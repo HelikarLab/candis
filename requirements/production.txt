@@ -1,0 +1,4 @@
+six
+pyqt5
+requests
+tqdm
