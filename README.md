@@ -4,6 +4,7 @@
 ### Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
+* [Dependencies](#dependencies)
 * [License](#license)
 
 ### Installation
@@ -25,6 +26,10 @@ via Python
 >>> import candis
 >>> candis.app.main()
 ```
+
+### Dependencies
+* Production Dependencies
+  * Python 2.7+ or Python3.5+
 
 ### License
 This software has been released under the [GNU General Public License v3](LICENSE).
