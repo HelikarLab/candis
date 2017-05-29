@@ -36,6 +36,8 @@ via Python
 >>> candis.main()
 ```
 
+![](.github/ria.png)
+
 ### Dependencies
 * Production Dependencies
   * Python 2.7+ or Python 3.5+
