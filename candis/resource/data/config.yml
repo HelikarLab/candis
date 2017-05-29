@@ -1,0 +1,11 @@
+name: &name "candis"
+version: &version "0.1.0"
+app:
+  lang: "en"
+  encoding: "utf-8"
+  title: !join [*name, " v", *version]
+  color:
+    primary: "#E91E63"
+  routes:
+    base: "/"
+  container: "app"

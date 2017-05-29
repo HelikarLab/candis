@@ -1,2 +1,0 @@
-class BaseLayout(object):
-    pass

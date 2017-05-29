@@ -1,7 +1,12 @@
 # imports - standard imports
 import argparse
 
-def create_parser():
-    parser = argparse.ArgumentParser()
+class ArgumentParser(argparse.ArgumentParser):
+    def __init__(self, config, *args, **kwargs):
+        self.super  = super(ArgumentParser, self)
+        self.config = config
 
-    return parser
+    def parse(self):
+        args = self.parse_args()
+
+        return args

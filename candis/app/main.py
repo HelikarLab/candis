@@ -1,14 +1,13 @@
 # imports - standard imports
-import sys
+import os
 
 # imports - module imports
-import candis
+from candis.util import assign_if_none
+from candis.app  import app
 
-def main():
-    argv = [ ]
+def main(argv = None):
+	code = os.EX_OK
 
-    app  = candis.app.App(argv)
-    app.show()
-    code = app.exec_()
+	app.run(debug = True)
 
-    sys.exit(code)
+	return code

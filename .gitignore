@@ -1,5 +1,11 @@
 # virtualenv
 .venv
 
-# misc
-TODO.md
+# docs
+docs/build
+
+# Dependencies
+node_modules
+
+# Cache
+.sass-cache

@@ -1,5 +1,8 @@
+flake8
 sphinx
 six
-pyqt5
+pyyaml
 requests
 tqdm
+Flask
+pytest

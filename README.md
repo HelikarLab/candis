@@ -1,5 +1,5 @@
 ![](.github/logo.png)
-> A data mining suite for DNA microarrays.
+> :ribbon: *"A data mining suite for DNA microarrays."*
 
 ### Table of Contents
 * [Installation](#installation)
@@ -19,17 +19,29 @@ $ make install
 ```
 
 ### Usage
-**Launching the Graphical User Interface**
+**Launching the RIA (Rich Internet Application)**
+
+via CLI
+```
+$ candis
+```
+OR
+```
+$ python -m candis
+```
 
 via Python
 ```python
 >>> import candis
->>> candis.app.main()
+>>> candis.main()
 ```
 
 ### Dependencies
 * Production Dependencies
-  * Python 2.7+ or Python3.5+
+  * Python 2.7+ or Python 3.5+
+* Development Dependencies
+  * [Node.js](https://nodejs.org)
+  * [SASS](http://sass-lang.com)
 
 ### License
 This software has been released under the [GNU General Public License v3](LICENSE).

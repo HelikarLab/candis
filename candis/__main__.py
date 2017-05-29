@@ -4,12 +4,8 @@ import sys
 # imports - module imports
 import candis
 
-def main():
-    code = candis.main()
-
-    return code
-
 if __name__ == '__main__':
-    code = main()
+    args = sys.argv[1:]
+    code = candis.main(args)
 
     sys.exit(code)

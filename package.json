@@ -1,0 +1,45 @@
+{
+  "name": "candis",
+  "version": "0.1.0",
+  "description": "A data mining suite for DNA microarrays",
+  "main": "candis/app/client/app/Client.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "sass": "sass --watch --sourcemap=none candis/app/client/styles/App.scss:candis/app/assets/css/styles.min.css",
+    "webpack": "webpack --watch",
+    "start": "concurrently --kill-others \"npm run sass\" \"npm run webpack\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achillesrasquinha/candis.git"
+  },
+  "author": "Achilles Rasquinha",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/achillesrasquinha/candis/issues"
+  },
+  "homepage": "https://github.com/achillesrasquinha/candis#readme",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.5.1",
+    "babel-preset-react": "^6.24.1",
+    "webpack": "^2.6.1"
+  },
+  "dependencies": {
+    "fuse.js": "^3.0.3",
+    "react": "^15.5.4",
+    "react-data-grid": "^2.0.44",
+    "react-dnd": "^2.4.0",
+    "react-dnd-html5-backend": "^2.4.1",
+    "react-dom": "^15.5.4",
+    "react-redux": "^5.0.5",
+    "react-router": "^3.0.5",
+    "redux": "^3.6.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "shortid": "^2.2.8"
+  }
+}

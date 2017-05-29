@@ -1,4 +1,5 @@
 six
-pyqt5
+pyyaml
 requests
 tqdm
+Flask
