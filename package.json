@@ -29,6 +29,7 @@
     "webpack": "^2.6.1"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "fuse.js": "^3.0.3",
     "react": "^15.5.4",
     "react-data-grid": "^2.0.44",

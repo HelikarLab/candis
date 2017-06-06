@@ -42,13 +42,15 @@ class Compartment extends React.Component {
           id={`compartment-${this.id}`}>
           <div className="list-group">
             {
+
               this.props.tools.map((tool, index) => {
                 return (
                   <div className="list-group-item" key={index}>
                     <Tool
                       name={tool.name}
                       icon={tool.icon}
-                      tooltip={tool.description}>
+                      tooltip={tool.description}
+                      onClick={tool.onClick}>
                     </Tool>
                   </div>
                 )

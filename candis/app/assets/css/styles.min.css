@@ -4,6 +4,15 @@
 .no-decoration, a {
   text-decoration: none !important; }
 
+.no-background {
+  background: none !important; }
+
+.no-border {
+  border: none !important; }
+
+.no-shadow {
+  box-shadow: none !important; }
+
 body {
   font-family: "Roboto"; }
 

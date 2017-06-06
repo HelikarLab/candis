@@ -52,7 +52,8 @@ MenuBar.Menu = class extends React.Component {
   render ( ) {
     return (
       <li className="dropdown">
-        <a href="#" className="dropdown-toggle" data-toggle="dropdown">
+        <a href="#" className="dropdown-toggle" data-toggle="dropdown"
+          onClick={this.onClick}>
           {this.props.title}
         </a>
         <ul className="dropdown-menu">

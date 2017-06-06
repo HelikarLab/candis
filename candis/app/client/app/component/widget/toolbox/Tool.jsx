@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import { connect } from 'react-redux'
 
 class Tool extends React.Component {
   constructor (props) {
@@ -8,7 +9,7 @@ class Tool extends React.Component {
   }
 
   onClick (event) {
-    
+    this.props.dispatch(this.props.onClick())
   }
 
   render ( ) {
@@ -41,4 +42,4 @@ class Tool extends React.Component {
   }
 }
 
-export default Tool
+export default connect()(Tool)

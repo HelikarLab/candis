@@ -1,4 +1,5 @@
 import React       from 'react'
+import { connect } from 'react-redux'
 import shortid     from 'shortid'
 
 import TypeAhead   from '../TypeAhead'
@@ -9,18 +10,33 @@ class ToolBox extends React.Component {
   constructor ( ) {
     super ( )
 
-    this.id    = shortid.generate()
-    this.state = ToolBox.defaultStates
+    this.onSelect   = this.onSelect.bind(this)
+
+    this.id         = shortid.generate()
+    this.tools      = [ ]
+    this.state      = ToolBox.defaultStates
+  }
+
+  onSelect (data) {
+    const tool      = this.tools.find(({ ID }) => {
+         return ID == data.ID
+    })
+
+    this.props.dispatch(tool.onClick())
   }
 
   render ( ) {
-    let data   = [ ]
+    let data        = [ ]
     this.props.compartments.forEach((compartment) => {
       compartment.tools.forEach((tool) => {
+        const ltool = Object.assign(tool, { ID: shortid.generate() })
+        this.tools.push(ltool)
+
         data.push({
-            title: tool.name,
-             icon: tool.icon,
-          content: tool.description
+               ID: ltool.ID,
+            title: ltool.name,
+             icon: ltool.icon,
+          content: ltool.description
         })
       })
     })
@@ -53,7 +69,7 @@ class ToolBox extends React.Component {
           <div className="panel-body">
             <div className="panel-group no-margin" id={`toolbox-${this.id}`}>
               <TypeAhead placeholder="Search tool" data={data}
-                maximum={4}/>
+                maximum={4} onSelect={this.onSelect}/>
               {
                 this.props.compartments.map((compartment, index) => {
                   return (
@@ -93,4 +109,4 @@ ToolBox.defaultProps  =
   draggable: false
 }
 
-export default ToolBox
+export default connect()(ToolBox)

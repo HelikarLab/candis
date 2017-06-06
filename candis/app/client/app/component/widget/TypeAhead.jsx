@@ -28,6 +28,7 @@ class TypeAhead extends React.Component {
       minMatchCharLength: 1,
                     keys: ["title", "content"]
     })
+    const that = this
 
     return (
       <div>
@@ -42,7 +43,9 @@ class TypeAhead extends React.Component {
               return (
                 <li key={index} className="list-group-item">
                   <a href="#" data-toggle="tooltip" data-placement="top"
-                    title={data.content}>
+                    title={data.content} onClick={() => {
+                      that.props.onSelect(data)
+                    }}>
                     <div className="media">
                       {
                         data.icon ?

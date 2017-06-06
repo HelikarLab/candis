@@ -3,9 +3,10 @@ import React      from 'react'
 import MenuBar    from '../component/MenuBar'
 import ToolBox    from '../component/widget/toolbox/ToolBox'
 import Canvas     from '../component/widget/Canvas'
+import Dialog     from '../component/dialog/Dialog'
 
-import ActionType from '../constant/ActionType'
-import DialogType from '../constant/DialogType'
+import DialogType        from '../constant/DialogType'
+import { displayDialog } from '../action/DialogActions'
 
 const compartments = [
   {
@@ -14,29 +15,26 @@ const compartments = [
     tooltip: 'Tools for Source Selection',
       tools: [
         {
-             name: 'Create',
+             name: 'File',
              icon: `/assets/img/icon/edit.png`,
           tooltip: 'Create a new dataset',
-           action:
-           {
-                type: ActionType.SHOW_DIALOG,
-             payload:
-             {
-               dialog:
-               {
-                 type: DialogType.CREATE
+          onClick: () => {
+             const action = displayDialog({
+                type: DialogType.FILE,
+               title: 'File',
+               props: {
+                 classNames: ['no-background', 'no-border', 'no-shadow',
+                              'no-margin']
                }
-             }
+             })
+
+             return action
            }
         },
         {
              name: 'Save',
              icon: `/assets/img/icon/floppy-disk.png`,
-          tooltip: 'Save data to an output file',
-           action:
-           {
-
-           }
+          tooltip: 'Save data to an output file'
         }
       ]
   },
@@ -86,7 +84,9 @@ const compartments = [
        icon: `/assets/img/icon/clipboard.png`,
     tooltip: 'Tools for Model Evaluation',
       tools: [
-
+        {
+          name: 'Predict'
+        }
       ]
   }
 ]
@@ -139,6 +139,7 @@ class App extends React.Component {
             </div>
           </div>
         </div>
+        <Dialog/>
       </div>
     )
   }
