@@ -7,5 +7,9 @@ app:
   color:
     primary: "#E91E63"
   routes:
-    base: "/"
+    base: &base "/"
+     api: &api  !relurljoin [*base, "api"]
+
+    data: &data !relurljoin [*api, "data"]
+    file: !relurljoin [*data, "file"]
   container: "app"

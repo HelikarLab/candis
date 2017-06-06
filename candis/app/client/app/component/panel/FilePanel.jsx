@@ -1,5 +1,5 @@
-import React         from 'react'
-import classNames    from 'classnames'
+import React      from 'react'
+import classNames from 'classnames'
 
 class FilePanel extends React.Component {
   constructor (props) {
@@ -7,7 +7,7 @@ class FilePanel extends React.Component {
   }
 
   componentDidMount ( ) {
-    $('.selectpicker').selectpicker();
+    $('.selectpicker').selectpicker()
   }
 
   render ( ) {
@@ -18,7 +18,7 @@ class FilePanel extends React.Component {
             <div className="col-xs-9">
               <div className="form-group">
                 <select className="selectpicker" data-width="100%">
-                  
+
                 </select>
               </div>
             </div>

@@ -1,1 +1,1 @@
-{"lang": "en", "color": {"primary": "#E91E63"}, "encoding": "utf-8", "title": "candis v0.1.0", "routes": {"base": "/"}, "container": "app"}
+{"title": "candis v0.1.0", "encoding": "utf-8", "lang": "en", "color": {"primary": "#E91E63"}, "routes": {"base": "/", "api": "/api", "file": "/api/file"}, "container": "app"}

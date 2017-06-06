@@ -12,8 +12,9 @@ from candis.config   import Config
 class Loader(object):
     DEFAULT_CONFIG       = os.path.join(R.Path.DATA, 'config.yml')
     DEFAULT_CONSTRUCTORS = [
-        ('!join', constructor.join),
-        ('!icon', constructor.icon),
+        ('!join',       constructor.join),
+        ('!relurljoin', constructor.relurljoin),
+        ('!icon',       constructor.icon),
     ]
     '''
     Loads and parses a YAML configuration file into a :py:obj:`candis.Config` object.
