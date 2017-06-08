@@ -12,5 +12,5 @@ node_modules
 
 # misc
 TODO.md
-data/
+data
 snippet.py

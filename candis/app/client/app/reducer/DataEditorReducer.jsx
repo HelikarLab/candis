@@ -1,24 +1,16 @@
-import shortid    from 'shortid'
-import ActionType from '../constant/ActionType'
+import React       from 'react'
+import { Editors } from 'react-data-grid-addons'
+import shortid     from 'shortid'
+
+import ActionType  from '../constant/ActionType'
 
 const initialState = {
+     data: { },
      rows: [ ],
   columns: [
     {
-            ID: shortid.generate(),
-           key: 'id',
-          name: 'ID'
-    },
-    {
-            ID: shortid.generate(),
-           key: 'file',
-          name: 'File'
-    },
-    {
-            ID: shortid.generate(),
-           key: 'label',
-          name: 'Label',
-      editable: true
+       key: 'id',
+      name: 'ID'
     }
   ]
 }
@@ -40,6 +32,15 @@ const dataEditor   = (state = initialState, action) => {
       return {...state, rows: rows }
     }
 
+    case ActionType.INSERT_COLUMN: {
+      let columns  = action.payload.slice()
+      let column   = { key: shortid.generate(), editable: true }
+
+      columns.push(column)
+
+      return {...state, columns: columns }
+    }
+
     case ActionType.UPDATE_ROWS: {
       let { fromRow, toRow, update } = action.payload
       let rows                       =  state.rows.slice()
@@ -49,6 +50,16 @@ const dataEditor   = (state = initialState, action) => {
       }
 
       return {...state, rows: rows }
+    }
+
+    case ActionType.REFRESH_DATA_SUCCESS: {
+      let options = action.payload.map((data) => {
+        return data.name
+      })
+      let editor  = <Editors.DropDownEditor options={options}/>
+      let columns = state.columns.slice()
+
+      return {...state, columns: columns }
     }
   }
 

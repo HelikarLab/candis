@@ -7,23 +7,29 @@ class CreatePanel extends React.Component {
   constructor (props) {
     super (props)
 
-    this.onCreate = this.onCreate.bind(this)
-    this.onCancel = this.onCancel.bind(this)
+    this.onCreate     = this.onCreate.bind(this)
+    this.onCancel     = this.onCancel.bind(this)
+    this.onChangeData = this.onChangeData.bind(this)
   }
 
   onCreate ( ) {
-    this.props.dispatch(this.props.onCreate())
+    this.props.dispatch(this.props.onCreate)
   }
 
   onCancel ( ) {
-    this.props.dispatch(this.props.onCancel())
+    this.props.dispatch(this.props.onCancel)
+  }
+
+  onChangeData (data) {
+    
   }
 
   render ( ) {
     return (
       <div className={classNames("panel panel-default", this.props.classNames.root)}>
         <div className="panel-body">
-          <DataEditor/>
+          <DataEditor
+            onChangeData={this.props.onChangeData}/>
         </div>
         <div className={classNames("panel-footer", this.props.classNames.footer)}>
           <div className="text-right">

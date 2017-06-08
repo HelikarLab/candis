@@ -9,7 +9,7 @@ class Tool extends React.Component {
   }
 
   onClick (event) {
-    this.props.dispatch(this.props.onClick())
+    this.props.dispatch(this.props.onClick)
   }
 
   render ( ) {

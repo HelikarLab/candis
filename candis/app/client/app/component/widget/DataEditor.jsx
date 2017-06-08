@@ -2,7 +2,10 @@ import React         from 'react'
 import { connect }   from 'react-redux'
 import ReactDataGrid from 'react-data-grid'
 
-import { insertRow, updateRows } from '../../action/DataEditorAction'
+import config        from '../../Config'
+
+import { insertRow, insertColumn, updateRows, refreshData }
+  from '../../action/DataEditorAction'
 
 class DataEditor extends React.Component {
   constructor (props) {
@@ -12,29 +15,47 @@ class DataEditor extends React.Component {
     this.tools =
     [
       {
-           icon: `/assets/img/icon/insert-row.png`,
+           icon: `${config.routes.icons}/insert-row.png`,
         tooltip: 'Insert Row',
-        onClick: () => {
+        onClick: (dispatch) => {
           const action = insertRow(that.props.rows)
 
-          return action
+          dispatch(action)
         }
       },
       {
-           icon: `/assets/img/icon/insert-column.png`,
+           icon: `${config.routes.icons}/insert-column.png`,
         tooltip: 'Insert Column',
-        onClick: () => {
+        onClick: (dispatch) => {
+          const action = insertColumn(that.props.columns)
+
+          dispatch(action)
+        }
+      },
+      {
+           icon: `${config.routes.icons}/delete-row.png`,
+        tooltip: 'Delete Row',
+        onClick: (dispatch) => {
 
         }
       },
       {
-           icon: `/assets/img/icon/reload.png`,
-        tooltip: 'Refresh',
-        onClick: () => {
+           icon: `${config.routes.icons}/delete-column.png`,
+        tooltip: 'Delete Column',
+        onClick: (dispatch) => {
 
         }
+      },
+      {
+           icon: `${config.routes.icons}/reload.png`,
+        tooltip: 'Refresh',
+        onClick: refreshData
       }
     ]
+  }
+
+  componentDidMount ( ) {
+    this.props.dispatch(refreshData)
   }
 
   render ( ) {
@@ -43,7 +64,7 @@ class DataEditor extends React.Component {
       <div className="wrapper">
         <div className="panel panel-default no-background no-border no-shadow">
           <div className="panel-body">
-            <div className="text-center">
+            <div className="text-right">
               {
                 this.tools.map((tool, index) => {
                   const tooltip = tool.tooltip
@@ -56,7 +77,7 @@ class DataEditor extends React.Component {
 
                   return (
                     <button key={index} className="btn no-background no-border no-shadow"
-                      {...ttattrs} onClick={() => { that.props.dispatch(tool.onClick()) }}>
+                      {...ttattrs} onClick={() => { that.props.dispatch(tool.onClick) }}>
                       <img width="20" src={tool.icon}/>
                     </button>
                   )
@@ -72,7 +93,13 @@ class DataEditor extends React.Component {
                   rowsCount={this.props.rows.length}
             enableRowSelect={true}
           onGridRowsUpdated={({ fromRow, toRow, updated }) => {
-            that.props.dispatch(updateRows(fromRow, toRow, updated))
+            that.props.dispatch((dispatch) => {
+              const action = updateRows(fromRow, toRow, updated)
+
+              dispatch(action)
+
+              this.props.onChangeData(this.props.rows)
+            })
           }}/>
       </div>
     )

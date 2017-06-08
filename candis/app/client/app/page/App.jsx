@@ -1,5 +1,7 @@
 import React      from 'react'
 
+import config     from '../Config'
+
 import MenuBar    from '../component/MenuBar'
 import ToolBox    from '../component/widget/toolbox/ToolBox'
 import Canvas     from '../component/widget/Canvas'
@@ -12,14 +14,14 @@ import { showDialog, hideDialog } from '../action/DialogAction'
 const compartments = [
   {
        name: 'Data',
-       icon: `/assets/img/icon/database.png`,
+       icon: `${config.routes.icons}/database.png`,
     tooltip: 'Tools for Source Selection',
       tools: [
         {
              name: 'Create',
-             icon: `/assets/img/icon/edit.png`,
+             icon: `${config.routes.icons}/edit.png`,
           tooltip: 'Create a new dataset',
-          onClick: () => {
+          onClick: (dispatch) => {
              const action = showDialog({
                 type: DialogType.CREATE,
                title: 'Create',
@@ -29,36 +31,38 @@ const compartments = [
                      root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
                    footer: ['no-background', 'no-border']
                  },
-                 onCreate: () => {
-                   const action = hideDialog({
+                 onCreate: (dispatch) => {
+                   let action = null
+                   
+                   action     = hideDialog({
                      type: DialogType.CREATE
                    })
 
-                   return action
+                   dispatch(action)
                  },
-                 onCancel: () => {
+                 onCancel: (dispatch) => {
                    const action = hideDialog({
                      type: DialogType.CREATE
                    })
 
-                   return action
+                   dispatch(action)
                  }
                }
              })
 
-             return action
+             dispatch(action)
            }
         },
         {
              name: 'Save',
-             icon: `/assets/img/icon/floppy-disk.png`,
+             icon: `${config.routes.icons}/floppy-disk.png`,
           tooltip: 'Save data to an output file'
         }
       ]
   },
   {
        name: 'Visualize',
-       icon: `/assets/img/icon/pie-chart.png`,
+       icon: `${config.routes.icons}/pie-chart.png`,
     tooltip: 'Tools for Data Visualization',
       tools: [
 
@@ -66,7 +70,7 @@ const compartments = [
   },
   {
        name: 'Preprocess',
-       icon: `/assets/img/icon/gears.png`,
+       icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
       tools: [
 
@@ -74,7 +78,7 @@ const compartments = [
   },
   {
        name: 'Model',
-       icon: `/assets/img/icon/network.png`,
+       icon: `${config.routes.icons}/network.png`,
     tooltip: 'List of Models',
       tools: [
         {
@@ -82,7 +86,7 @@ const compartments = [
         },
         {
                name: 'Decision Tree',
-               icon: `/assets/img/icon/tree-structure.png`,
+               icon: `${config.routes.icons}/tree-structure.png`,
             tooltip: 'Classifier, Regressor'
         },
         {
@@ -99,7 +103,7 @@ const compartments = [
   },
   {
        name: 'Evaluate',
-       icon: `/assets/img/icon/clipboard.png`,
+       icon: `${config.routes.icons}/clipboard.png`,
     tooltip: 'Tools for Model Evaluation',
       tools: [
         {
@@ -119,12 +123,12 @@ class App extends React.Component {
         actions: [
           {
                text: 'New',
-               icon: `/assets/img/icon/file.png`,
+               icon: `${config.routes.icons}/file.png`,
             tooltip: 'Create a new experiment'
           },
           {
                text: 'Quit',
-               icon: `/assets/img/icon/quit.png`,
+               icon: `${config.routes.icons}/quit.png`,
             tooltip: 'Quit the application'
           }
         ]
@@ -134,7 +138,7 @@ class App extends React.Component {
         actions: [
           {
                text: 'About',
-               icon: `/assets/img/icon/info.png`,
+               icon: `${config.routes.icons}/info.png`,
             tooltip: 'Shows application information'
           }
         ]

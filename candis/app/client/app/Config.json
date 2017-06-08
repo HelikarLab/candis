@@ -1,1 +1,19 @@
-{"startdir": "data", "routes": {"data": "/api/data", "base": "/", "files": "/api/data/files", "api": "/api"}, "title": "candis v0.1.0", "lang": "en", "container": "app", "color": {"primary": "#E91E63"}, "encoding": "utf-8"}
+{
+    "routes": {
+        "images": "/assets/img",
+        "assets": "/assets",
+        "base": "/",
+        "icons": "/assets/img/icons",
+        "api": "/api",
+        "files": "/api/data/files",
+        "data": "/api/data"
+    },
+    "encoding": "utf-8",
+    "color": {
+        "primary": "#E91E63"
+    },
+    "lang": "en",
+    "title": "candis v0.1.0",
+    "container": "app",
+    "startdir": "data"
+}

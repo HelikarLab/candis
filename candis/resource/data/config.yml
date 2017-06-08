@@ -8,6 +8,9 @@ app:
     primary: "#E91E63"
   routes:
     base: &base "/"
+    assets: &assets !relurljoin [*base, "assets"]
+    images: &images !relurljoin [*assets, "img"]
+    icons: &icons !relurljoin [*images, "icons"]
     api: &api !relurljoin [*base, "api"]
     data: &data !relurljoin [*api, "data"]
     files: !relurljoin [*data, "files"]
