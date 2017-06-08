@@ -5,4 +5,5 @@ pyyaml
 requests
 tqdm
 Flask
+addict
 pytest

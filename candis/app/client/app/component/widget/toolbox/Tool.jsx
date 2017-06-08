@@ -22,7 +22,7 @@ class Tool extends React.Component {
       } : { }
 
     return (
-      <a href="#" onClick={this.onClick}>
+      <a href="javascript:void(0);" onClick={this.onClick}>
         <div className="media" {...ttattrs}>
           {
             this.props.icon ?

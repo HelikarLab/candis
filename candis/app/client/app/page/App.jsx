@@ -4,9 +4,10 @@ import MenuBar    from '../component/MenuBar'
 import ToolBox    from '../component/widget/toolbox/ToolBox'
 import Canvas     from '../component/widget/Canvas'
 import Dialog     from '../component/dialog/Dialog'
+import CreatePanel from '../component/panel/CreatePanel'
 
-import DialogType        from '../constant/DialogType'
-import { displayDialog } from '../action/DialogActions'
+import DialogType from '../constant/DialogType'
+import { showDialog, hideDialog } from '../action/DialogAction'
 
 const compartments = [
   {
@@ -15,16 +16,33 @@ const compartments = [
     tooltip: 'Tools for Source Selection',
       tools: [
         {
-             name: 'File',
+             name: 'Create',
              icon: `/assets/img/icon/edit.png`,
           tooltip: 'Create a new dataset',
           onClick: () => {
-             const action = displayDialog({
-                type: DialogType.FILE,
-               title: 'File',
+             const action = showDialog({
+                type: DialogType.CREATE,
+               title: 'Create',
+                size: Dialog.LARGE,
                props: {
-                 classNames: ['no-background', 'no-border', 'no-shadow',
-                              'no-margin']
+                 classNames: {
+                     root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                   footer: ['no-background', 'no-border']
+                 },
+                 onCreate: () => {
+                   const action = hideDialog({
+                     type: DialogType.CREATE
+                   })
+
+                   return action
+                 },
+                 onCancel: () => {
+                   const action = hideDialog({
+                     type: DialogType.CREATE
+                   })
+
+                   return action
+                 }
                }
              })
 

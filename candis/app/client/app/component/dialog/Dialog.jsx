@@ -4,14 +4,11 @@ import shortid     from 'shortid'
 import classNames  from 'classnames'
 
 import DialogType  from '../../constant/DialogType'
-
-import FilePanel   from '../panel/FilePanel'
-import AboutPanel  from '../panel/AboutPanel'
+import CreatePanel from '../panel/CreatePanel'
 
 const COMPONENTS =
 {
-    [DialogType.FILE]: FilePanel,
-   [DialogType.ABOUT]: AboutPanel
+  [DialogType.CREATE]: CreatePanel
 }
 
 class Dialog extends React.Component {
@@ -23,38 +20,41 @@ class Dialog extends React.Component {
 
   render ( ) {
     const dialog    = this.props.dialog
+    let   modal     = null
 
     if ( dialog.type ) {
-      const ID        = this.props.id ? this.props.id : `dialog-${this.ID}`
-      const Component = COMPONENTS[dialog.type]
-      const large     = dialog.size == Dialog.LARGE
-
+      const ID      = this.props.id ? this.props.id : `dialog-${this.ID}`
       if ( dialog.display ) {
-        $(`#${ID}`).modal('show')
-      }
+          const Component = COMPONENTS[dialog.type]
+          const large     = dialog.size == Dialog.LARGE
 
-      return (
-        <div className="modal" id={ID}>
-          <div className={classNames("modal-dialog", large: "modal-lg")}>
-            <div className="modal-content">
-              <div className="modal-header">
-                <button className="close" data-dismiss="modal">
-                  &times;
-                </button>
-                <div className="modal-title font-heavy">
-                  {dialog.title}
+          modal           = (
+          <div className="modal" id={ID}>
+            <div className={classNames("modal-dialog", "modal-lg": large)}>
+              <div className="modal-content">
+                <div className="modal-header">
+                  <button className="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                  <div className="modal-title font-heavy">
+                    {dialog.title}
+                  </div>
                 </div>
-              </div>
-              <div className="modal-body">
-                <Component {...dialog.props}/>
+                <div className="modal-body">
+                  <Component {...dialog.props}/>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )
-    } else {
-      return null;
+        )
+
+        $(`#${ID}`).modal('show')
+      } else {
+        $(`#${ID}`).modal('hide')
+      }
     }
+
+    return modal
   }
 }
 

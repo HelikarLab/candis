@@ -1,18 +1,26 @@
 import ActionType from '../constant/ActionType'
 
-const initialState = { }
-const dialog       = (state = initialState, action) => {
+const initialState   = {
+     type: null,
+  display: false
+}
+
+const dialog         = (state = initialState, action) => {
+  let dialog         = action.payload
+
   switch (action.type) {
     case ActionType.SHOW_DIALOG:
-      let dialog     = action.payload.dialog
       dialog.display = true
 
       return dialog
+
     case ActionType.HIDE_DIALOG:
-      return state
-    default:
-      return state
+      dialog.display = false
+
+      return dialog
   }
+
+  return state
 }
 
 export default dialog

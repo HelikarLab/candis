@@ -8,8 +8,8 @@ app:
     primary: "#E91E63"
   routes:
     base: &base "/"
-     api: &api  !relurljoin [*base, "api"]
-
+    api: &api !relurljoin [*base, "api"]
     data: &data !relurljoin [*api, "data"]
-    file: !relurljoin [*data, "file"]
+    files: !relurljoin [*data, "files"]
   container: "app"
+  startdir: "data"

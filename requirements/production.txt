@@ -3,3 +3,4 @@ pyyaml
 requests
 tqdm
 Flask
+addict

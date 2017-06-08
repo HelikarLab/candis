@@ -13,6 +13,9 @@
 .no-shadow {
   box-shadow: none !important; }
 
+.cursor-pointer {
+  cursor: pointer; }
+
 body {
   font-family: "Roboto"; }
 

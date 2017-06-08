@@ -1,8 +1,6 @@
 const DialogType =
 {
-    FILE: 'DIALOG_FILE',
-  CREATE: 'DIALOG_CREATE',
-   ABOUT: 'DIALOG_ABOUT'
+  CREATE: 'DIALOG_CREATE'
 }
 
 export default DialogType

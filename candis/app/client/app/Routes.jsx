@@ -1,11 +1,11 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
-import Config from './Config'
+import config from './Config'
 import App    from './page/App'
 
 const Routes = (
-  <Route path={Config.routes.base}>
+  <Route path={config.routes.base}>
     <IndexRoute component={App}/>
   </Route>
 )
