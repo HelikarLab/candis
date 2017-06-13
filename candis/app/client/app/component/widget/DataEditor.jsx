@@ -1,11 +1,11 @@
-import React         from 'react'
-import { connect }   from 'react-redux'
-import ReactDataGrid from 'react-data-grid'
+import React          from 'react'
+import { connect }    from 'react-redux'
+import ReactDataGrid  from 'react-data-grid'
 
-import config        from '../../Config'
+import config         from '../../Config'
 
-import { insertRow, insertColumn, updateRows, refreshData }
-  from '../../action/DataEditorAction'
+import { insertRow, insertColumn, updateRows } from '../../action/DataEditorAction'
+import { refreshResource } from '../../action/AsynchronousAction'
 
 class DataEditor extends React.Component {
   constructor (props) {
@@ -49,13 +49,13 @@ class DataEditor extends React.Component {
       {
            icon: `${config.routes.icons}/reload.png`,
         tooltip: 'Refresh',
-        onClick: refreshData
+        onClick: refreshResource
       }
     ]
   }
 
   componentDidMount ( ) {
-    this.props.dispatch(refreshData)
+    this.props.dispatch(refreshResource)
   }
 
   render ( ) {
@@ -98,7 +98,7 @@ class DataEditor extends React.Component {
 
               dispatch(action)
 
-              this.props.onChangeData(this.props.rows)
+              that.props.onChangeData(that.props.rows)
             })
           }}/>
       </div>

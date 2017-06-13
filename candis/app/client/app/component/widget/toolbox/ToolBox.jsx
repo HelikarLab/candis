@@ -22,7 +22,7 @@ class ToolBox extends React.Component {
          return ID == data.ID
     })
 
-    this.props.dispatch(tool.onClick())
+    this.props.dispatch(tool.onClick)
   }
 
   render ( ) {

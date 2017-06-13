@@ -1,14 +1,17 @@
-import React       from 'react'
-import { connect } from 'react-redux'
-import shortid     from 'shortid'
-import classNames  from 'classnames'
+import React          from 'react'
+import { connect }    from 'react-redux'
+import shortid        from 'shortid'
+import classNames     from 'classnames'
 
-import DialogType  from '../../constant/DialogType'
-import CreatePanel from '../panel/CreatePanel'
+import DialogType     from '../../constant/DialogType'
+import { hideDialog } from '../../action/DialogAction'
+import CreatePanel    from '../panel/CreatePanel'
+import FilePanel      from '../panel/FilePanel'
 
 const COMPONENTS =
 {
-  [DialogType.CREATE]: CreatePanel
+  [DialogType.CREATE]: CreatePanel,
+    [DialogType.FILE]:   FilePanel
 }
 
 class Dialog extends React.Component {
@@ -27,13 +30,21 @@ class Dialog extends React.Component {
       if ( dialog.display ) {
           const Component = COMPONENTS[dialog.type]
           const large     = dialog.size == Dialog.LARGE
+          const small     = dialog.size == Dialog.SMALL
 
           modal           = (
           <div className="modal" id={ID}>
-            <div className={classNames("modal-dialog", "modal-lg": large)}>
+            <div className={classNames("modal-dialog", {"modal-lg": large}, {"modal-sm": small})}>
               <div className="modal-content">
                 <div className="modal-header">
-                  <button className="close" data-dismiss="modal">
+                  <button className="close" data-dismiss="modal"
+                    onClick={() => {
+                      const action = hideDialog({
+                        type: dialog.type
+                      })
+
+                      this.props.dispatch(action)
+                    }}>
                     &times;
                   </button>
                   <div className="modal-title font-heavy">
@@ -65,5 +76,6 @@ const mapStateToProps = (state) => {
 }
 
 Dialog.LARGE = 'L'
+Dialog.SMALL = 'S'
 
 export default connect(mapStateToProps)(Dialog)

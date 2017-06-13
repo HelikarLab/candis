@@ -33,7 +33,7 @@ const compartments = [
                  },
                  onCreate: (dispatch) => {
                    let action = null
-                   
+
                    action     = hideDialog({
                      type: DialogType.CREATE
                    })
@@ -52,6 +52,41 @@ const compartments = [
 
              dispatch(action)
            }
+        },
+        {
+             name: 'File',
+             icon: `${config.routes.icons}/document.png`,
+          tooltip: 'Load a CSV file',
+          onClick: (dispatch) => {
+            const action = showDialog({
+               type: DialogType.FILE,
+              title: 'File',
+              props: {
+                classNames: {
+                    root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                  footer: ['no-background', 'no-border']
+                },
+                onSelect: (dispatch) => {
+                  let action   = null
+                  
+                  action       = hideDialog({
+                    type: DialogType.FILE
+                  })
+
+                  dispatch(action)
+                },
+                onCancel: (dispatch) => {
+                  const action = hideDialog({
+                    type: DialogType.FILE
+                  })
+
+                  dispatch(action)
+                }
+              }
+            })
+
+            dispatch(action)
+          }
         },
         {
              name: 'Save',

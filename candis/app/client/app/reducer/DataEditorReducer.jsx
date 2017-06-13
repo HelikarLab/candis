@@ -1,16 +1,27 @@
-import React       from 'react'
-import { Editors } from 'react-data-grid-addons'
-import shortid     from 'shortid'
+import React         from 'react'
+import { Editors }   from 'react-data-grid-addons'
+import shortid       from 'shortid'
 
-import ActionType  from '../constant/ActionType'
+import ActionType    from '../constant/ActionType'
+import AttributeType from '../constant/AttributeType'
 
 const initialState = {
      data: { },
      rows: [ ],
   columns: [
     {
-       key: 'id',
-      name: 'ID'
+          key: 'ID',
+         name: 'ID'
+    },
+    {
+          key: 'file',
+         name: 'File',
+         type: AttributeType.FILE
+    },
+    {
+           key: 'label',
+          name: 'Label',
+      editable: true
     }
   ]
 }
@@ -24,7 +35,7 @@ const dataEditor   = (state = initialState, action) => {
 
       columns.forEach((column) => {
         let key    = column.key
-        row[key]   = key == 'id' ? rows.length + 1 : ''
+        row[key]   = key == 'ID' ? rows.length + 1 : ''
       })
 
       rows.push(row)
@@ -34,7 +45,7 @@ const dataEditor   = (state = initialState, action) => {
 
     case ActionType.INSERT_COLUMN: {
       let columns  = action.payload.slice()
-      let column   = { key: shortid.generate(), editable: true }
+      let column   = { key: shortid.generate(), name: '', editable: true }
 
       columns.push(column)
 
@@ -52,12 +63,19 @@ const dataEditor   = (state = initialState, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.REFRESH_DATA_SUCCESS: {
-      let options = action.payload.map((data) => {
+    case ActionType.REFRESH_RESOURCE_SUCCESS: {
+      let options = action.payload.data.map((data) => {
         return data.name
       })
+
       let editor  = <Editors.DropDownEditor options={options}/>
       let columns = state.columns.slice()
+
+      columns.forEach((column) => {
+        if ( column.type == AttributeType.FILE ) {
+            column.editor = editor
+        }
+      })
 
       return {...state, columns: columns }
     }

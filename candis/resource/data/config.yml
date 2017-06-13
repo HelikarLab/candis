@@ -13,6 +13,6 @@ app:
     icons: &icons !relurljoin [*images, "icons"]
     api: &api !relurljoin [*base, "api"]
     data: &data !relurljoin [*api, "data"]
-    files: !relurljoin [*data, "files"]
+    resource: !relurljoin [*data, "resource"]
   container: "app"
   startdir: "data"

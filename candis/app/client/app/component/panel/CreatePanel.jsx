@@ -29,7 +29,7 @@ class CreatePanel extends React.Component {
       <div className={classNames("panel panel-default", this.props.classNames.root)}>
         <div className="panel-body">
           <DataEditor
-            onChangeData={this.props.onChangeData}/>
+            onChangeData={this.onChangeData}/>
         </div>
         <div className={classNames("panel-footer", this.props.classNames.footer)}>
           <div className="text-right">

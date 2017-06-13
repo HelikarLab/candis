@@ -1,19 +1,19 @@
 {
-    "routes": {
-        "images": "/assets/img",
-        "assets": "/assets",
-        "base": "/",
-        "icons": "/assets/img/icons",
-        "api": "/api",
-        "files": "/api/data/files",
-        "data": "/api/data"
-    },
-    "encoding": "utf-8",
     "color": {
         "primary": "#E91E63"
     },
     "lang": "en",
-    "title": "candis v0.1.0",
+    "routes": {
+        "assets": "/assets",
+        "data": "/api/data",
+        "base": "/",
+        "api": "/api",
+        "images": "/assets/img",
+        "resource": "/api/data/resource",
+        "icons": "/assets/img/icons"
+    },
     "container": "app",
-    "startdir": "data"
+    "startdir": "data",
+    "encoding": "utf-8",
+    "title": "candis v0.1.0"
 }

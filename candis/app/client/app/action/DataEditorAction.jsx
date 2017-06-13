@@ -1,6 +1,3 @@
-import axios      from 'axios'
-
-import config     from '../Config'
 import ActionType from '../constant/ActionType'
 
 const insertRow    = (row) => {
@@ -34,38 +31,4 @@ const updateRows   = (fromRow, toRow, update) => {
   return action
 }
 
-const refreshData  = (dispatch) => {
-  dispatch(refreshDataRequest())
-  axios.post(config.routes.files)
-       .then((response) => {
-         response = response.data
-
-         if ( response.status == "success" ) {
-           const data   = response.data
-           const action = refreshDataSuccess(data)
-
-           dispatch(action)
-         } else {
-           // TODO: handle fail, error
-         }
-       })
-}
-
-const refreshDataRequest = () => {
-  const action           = {
-    type: ActionType.REFRESH_DATA_REQUEST
-  }
-
-  return action
-}
-
-const refreshDataSuccess = (data) => {
-  const action           = {
-       type: ActionType.REFRESH_DATA_SUCCESS,
-    payload: data
-  }
-
-  return action
-}
-
-export { insertRow, insertColumn, updateRows, refreshData }
+export { insertRow, insertColumn, updateRows }
