@@ -15,10 +15,14 @@ install:
 
 	npm install .
 
+	$(PYTHON) setup.py install
+
 clean:
 	find $(BASEDIR) | grep -E "__pycache__" | xargs rm -rf
 
 	rm -rf .sass-cache
+
+	$(PYTHON) setup.py clean
 
 	clear
 
@@ -34,7 +38,8 @@ run:
 	$(PYTHON) -B -m candis & $(PYTHON) -B -m build & npm start
 
 loc:
-	( find $(SOURCEDIR) -name "*.py" -print0 | xargs -0 cat ) | wc -l
+	( find $(SOURCEDIR) -name "*.py"  -print0 | xargs -0 cat ) | wc -l
+	( find $(SOURCEDIR) -name "*.jsx" -print0 | xargs -0 cat ) | wc -l
 
 analyse:
 	# flake8 $(SOURCEDIR)

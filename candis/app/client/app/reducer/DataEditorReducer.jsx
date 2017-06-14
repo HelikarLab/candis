@@ -56,6 +56,41 @@ const dataEditor   = (state = initialState, action) => {
       return {...state, columns: columns }
     }
 
+    case ActionType.DELETE_ROW: {
+      const toDelete = action.payload
+      let       rows =  state.rows.slice()
+      const    index = toDelete.rowIdx
+
+      rows.splice(index, 1)
+
+      rows.forEach((row, index) => {
+        row.ID       = index + 1,
+        row.selected = false
+      })
+
+      return {...state, rows: rows }
+    }
+
+    case ActionType.SELECT_ROW: {
+      const selected = action.payload
+      let       rows = state.rows.slice()
+      const    index = selected.rowIdx
+
+      rows[index].selected = true
+
+      return {...state, rows: rows }
+    }
+
+    case ActionType.DESELECT_ROW: {
+      const deselected = action.payload
+      let         rows = state.rows.slice()
+      const      index = deselected.rowIdx
+
+      rows[index].selected = false
+
+      return {...state, rows: rows }
+    }
+
     case ActionType.UPDATE_ROWS: {
       let { fromRow, toRow, update } = action.payload
       let rows                       =  state.rows.slice()

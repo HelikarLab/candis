@@ -1,20 +1,21 @@
 {
-    "container": "app",
     "color": {
         "primary": "#E91E63"
     },
-    "encoding": "utf-8",
+    "container": "app",
     "startdir": "data",
     "routes": {
-        "images": "/assets/img",
-        "base": "/",
-        "data": "/api/data",
+        "write": "/api/data/write",
+        "api": "/api",
         "assets": "/assets",
+        "data": "/api/data",
+        "base": "/",
+        "images": "/assets/img",
+        "read": "/api/data/read",
         "icons": "/assets/img/icons",
-        "create": "/api/data/create",
-        "resource": "/api/data/resource",
-        "api": "/api"
+        "resource": "/api/data/resource"
     },
+    "encoding": "utf-8",
     "title": "candis v0.1.0",
     "lang": "en"
 }

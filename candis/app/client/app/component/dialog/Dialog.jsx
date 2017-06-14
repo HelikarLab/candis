@@ -5,13 +5,16 @@ import classNames     from 'classnames'
 
 import DialogType     from '../../constant/DialogType'
 import { hideDialog } from '../../action/DialogAction'
+
 import CreatePanel    from '../panel/CreatePanel'
 import FilePanel      from '../panel/FilePanel'
+import AboutPanel     from '../panel/AboutPanel'
 
 const COMPONENTS =
 {
   [DialogType.CREATE]: CreatePanel,
-    [DialogType.FILE]:   FilePanel
+    [DialogType.FILE]:   FilePanel,
+   [DialogType.ABOUT]:  AboutPanel,
 }
 
 class Dialog extends React.Component {

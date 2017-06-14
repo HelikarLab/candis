@@ -13,6 +13,55 @@ import DialogType from '../constant/DialogType'
 import { showDialog, hideDialog } from '../action/DialogAction'
 import { refreshResource } from '../action/AsynchronousAction'
 
+const menus        = [
+  {
+      title: 'File',
+    actions: [
+      {
+           text: 'New',
+           icon: `${config.routes.icons}/file.png`,
+        tooltip: 'Create a new experiment'
+      },
+      {
+           text: 'Quit',
+           icon: `${config.routes.icons}/quit.png`,
+        tooltip: 'Quit the application'
+      }
+    ]
+  },
+  {
+      title: 'Help',
+    actions: [
+      {
+           text: 'About',
+           icon: `${config.routes.icons}/info.png`,
+        tooltip: 'Shows application information',
+        onClick: (dispatch) => {
+          const action = showDialog({
+             type: DialogType.ABOUT,
+            title: `${config.title}`,
+            props: {
+              classNames: {
+                  root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                footer: ['no-background', 'no-border']
+              },
+                 onClose: (dispatch) => {
+                   const action = hideDialog({
+                     type: DialogType.ABOUT
+                   })
+
+                   dispatch(action)
+                 }
+            }
+          })
+
+          dispatch(action)
+        }
+      }
+    ]
+  }
+]
+
 const compartments = [
   {
        name: 'Data',
@@ -98,14 +147,14 @@ const compartments = [
         // }
       ]
   },
-  // {
-  //      name: 'Visualize',
-  //      icon: `${config.routes.icons}/pie-chart.png`,
-  //   tooltip: 'Tools for Data Visualization',
-  //     tools: [
-  //
-  //     ]
-  // },
+  {
+       name: 'Visualize',
+       icon: `${config.routes.icons}/pie-chart.png`,
+    tooltip: 'Tools for Data Visualization',
+      tools: [
+
+      ]
+  },
   {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
@@ -154,34 +203,6 @@ const compartments = [
 class App extends React.Component {
   constructor (props) {
     super (props)
-
-    this.menus = [
-      {
-          title: 'File',
-        actions: [
-          {
-               text: 'New',
-               icon: `${config.routes.icons}/file.png`,
-            tooltip: 'Create a new experiment'
-          },
-          {
-               text: 'Quit',
-               icon: `${config.routes.icons}/quit.png`,
-            tooltip: 'Quit the application'
-          }
-        ]
-      },
-      {
-          title: 'Help',
-        actions: [
-          {
-               text: 'About',
-               icon: `${config.routes.icons}/info.png`,
-            tooltip: 'Shows application information'
-          }
-        ]
-      }
-    ]
   }
 
   componentDidMount ( ) {
@@ -192,7 +213,7 @@ class App extends React.Component {
     return (
       <div>
         <MenuBar
-          menus={this.menus}/>
+          menus={menus}/>
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">

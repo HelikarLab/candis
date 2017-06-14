@@ -4,7 +4,8 @@ import ReactDataGrid  from 'react-data-grid'
 
 import config         from '../../Config'
 
-import { insertRow, insertColumn, updateRows } from '../../action/DataEditorAction'
+import { insertRow, insertColumn, deleteRow, deleteColumn, selectRow, deselectRow,
+  updateRows } from '../../action/DataEditorAction'
 import { refreshResource } from '../../action/AsynchronousAction'
 
 class DataEditor extends React.Component {
@@ -36,7 +37,13 @@ class DataEditor extends React.Component {
            icon: `${config.routes.icons}/delete-row.png`,
         tooltip: 'Delete Row',
         onClick: (dispatch) => {
+          that.props.rows.forEach((row) => {
+            if ( row.selected ) {
+              const action = deleteRow(row)
 
+              dispatch(action)
+            }
+          })
         }
       },
       {
@@ -52,6 +59,14 @@ class DataEditor extends React.Component {
         onClick: refreshResource
       }
     ]
+  }
+
+  componentDidMount ( ) {
+    // horrible fix for an even more horrible bug
+    const that    = this
+    setTimeout(() => {
+      that.refs.grid.updateMetrics()
+    }, 1000)
   }
 
   render ( ) {
@@ -84,11 +99,30 @@ class DataEditor extends React.Component {
         </div>
         <div>
           <ReactDataGrid
+                          ref="grid"
              enableCellSelect={true}
                       columns={this.props.columns}
                     rowGetter={(index) => { return that.props.rows[index] }}
                     rowsCount={this.props.rows.length}
-              enableRowSelect={true}
+                 rowSelection={{
+                        showCheckbox: true,
+                   enableShiftSelect: true,
+                      onRowsSelected: (rows) => {
+                        rows.forEach((row) => {
+                          const action = selectRow(row)
+
+                          that.props.dispatch(action)
+                        })
+                      },
+                    onRowsDeselected: (rows) => {
+                        rows.forEach((row) => {
+                          const action = deselectRow(row)
+
+                          that.props.dispatch(action)
+                        })
+                    },
+                            selectBy: { isSelectedKey: 'selected' }
+                 }}
             onGridRowsUpdated={({ fromRow, toRow, updated }) => {
               that.props.dispatch((dispatch) => {
                 const action  = updateRows(fromRow, toRow, updated)

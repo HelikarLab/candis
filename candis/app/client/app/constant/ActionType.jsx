@@ -5,6 +5,10 @@ const ActionType =
 
                  INSERT_ROW: 'ACTION_TYPE_INSERT_ROW',
               INSERT_COLUMN: 'ACTION_TYPE_INSERT_COLUMN',
+                 DELETE_ROW: 'ACTION_TYPE_DELETE_ROW',
+              DELETE_COLUMN: 'ACTION_TYPE_DELETE_COLUMN',
+                 SELECT_ROW: 'ACTION_TYPE_SELECT_ROW',
+               DESELECT_ROW: 'ACTION_TYPE_DESELECT_ROW',
                 UPDATE_ROWS: 'ACTION_TYPE_UPDATE_ROWS',
 
    // Asynchronous Action Types

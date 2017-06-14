@@ -1,0 +1,2 @@
+include candis/resource/data/config.yml
+include candis/app/templates/**/*.html

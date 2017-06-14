@@ -92,16 +92,39 @@ def resource(path   = None,
 
     return json_, code
 
-@app.route(CONFIG.App.Routes.CREATE, methods = ['POST'])
-def create():
-    response  = Response()
+@app.route(CONFIG.App.Routes.READ, methods = ['GET', 'POST'])
+def read():
+    response    = Response()
 
-    data      = request.get_json()
+    parameters  = request.get_json()
 
-    save_cdata(dataset)
+    # TODO: check if valid parameters
+    path, name  = parameters['path'], parameters['name']
 
-    dict_     = response.to_dict()
-    json_     = jsonify(dict_)
-    code      = response.code
+    relpath     = os.path.join(path, name)
+    format_     = get_file_format(name)
+
+    if format_ == 'CDATA':
+        dataset = cdata.read(relpath)
+
+        response.set_data(dataset)
+
+    dict_       = response.to_dict()
+    json_       = jsonify(dict_)
+    code        = response.code
+
+    return json_, code
+
+@app.route(CONFIG.App.Routes.WRITE, methods = ['POST'])
+def write():
+    response   = Response()
+
+    parameters = request.get_json()
+
+    cdata.write(parameters['name'] + '.cdata', parameters['buffer'])
+
+    dict_      = response.to_dict()
+    json_      = jsonify(dict_)
+    code       = response.code
 
     return json_, code

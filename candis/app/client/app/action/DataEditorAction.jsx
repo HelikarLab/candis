@@ -18,6 +18,42 @@ const insertColumn = (column) => {
   return action
 }
 
+const deleteRow    = (row) => {
+  const action     = {
+       type: ActionType.DELETE_ROW,
+    payload: row
+  }
+
+  return action
+}
+
+const deleteColumn = (column) => {
+  const action     = {
+       type: ActionType.DELETE_COLUMN,
+    payload: column
+  }
+
+  return action
+}
+
+const selectRow    = (selected) => {
+  const action     = {
+       type: ActionType.SELECT_ROW,
+    payload: selected
+  }
+
+  return action
+}
+
+const deselectRow  = (deselected) => {
+  const action     = {
+       type: ActionType.DESELECT_ROW,
+    payload: deselected
+  }
+
+  return action
+}
+
 const updateRows   = (fromRow, toRow, update) => {
   const action     = {
        type: ActionType.UPDATE_ROWS,
@@ -31,4 +67,5 @@ const updateRows   = (fromRow, toRow, update) => {
   return action
 }
 
-export { insertRow, insertColumn, updateRows }
+export { insertRow, insertColumn, selectRow, deselectRow, deleteRow,
+  deleteColumn, updateRows }

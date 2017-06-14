@@ -1,10 +1,13 @@
-import React         from 'react'
-import Select        from 'react-select'
-import ReactDataGrid from 'react-data-grid'
-import { connect }   from 'react-redux'
-import classNames    from 'classnames'
+import React           from 'react'
+import Select          from 'react-select'
+import ReactDataGrid   from 'react-data-grid'
+import { connect }     from 'react-redux'
+import classNames      from 'classnames'
 
-import FileFormat    from '../../constant/FileFormat'
+import axios           from 'axios'
+
+import config          from '../../Config'
+import FileFormat      from '../../constant/FileFormat'
 import { filterFiles } from '../../util'
 
 class FilePanel extends React.Component {
@@ -22,6 +25,29 @@ class FilePanel extends React.Component {
     this.setState({
       select: value
     })
+
+    const parameters = JSON.parse(value.value)
+    const that       = this
+
+    axios.post(config.routes.read, parameters)
+         .then((response) => {
+           response = response.data
+
+           if ( response.status == "success" ) {
+             const dataset = response.data
+
+             const columns = dataset.attributes.map((attribute) => {
+               return {...attribute, key: attribute.name}
+             })
+             const rows    = dataset.data
+
+             that.setState({
+               data: { columns: columns, rows: rows }
+             })
+
+             that.refs.grid.updateMetrics()
+           }
+         })
   }
 
   onSelect ( ) {
@@ -46,12 +72,15 @@ class FilePanel extends React.Component {
                onChange={this.onChange}
               clearable={false}/>
           </div>{/* minimal padding */}
-          <ReactDataGrid
-                columns={this.state.data.columns}
-              rowGetter={(index) => {
-                return that.state.data.rows[index]
-              }}
-              rowsCount={this.state.data.rows.length}/>
+          <div>
+            <ReactDataGrid
+                      ref="grid"
+                  columns={this.state.data.columns}
+                rowGetter={(index) => {
+                  return that.state.data.rows[index]
+                }}
+                rowsCount={this.state.data.rows.length}/>
+          </div>
         </div>
         <div className={classNames("panel-footer", this.props.classNames.footer)}>
           <div className="text-right">
@@ -86,7 +115,7 @@ const mapStateToProps   = (state) => {
 
   const options         = files.map((file) => {
     return {
-      value: `{path: "${file.path}", name: "${file.name}"}`,
+      value: `{"path": "${file.path}", "name": "${file.name}"}`,
       label: file.name
     }
   })

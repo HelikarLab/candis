@@ -1,5 +1,6 @@
-import React   from 'react'
-import shortid from 'shortid'
+import React       from 'react'
+import { connect } from 'react-redux'
+import shortid     from 'shortid'
 
 import Media   from './widget/Media'
 
@@ -11,6 +12,7 @@ class MenuBar extends React.Component {
   }
 
   render ( ) {
+    this.ID = this.props.ID ? this.props.ID : this.ID
     return (
       <div className="navbar navbar-default navbar-fixed-top" id={`menubar-${this.ID}`}>
         <div className="container-fluid">
@@ -34,8 +36,8 @@ class MenuBar extends React.Component {
                 this.props.menus.map((menu, index) => {
                   return (
                     <MenuBar.Menu
-                      key={index}
-                      title={menu.title}
+                          key={index}
+                        title={menu.title}
                       actions={menu.actions}/>
                   )
                 })
@@ -52,7 +54,7 @@ MenuBar.Menu = class extends React.Component {
   render ( ) {
     return (
       <li className="dropdown">
-        <a href="#" className="dropdown-toggle" data-toggle="dropdown"
+        <a href="javascript:void(0);" className="dropdown-toggle" data-toggle="dropdown"
           onClick={this.onClick}>
           {this.props.title}
         </a>
@@ -68,10 +70,12 @@ MenuBar.Menu = class extends React.Component {
 
               return (
                 <li key={index} {...ttattrs}>
-                  <a href="#" onClick={action.onClick}>
+                  <a href="javascript:void(0);" onClick={() => {
+                      this.props.dispatch(action.onClick)
+                    }}>
                     <Media
                       heading={action.text}
-                      icon={action.icon}/>
+                         icon={action.icon}/>
                   </a>
                 </li>
               )
@@ -82,5 +86,7 @@ MenuBar.Menu = class extends React.Component {
     )
   }
 }
+
+MenuBar.Menu = connect()(MenuBar.Menu)
 
 export default MenuBar
