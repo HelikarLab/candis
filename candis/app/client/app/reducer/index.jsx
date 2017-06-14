@@ -2,12 +2,12 @@ import { combineReducers } from 'redux'
 
 import dialog     from './DialogReducer'
 import dataEditor from './DataEditorReducer'
-import filePanel  from './FilePanelReducer'
+import data       from './DataReducer'
 
 const Reducers = combineReducers({
       dialog: dialog,
   dataEditor: dataEditor,
-   filePanel: filePanel
+        data: data
 })
 
 export default Reducers

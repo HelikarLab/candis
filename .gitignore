@@ -11,6 +11,5 @@ node_modules
 .sass-cache
 
 # misc
-TODO.md
 data
-snippet.py
+snippet

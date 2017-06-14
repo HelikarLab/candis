@@ -1,15 +1,17 @@
-import React      from 'react'
+import React       from 'react'
+import { connect } from 'react-redux'
 
-import config     from '../Config'
+import config      from '../Config'
 
-import MenuBar    from '../component/MenuBar'
-import ToolBox    from '../component/widget/toolbox/ToolBox'
-import Canvas     from '../component/widget/Canvas'
-import Dialog     from '../component/dialog/Dialog'
+import MenuBar     from '../component/MenuBar'
+import ToolBox     from '../component/widget/toolbox/ToolBox'
+import Canvas      from '../component/widget/Canvas'
+import Dialog      from '../component/dialog/Dialog'
 import CreatePanel from '../component/panel/CreatePanel'
 
 import DialogType from '../constant/DialogType'
 import { showDialog, hideDialog } from '../action/DialogAction'
+import { refreshResource } from '../action/AsynchronousAction'
 
 const compartments = [
   {
@@ -60,6 +62,7 @@ const compartments = [
           onClick: (dispatch) => {
             const action = showDialog({
                type: DialogType.FILE,
+               size: Dialog.LARGE,
               title: 'File',
               props: {
                 classNames: {
@@ -68,7 +71,7 @@ const compartments = [
                 },
                 onSelect: (dispatch) => {
                   let action   = null
-                  
+
                   action       = hideDialog({
                     type: DialogType.FILE
                   })
@@ -88,21 +91,21 @@ const compartments = [
             dispatch(action)
           }
         },
-        {
-             name: 'Save',
-             icon: `${config.routes.icons}/floppy-disk.png`,
-          tooltip: 'Save data to an output file'
-        }
+        // {
+        //      name: 'Save',
+        //      icon: `${config.routes.icons}/floppy-disk.png`,
+        //   tooltip: 'Save data to an output file'
+        // }
       ]
   },
-  {
-       name: 'Visualize',
-       icon: `${config.routes.icons}/pie-chart.png`,
-    tooltip: 'Tools for Data Visualization',
-      tools: [
-
-      ]
-  },
+  // {
+  //      name: 'Visualize',
+  //      icon: `${config.routes.icons}/pie-chart.png`,
+  //   tooltip: 'Tools for Data Visualization',
+  //     tools: [
+  //
+  //     ]
+  // },
   {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
@@ -181,6 +184,10 @@ class App extends React.Component {
     ]
   }
 
+  componentDidMount ( ) {
+    this.props.dispatch(refreshResource)
+  }
+
   render ( ) {
     return (
       <div>
@@ -202,4 +209,4 @@ class App extends React.Component {
   }
 }
 
-export default App
+export default connect()(App)

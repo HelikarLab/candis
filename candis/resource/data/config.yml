@@ -14,5 +14,7 @@ app:
     api: &api !relurljoin [*base, "api"]
     data: &data !relurljoin [*api, "data"]
     resource: !relurljoin [*data, "resource"]
+    write: !relurljoin [*data, "write"]
+    read: !relurljoin [*data, "read"]
   container: "app"
   startdir: "data"

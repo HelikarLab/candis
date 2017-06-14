@@ -54,10 +54,6 @@ class DataEditor extends React.Component {
     ]
   }
 
-  componentDidMount ( ) {
-    this.props.dispatch(refreshResource)
-  }
-
   render ( ) {
     const that = this
     return (
@@ -86,21 +82,26 @@ class DataEditor extends React.Component {
             </div>
           </div>
         </div>
-        <ReactDataGrid
-           enableCellSelect={true}
-                    columns={this.props.columns}
-                  rowGetter={(index) => { return that.props.rows[index] }}
-                  rowsCount={this.props.rows.length}
-            enableRowSelect={true}
-          onGridRowsUpdated={({ fromRow, toRow, updated }) => {
-            that.props.dispatch((dispatch) => {
-              const action = updateRows(fromRow, toRow, updated)
+        <div>
+          <ReactDataGrid
+             enableCellSelect={true}
+                      columns={this.props.columns}
+                    rowGetter={(index) => { return that.props.rows[index] }}
+                    rowsCount={this.props.rows.length}
+              enableRowSelect={true}
+            onGridRowsUpdated={({ fromRow, toRow, updated }) => {
+              that.props.dispatch((dispatch) => {
+                const action  = updateRows(fromRow, toRow, updated)
 
-              dispatch(action)
+                dispatch(action)
 
-              that.props.onChangeData(that.props.rows)
-            })
-          }}/>
+                that.props.onChangeData({
+                  columns: that.props.columns,
+                     rows: that.props.rows
+                })
+              })
+            }}/>
+        </div>{/* a hack which doesn't work, what's the harm anyway? */}
       </div>
     )
   }

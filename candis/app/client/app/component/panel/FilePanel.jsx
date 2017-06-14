@@ -1,20 +1,30 @@
-import React       from 'react'
-import { connect } from 'react-redux'
-import classNames  from 'classnames'
+import React         from 'react'
+import Select        from 'react-select'
+import ReactDataGrid from 'react-data-grid'
+import { connect }   from 'react-redux'
+import classNames    from 'classnames'
 
-import { refreshResource } from '../../action/AsynchronousAction'
+import FileFormat    from '../../constant/FileFormat'
+import { filterFiles } from '../../util'
 
 class FilePanel extends React.Component {
   constructor (props) {
     super (props)
 
+    this.onChange = this.onChange.bind(this)
     this.onSelect = this.onSelect.bind(this)
     this.onCancel = this.onCancel.bind(this)
+
+    this.state    = FilePanel.defaultStates
+  }
+
+  onChange (value) {
+    this.setState({
+      select: value
+    })
   }
 
   onSelect ( ) {
-    const value   = $(this.refs.selectpicker).selectpicker('val')
-
     this.props.dispatch(this.props.onSelect)
   }
 
@@ -22,29 +32,26 @@ class FilePanel extends React.Component {
     this.props.dispatch(this.props.onCancel)
   }
 
-  componentWillMount ( ) {
-    this.props.dispatch(refreshResource)
-  }
-
-  componentDidMount ( ) {
-    $(this.refs.selectpicker).selectpicker('render')
-  }
-
   render ( ) {
+    const that = this
+
     return (
       <div className={classNames("panel panel-default", this.props.classNames.root)}>
         <div className="panel-body">
-          <select className="selectpicker" ref="selectpicker" data-width="100%">
-            {
-              this.props.files.map((file, index) => {
-                return (
-                  <option key={index} value={file.id}>
-                    {file.name}
-                  </option>
-                )
-              })
-            }
-          </select>
+          <div className="form-group">
+            <Select
+                options={this.props.files}
+                   name="select"
+                  value={this.state.select}
+               onChange={this.onChange}
+              clearable={false}/>
+          </div>{/* minimal padding */}
+          <ReactDataGrid
+                columns={this.state.data.columns}
+              rowGetter={(index) => {
+                return that.state.data.rows[index]
+              }}
+              rowsCount={this.state.data.rows.length}/>
         </div>
         <div className={classNames("panel-footer", this.props.classNames.footer)}>
           <div className="text-right">
@@ -67,11 +74,25 @@ class FilePanel extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const filePanel     = state.filePanel
+FilePanel.defaultStates =
+{
+  select: { },
+    data: { columns: [ ], rows: [ ] }
+}
+
+const mapStateToProps   = (state) => {
+  const data            = state.data
+  const files           = filterFiles(data.resource, [FileFormat.CDATA])
+
+  const options         = files.map((file) => {
+    return {
+      value: `{path: "${file.path}", name: "${file.name}"}`,
+      label: file.name
+    }
+  })
 
   return {
-    files: filePanel.files
+    files: options
   }
 }
 

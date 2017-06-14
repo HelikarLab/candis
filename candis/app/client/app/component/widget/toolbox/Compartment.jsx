@@ -40,23 +40,29 @@ class Compartment extends React.Component {
           </div>
         <div className="collapse panel-collapse"
           id={`compartment-${this.id}`}>
-          <div className="list-group">
-            {
+          {
+            this.props.tools.length ?
+              <div className="list-group">
+                {
 
-              this.props.tools.map((tool, index) => {
-                return (
-                  <div className="list-group-item" key={index}>
-                    <Tool
-                      name={tool.name}
-                      icon={tool.icon}
-                      tooltip={tool.description}
-                      onClick={tool.onClick}>
-                    </Tool>
-                  </div>
-                )
-              })
+                  this.props.tools.map((tool, index) => {
+                    return (
+                      <div className="list-group-item" key={index}>
+                        <Tool
+                          name={tool.name}
+                          icon={tool.icon}
+                          tooltip={tool.description}
+                          onClick={tool.onClick}>
+                        </Tool>
+                      </div>
+                    )
+                  })
+                }
+              </div> :
+              <div className="panel-body">
+                No tools found.
+              </div>
             }
-          </div>
         </div>
       </div>
     )

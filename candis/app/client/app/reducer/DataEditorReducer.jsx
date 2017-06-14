@@ -4,6 +4,9 @@ import shortid       from 'shortid'
 
 import ActionType    from '../constant/ActionType'
 import AttributeType from '../constant/AttributeType'
+import FileFormat    from '../constant/FileFormat'
+
+import { filterFiles } from '../util'
 
 const initialState = {
      data: { },
@@ -16,7 +19,8 @@ const initialState = {
     {
           key: 'file',
          name: 'File',
-         type: AttributeType.FILE
+         type: AttributeType.FILE,
+      allowed: [FileFormat.CEL]
     },
     {
            key: 'label',
@@ -64,16 +68,22 @@ const dataEditor   = (state = initialState, action) => {
     }
 
     case ActionType.REFRESH_RESOURCE_SUCCESS: {
-      let options = action.payload.data.map((data) => {
-        return data.name
-      })
-
-      let editor  = <Editors.DropDownEditor options={options}/>
-      let columns = state.columns.slice()
+      let resource = action.payload
+      let columns  = state.columns.slice()
 
       columns.forEach((column) => {
         if ( column.type == AttributeType.FILE ) {
-            column.editor = editor
+          let files     = filterFiles(resource, column.allowed)
+
+          let options   = files.map((file, index) => {
+            return {
+                 id: index,
+              value: file.name,
+              title: index,
+            }
+          })
+
+          column.editor = <Editors.DropDownEditor options={options}/>
         }
       })
 

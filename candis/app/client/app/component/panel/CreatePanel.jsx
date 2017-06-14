@@ -10,10 +10,20 @@ class CreatePanel extends React.Component {
     this.onCreate     = this.onCreate.bind(this)
     this.onCancel     = this.onCancel.bind(this)
     this.onChangeData = this.onChangeData.bind(this)
+
+    this.state        = CreatePanel.defaultStates
   }
 
   onCreate ( ) {
-    this.props.dispatch(this.props.onCreate)
+    const data        = this.state.data
+    const attributes  = data.columns.map((column) => {
+      return { name: column.name, type: column.type }
+    })
+    
+    const buffer      = { attributes: attributes, data: data.rows }
+    const dispatch    = this.props.dispatch
+
+    dispatch(this.props.onCreate)
   }
 
   onCancel ( ) {
@@ -21,7 +31,9 @@ class CreatePanel extends React.Component {
   }
 
   onChangeData (data) {
-    
+    this.setState({
+      data: data
+    })
   }
 
   render ( ) {
@@ -50,6 +62,11 @@ class CreatePanel extends React.Component {
       </div>
     )
   }
+}
+
+CreatePanel.defaultStates =
+{
+  data: { columns: [ ], rows: [ ] }
 }
 
 export default connect()(CreatePanel)

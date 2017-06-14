@@ -1,6 +1,6 @@
 const AttributeType =
 {
-  FILE: 'ATTRIBUTE_TYPE_FILE'
+  FILE: 'file'
 }
 
 export default AttributeType
