@@ -23,8 +23,6 @@ def get_rand_uuid_str():
 
 	return strip
 
-# mortally scared of this function - Achilles Rasquinha
-# potential race conditions, exposing ports if system fails, etc.
 def get_free_port(host = None, seed = 1024):
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
