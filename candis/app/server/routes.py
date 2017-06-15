@@ -1,4 +1,4 @@
-# imports - standard imports
+# imports - third-party imports
 from flask import render_template
 
 # imports - module imports

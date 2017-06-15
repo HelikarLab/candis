@@ -13,7 +13,7 @@ Download or clone the repository as follows:
 $ git clone http://github.com/achillesrasquinha/candis.git && cd candis
 ```
 
-Install necessary dependencies:
+Then, simply:
 ```console
 $ make install
 ```
@@ -36,7 +36,7 @@ via Python
 >>> candis.main()
 ```
 
-![](.github/ria.png)
+![](.github/ria.gif)
 
 ### Dependencies
 * Production Dependencies

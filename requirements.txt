@@ -1,9 +1,10 @@
 flake8
 sphinx
 six
+addict
 pyyaml
 requests
 tqdm
 Flask
-addict
+django-htmlmin
 pytest

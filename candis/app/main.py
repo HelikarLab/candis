@@ -2,12 +2,17 @@
 import os
 
 # imports - module imports
-from candis.util import assign_if_none
-from candis.app  import app
+from candis.config import CONFIG
+from candis.util   import get_free_port
+from candis.app    import app
 
 def main(argv = None):
-	code = os.EX_OK
+	code  = os.EX_OK
 
-	app.run(debug = True)
+	host  = CONFIG.App.HOST
+	port  = get_free_port(seed = CONFIG.App.PORT)
+	debug = CONFIG.DEBUG
+
+	app.run(host = host, port = port, debug = debug)
 
 	return code
