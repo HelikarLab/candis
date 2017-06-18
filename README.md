@@ -1,6 +1,8 @@
-<h1 align="center">
+<div align="center">
   <img src=".github/logo.png" width="512">
-</h1>
+</div>
+
+---
 
 <h4 align="center">
   A data mining suite for DNA microarrays
@@ -20,7 +22,7 @@
 
 ![](.github/ria.gif)
 
-**candis** is an Open-Sourced data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from from Data Extraction to Model Deployment.
+**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment.
 
 ### Table of Contents
 * [Installation](#installation)

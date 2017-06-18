@@ -8,7 +8,7 @@ Release: v\ |version| (:ref:`Installation <installation>`)
 
 **candis** is an Open Source data mining suite (released
 under the GNU General Public License v3) for DNA microarrays that consists of
-a wide collection of tools you require, right from from Data Extraction to
+a wide collection of tools you require, right from Data Extraction to
 Model Deployment.
 
 **candis** helps you with
