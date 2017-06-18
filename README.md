@@ -1,9 +1,9 @@
 <h1 align="center">
-  <img src=".github/logo.png" width="300">
+  <img src=".github/logo.png" width="512">
 </h1>
 
 <h4 align="center">
-  A data mining suite for DNA microarrays.
+  A data mining suite for DNA microarrays
 </h4>
 
 ### Table of Contents
