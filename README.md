@@ -10,7 +10,7 @@
   <a href="https://saythanks.io/to/achillesrasquinha" target="_blank">
     <img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg">
   </a>
-  <a href="paypal.me/achillesrasquinha" target="_blank">
+  <a href="https://paypal.me/achillesrasquinha" target="_blank">
     <img src="https://img.shields.io/badge/Donate-%24-blue.svg">
   </a>
 </p>
