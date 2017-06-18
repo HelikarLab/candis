@@ -6,6 +6,15 @@
   A data mining suite for DNA microarrays
 </h4>
 
+<p align="center">
+  <a href="https://saythanks.io/to/achillesrasquinha" target="_blank">
+    <img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg">
+  </a>
+  <a href="paypal.me/achillesrasquinha" target="_blank">
+    <img src="https://img.shields.io/badge/Donate-%24-blue.svg">
+  </a>
+</p>
+
 ### Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
