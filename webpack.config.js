@@ -1,25 +1,32 @@
-var path       = require('path')
-,   webpack    = require('webpack');
+var path           = require('path')
+,   webpack        = require('webpack')
+,   UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-var basepath   = path.join(__dirname, 'candis', 'app');
+var paths      = { };
+paths.BASE     = path.join(__dirname, 'candis', 'app');
+paths.APP      = path.join(paths.BASE, 'client', 'app');
 
 module.exports = {
   entry: [
-    path.join(basepath, 'client', 'app', 'Client.jsx'),
-    path.join(basepath, 'client', 'app', 'plugins.js')
+    path.join(paths.APP, 'Client.jsx'),
+    path.join(paths.APP, 'plugins.js')
   ],
   output: {
-    path: path.join(basepath, 'assets', 'js'),
+    path: path.join(paths.BASE, 'assets', 'js'),
     filename: 'bundle.min.js'
   },
   module: {
     rules: [
       {
-          test: /\.jsx$/,
-        loader: 'babel-loader'
+           test: /\.(js|jsx)$/,
+         loader: 'babel-loader',
+        exclude: /node_modules/
       }
     ]
   },
+  plugins: [
+    new UglifyJSPlugin()
+  ],
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
   }

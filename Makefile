@@ -9,13 +9,14 @@ HOST      = 0.0.0.0
 PORT     ?= 5000
 
 install:
-	cat requirements/*.txt > requirements.txt
+	cat requirements/*.txt          > requirements-dev.txt
+	cat requirements/production.txt > requirements.txt
 
 	pip install -r requirements.txt
 
-	npm install .
+	# npm install .
 
-	$(PYTHON) setup.py install
+	# $(PYTHON) setup.py install
 
 clean:
 	find $(BASEDIR) | grep -E "__pycache__" | xargs rm -rf

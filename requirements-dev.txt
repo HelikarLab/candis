@@ -1,3 +1,6 @@
+flake8
+gunicorn
+sphinx
 six
 addict
 pyyaml
@@ -5,3 +8,4 @@ requests
 tqdm
 Flask
 django-htmlmin
+pytest

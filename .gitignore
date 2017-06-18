@@ -7,6 +7,9 @@ docs/build
 # Dependencies
 node_modules
 
+# Logs
+npm-debug.log
+
 # Cache
 .sass-cache
 
