@@ -7,13 +7,17 @@
 </h4>
 
 <p align="center">
-  <a href="https://saythanks.io/to/achillesrasquinha" target="_blank">
+  <a href="https://saythanks.io/to/achillesrasquinha">
     <img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg">
   </a>
-  <a href="https://paypal.me/achillesrasquinha" target="_blank">
+  <a href="https://paypal.me/achillesrasquinha">
     <img src="https://img.shields.io/badge/Donate-%24-blue.svg">
   </a>
 </p>
+
+![](.github/ria.gif)
+
+**candis** is an Open-Sourced data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from from Data Extraction to Model Deployment.
 
 ### Table of Contents
 * [Installation](#installation)
@@ -27,9 +31,14 @@ Download or clone the repository as follows:
 $ git clone http://github.com/achillesrasquinha/candis.git && cd candis
 ```
 
-Then, simply:
+Install necessary dependencies:
 ```console
-$ make install
+$ pip install -r requirements.txt
+```
+
+Then, go ahead and simply:
+```console
+$ python setup.py install
 ```
 
 ### Usage
@@ -49,8 +58,6 @@ via Python
 >>> import candis
 >>> candis.main()
 ```
-
-![](.github/ria.gif)
 
 ### Dependencies
 * Production Dependencies

@@ -4,6 +4,7 @@ import os
 # imports - module imports
 from candis.util import assign_if_none
 from candis.cli.parser import ArgumentParser
+from candis.config import CONFIG
 from candis import app
 
 def main(argv = None):
@@ -24,7 +25,6 @@ def main(argv = None):
     # parser = ArgumentParser()
     # args   = parser.parse(argv)
 
-    # Check if argv is None or an emtpy list
     if not argv:
         code = app.main()
 
