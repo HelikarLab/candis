@@ -1,5 +1,10 @@
-![](.github/logo.png)
-> :ribbon: *"A data mining suite for DNA microarrays."*
+<div style="text-align: center">
+  <img src=".github/logo.png" width="250">
+</div>
+
+<h4 style="text-align: center">
+  *"A data mining suite for DNA microarrays."*
+</h4>
 
 ### Table of Contents
 * [Installation](#installation)

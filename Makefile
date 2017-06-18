@@ -14,7 +14,7 @@ install:
 
 	pip install -r requirements.txt
 
-	# npm install .
+	npm install .
 
 	# $(PYTHON) setup.py install
 
