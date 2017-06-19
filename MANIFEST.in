@@ -1,4 +1,0 @@
-include candis/resource/data/config.yml
-include candis/app/templates/**/*.html
-include candis/app/assets/img/**/*.png
-include candis/app/assets/img/**/*.jpg

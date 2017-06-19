@@ -2,11 +2,11 @@ var path           = require('path')
 ,   webpack        = require('webpack')
 ,   UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
-var paths      = { };
-paths.BASE     = path.join(__dirname, 'candis', 'app');
-paths.APP      = path.join(paths.BASE, 'client', 'app');
+var paths          = { };
+paths.BASE         = path.join(__dirname, 'candis', 'app');
+paths.APP          = path.join(paths.BASE, 'client', 'app');
 
-module.exports = {
+module.exports     = {
   entry: [
     path.join(paths.APP, 'Client.jsx'),
     path.join(paths.APP, 'plugins.js')
@@ -25,7 +25,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new UglifyJSPlugin()
+    new UglifyJSPlugin({
+      output: {
+        comments: false
+      }
+    })
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json'],

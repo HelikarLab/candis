@@ -147,14 +147,14 @@ const compartments = [
         // }
       ]
   },
-  {
-       name: 'Visualize',
-       icon: `${config.routes.icons}/pie-chart.png`,
-    tooltip: 'Tools for Data Visualization',
-      tools: [
-
-      ]
-  },
+  // {
+  //      name: 'Visualize',
+  //      icon: `${config.routes.icons}/pie-chart.png`,
+  //   tooltip: 'Tools for Data Visualization',
+  //     tools: [
+  //
+  //     ]
+  // },
   {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
