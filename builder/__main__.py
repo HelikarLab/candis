@@ -13,7 +13,7 @@ def main(args = None):
     dikt = CONFIG.App.schema
 
     with open(path, 'w') as f:
-        json.dump(dikt, f)
+        json.dump(dikt, f, indent = 4)
 
     return code
 

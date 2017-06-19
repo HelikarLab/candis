@@ -1,0 +1,10 @@
+[
+  {
+    "name": "CEL",
+    "extensions": [".cel", ".CEL"]
+  },
+  {
+    "name": "CDATA",
+    "extensions": [".cdata", ".CDATA"]
+  }
+]

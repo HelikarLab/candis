@@ -20,4 +20,4 @@ app:
     write: !relurljoin [*data, "write"]
     read: !relurljoin [*data, "read"]
   container: "app"
-  startdir: "data"
+  startdir: "cres"

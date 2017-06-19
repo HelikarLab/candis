@@ -1,6 +1,6 @@
 # imports - standard imports
-import os
-import uuid
+import os, json
+import time, uuid
 import socket, errno
 
 def assign_if_none(object_, value):
@@ -47,3 +47,24 @@ def get_free_port(host = None, seed = 1024):
 		sock.close()
 
 	return port
+
+def makedirs(path, exists_ok = False):
+	try:
+		os.makedirs(path)
+	except OSError as e:
+		if not exists_ok:
+			if not os.path.isdir(path):
+				raise e
+
+def json_load(path):
+	data = None
+
+	with open(path) as f:
+		data = json.load(f)
+
+	return data
+
+def get_timestamp_str(format_):
+	string = time.strftime(format_)
+
+	return string

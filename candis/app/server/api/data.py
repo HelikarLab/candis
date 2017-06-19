@@ -6,34 +6,34 @@ from flask import request, jsonify
 import addict
 
 # imports - module imports
-from candis.app.server.app      import app
 from candis.config              import CONFIG
-from candis.app.server.response import Response
+from candis.util                import (
+    assign_if_none, get_rand_uuid_str, json_load, get_timestamp_str
+)
+from candis.resource            import R
 from candis.data                import cdata
-from candis.util                import assign_if_none, get_rand_uuid_str
+from candis.app.server.app      import app
+from candis.app.server.response import Response
 
-# TODO: store in a JSON file
-FILE_FORMATS = [
-    { 'name': 'CEL',   'extensions': ['.cel', '.CEL'] },
-    { 'name': 'CDATA', 'extensions': ['.cdata'] }
-]
+FFORMATS         = json_load(os.path.join(R.Path.DATA, 'file-formats.json'))
+ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
 
 def get_file_format(file_):
-    _, ext  = os.path.splitext(file_)
     format_ = None
 
-    for metadata in FILE_FORMATS:
-        for extension in metadata['extensions']:
-            if ext == extension:
-                format_ = metadata['name']
+    if not file_:
+        _, ext = os.path.splitext(file_)
 
-                break
+        for metadata in FFORMATS:
+            for extension in metadata['extensions']:
+                if ext == extension:
+                    format_ = metadata['name']
+
+                    break
 
     return format_
 
-def discover_resource(path,
-                      level   = None,
-                      filter_ = None):
+def discover_resource(path, level = None, filter_ = None):
     tree      = addict.Dict()
     tree.path = path
     tree.dirs, tree.files = [ ], [ ]
@@ -71,12 +71,10 @@ def discover_resource(path,
     return tree
 
 @app.route(CONFIG.App.Routes.RESOURCE, methods = ['GET', 'POST'])
-def resource(path   = None,
-            level   = None, # provide an exhaustive search
-            filter_ = ['CDATA', 'CEL']):
+def resource(filter_ = ['CDATA', 'CEL'], level = None):
     response  = Response()
 
-    startdir  = assign_if_none(path, CONFIG.App.STARTDIR)
+    startdir  = CONFIG.App.STARTDIR
 
     tree      = discover_resource(
       path    = startdir,
@@ -96,18 +94,25 @@ def resource(path   = None,
 def read():
     response    = Response()
 
-    parameters  = request.get_json()
+    path        = request.args.get('path')
+    name        = request.args.get('name')
 
-    # TODO: check if valid parameters
-    path, name  = parameters['path'], parameters['name']
+    if not path:
+        if not name:
+            relpath = os.path.join(path, name)
 
-    relpath     = os.path.join(path, name)
-    format_     = get_file_format(name)
+            # TODO: check if file exists, set error if not.
 
-    if format_ == 'CDATA':
-        dataset = cdata.read(relpath)
+            format_ = get_file_format(name)
 
-        response.set_data(dataset)
+            if format_ == 'CDATA':
+                pass
+        else:
+            # TODO: set response error: filename not provided
+            pass
+    else:
+        # TODO: set response error: path not provided
+        pass
 
     dict_       = response.to_dict()
     json_       = jsonify(dict_)
@@ -119,9 +124,22 @@ def read():
 def write():
     response   = Response()
 
-    parameters = request.get_json()
+    filename   = request.args.get('name', get_timestamp_str())
+    format_    = request.args.get('format')
+    buffer_    = request.args.get('buffer')
 
-    cdata.write(parameters['name'] + '.cdata', parameters['buffer'])
+    if format_ == 'CDATA':
+        file_  = '{name}.{ext}'.format(name = filename, ext = '.cdata')
+        path   = os.path.join(ABSPATH_STARTDIR, file_)
+
+        try:
+            cdata.write(path, buffer_)
+        except TypeError as e:
+            # TODO: set response error: invalid buffer
+            pass
+    else:
+        # TODO: set response error: cannot write file, invalid file format.
+        pass
 
     dict_      = response.to_dict()
     json_      = jsonify(dict_)
