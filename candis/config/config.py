@@ -25,9 +25,9 @@ class Config(object):
     'candis'
     '''
     def __init__(self, schema = None):
-        self.schema   = assign_if_none(schema, { })
+        # check_mapping(schema)
 
-        # check_mutable_mapping(schema)
+        self.schema   = assign_if_none(schema, { })
 
         self.children = [ ]
 
@@ -39,13 +39,13 @@ class Config(object):
         self.schema.update(schema)
 
         for key, value in self.schema.items():
-            # Assuming (key, value) to be a leaf node.
+            # assuming (key, value) to be a leaf node.
             attr = key.upper()
             aval = value
-            # Check whether a sub-object is of type dict-like.
+            # check whether a sub-object is of type dict-like.
             # if check_mutable_mapping(value, raise_err = False):
             if isinstance(value, collections.Mapping):
-                # Set node name as capitalcase with corresponding value.
+                # set node name as capitalcase with corresponding value.
                 attr = key.capitalize()
                 aval = Config(value)
 

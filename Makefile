@@ -1,3 +1,4 @@
+.PHONY: build
 .PHONY: docs
 
 PYTHON      ?= python
@@ -15,6 +16,9 @@ install:
 	pip install -r requirements.txt
 
 	npm install .
+
+build:
+	$(PYTHON) -B -m builder
 
 clean:
 	rm -rf .sass-cache
