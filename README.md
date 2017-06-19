@@ -64,6 +64,9 @@ via Python
 >>> candis.main()
 ```
 
+### Demo
+Check out a live demo of the application [here](https://cancerdiscover.herokuapp.com).
+
 ### Dependencies
 * Production Dependencies
   * Python 2.7+ or Python 3.5+
