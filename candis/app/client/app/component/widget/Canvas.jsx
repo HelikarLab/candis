@@ -24,7 +24,7 @@ class Canvas extends React.Component {
         <div className="panel-heading">
           <div className="panel-title">
             <XEditable
-              state={this.state.title}
+              value={this.state.title}
               onChange={(value) => {
                 that.setState({
                   title: value

@@ -1,23 +1,23 @@
 {
-    "container": "app",
     "port": 5000,
-    "encoding": "utf-8",
+    "container": "app",
+    "startdir": "cres",
+    "host": "127.0.0.1",
     "title": "candis v0.1.0",
+    "lang": "en",
     "color": {
         "primary": "#E91E63"
     },
-    "lang": "en",
+    "encoding": "utf-8",
     "routes": {
-        "api": "/api",
-        "assets": "/assets",
-        "write": "/api/data/write",
-        "read": "/api/data/read",
-        "icons": "/assets/img/icons",
-        "data": "/api/data",
         "resource": "/api/data/resource",
+        "api": "/api",
+        "images": "/assets/img",
+        "icons": "/assets/img/icons",
+        "write": "/api/data/write",
         "base": "/",
-        "images": "/assets/img"
-    },
-    "host": "127.0.0.1",
-    "startdir": "cres"
+        "assets": "/assets",
+        "data": "/api/data",
+        "read": "/api/data/read"
+    }
 }
