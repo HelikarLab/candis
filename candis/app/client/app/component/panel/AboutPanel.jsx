@@ -2,7 +2,7 @@ import React       from 'react'
 import { connect } from 'react-redux'
 import classNames  from 'classnames'
 
-import config      from '../../Config'
+import config      from '../../config'
 
 class AboutPanel extends React.Component {
   constructor (props) {

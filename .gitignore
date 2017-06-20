@@ -6,6 +6,7 @@ docs/build
 
 # Dependencies
 node_modules
+bower_components
 
 # Logs
 npm-debug.log

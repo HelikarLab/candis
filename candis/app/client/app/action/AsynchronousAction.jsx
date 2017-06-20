@@ -1,11 +1,11 @@
 import axios      from 'axios'
 
-import config     from '../Config'
+import config     from '../config'
 import ActionType from '../constant/ActionType'
 
-const refreshResource = (dispatch) => {
+const getResource = (dispatch) => {
   dispatch({
-    type: ActionType.REFRESH_RESOURCE_REQUEST
+    type: ActionType.GET_RESOURCE_REQUEST
   })
 
   axios.post(config.routes.resource)
@@ -15,14 +15,14 @@ const refreshResource = (dispatch) => {
           if ( response.status == "success" ) {
             const data   = response.data
             const action = {
-                 type: ActionType.REFRESH_RESOURCE_SUCCESS,
+                 type: ActionType.GET_RESOURCE_SUCCESS,
               payload: data
             }
 
             dispatch(action)
           } else {
             const action = {
-                 type: ActionType.REFRESH_RESOURCE_ERROR
+                 type: ActionType.GET_RESOURCE_ERROR
             }
 
             dispatch(action)
@@ -56,4 +56,4 @@ const writeFile       = (dispatch, params) => {
        })
 }
 
-export { refreshResource, writeFile }
+export { getResource, writeFile }

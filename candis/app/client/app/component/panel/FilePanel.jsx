@@ -6,7 +6,7 @@ import classNames      from 'classnames'
 
 import axios           from 'axios'
 
-import config          from '../../Config'
+import config          from '../../config'
 import FileFormat      from '../../constant/FileFormat'
 import { filterFiles } from '../../util'
 

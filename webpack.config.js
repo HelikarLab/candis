@@ -20,7 +20,7 @@ module.exports     = {
       {
            test: /\.(js|jsx)$/,
          loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /(node_modules|bower_components)/
       }
     ]
   },
@@ -32,6 +32,7 @@ module.exports     = {
     })
   ],
   resolve: {
+    modules: ['node_modules', 'bower_components'],
     extensions: ['.js', '.jsx', '.json'],
   }
 };

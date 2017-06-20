@@ -1,10 +1,7 @@
-import config     from '../Config'
-
+import config     from '../config'
 import Dialog     from '../component/dialog/Dialog'
-
 import DialogType from '../constant/DialogType'
 import { showDialog, hideDialog } from '../action/DialogAction'
-import { refreshResource } from '../action/AsynchronousAction'
 
 const Menus = [
   {

@@ -1,10 +1,10 @@
-import config     from '../Config'
+import config     from '../config'
 
 import Dialog     from '../component/dialog/Dialog'
 
 import DialogType from '../constant/DialogType'
 import { showDialog, hideDialog } from '../action/DialogAction'
-import { refreshResource } from '../action/AsynchronousAction'
+import { getResource } from '../action/AsynchronousAction'
 
 const Compartments = [
   {
@@ -91,14 +91,14 @@ const Compartments = [
         // }
       ]
   },
-  // {
-  //      name: 'Visualize',
-  //      icon: `${config.routes.icons}/pie-chart.png`,
-  //   tooltip: 'Tools for Data Visualization',
-  //     tools: [
-  //
-  //     ]
-  // },
+  {
+       name: 'Visualize',
+       icon: `${config.routes.icons}/pie-chart.png`,
+    tooltip: 'Tools for Data Visualization',
+      tools: [
+
+      ]
+  },
   {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,

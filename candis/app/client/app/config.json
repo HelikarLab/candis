@@ -1,0 +1,23 @@
+{
+    "container": "app",
+    "port": 5000,
+    "encoding": "utf-8",
+    "title": "candis v0.1.0",
+    "color": {
+        "primary": "#E91E63"
+    },
+    "lang": "en",
+    "routes": {
+        "api": "/api",
+        "assets": "/assets",
+        "write": "/api/data/write",
+        "read": "/api/data/read",
+        "icons": "/assets/img/icons",
+        "data": "/api/data",
+        "resource": "/api/data/resource",
+        "base": "/",
+        "images": "/assets/img"
+    },
+    "host": "127.0.0.1",
+    "startdir": "cres"
+}

@@ -6,7 +6,7 @@ import ToolBox      from '../component/widget/toolbox/ToolBox'
 import Canvas       from '../component/widget/Canvas'
 import Dialog       from '../component/dialog/Dialog'
 
-import { refreshResource } from '../action/AsynchronousAction'
+import { getResource } from '../action/AsynchronousAction'
 
 import Menus        from '../meta/Menus'
 import Compartments from '../meta/Compartments'
@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   componentDidMount ( ) {
-    this.props.dispatch(refreshResource)
+    this.props.dispatch(getResource)
   }
 
   render ( ) {

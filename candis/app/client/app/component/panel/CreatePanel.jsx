@@ -2,6 +2,7 @@ import React         from 'react'
 import { connect }   from 'react-redux'
 import classNames    from 'classnames'
 import DataEditor    from '../widget/DataEditor'
+import XEditable     from '../widget/XEditable'
 
 import { writeFile } from '../../action/AsynchronousAction'
 
@@ -60,13 +61,19 @@ class CreatePanel extends React.Component {
   }
 
   render ( ) {
+    const that = this
+
     return (
       <div className={classNames("panel panel-default", this.props.classNames.root)}>
         <div className="panel-body">
           <div className="form-group">
-            <input className="form-control no-background no-border no-shadow"
-              placeholder="Filename" name="filename" value={this.state.filename}
-              onChange={this.onChange}/>
+            <XEditable
+              value={this.state.filename}
+              onChange={(value) => {
+                that.setState({
+                  filename: value
+                })
+              }}/>
           </div>
           <DataEditor
             onChangeData={this.onChangeData}/>
@@ -94,7 +101,7 @@ class CreatePanel extends React.Component {
 
 CreatePanel.defaultStates =
 {
-  filename: "",
+  filename: "Untitled",
       data: { columns: [ ], rows: [ ] }
 }
 

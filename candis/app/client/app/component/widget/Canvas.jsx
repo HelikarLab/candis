@@ -1,4 +1,5 @@
-import React from 'react'
+import React     from 'react'
+import XEditable from './XEditable'
 
 class Canvas extends React.Component {
   constructor (props) {
@@ -16,11 +17,19 @@ class Canvas extends React.Component {
   }
 
   render ( ) {
+    const that = this
+
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
           <div className="panel-title">
-            
+            <XEditable
+              state={this.state.title}
+              onChange={(value) => {
+                that.setState({
+                  title: value
+                })
+              }}/>
           </div>
         </div>
         <div className="panel-body">

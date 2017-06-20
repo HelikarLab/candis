@@ -9,7 +9,7 @@ from candis.resource import R
 def main(args = None):
     code = os.EX_OK
 
-    path = os.path.join(R.Path.APP, 'client/app/Config.json')
+    path = os.path.join(R.Path.APP, 'client/app/config.json')
     dikt = CONFIG.App.schema
 
     with open(path, 'w') as f:

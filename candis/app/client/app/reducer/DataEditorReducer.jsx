@@ -102,7 +102,7 @@ const dataEditor   = (state = initialState, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.REFRESH_RESOURCE_SUCCESS: {
+    case ActionType.GET_RESOURCE_SUCCESS: {
       let resource = action.payload
       let columns  = state.columns.slice()
 
