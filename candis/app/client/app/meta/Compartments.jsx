@@ -91,20 +91,49 @@ const Compartments = [
         // }
       ]
   },
-  {
-       name: 'Visualize',
-       icon: `${config.routes.icons}/pie-chart.png`,
-    tooltip: 'Tools for Data Visualization',
-      tools: [
-
-      ]
-  },
+  // {
+  //      name: 'Visualize',
+  //      icon: `${config.routes.icons}/pie-chart.png`,
+  //   tooltip: 'Tools for Data Visualization',
+  //     tools: [
+  //
+  //     ]
+  // },
   {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
       tools: [
+        {
+               name: 'Background Correction',
+            onClick: (dispatch) => {
+              const action = showDialog({
+                  type: DialogType.SELECT,
+                 title: 'Background Correction',
+                 props: {
+                   
+                 }
+              })
+            }
+        },
+        {
+               name: 'Normalize',
+            onClick: (dispatch) => {
 
+            }
+        },
+        {
+               name: 'PM Correction',
+            onClick: (dispatch) => {
+
+            }
+        },
+        {
+               name: 'Summarize',
+            onClick: (dispatch) => {
+
+            }
+        }
       ]
   },
   {

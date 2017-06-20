@@ -36,6 +36,7 @@
     "axios": "^0.16.2",
     "classnames": "^2.2.5",
     "fuse.js": "^3.0.3",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-contenteditable": "^2.0.2",
     "react-data-grid": "^2.0.46",

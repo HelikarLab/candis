@@ -1,4 +1,5 @@
 import React       from 'react'
+import PropTypes   from 'prop-types'
 import { connect } from 'react-redux'
 import shortid     from 'shortid'
 
@@ -36,7 +37,7 @@ class ToolBox extends React.Component {
                ID: ltool.ID,
             title: ltool.name,
              icon: ltool.icon,
-          content: ltool.description
+          content: compartment.name
         })
       })
     })
@@ -98,9 +99,10 @@ class ToolBox extends React.Component {
   }
 }
 
-ToolBox.defaultStates =
+ToolBox.propTypes     =
 {
-    tooltip: null
+      title: PropTypes.string,
+  draggable: PropTypes.bool
 }
 
 ToolBox.defaultProps  =
@@ -109,4 +111,11 @@ ToolBox.defaultProps  =
   draggable: false
 }
 
-export default connect()(ToolBox)
+ToolBox.defaultStates =
+{
+    tooltip: null
+}
+
+const mapStateToProps = null
+
+export default connect(mapStateToProps)(ToolBox)
