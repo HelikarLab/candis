@@ -36,7 +36,7 @@ class FilePanel extends React.Component {
            if ( response.status == "success" ) {
              const dataset = response.data
 
-             const columns = dataset.attributes.map((attribute) => {
+             const columns = dataset.attributes.map((attribute, index) => {
                return {...attribute, key: attribute.name}
              })
              const rows    = dataset.data

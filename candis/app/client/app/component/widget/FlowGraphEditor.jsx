@@ -1,13 +1,13 @@
 import React     from 'react'
 import XEditable from './XEditable'
 
-class Canvas extends React.Component {
+class FlowGraphEditor extends React.Component {
   constructor (props) {
     super (props)
 
     this.onChange = this.onChange.bind(this)
 
-    this.state    = Canvas.defaultStates
+    this.state    = FlowGraphEditor.defaultStates
   }
 
   onChange (event) {
@@ -40,9 +40,9 @@ class Canvas extends React.Component {
   }
 }
 
-Canvas.defaultStates =
+FlowGraphEditor.defaultStates =
 {
   title: "Untitled document"
 }
 
-export default Canvas
+export default FlowGraphEditor

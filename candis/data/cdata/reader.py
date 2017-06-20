@@ -1,44 +1,79 @@
-# imports -  standard imports
-import csv, re
+# imports - standard imports
+import os, csv
+import re
 
 # imports - third-party imports
 import addict
 
-PATTERN_COLUMN = re.compile('(!file)?')
+# imports - module imports
+from candis.resource import R
+from candis.util     import json_load
+
+ATTRIBUTE_TYPES   = json_load(os.path.join(R.Path.DATA, 'attribute-types.json'))
+
+def get_attribute_pattern():
+    wrapper     = '({regex})?'
+    regex       = '|'.join([attp['tag'] for attp in ATTRIBUTE_TYPES])
+
+    pattern     = re.compile(wrapper.format(regex = regex))
+
+    return pattern
+
+ATTRIBUTE_PATTERN = get_attribute_pattern()
+
+def get_attribute_type(attr, data):
+    kind        = None
+
+    for attp in ATTRIBUTE_TYPES:
+        if attr in attp['tag']:
+            kind = attr['name']
+
+    if not kind:
+        # TODO: check attribute type using data provided
+        kind    = ''
+
+    return kind
+
+def sanitize_attribute(attr):
+    name = re.sub(ATTRIBUTE_PATTERN, '', attr)
+    name = name.strip()
+
+    return name
 
 def get_attribute_metadata(attr, data):
-    tipe          = re.search(PATTERN_COLUMN, attr)
-    name          = re.sub(PATTERN_COLUMN, '', attr).strip()
+    kind     = get_attribute_type(attr, data)
+    name     = sanitize_attribute(attr)
 
-    metadata      = addict.Dict()
+    metadata = addict.Dict()
+    metadata.type = kind
     metadata.name = name
-    metadata.type = ''
 
     return metadata
 
 def read(path):
-    with open(path, mode = 'r') as f:
-        reader          = csv.reader(f)
-        rows            = [row for row in reader]
-        columns         = list(zip(*rows))
-        attrs           = rows[0]
+    dataset            = addict.Dict()
+    dataset.attributes = [ ]
+    dataset.data       = [ ]
 
-        data            = addict.Dict()
-        data.attributes = list()
-        data.data       = list()
+    with open(path, mode = 'r') as f:
+        reader      = csv.reader(f)
+        buffer_     = [row for row in reader]
+
+        attrs, rows = buffer_[0], buffer_[1:]
+        columns     = list(zip(*rows))
 
         for i, attr in enumerate(attrs):
-            metadata    = get_attribute_metadata(attr, columns[i])
-            attrs[i]    = metadata.name
+            metadata = get_attribute_metadata(attr, columns[i])
 
-            data.attributes.append(metadata)
+            dataset.attributes.append(metadata)
 
-        for i in range(1, len(rows)):
-            wrap     = addict.Dict()
-            row      = rows[i]
-            for j, value in enumerate(row):
-                wrap[attrs[j]] = value
+        for row in rows:
+            meta = addict.Dict()
 
-            data.data.append(wrap)
+            for i, value in enumerate(row):
+                attr            = dataset.attributes[i]
+                meta[attr.name] = value
 
-    return data
+            dataset.data.append(meta)
+
+    return dataset

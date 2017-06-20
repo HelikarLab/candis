@@ -1,15 +1,15 @@
-import React        from 'react'
-import { connect }  from 'react-redux'
+import React           from 'react'
+import { connect }     from 'react-redux'
 
-import MenuBar      from '../component/MenuBar'
-import ToolBox      from '../component/widget/toolbox/ToolBox'
-import Canvas       from '../component/widget/Canvas'
-import Dialog       from '../component/dialog/Dialog'
+import MenuBar         from '../component/MenuBar'
+import ToolBox         from '../component/widget/toolbox/ToolBox'
+import FlowGraphEditor from '../component/widget/FlowGraphEditor'
+import Dialog          from '../component/dialog/Dialog'
 
 import { getResource } from '../action/AsynchronousAction'
 
-import Menus        from '../meta/Menus'
-import Compartments from '../meta/Compartments'
+import Menus           from '../meta/Menus'
+import Compartments    from '../meta/Compartments'
 
 class App extends React.Component {
   constructor (props) {
@@ -31,7 +31,7 @@ class App extends React.Component {
               <ToolBox title="Tool Box" compartments={Compartments}/>
             </div>
             <div className="col-md-9">
-              <Canvas/>
+              <FlowGraphEditor/>
             </div>
           </div>
         </div>

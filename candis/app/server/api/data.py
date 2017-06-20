@@ -21,7 +21,7 @@ ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
 def get_file_format(file_):
     format_ = None
 
-    if not file_:
+    if file_:
         _, ext = os.path.splitext(file_)
 
         for metadata in FFORMATS:
@@ -94,11 +94,13 @@ def resource(filter_ = ['CDATA', 'CEL'], level = None):
 def read():
     response    = Response()
 
-    path        = request.args.get('path')
-    name        = request.args.get('name')
+    parameters  = request.get_json()
 
-    if not path:
-        if not name:
+    if 'path' in parameters:
+        if 'name' in parameters:
+            path    = parameters['path']
+            name    = parameters['name']
+
             relpath = os.path.join(path, name)
 
             # TODO: check if file exists, set error if not.
@@ -106,7 +108,9 @@ def read():
             format_ = get_file_format(name)
 
             if format_ == 'CDATA':
-                pass
+                dataset = cdata.read(relpath)
+
+                response.set_data(dataset)
         else:
             # TODO: set response error: filename not provided
             pass

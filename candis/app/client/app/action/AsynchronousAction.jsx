@@ -3,7 +3,7 @@ import axios      from 'axios'
 import config     from '../config'
 import ActionType from '../constant/ActionType'
 
-const getResource = (dispatch) => {
+const getResource     = (dispatch) => {
   dispatch({
     type: ActionType.GET_RESOURCE_REQUEST
   })
