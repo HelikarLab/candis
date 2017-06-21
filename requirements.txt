@@ -5,4 +5,3 @@ requests
 tqdm
 Flask
 django-htmlmin
-rpy2

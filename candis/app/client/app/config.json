@@ -1,26 +1,26 @@
 {
-    "host": "127.0.0.1",
     "container": "app",
+    "host": "127.0.0.1",
     "port": 5000,
-    "encoding": "utf-8",
-    "routes": {
-        "data": "/api/data",
-        "preprocess": {
-            "methods": "/api/preprocess/methods"
-        },
-        "base": "/",
-        "read": "/api/data/read",
-        "resource": "/api/data/resource",
-        "icons": "/assets/img/icons",
-        "images": "/assets/img",
-        "write": "/api/data/write",
-        "assets": "/assets",
-        "api": "/api"
-    },
-    "startdir": "cres",
+    "title": "candis v0.1.0",
     "color": {
         "primary": "#E91E63"
     },
-    "lang": "en",
-    "title": "candis v0.1.0"
+    "startdir": "CRES",
+    "routes": {
+        "images": "/assets/img",
+        "api": "/api",
+        "base": "/",
+        "preprocess": {
+            "methods": "/api/preprocess/methods"
+        },
+        "icons": "/assets/img/icons",
+        "assets": "/assets",
+        "read": "/api/data/read",
+        "write": "/api/data/write",
+        "data": "/api/data",
+        "resource": "/api/data/resource"
+    },
+    "encoding": "utf-8",
+    "lang": "en"
 }
