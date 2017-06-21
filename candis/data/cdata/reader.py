@@ -50,13 +50,13 @@ def get_attribute_metadata(attr, data):
 
     return metadata
 
-def read(path):
+def read(path, delimiter = ','):
     dataset            = addict.Dict()
     dataset.attributes = [ ]
     dataset.data       = [ ]
 
     with open(path, mode = 'r') as f:
-        reader      = csv.reader(f)
+        reader      = csv.reader(f, delimiter = delimiter)
         buffer_     = [row for row in reader]
 
         attrs, rows = buffer_[0], buffer_[1:]

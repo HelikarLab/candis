@@ -1,0 +1,42 @@
+[
+  {
+       "name": "Background Correction",
+       "code": "bgc",
+    "methods": [
+      {
+        "name": "Robust Multi-Array Average",
+        "code": "bgc.rma",
+        "information": {
+          "description": "This is a test description."
+        }
+      }
+    ]
+  },
+  {
+       "name": "Normalization",
+       "code": "nrm",
+    "methods": [
+      {
+        "name": "Constant",
+        "code": "nrm.cst",
+        "information": {
+          "description": "This is a test description."
+        }
+      }
+    ]
+  },
+  {
+       "name": "Phenotype Microarray Correction",
+       "code": "pmc",
+    "methods": [
+
+    ]
+  },
+  {
+       "name": "Summarization",
+       "code": "pmc",
+    "methods": [
+
+    ]
+  }
+]

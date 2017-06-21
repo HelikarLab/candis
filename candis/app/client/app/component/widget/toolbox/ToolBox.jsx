@@ -46,24 +46,27 @@ class ToolBox extends React.Component {
       <div className="panel panel-default">
         <div className="panel-heading">
           <div className="row">
-            <a href={`#toolbox-${this.id}-collapse`} className="collapsed"
-              data-toggle="collapse">
-              <div className="col-xs-9">
-                <div className="panel-title font-bold">
-                  {this.props.title}
-                </div>
+            <div className="col-xs-7">
+              <div className="panel-title font-bold">
+                {this.props.title}
               </div>
-            </a>
-            {
-              this.props.draggable ?
-                <div className="col-xs-3">
-                  <div className="text-right">
-                    <a href="#">
-                      <i className="fa fa-fw fa-arrows"></i>
-                    </a>
-                  </div>
-                </div> : false
-            }
+            </div>
+            <div className="col-xs-5">
+              <div className="text-right">
+                {
+                  this.props.draggable ?
+                    <a href="javascript:void(0);">
+                      <span className="fa fa-fw fa-arrows" data-toggle="tooltip"
+                        title="Drag"></span>
+                    </a> : false
+                }
+                <a href={`#toolbox-${this.id}-collapse`} className="collapsed"
+                  data-toggle="collapse">
+                  <span className="fa fa-fw fa-minus" data-toggle="tooltip"
+                    title="Minimize"></span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
         <div id={`toolbox-${this.id}-collapse`} className="collapse panel-collapse in">
@@ -75,12 +78,13 @@ class ToolBox extends React.Component {
                 this.props.compartments.map((compartment, index) => {
                   return (
                     <Compartment
-                      key={index}
-                      name={compartment.name}
+                          key={index}
+                         name={compartment.name}
                       tooltip={compartment.tooltip}
-                      icon={compartment.icon}
-                      tools={compartment.tools}
-                      parent={`toolbox-${this.id}`}/>
+                         icon={compartment.icon}
+                        tools={compartment.tools}
+                      fetcher={compartment.fetcher}
+                       parent={`toolbox-${this.id}`}/>
                   )
                 })
               }
@@ -116,6 +120,12 @@ ToolBox.defaultStates =
     tooltip: null
 }
 
-const mapStateToProps = null
+const mapStateToProps = (state) => {
+  const toolBox       = state.toolBox
+
+  return {
+    compartments: toolBox.compartments
+  }
+}
 
 export default connect(mapStateToProps)(ToolBox)

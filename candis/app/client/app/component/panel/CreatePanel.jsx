@@ -4,6 +4,7 @@ import classNames    from 'classnames'
 import DataEditor    from '../widget/DataEditor'
 import XEditable     from '../widget/XEditable'
 
+import FileFormat    from '../../constant/FileFormat'
 import { writeFile } from '../../action/AsynchronousAction'
 
 class CreatePanel extends React.Component {
@@ -28,10 +29,14 @@ class CreatePanel extends React.Component {
   onCreate ( ) {
     const data        = this.state.data
     const filename    = this.state.filename
+    let   attributes  = [ ]
 
-    const attributes  = data.columns.map((column) => {
-      return { name: column.name, type: column.type }
+    data.columns.forEach((column) => {
+      if ( column.key != 'ID' ) {
+        attributes.push({ name: column.name, type: column.type })
+      }
     })
+
     const rows        = data.rows.map((row) => {
       delete row.ID
 
@@ -41,7 +46,8 @@ class CreatePanel extends React.Component {
     const buffer      = { attributes: attributes, data: rows }
     const dispatch    = this.props.dispatch
 
-    const params      = { name: filename, buffer: buffer }
+    const params      = { format: FileFormat.CDATA, name: filename,
+      buffer: buffer }
 
     dispatch((dispatcher) => {
       writeFile(dispatcher, params)

@@ -1,16 +1,22 @@
-import React   from 'react'
-import shortid from 'shortid'
+import React       from 'react'
+import { connect } from 'react-redux'
+import shortid     from 'shortid'
 
-import Tool    from './Tool'
+import Tool        from './Tool'
 
 class Compartment extends React.Component {
-  constructor ( ) {
-    super ( )
+  constructor (props) {
+    super (props)
 
-    this.id = shortid.generate()
+    this.id    = shortid.generate()
+    this.state = {
+      tools: props.tools
+    }
   }
 
   render ( ) {
+    const that    = this
+
     const tooltip = this.props.tooltip
     const ttattrs = tooltip ?
       {
@@ -21,10 +27,9 @@ class Compartment extends React.Component {
 
     return (
       <div className="panel panel-default" {...ttattrs}>
-          <div className="panel-heading">
-            <a className="collapsed" data-toggle="collapse"
-              data-parent={`#${this.props.parent}`}
-              href={`#compartment-${this.id}`}>
+        <div className="panel-heading">
+          <div className="row">
+            <div className="col-xs-8">
               <div className="media">
                 <div className="media-left">
                   <img className="media-object"width="20px" height="20px"
@@ -36,16 +41,44 @@ class Compartment extends React.Component {
                   </div>
                 </div>
               </div>
-            </a>
+            </div>
+            <div className="col-xs-4">
+              <div className="text-right">
+                {
+                  this.props.fetcher ?
+                    <a href="javascript:void(0);" onClick={() => {
+                        that.props.fetcher().then((tools) => {
+                          that.setState({
+                            tools: tools
+                          })
+                        })
+                      }}>
+                      <span className="fa fa-fw fa-refresh" data-toggle="tooltip"
+                        title="Refresh"></span>
+                    </a> : false
+                }
+                <a className="collapsed" data-toggle="collapse"
+                  data-parent={`#${this.props.parent}`}
+                  href={`#compartment-${this.id}`}>
+                  <span className="fa fa-fw fa-chevron-down" data-toggle="tooltip"
+                    title="Expand"></span>
+                </a>
+              </div>
+            </div>
           </div>
+        </div>
         <div className="collapse panel-collapse"
           id={`compartment-${this.id}`}>
           {
-            this.props.tools.length ?
-              <div className="list-group">
+            this.state.tools.length ?
+              <div className="list-group"
+                style={{
+                  maxHeight: '150px',
+                  overflowY: 'scroll'
+                }}>
                 {
 
-                  this.props.tools.map((tool, index) => {
+                  this.state.tools.map((tool, index) => {
                     return (
                       <div className="list-group-item" key={index}>
                         <Tool
@@ -69,4 +102,4 @@ class Compartment extends React.Component {
   }
 }
 
-export default Compartment
+export default connect()(Compartment)

@@ -1,3 +1,5 @@
+import axios      from 'axios'
+
 import config     from '../config'
 
 import Dialog     from '../component/dialog/Dialog'
@@ -83,58 +85,38 @@ const Compartments = [
 
             dispatch(action)
           }
-        },
-        // {
-        //      name: 'Save',
-        //      icon: `${config.routes.icons}/floppy-disk.png`,
-        //   tooltip: 'Save data to an output file'
-        // }
+        }
       ]
   },
-  // {
-  //      name: 'Visualize',
-  //      icon: `${config.routes.icons}/pie-chart.png`,
-  //   tooltip: 'Tools for Data Visualization',
-  //     tools: [
-  //
-  //     ]
-  // },
   {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
-      tools: [
-        {
-               name: 'Background Correction',
-            onClick: (dispatch) => {
-              const action = showDialog({
-                  type: DialogType.SELECT,
-                 title: 'Background Correction',
-                 props: {
-                   
-                 }
-              })
-            }
-        },
-        {
-               name: 'Normalize',
-            onClick: (dispatch) => {
+      tools: [ ],
+    fetcher: () => {
+      return axios.get(config.routes.preprocess.methods).then((response) => {
+        response       = response.data
 
-            }
-        },
-        {
-               name: 'PM Correction',
-            onClick: (dispatch) => {
+        if ( response.status == "success" ) {
+          const data   = response.data
 
-            }
-        },
-        {
-               name: 'Summarize',
-            onClick: (dispatch) => {
+          const tools  = data.map((method) => {
+            const tool = {
+                 name: method.name,
+              onClick: (dispatch) => {
 
+              }
             }
+
+            return tool
+          })
+
+          return tools
+        } else {
+          return [ ]
         }
-      ]
+      })
+    }
   },
   {
        name: 'Model',

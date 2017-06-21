@@ -9,6 +9,7 @@ import axios           from 'axios'
 import config          from '../../config'
 import FileFormat      from '../../constant/FileFormat'
 import { filterFiles } from '../../util'
+import { getResource } from '../../action/AsynchronousAction'
 
 class FilePanel extends React.Component {
   constructor (props) {
@@ -56,6 +57,10 @@ class FilePanel extends React.Component {
 
   onCancel ( ) {
     this.props.dispatch(this.props.onCancel)
+  }
+
+  componentDidMount ( ) {
+    this.props.dispatch(getResource)
   }
 
   render ( ) {

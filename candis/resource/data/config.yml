@@ -19,5 +19,8 @@ app:
     resource: !relurljoin [*data, "resource"]
     write: !relurljoin [*data, "write"]
     read: !relurljoin [*data, "read"]
+
+    preprocess:
+      methods: !relurljoin [*base, "api", "preprocess", "methods"]
   container: "app"
   startdir: "cres"

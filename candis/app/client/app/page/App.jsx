@@ -28,7 +28,7 @@ class App extends React.Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-3">
-              <ToolBox title="Tool Box" compartments={Compartments}/>
+              <ToolBox title="Tool Box" draggable={true}/>
             </div>
             <div className="col-md-9">
               <FlowGraphEditor/>

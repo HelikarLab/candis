@@ -17,13 +17,13 @@ const initialState = {
          name: 'ID'
     },
     {
-          key: 'file',
+          key: 'File',
          name: 'File',
          type: AttributeType.FILE,
       allowed: [FileFormat.CEL]
     },
     {
-           key: 'label',
+           key: 'Label',
           name: 'Label',
       editable: true
     }

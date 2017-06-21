@@ -128,21 +128,32 @@ def read():
 def write():
     response   = Response()
 
-    filename   = request.args.get('name', get_timestamp_str())
-    format_    = request.args.get('format')
-    buffer_    = request.args.get('buffer')
+    parameters  = request.get_json()
 
-    if format_ == 'CDATA':
-        file_  = '{name}.{ext}'.format(name = filename, ext = '.cdata')
-        path   = os.path.join(ABSPATH_STARTDIR, file_)
+    if 'format' in parameters:
+        if 'buffer' in parameters:
+            if 'name' in parameters:
+                filename = parameters['name']
+            else:
+                filename = get_timestamp_str()
 
-        try:
-            cdata.write(path, buffer_)
-        except TypeError as e:
-            # TODO: set response error: invalid buffer
+            format_ = parameters['format']
+            buffer_ = parameters['buffer']
+
+            if format_ == 'CDATA':
+                 file_  = '{name}.{ext}'.format(name = filename, ext = 'cdata')
+                 path   = os.path.join(ABSPATH_STARTDIR, file_)
+
+                 try:
+                     cdata.write(path, buffer_)
+                 except TypeError as e:
+                     # TODO: set response error: invalid buffer
+                     pass
+        else:
+            # TODO: set response error: buffer not provided
             pass
     else:
-        # TODO: set response error: cannot write file, invalid file format.
+        # TODO: set response error: format not provided
         pass
 
     dict_      = response.to_dict()
