@@ -5,6 +5,7 @@ import shortid     from 'shortid'
 
 import TypeAhead   from '../TypeAhead'
 import Compartment from './Compartment'
+import TipView     from './TipView'
 
 class ToolBox extends React.Component {
   constructor (props) {
@@ -60,10 +61,10 @@ class ToolBox extends React.Component {
               <div className="panel-body">
                 {
                   this.props.activeTool ?
-                    <ToolBox.TipView
-                        title={activeTool.name}
-                      content={activeTool.description ?
-                                activeTool.description : activeTool.tooltip
+                    <TipView
+                        title={this.props.activeTool.name}
+                      content={this.props.activeTool.description ?
+                                this.props.activeTool.description : this.props.activeTool.tooltip
                               }/> : false
                 }
               </div>
@@ -87,32 +88,14 @@ class ToolBox extends React.Component {
   }
 }
 
-ToolBox.TipView           = class extends React.Component {
-  render ( ) {
-    return (
-      <div>
-        <h5 className="font-bold">
-          {this.props.title}
-        </h5>
-        <p className="text-justify">
-          {this.props.content}
-        </p>
-      </div>
-    )
-  }
-}
-
-ToolBox.TipView.propTypes = { title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired }
-
 ToolBox.propTypes         = { title: PropTypes.string }
 ToolBox.defaultProps      = { title: "" }
 
 const mapStateToProps     = (state) => {
-  const toolBar           = state.toolBar
+  const toolBox           = state.toolBox
 
   return {
-    activeTool: toolBar.activeTool
+    activeTool: toolBox.activeTool
   }
 }
 

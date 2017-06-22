@@ -5,6 +5,8 @@ import shortid     from 'shortid'
 
 import Tool        from './Tool'
 
+import { onHoverTool } from '../../../action/ToolBoxAction'
+
 class Compartment extends React.Component {
   constructor (props) {
     super (props)
@@ -81,17 +83,15 @@ class Compartment extends React.Component {
 
                   this.state.tools.map((tool, index) => {
                     return (
-                      <div className="list-group-item" key={index}>
+                      <div className="list-group-item" key={index}
+                        onMouseOver={() => { this.props.dispatch(onHoverTool(tool)) }}
+                        onMouseOut ={() => { this.props.dispatch(onHoverTool(null)) }}>
                         <Tool
                           name={tool.name}
                           icon={tool.icon}
                           tooltip={tool.description}
                           onClick={tool.onClick}
-                          onMouseOver={() => {
-                            const action = onHoverTool(tool)
-
-                            this.props.dispatch(action)
-                          }}>
+                          >
                         </Tool>
                       </div>
                     )

@@ -1,5 +1,8 @@
 const ActionType =
 {
+             ON_HOVER_TOOL: 'ACTION_TYPE_ON_HOVER_TOOL',
+
+
                SHOW_DIALOG: 'ACTION_TYPE_SHOW_DIALOG',
                HIDE_DIALOG: 'ACTION_TYPE_HIDE_DIALOG',
 
