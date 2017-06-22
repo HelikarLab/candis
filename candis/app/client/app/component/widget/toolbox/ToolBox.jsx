@@ -7,20 +7,48 @@ import TypeAhead   from '../TypeAhead'
 import Compartment from './Compartment'
 import TipView     from './TipView'
 
+import { insertTool, onHoverTool } from '../../../action/ToolBoxAction'
+
 class ToolBox extends React.Component {
   constructor (props) {
     super (props)
 
-    this.ID         = props.ID ? props.ID : shortid.generate()
-
-    this.onSelect   = this.onSelect.bind(this)
+    this.ID             = props.ID ? props.ID : shortid.generate()
   }
 
-  onSelect (data) {
+  componentWillMount ( ) {
+    this.props.compartments.forEach((_, index) => {
+      const compartment = this.props.compartments[index]
+      compartment.ID    = `compartment-${shortid.generate()}`
 
+      if ( compartment.tools ) {
+        compartment.tools.forEach((object) => {
+          const tool   = {...object, compartmentID: compartment.ID,
+            compartmentName: compartment.name }
+          const action = insertTool(tool)
+
+          this.props.dispatch(action)
+        })
+      }
+
+      if ( compartment.fetcher ) {
+        compartment.fetcher().then((tools) => {
+          tools.forEach((object) => {
+            const tool   = {...object, compartmentID: compartment.ID,
+              compartmentName: compartment.name }
+            const action = insertTool(tool)
+
+            this.props.dispatch(action)
+          })
+        })
+      }
+    })
   }
 
   render ( ) {
+    const activeTool = this.props.activeTool
+    const tools      = this.props.tools
+
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
@@ -43,13 +71,31 @@ class ToolBox extends React.Component {
         <div id={`toolbox-${this.ID}-collapse`} className="collapse panel-collapse in">
           <div className="panel-body">
             <div className="panel-group no-margin" id={`toolbox-${this.ID}`}>
-              <TypeAhead placeholder="Search tool" data={[ ]}
-                maximum={4} onSelect={this.onSelect}/>
+              <TypeAhead placeholder="Search tool" data={this.props.tools}
+                keys={["name", "tooltip", "description", "compartmentName"]} maximum={4}
+
+                onHover={(tool) => {
+                  this.props.dispatch(onHoverTool(tool))
+                }}
+
+                onSelect={(tool) => {
+                  this.props.dispatch(tool.onClick)
+                }}
+                map={{
+                  title: "name",
+                   body: "compartmentName",
+                   icon: "icon"
+                }}/>
               {
                 this.props.compartments.map((compartment, index) => {
                   return (
-                    <Compartment key={index} parent={`toolbox-${this.ID}`}
-                       {...compartment}/>
+                    <Compartment
+                          key={index}
+                           ID={compartment.ID}
+                         name={compartment.name}
+                         icon={compartment.icon}
+                      tooltip={compartment.tooltip}
+                       parent={`toolbox-${this.ID}`}/>
                   )
                 })
               }
@@ -60,11 +106,11 @@ class ToolBox extends React.Component {
             <div id={`toolbox-${this.ID}-tipview-collapse`} className="collapse panel-collapse in">
               <div className="panel-body">
                 {
-                  this.props.activeTool ?
+                  activeTool ?
                     <TipView
-                        title={this.props.activeTool.name}
-                      content={this.props.activeTool.description ?
-                                this.props.activeTool.description : this.props.activeTool.tooltip
+                        title={activeTool.name}
+                      content={activeTool.description ?
+                                activeTool.description : activeTool.tooltip
                               }/> : false
                 }
               </div>
@@ -95,6 +141,7 @@ const mapStateToProps     = (state) => {
   const toolBox           = state.toolBox
 
   return {
+         tools: toolBox.tools,
     activeTool: toolBox.activeTool
   }
 }

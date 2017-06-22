@@ -2,13 +2,22 @@ import ActionType   from '../constant/ActionType'
 
 import Compartments from '../meta/Compartments'
 
-const initialState = { }
+const initialState = { tools: [ ] }
 
 const toolBox      = (state = initialState, action) => {
   switch (action.type) {
+    case ActionType.INSERT_TOOL: {
+      const tool   = action.payload
+      let   tools  =  state.tools.slice()
+
+      tools.push(tool)
+
+      return {...state, tools: tools}
+    }
+
     case ActionType.ON_HOVER_TOOL: {
       const tool   = action.payload
-      
+
       return {...state, activeTool: tool}
     }
   }

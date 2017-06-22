@@ -9,10 +9,6 @@ class TypeAhead extends React.Component {
   constructor (props) {
     super (props)
 
-    this.fuse     = new Fuse(props.data, { shouldSort: true, threshold: 0.6,
-      location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1,
-        keys: ["title", "body"] })
-
     this.onChange = this.onChange.bind(this)
     this.state    = TypeAhead.defaultStates
   }
@@ -32,6 +28,10 @@ class TypeAhead extends React.Component {
   }
 
   render ( ) {
+    this.fuse  = new Fuse(this.props.data, { shouldSort: true, threshold: 0.6,
+      location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1,
+        keys: this.props.keys })
+
     return (
       <div className="form-group" style={{ position: 'relative' }}>
         <input className="form-control no-shadow no-outline"
@@ -47,14 +47,22 @@ class TypeAhead extends React.Component {
               <ul className="list-group no-margin">
                 {
                   this.state.filter.map((data, index) => {
+                    let props    = { }
+
+                    for (let key in this.props.map) {
+                      props[key] = data[this.props.map[key]]
+                    }
+
                     return (
-                      <li key={index} className="list-group-item">
+                      <li key={index} className="list-group-item"
+                        onMouseOver={() => { this.props.onHover(data) }}
+                        onMouseOut ={() => { this.props.onHover(null) }}>
                         <a href="javascript:void(0);" onClick={() => {
                             this.setState(TypeAhead.defaultStates)
 
                             this.props.onSelect(data)
                           }}>
-                          <Media {...data}/>
+                          <Media {...props}/>
                         </a>
                       </li>
                     )
@@ -73,7 +81,8 @@ TypeAhead.propTypes     =
   placeholder: PropTypes.string,
          data: PropTypes.array.isRequired,
      onSelect: PropTypes.func.isRequired,
-      maximum: PropTypes.number
+      maximum: PropTypes.number,
+         keys: PropTypes.array
 }
 
 TypeAhead.defaultProps  =

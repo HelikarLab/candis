@@ -15,7 +15,7 @@ class MenuBar extends React.Component {
   render ( ) {
     return (
       <div className="navbar navbar-default" id={`menubar-${this.ID}`}>
-        <div className="container-fluid">
+        <div className="container">
           <div className="navbar-header">
             <button className="collpased navbar-toggle"
               data-toggle="collapse"

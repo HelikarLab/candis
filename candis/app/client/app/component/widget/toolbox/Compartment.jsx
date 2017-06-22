@@ -1,9 +1,10 @@
 import React       from 'react'
+import PropTypes   from 'prop-types'
 import { connect } from 'react-redux'
 import classNames  from 'classnames'
 import shortid     from 'shortid'
 
-import Tool        from './Tool'
+import Media       from '../Media'
 
 import { onHoverTool } from '../../../action/ToolBoxAction'
 
@@ -11,15 +12,11 @@ class Compartment extends React.Component {
   constructor (props) {
     super (props)
 
-    this.id    = shortid.generate()
-    this.state = {
-      tools: props.tools
-    }
+    this.ID    = props.ID ? props.ID : shortid.generate()
+    this.state = Compartment.defaultStates
   }
 
   render ( ) {
-    const that    = this
-
     const tooltip = this.props.tooltip
     const ttattrs = tooltip ?
       {
@@ -27,85 +24,97 @@ class Compartment extends React.Component {
         "data-placement": "top",
                    title: tooltip
       } : { }
+    const tools   = this.props.tools.filter((tool) => {
+      return tool.compartmentID == this.ID
+    })
 
     return (
       <div className="panel panel-default" {...ttattrs}>
         <div className="panel-heading">
-          <div className="row">
-            <div className="col-xs-8">
-              <div className="media">
-                <div className="media-left">
-                  <img className="media-object"width="20px" height="20px"
-                    src={this.props.icon}/>
-                </div>
-                <div className="media-body">
-                  <div className="media-heading no-margin">
-                    {this.props.name}
-                  </div>
+          <a data-toggle="collapse" data-parent={`#${this.props.parent}`}
+            href={`#compartment-${this.ID}`} onClick={() => {
+              this.setState({
+                active: this.state.active ? false : true
+              })
+            }}>
+            <div className="row">
+              <div className="col-xs-8">
+                <Media title={this.props.name} icon={this.props.icon}/>
+              </div>
+              <div className="col-xs-4">
+                <div className="text-right">
+                  {
+                    this.state.active ?
+                      <i className="fa fa-fw fa-chevron-up" data-toggle="tooltip" title="Close"/>
+                      :
+                      <i className="fa fa-fw fa-chevron-down" data-toggle="tooltip" title="Open"/>
+                  }
                 </div>
               </div>
             </div>
-            <div className="col-xs-4">
-              <div className="text-right">
-                {
-                  this.props.fetcher ?
-                    <a href="javascript:void(0);" onClick={() => {
-                        that.props.fetcher().then((tools) => {
-                          that.setState({
-                            tools: tools
-                          })
-                        })
-                      }}>
-                      <span className="fa fa-fw fa-refresh" data-toggle="tooltip"
-                        title="Refresh"></span>
-                    </a> : false
-                }
-                <a data-toggle="collapse"
-                  data-parent={`#${this.props.parent}`}
-                  href={`#compartment-${this.id}`}>
-                  <span className="fa fa-fw fa-chevron-down" data-toggle="tooltip"
-                    title="Expand"></span>
-                </a>
-              </div>
-            </div>
-          </div>
+          </a>
         </div>
-        <div className={classNames("collapse panel-collapse", {"in": this.props.active})}
-          id={`compartment-${this.id}`}>
+        <div className="collapse panel-collapse" id={`compartment-${this.ID}`}>
           {
-            this.state.tools.length ?
-              <div className="list-group"
+            tools.length ?
+              <ul className="list-group"
                 style={{
                   maxHeight: '150px',
                   overflowY: 'scroll'
                 }}>
                 {
+                  tools.map((tool, index) => {
+                    const tooltip = tool.tooltip
+                    const ttattrs = tooltip ?
+                      {
+                           "data-toggle": "tooltip",
+                        "data-placement": "top",
+                                   title: tooltip
+                      } : { }
 
-                  this.state.tools.map((tool, index) => {
                     return (
-                      <div className="list-group-item" key={index}
+                      <li key={index} className="list-group-item"
                         onMouseOver={() => { this.props.dispatch(onHoverTool(tool)) }}
                         onMouseOut ={() => { this.props.dispatch(onHoverTool(null)) }}>
-                        <Tool
-                          name={tool.name}
-                          icon={tool.icon}
-                          tooltip={tool.description}
-                          onClick={tool.onClick}
-                          >
-                        </Tool>
-                      </div>
+                        <a href="javascript:void(0);" onClick={() => {
+                          this.props.dispatch(tool.onClick)
+                        }} {...ttattrs}>
+                          <Media
+                            title={tool.name}
+                             body={tool.description ? tool.description : tool.tooltip}
+                             icon={tool.icon}/>
+                        </a>
+                      </li>
                     )
                   })
                 }
-              </div> :
+              </ul>
+              :
               <div className="panel-body">
                 No tools found.
               </div>
-            }
+          }
         </div>
       </div>
     )
   }
 }
 
-export default connect()(Compartment)
+Compartment.PropTypes     =
+{
+
+}
+Compartment.defaultProps  = { }
+
+Compartment.defaultStates = { active: false }
+
+const mapStateToProps     = (state) => {
+  const toolBox           = state.toolBox
+  const tools             = toolBox.tools
+
+  return {
+    tools: tools
+  }
+}
+
+export default connect(mapStateToProps)(Compartment)

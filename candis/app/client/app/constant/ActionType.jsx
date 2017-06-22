@@ -1,5 +1,6 @@
 const ActionType =
 {
+               INSERT_TOOL: 'ACTION_TYPE_INSERT_TOOL',
              ON_HOVER_TOOL: 'ACTION_TYPE_ON_HOVER_TOOL',
 
 
