@@ -1,4 +1,5 @@
-import React from 'react';
+import React     from 'react';
+import PropTypes from 'prop-types'
 
 class Media extends React.Component {
   render ( ) {
@@ -13,13 +14,19 @@ class Media extends React.Component {
         }
         <div className="media-body">
           <div className="media-heading no-margin">
-            {this.props.heading}
+            {this.props.title}
           </div>
           {this.props.body}
         </div>
       </div>
     )
   }
+}
+
+Media.propTypes =
+{
+   icon: PropTypes.string,
+  title: PropTypes.string.isRequired
 }
 
 export default Media
