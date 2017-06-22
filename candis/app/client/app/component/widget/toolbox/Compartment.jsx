@@ -1,5 +1,6 @@
 import React       from 'react'
 import { connect } from 'react-redux'
+import classNames  from 'classnames'
 import shortid     from 'shortid'
 
 import Tool        from './Tool'
@@ -57,7 +58,7 @@ class Compartment extends React.Component {
                         title="Refresh"></span>
                     </a> : false
                 }
-                <a className="collapsed" data-toggle="collapse"
+                <a data-toggle="collapse"
                   data-parent={`#${this.props.parent}`}
                   href={`#compartment-${this.id}`}>
                   <span className="fa fa-fw fa-chevron-down" data-toggle="tooltip"
@@ -67,7 +68,7 @@ class Compartment extends React.Component {
             </div>
           </div>
         </div>
-        <div className="collapse panel-collapse"
+        <div className={classNames("collapse panel-collapse", {"in": this.props.active})}
           id={`compartment-${this.id}`}>
           {
             this.state.tools.length ?
@@ -85,7 +86,12 @@ class Compartment extends React.Component {
                           name={tool.name}
                           icon={tool.icon}
                           tooltip={tool.description}
-                          onClick={tool.onClick}>
+                          onClick={tool.onClick}
+                          onMouseOver={() => {
+                            const action = onHoverTool(tool)
+
+                            this.props.dispatch(action)
+                          }}>
                         </Tool>
                       </div>
                     )

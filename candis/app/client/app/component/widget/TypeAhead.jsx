@@ -1,9 +1,17 @@
-import React from 'react'
-import Fuse  from 'fuse.js'
+import React      from 'react'
+import PropTypes  from 'prop-types'
+import classNames from 'classnames'
+import Fuse       from 'fuse.js'
+
+import Media      from './Media'
 
 class TypeAhead extends React.Component {
-  constructor ( ) {
-    super ( )
+  constructor (props) {
+    super (props)
+
+    this.fuse     = new Fuse(props.data, { shouldSort: true, threshold: 0.6,
+      location: 0, distance: 100, maxPatternLength: 32, minMatchCharLength: 1,
+        keys: ["title", "body"] })
 
     this.onChange = this.onChange.bind(this)
     this.state    = TypeAhead.defaultStates
@@ -13,77 +21,67 @@ class TypeAhead extends React.Component {
     let query  = event.target.value
     let filter = this.fuse.search(query)
 
+    if ( this.props.maximum ) {
+        filter = filter.slice(0, this.props.maximum)
+    }
+
     this.setState({
+       query: query,
       filter: filter
     })
   }
 
   render ( ) {
-    this.fuse  = new Fuse(this.props.data, {
-              shouldSort: true,
-               threshold: 0.6,
-                location: 0,
-                distance: 100,
-        maxPatternLength: 32,
-      minMatchCharLength: 1,
-                    keys: ["title", "content"]
-    })
-    const that = this
-
     return (
-      <div>
-        <div className="form-group">
-          <input className="form-control"
-            placeholder={this.props.placeholder} onChange={this.onChange}/>
-        </div>
-        <ul className="list-group">
-          {
-            this.state.filter.slice(0, this.props.maximum)
-                             .map((data, index) => {
-              return (
-                <li key={index} className="list-group-item">
-                  <a href="#" data-toggle="tooltip" data-placement="top"
-                    title={data.content} onClick={() => {
-                      that.props.onSelect(data)
-                    }}>
-                    <div className="media">
-                      {
-                        data.icon ?
-                          <div className="media-left">
-                            <img className="media-object" width="20px"
-                              height="20px" src={data.icon}/>
-                          </div> : false
-                      }
-                      <div className="media-body">
-                        <div className="media-heading no-margin">
-                          {data.title}
-                          <div>
-                            <small>
-                              {data.content}
-                            </small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              )
-            })
-          }
-        </ul>
+      <div className="form-group" style={{ position: 'relative' }}>
+        <input className="form-control no-shadow no-outline"
+          placeholder={this.props.placeholder} value={this.state.query}
+          onChange={this.onChange}/>
+        {
+          this.state.filter.length ?
+            <div style={{
+                 position: 'absolute',
+                   zIndex: 1010,
+                boxShadow: '0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08)' // Thanks, Google Search
+              }}>
+              <ul className="list-group no-margin">
+                {
+                  this.state.filter.map((data, index) => {
+                    return (
+                      <li key={index} className="list-group-item">
+                        <a href="javascript:void(0);" onClick={() => {
+                            this.setState(TypeAhead.defaultStates)
+
+                            this.props.onSelect(data)
+                          }}>
+                          <Media {...data}/>
+                        </a>
+                      </li>
+                    )
+                  })
+                }
+              </ul>
+            </div> : false
+        }
       </div>
     )
   }
 }
 
-TypeAhead.defaultProps  =
+TypeAhead.propTypes     =
 {
-  maximum: 3
+  placeholder: PropTypes.string,
+         data: PropTypes.array.isRequired,
+     onSelect: PropTypes.func.isRequired,
+      maximum: PropTypes.number
 }
 
-TypeAhead.defaultStates =
+TypeAhead.defaultProps  =
 {
-   filter: [ ]
+  placeholder: "",
+      maximum: null
 }
+
+TypeAhead.defaultStates = { query: "", filter: [ ] }
 
 export default TypeAhead

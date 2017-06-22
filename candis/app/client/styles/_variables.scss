@@ -1,6 +1,9 @@
+$color-gray-lightest                          : lighten(#000, 93.5%);
+
 $font-family-base                             : "Roboto";
 
 $font-weight-bold                             : 700;
 $font-weight-heavy                            : 900;
 
 $body-font-family                             : $font-family-base;
+$body-background-color                        : $color-gray-lightest;

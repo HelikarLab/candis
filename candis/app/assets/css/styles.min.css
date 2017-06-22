@@ -10,11 +10,26 @@
 .no-border {
   border: none !important; }
 
+.no-border-left {
+  border-left: none !important; }
+
+.no-border-right {
+  border-right: none !important; }
+
+.no-border-bottom {
+  border-bottom: none !important; }
+
 .no-shadow {
   box-shadow: none !important; }
 
+.no-outline {
+  outline: none; }
+
 .cursor-pointer {
   cursor: pointer; }
+
+body {
+  background-color: #eeeeee; }
 
 body {
   font-family: "Roboto"; }

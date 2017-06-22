@@ -2,7 +2,7 @@ name: &name "candis"
 version: &version "0.1.0"
 debug: true
 app:
-  host: "127.0.0.1"
+  host: "0.0.0.0"
   port: 5000
   lang: "en"
   encoding: "utf-8"

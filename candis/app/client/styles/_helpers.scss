@@ -14,8 +14,26 @@
   border: none !important;
 }
 
+.no-border-left {
+  border-left: none !important;
+}
+
+.no-border-right {
+  border-right: none !important;
+}
+
+.no-border-bottom {
+  border-bottom: none !important;
+}
+
 .no-shadow {
-  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+     -moz-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+.no-outline {
+  outline: none;
 }
 
 .cursor-pointer {

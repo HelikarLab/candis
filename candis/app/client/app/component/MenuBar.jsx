@@ -9,7 +9,7 @@ class MenuBar extends React.Component {
   constructor (props) {
     super (props)
 
-    this.ID = this.props.ID ? this.props.ID : shortid.generate()
+    this.ID = props.ID ? props.ID : shortid.generate()
   }
 
   render ( ) {
@@ -77,12 +77,12 @@ MenuBar.Menu = class extends React.Component {
   }
 }
 
-MenuBar.propTypes =
+MenuBar.Menu.propTypes =
 {
     title: PropTypes.string.isRequired,
   actions:  PropTypes.array.isRequired
 }
 
-MenuBar.Menu      = connect()(MenuBar.Menu)
+MenuBar.Menu           = connect()(MenuBar.Menu)
 
 export default MenuBar

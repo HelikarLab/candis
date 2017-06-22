@@ -89,6 +89,12 @@ const Compartments = [
       ]
   },
   {
+       name: 'Visualize',
+       icon: `${config.routes.icons}/pie-chart.png`,
+    tooltip: 'Tools for Data Visualization',
+      tools: [ ]
+  },
+  {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
@@ -117,6 +123,12 @@ const Compartments = [
         }
       })
     }
+  },
+  {
+       name: 'Feature Selection',
+       icon: `${config.routes.icons}/column-select.png`,
+    tooltip: 'List of Feature Selection Methods',
+      tools: [ ]
   },
   {
        name: 'Model',

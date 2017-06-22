@@ -16,7 +16,9 @@ class Media extends React.Component {
           <div className="media-heading no-margin">
             {this.props.title}
           </div>
-          {this.props.body}
+          <small>
+            {this.props.body}
+          </small>
         </div>
       </div>
     )

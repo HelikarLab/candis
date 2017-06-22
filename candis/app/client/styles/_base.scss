@@ -1,3 +1,7 @@
+body {
+  background-color: $body-background-color;
+}
+
 a {
   @extend .no-decoration
 }
