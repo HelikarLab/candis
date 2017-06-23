@@ -1,4 +1,5 @@
 import React          from 'react'
+import PropTypes      from 'prop-types'
 import { connect }    from 'react-redux'
 import shortid        from 'shortid'
 import classNames     from 'classnames'
@@ -20,51 +21,50 @@ const COMPONENTS =
 class Dialog extends React.Component {
   constructor (props) {
     super (props)
-
-    this.ID = props.ID ? props.ID : shortid.generate()
   }
 
   render ( ) {
     const dialog    = this.props.dialog
     let   modal     = null
 
-    if ( dialog.type ) {
-      const ID      = this.props.id ? this.props.id : `dialog-${this.ID}`
-      if ( dialog.display ) {
-          const Component = COMPONENTS[dialog.type]
-          const large     = dialog.size == Dialog.LARGE
-          const small     = dialog.size == Dialog.SMALL
+    if ( dialog ) {
+      if ( dialog.type ) {
+        if ( dialog.display ) {
+            const Component = COMPONENTS[dialog.type]
+            const large     = dialog.size == Dialog.LARGE
+            const small     = dialog.size == Dialog.SMALL
 
-          modal           = (
-          <div className="modal" id={ID}>
-            <div className={classNames("modal-dialog", {"modal-lg": large}, {"modal-sm": small})}>
-              <div className="modal-content">
-                <div className="modal-header">
-                  <button className="close" data-dismiss="modal"
-                    onClick={() => {
-                      const action = hideDialog({
-                        type: dialog.type
-                      })
+            modal           = (
+            <div className="modal" id={this.props.ID}>
+              <div className={classNames("modal-dialog", {"modal-lg": large}, {"modal-sm": small})}>
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <button className="close" data-dismiss="modal"
+                      onClick={() => {
+                        const action = hideDialog({
+                          type: dialog.type
+                        })
 
-                      this.props.dispatch(action)
-                    }}>
-                    &times;
-                  </button>
-                  <div className="modal-title font-heavy">
-                    {dialog.title}
+                        this.props.dispatch(action)
+                      }}>
+                      &times;
+                    </button>
+                    <div className="modal-title font-heavy">
+                      {dialog.title}
+                    </div>
                   </div>
-                </div>
-                <div className="modal-body">
-                  <Component {...dialog.props}/>
+                  <div className="modal-body">
+                    <Component {...dialog.props}/>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )
+          )
 
-        $(`#${ID}`).modal('show')
-      } else {
-        $(`#${ID}`).modal('hide')
+          $(`#${this.props.ID}`).modal('show')
+        } else {
+          $(`#${this.props.ID}`).modal('hide')
+        }
       }
     }
 
@@ -72,13 +72,22 @@ class Dialog extends React.Component {
   }
 }
 
+Dialog.LARGE = 'DIALOG_LARGE'
+Dialog.SMALL = 'DIALOG_SMALL'
+
+Dialog.propTypes      =
+{
+      ID: PropTypes.string
+}
+Dialog.defaultProps   =
+{
+      ID: shortid.generate()
+}
+
 const mapStateToProps = (state) => {
   return {
     dialog: state.dialog
   }
 }
-
-Dialog.LARGE = 'L'
-Dialog.SMALL = 'S'
 
 export default connect(mapStateToProps)(Dialog)

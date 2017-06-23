@@ -6,5 +6,9 @@
   {
     "name": "CDATA",
     "extensions": [".cdata", ".CDATA"]
+  },
+  {
+    "name": "CSV",
+    "extensions": [".csv", ".CSV"]
   }
 ]

@@ -17,26 +17,31 @@ class MenuBar extends React.Component {
       <div className={classNames("navbar navbar-default", this.props.classNames.root)}
         id={`menubar-${this.props.ID}`}>
         <div className={this.props.fluid ? "container-fluid" : "container"}>
-          <div className="navbar-header">
-            <button className="collpased navbar-toggle"
-              data-toggle="collapse"
-              data-target={`#menubar-${this.props.ID}-collapse`}>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-          </div>
-          <div id={`menubar-${this.props.ID}-collapse`} className="collapse navbar-collapse">
-            <ul className="nav navbar-nav">
-              {
-                this.props.menus.map((menu, index) => {
-                  return (
-                    <MenuBar.Menu key={index} {...menu}/>
-                  )
-                })
-              }
-            </ul>
-          </div>
+          {
+            this.props.menus.length ?
+              <span>
+                <div className="navbar-header">
+                  <button className="collpased navbar-toggle"
+                    data-toggle="collapse"
+                    data-target={`#menubar-${this.props.ID}-collapse`}>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                    <span className="icon-bar"></span>
+                  </button>
+                </div>
+                <div id={`menubar-${this.props.ID}-collapse`} className="collapse navbar-collapse">
+                  <ul className="nav navbar-nav">
+                    {
+                      this.props.menus.map((menu, index) => {
+                        return (
+                          <MenuBar.Menu key={index} {...menu}/>
+                        )
+                      })
+                    }
+                  </ul>
+                </div>
+              </span> : false
+          }
         </div>
       </div>
     )
@@ -87,7 +92,7 @@ MenuBar.propTypes      =
   menus: PropTypes.array,
   fluid: PropTypes.bool
 }
-MenuBar.defaultPRops   =
+MenuBar.defaultProps   =
 {
      ID: shortid.generate(),
   menus: [ ],

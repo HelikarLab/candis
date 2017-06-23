@@ -1,7 +1,4 @@
-import config     from '../config'
-
-import DialogType from '../constant/DialogType'
-import { showDialog } from '../action/DialogAction'
+import config from '../config'
 
 const Menus = [
   {
@@ -10,7 +7,7 @@ const Menus = [
       {
            text: 'New',
            icon: `${config.routes.icons}/document.png`,
-        tooltip: 'Create a new experiment',
+        tooltip: 'Create a new Experiment',
         onClick: (dispatch) => {
 
         }
@@ -20,7 +17,17 @@ const Menus = [
            icon: `${config.routes.icons}/quit.png`,
         tooltip: 'Quit the application',
         onClick: (dispatch) => {
-
+          console.log(bootbox)
+          bootbox.confirm({
+             message: "Are you sure you want to quit?",
+             buttons: {
+              confirm: { label: "Quit",   className: "btn-success" },
+               cancel: { label: "Cancel", className: "btn-default" }
+            },
+            callback: (result) => {
+              console.log(result)
+            }
+          })
         }
       }
     ]
@@ -46,14 +53,7 @@ const Menus = [
            icon: `${config.routes.icons}/info.png`,
         tooltip: 'Show application information',
         onClick: (dispatch) => {
-          const dialog =
-          {
-             type: DialogType.ABOUT,
-            title: config.title
-          }
-          const action = showDialog(dialog)
 
-          dispatch(action)
         }
       },
       {

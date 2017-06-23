@@ -23,9 +23,7 @@ class App extends React.Component {
         <AppBar image={`${config.routes.images}/logo.png`} classNames={{
           root: ["navbar-static-top", "no-margin"]
         }}/>
-      <MenuBar classNames={{
-          root: ["navbar-static-top"]
-        }} menus={Menus}/>
+        <MenuBar classNames={{ root: "navbar-static-top" }} menus={Menus}/>
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-3">
@@ -42,12 +40,4 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  const app           = state.app
-
-  return {
-
-  }
-}
-
-export default connect(mapStateToProps)(App)
+export default App
