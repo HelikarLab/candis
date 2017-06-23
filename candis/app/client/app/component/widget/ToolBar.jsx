@@ -13,9 +13,10 @@ class ToolBar extends React.Component {
               tools && tools.length ?
                 tools.map((tool, index) => {
                   return (
-                    <div key={index}>
-
-                    </div>
+                    <button key={index} className="btn no-background no-border no-shadow"
+                      >
+                      <img src={tool.icon} width="20"/>
+                    </button>
                   )
                 })
                 :

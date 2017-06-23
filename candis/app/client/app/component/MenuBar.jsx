@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import shortid     from 'shortid'
 
 import Media       from './widget/Media'
+import { getBSTTProps } from '../util'
 
 class MenuBar extends React.Component {
   constructor (props) {
@@ -53,15 +54,10 @@ MenuBar.Menu = class extends React.Component {
         <ul className="dropdown-menu">
           {
             this.props.actions.map((action, index) => {
-              const ttattrs = action.tooltip ?
-                {
-                     "data-toggle": "tooltip",
-                  "data-placement": "top",
-                             title: action.tooltip
-                } : { }
+              const ttprops = getBSTTProps(action.tooltip)
 
               return (
-                <li key={index} {...ttattrs}>
+                <li key={index} {...ttprops}>
                   <a href="javascript:void(0);" onClick={() => {
                       this.props.dispatch(action.onClick)
                     }}>
@@ -84,5 +80,8 @@ MenuBar.Menu.propTypes =
 }
 
 MenuBar.Menu           = connect()(MenuBar.Menu)
+
+MenuBar.propTypes      = { menus: PropTypes.array }
+MenuBar.defaultPRops   = { menus: [ ] }
 
 export default MenuBar

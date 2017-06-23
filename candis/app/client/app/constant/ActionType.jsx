@@ -3,6 +3,8 @@ const ActionType =
                INSERT_TOOL: 'ACTION_TYPE_INSERT_TOOL',
              ON_HOVER_TOOL: 'ACTION_TYPE_ON_HOVER_TOOL',
 
+                  ADD_NODE: 'ACTION_TYPE_ADD_NODE',
+
                SHOW_DIALOG: 'ACTION_TYPE_SHOW_DIALOG',
                HIDE_DIALOG: 'ACTION_TYPE_HIDE_DIALOG',
 

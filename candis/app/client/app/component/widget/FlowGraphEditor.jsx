@@ -1,13 +1,33 @@
-import React      from 'react'
-import classNames from 'classnames'
+import React       from 'react'
+import { connect } from 'react-redux'
+import classNames  from 'classnames'
 
 class FlowGraphEditor extends React.Component {
   render ( ) {
+    const graph = this.props.graph
+
     return (
       <div className={classNames("panel panel-default", this.props.classNames.root)}>
         <div className="panel-body">
           {
-            
+            graph.nodes().map((ID, index) => {
+              let meta = graph.node(ID)
+              meta     = JSON.parse(meta)
+
+              return (
+                <a key={index} href="javascript:void(0);" onClick={() => {
+                    this.props.dispatch(meta.onClick)
+                  }}>
+                  <span>
+                    <h2 className="no-margin">
+                      <span className="label label-default">
+                        {meta.label}
+                      </span>
+                    </h2>
+                  </span>
+                </a>
+              )
+            })
           }
         </div>
       </div>
@@ -15,4 +35,12 @@ class FlowGraphEditor extends React.Component {
   }
 }
 
-export default FlowGraphEditor
+const mapStateToProps   = (state) => {
+  const flowGraphEditor = state.flowGraphEditor
+
+  return {
+    graph: flowGraphEditor.graph
+  }
+}
+
+export default connect(mapStateToProps)(FlowGraphEditor)

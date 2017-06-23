@@ -21,10 +21,10 @@ class App extends React.Component {
         <MenuBar menus={Menus}/>
         <div className="container-fluid">
           <div className="row">
-            <div className="col-md-3">
+            <div className="col-sm-3">
               <ToolBox title="Tool Box" compartments={Compartments}/>
             </div>
-            <div className="col-md-9">
+            <div className="col-sm-9">
               <DocumentEditor/>
             </div>
           </div>

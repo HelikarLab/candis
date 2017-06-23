@@ -1,3 +1,14 @@
+const getBSTTProps = (tooltip, options = { position: "top" }) => {
+  let ttprops         = tooltip ?
+    {
+         "data-toggle": "tooltip",
+      "data-placement": options.position,
+                 title: tooltip
+    } : { }
+
+  return ttprops
+}
+
 // TODO: can be written better.
 const filterFiles = (resource, filter = null) => {
   let collection  = [ ]
@@ -22,4 +33,4 @@ const filterFiles = (resource, filter = null) => {
   return collection
 }
 
-export { filterFiles }
+export { getBSTTProps, filterFiles }

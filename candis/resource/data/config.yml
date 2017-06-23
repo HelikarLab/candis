@@ -9,6 +9,8 @@ app:
   title: !join [*name, " v", *version]
   color:
     primary: "#E91E63"
+  urls:
+    documentation: "https://candis.readthedocs.io"
   routes:
     base: &base "/"
     assets: &assets !relurljoin [*base, "assets"]

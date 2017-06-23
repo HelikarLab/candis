@@ -1,5 +1,7 @@
 import React           from 'react'
 
+import config          from '../../../config'
+
 import XEditable       from '../XEditable'
 import ToolBar         from '../ToolBar'
 import FlowGraphEditor from '../FlowGraphEditor'
@@ -9,6 +11,14 @@ class DocumentEditor extends React.Component {
     super (props)
 
     this.onChange = this.onChange.bind(this)
+
+    this.tools    = [
+      {
+           name: 'Capture',
+           icon: `${config.routes.icons}/photo-camera.png`,
+        tooltip: 'Capture Flow Graph'
+      }
+    ]
 
     this.state    = DocumentEditor.defaultStates
   }
@@ -37,9 +47,11 @@ class DocumentEditor extends React.Component {
         </div>
         <div className="panel-body">
           <ToolBar/>
-          <FlowGraphEditor classNames={{
+          <FlowGraphEditor
+            classNames={{
               root: ["no-margin"]
-            }}/>
+            }}
+            tools={this.tools}/>
         </div>
       </div>
     )

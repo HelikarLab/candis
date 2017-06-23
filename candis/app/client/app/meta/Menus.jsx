@@ -1,7 +1,4 @@
-import config     from '../config'
-import Dialog     from '../component/dialog/Dialog'
-import DialogType from '../constant/DialogType'
-import { showDialog, hideDialog } from '../action/DialogAction'
+import config from '../config'
 
 const Menus = [
   {
@@ -9,7 +6,7 @@ const Menus = [
     actions: [
       {
            text: 'New',
-           icon: `${config.routes.icons}/file.png`,
+           icon: `${config.routes.icons}/document.png`,
         tooltip: 'Create a new experiment',
         onClick: (dispatch) => {
 
@@ -18,7 +15,23 @@ const Menus = [
       {
            text: 'Quit',
            icon: `${config.routes.icons}/quit.png`,
-        tooltip: 'Quit the application'
+        tooltip: 'Quit the application',
+        onClick: (dispatch) => {
+
+        }
+      }
+    ]
+  },
+  {
+      title: 'Options',
+    actions: [
+      {
+            text: 'Settings',
+            icon: `${config.routes.icons}/settings.png`,
+         tooltip: 'Open Settings View',
+         onClick: (dispatch) => {
+
+         }
       }
     ]
   },
@@ -28,27 +41,17 @@ const Menus = [
       {
            text: 'About',
            icon: `${config.routes.icons}/info.png`,
-        tooltip: 'Shows application information',
+        tooltip: 'Show application information',
         onClick: (dispatch) => {
-          const action = showDialog({
-             type: DialogType.ABOUT,
-            title: `${config.title}`,
-            props: {
-              classNames: {
-                  root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                footer: ['no-background', 'no-border']
-              },
-                 onClose: (dispatch) => {
-                   const action = hideDialog({
-                     type: DialogType.ABOUT
-                   })
 
-                   dispatch(action)
-                 }
-            }
-          })
-
-          dispatch(action)
+        }
+      },
+      {
+           text: 'Documentation',
+           icon: `${config.routes.icons}/documentation.png`,
+        tooltip: 'View Documentation',
+        onClick: () => {
+          window.open(config.urls.documentation)
         }
       }
     ]
