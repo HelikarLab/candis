@@ -102,10 +102,8 @@ class Compartment extends React.Component {
 
 Compartment.PropTypes     =
 {
-
+  name: PropTypes.string.isRequired
 }
-Compartment.defaultProps  = { }
-
 Compartment.defaultStates = { active: false }
 
 const mapStateToProps     = (state) => {

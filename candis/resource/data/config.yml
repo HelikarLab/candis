@@ -22,5 +22,7 @@ app:
 
     preprocess:
       methods: !relurljoin [*base, "api", "preprocess", "methods"]
+    model:
+      methods: !relurljoin [*base, "api", "model", "methods"]
   container: "app"
   startdir: "CRES"

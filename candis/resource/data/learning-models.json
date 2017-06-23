@@ -1,0 +1,26 @@
+[
+  {
+       "name": "Supervised Learning",
+       "code": "spl",
+    "methods": [
+      {
+           "name": "Regression",
+           "code": "spl.rgr",
+        "methods": [
+
+        ]
+      },
+      {
+           "name": "Classification",
+           "code": "spl.cls",
+        "methods": [
+          
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Unsupervised Learning",
+    "code": "usl"
+  }
+]

@@ -53,7 +53,7 @@ const Compartments = [
         {
              name: 'File',
              icon: `${config.routes.icons}/document.png`,
-          tooltip: 'Load a CSV file',
+          tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
             const action = showDialog({
                type: DialogType.FILE,
@@ -84,6 +84,14 @@ const Compartments = [
             })
 
             dispatch(action)
+          }
+        },
+        {
+             name: 'Download',
+             icon: `${config.routes.icons}/cloud-computing.png`,
+          tooltip: 'Download data from a remote host',
+          onClick: (dispatch) => {
+
           }
         }
       ]

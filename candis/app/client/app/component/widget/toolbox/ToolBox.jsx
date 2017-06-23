@@ -13,13 +13,13 @@ class ToolBox extends React.Component {
   constructor (props) {
     super (props)
 
-    this.ID             = props.ID ? props.ID : shortid.generate()
+    this.ID            = props.ID ? props.ID : shortid.generate()
   }
 
   componentWillMount ( ) {
     this.props.compartments.forEach((_, index) => {
-      const compartment = this.props.compartments[index]
-      compartment.ID    = `compartment-${shortid.generate()}`
+      let compartment  = this.props.compartments[index]
+      compartment.ID   = `compartment-${shortid.generate()}`
 
       if ( compartment.tools ) {
         compartment.tools.forEach((object) => {
@@ -71,21 +71,26 @@ class ToolBox extends React.Component {
         <div id={`toolbox-${this.ID}-collapse`} className="collapse panel-collapse in">
           <div className="panel-body">
             <div className="panel-group no-margin" id={`toolbox-${this.ID}`}>
-              <TypeAhead placeholder="Search tool" data={this.props.tools}
-                keys={["name", "tooltip", "description", "compartmentName"]} maximum={4}
+              <TypeAhead
+                    placeholder="Search tool"
+                           data={this.props.tools}
+                           keys={["name", "tooltip", "description", "compartmentName"]}
+                        maximum={4}
+                    onMouseOver={(tool) => {
+                      this.props.dispatch(onHoverTool(tool))
+                    }}
+                    onMouseOut ={(tool) => {
+                      this.props.dispatch(onHoverTool(null))
+                    }}
 
-                onHover={(tool) => {
-                  this.props.dispatch(onHoverTool(tool))
-                }}
-
-                onSelect={(tool) => {
-                  this.props.dispatch(tool.onClick)
-                }}
-                map={{
-                  title: "name",
-                   body: "compartmentName",
-                   icon: "icon"
-                }}/>
+                       onSelect={(tool) => {
+                         this.props.dispatch(tool.onClick)
+                       }}
+                            map={{
+                              title: "name",
+                               body: "compartmentName",
+                               icon: "icon"
+                            }}/>
               {
                 this.props.compartments.map((compartment, index) => {
                   return (
@@ -101,7 +106,6 @@ class ToolBox extends React.Component {
               }
             </div>
           </div>
-
           <div className="panel panel-default no-margin no-shadow no-border-left no-border-right no-border-bottom">
             <div id={`toolbox-${this.ID}-tipview-collapse`} className="collapse panel-collapse in">
               <div className="panel-body">
@@ -134,8 +138,16 @@ class ToolBox extends React.Component {
   }
 }
 
-ToolBox.propTypes         = { title: PropTypes.string }
-ToolBox.defaultProps      = { title: "" }
+ToolBox.propTypes         =
+{
+         title: PropTypes.string,
+  compartments: PropTypes.array
+}
+ToolBox.defaultProps      =
+{
+         title: "",
+  compartments: [ ]
+}
 
 const mapStateToProps     = (state) => {
   const toolBox           = state.toolBox

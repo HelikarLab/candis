@@ -3,7 +3,6 @@ const ActionType =
                INSERT_TOOL: 'ACTION_TYPE_INSERT_TOOL',
              ON_HOVER_TOOL: 'ACTION_TYPE_ON_HOVER_TOOL',
 
-
                SHOW_DIALOG: 'ACTION_TYPE_SHOW_DIALOG',
                HIDE_DIALOG: 'ACTION_TYPE_HIDE_DIALOG',
 
@@ -15,7 +14,7 @@ const ActionType =
                DESELECT_ROW: 'ACTION_TYPE_DESELECT_ROW',
                 UPDATE_ROWS: 'ACTION_TYPE_UPDATE_ROWS',
 
-   // Asynchronous Action Types
+  // Asynchronous Action Types
       GET_RESOURCE_REQUEST: 'ACTION_TYPE_GET_RESOURCE_REQUEST',
       GET_RESOURCE_SUCCESS: 'ACTION_TYPE_GET_RESOURCE_SUCCESS',
         GET_RESOURCE_ERROR: 'ACTION_TYPE_GET_RESOURCE_ERROR',

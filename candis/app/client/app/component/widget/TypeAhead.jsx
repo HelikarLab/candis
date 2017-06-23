@@ -34,15 +34,22 @@ class TypeAhead extends React.Component {
 
     return (
       <div className="form-group" style={{ position: 'relative' }}>
-        <input className="form-control no-shadow no-outline"
-          placeholder={this.props.placeholder} value={this.state.query}
-          onChange={this.onChange}/>
+        <div className="input-group">
+          <input className="form-control no-shadow no-outline"
+            placeholder={this.props.placeholder} value={this.state.query}
+            onChange={this.onChange}/>
+          <div className="input-group-addon">
+            <i className="fa fa-fw fa-search"></i>
+          </div>
+        </div>
         {
-          this.state.filter.length ?
+          this.state.query && this.state.filter.length ?
             <div style={{
                  position: 'absolute',
                    zIndex: 1010,
-                boxShadow: '0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08)' // Thanks, Google Search
+                maxHeight: '250px',
+                boxShadow: '0 3px 8px 0 rgba(0,0,0,0.2),0 0 0 1px rgba(0,0,0,0.08)', // Thanks, Google Search
+                overflowY: 'scroll'
               }}>
               <ul className="list-group no-margin">
                 {
@@ -55,8 +62,8 @@ class TypeAhead extends React.Component {
 
                     return (
                       <li key={index} className="list-group-item"
-                        onMouseOver={() => { this.props.onHover(data) }}
-                        onMouseOut ={() => { this.props.onHover(null) }}>
+                        onMouseOver={() => { this.props.onMouseOver(data) }}
+                        onMouseOut ={() => { this.props.onMouseOut(data) }}>
                         <a href="javascript:void(0);" onClick={() => {
                             this.setState(TypeAhead.defaultStates)
 
@@ -82,13 +89,17 @@ TypeAhead.propTypes     =
          data: PropTypes.array.isRequired,
      onSelect: PropTypes.func.isRequired,
       maximum: PropTypes.number,
-         keys: PropTypes.array
+         keys: PropTypes.array,
+  onMouseOver: PropTypes.func,
+  onMouseOut : PropTypes.func
 }
 
 TypeAhead.defaultProps  =
 {
   placeholder: "",
-      maximum: null
+      maximum: null,
+  onMouseOver: () => { },
+  onMouseOut : () => { }
 }
 
 TypeAhead.defaultStates = { query: "", filter: [ ] }

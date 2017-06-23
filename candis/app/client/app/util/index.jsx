@@ -1,6 +1,6 @@
 // TODO: can be written better.
-const filterFiles  = (resource, filter = null) => {
-  let collection = [ ]
+const filterFiles = (resource, filter = null) => {
+  let collection  = [ ]
 
   resource.files.forEach((file) => {
     if ( filter == null || filter.includes(file.format) ) {
