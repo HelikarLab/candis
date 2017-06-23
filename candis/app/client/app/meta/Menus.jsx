@@ -17,15 +17,17 @@ const Menus = [
            icon: `${config.routes.icons}/quit.png`,
         tooltip: 'Quit the application',
         onClick: (dispatch) => {
-          console.log(bootbox)
           bootbox.confirm({
              message: "Are you sure you want to quit?",
-             buttons: {
-              confirm: { label: "Quit",   className: "btn-success" },
-               cancel: { label: "Cancel", className: "btn-default" }
-            },
-            callback: (result) => {
-              console.log(result)
+             buttons:
+             {
+                cancel: { label: "Cancel", className: "btn-default" },
+               confirm: { label: "Quit",   className: "btn-success" }
+             },
+                size: "small",
+             animate: false,
+            callback: (confirm) => {
+
             }
           })
         }
