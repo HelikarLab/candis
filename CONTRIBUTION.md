@@ -11,7 +11,7 @@
 ## UI
 ### `Menus`
 ---
-Registering a `Menu` within the `MenuBar` is as easy as pie. Head over to [MenuBar.jsx](candis/app/client/app/meta/Menus.jsx). As shown, a `Menu` object containing `Menu.Action` objects must be defined in the following schema:
+Registering a `Menu` within the `MenuBar` is as easy as pie. Head over to [Menus.jsx](candis/app/client/app/meta/Menus.jsx). As shown, a `Menu` object containing `Menu.Action` objects must be defined in the following schema:
 ```js
 const action1 =
 {
