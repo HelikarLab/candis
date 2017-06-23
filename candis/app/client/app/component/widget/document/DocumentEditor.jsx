@@ -1,5 +1,8 @@
-import React     from 'react'
-import XEditable from './XEditable'
+import React           from 'react'
+
+import XEditable       from '../XEditable'
+import ToolBar         from '../ToolBar'
+import FlowGraphEditor from '../FlowGraphEditor'
 
 class DocumentEditor extends React.Component {
   constructor (props) {
@@ -33,16 +36,16 @@ class DocumentEditor extends React.Component {
           </div>
         </div>
         <div className="panel-body">
-          <svg className="canvas"></svg>
+          <ToolBar/>
+          <FlowGraphEditor classNames={{
+              root: ["no-margin"]
+            }}/>
         </div>
       </div>
     )
   }
 }
 
-DocumentEditor.defaultStates =
-{
-  title: "Untitled document"
-}
+DocumentEditor.defaultStates = { title: "Untitled document" }
 
 export default DocumentEditor

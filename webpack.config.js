@@ -25,11 +25,11 @@ module.exports     = {
     ]
   },
   plugins: [
-    new UglifyJSPlugin({
-      output: {
-        comments: false
-      }
-    })
+    // new UglifyJSPlugin({
+    //   output: {
+    //     comments: false
+    //   }
+    // })
   ],
   resolve: {
     modules: ['node_modules', 'bower_components'],

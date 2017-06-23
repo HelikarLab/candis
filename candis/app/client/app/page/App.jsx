@@ -3,7 +3,7 @@ import React           from 'react'
 import AppBar          from '../component/AppBar'
 import MenuBar         from '../component/MenuBar'
 import ToolBox         from '../component/widget/toolbox/ToolBox'
-import DocumentEditor  from '../component/widget/DocumentEditor'
+import DocumentEditor  from '../component/widget/document/DocumentEditor'
 import Dialog          from '../component/dialog/Dialog'
 
 import Menus           from '../meta/Menus'
