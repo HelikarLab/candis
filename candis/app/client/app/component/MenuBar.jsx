@@ -2,6 +2,7 @@ import React       from 'react'
 import PropTypes   from 'prop-types'
 import { connect } from 'react-redux'
 import shortid     from 'shortid'
+import classNames  from 'classnames'
 
 import Media       from './widget/Media'
 import { getBSTTProps } from '../util'
@@ -9,24 +10,23 @@ import { getBSTTProps } from '../util'
 class MenuBar extends React.Component {
   constructor (props) {
     super (props)
-
-    this.ID = props.ID ? props.ID : shortid.generate()
   }
 
   render ( ) {
     return (
-      <div className="navbar navbar-default" id={`menubar-${this.ID}`}>
-        <div className="container">
+      <div className={classNames("navbar navbar-default", this.props.classNames.root)}
+        id={`menubar-${this.props.ID}`}>
+        <div className={this.props.fluid ? "container-fluid" : "container"}>
           <div className="navbar-header">
             <button className="collpased navbar-toggle"
               data-toggle="collapse"
-              data-target={`#menubar-${this.ID}-collapse`}>
+              data-target={`#menubar-${this.props.ID}-collapse`}>
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
           </div>
-          <div id={`menubar-${this.ID}-collapse`} className="collapse navbar-collapse">
+          <div id={`menubar-${this.props.ID}-collapse`} className="collapse navbar-collapse">
             <ul className="nav navbar-nav">
               {
                 this.props.menus.map((menu, index) => {
@@ -81,7 +81,17 @@ MenuBar.Menu.propTypes =
 
 MenuBar.Menu           = connect()(MenuBar.Menu)
 
-MenuBar.propTypes      = { menus: PropTypes.array }
-MenuBar.defaultPRops   = { menus: [ ] }
+MenuBar.propTypes      =
+{
+     ID: PropTypes.string,
+  menus: PropTypes.array,
+  fluid: PropTypes.bool
+}
+MenuBar.defaultPRops   =
+{
+     ID: shortid.generate(),
+  menus: [ ],
+  fluid: false
+}
 
 export default MenuBar

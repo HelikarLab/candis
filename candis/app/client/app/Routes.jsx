@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, IndexRoute } from 'react-router'
 
 import config from './config'
-import App    from './page/App'
+import App    from './component/App'
 
 const Routes = (
   <Route path={config.routes.base}>

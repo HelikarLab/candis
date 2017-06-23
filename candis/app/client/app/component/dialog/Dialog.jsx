@@ -21,7 +21,7 @@ class Dialog extends React.Component {
   constructor (props) {
     super (props)
 
-    this.ID  = shortid.generate()
+    this.ID = props.ID ? props.ID : shortid.generate()
   }
 
   render ( ) {

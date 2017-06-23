@@ -12,8 +12,6 @@ import { insertTool, onHoverTool } from '../../../action/ToolBoxAction'
 class ToolBox extends React.Component {
   constructor (props) {
     super (props)
-
-    this.ID            = props.ID ? props.ID : shortid.generate()
   }
 
   componentWillMount ( ) {
@@ -60,7 +58,7 @@ class ToolBox extends React.Component {
             </div>
             <div className="col-xs-4">
               <div className="text-right">
-                <a href={`#toolbox-${this.ID}-collapse`} data-toggle="collapse">
+                <a href={`#toolbox-${this.props.ID}-collapse`} data-toggle="collapse">
                   <span className="fa fa-fw fa-minus" data-toggle="tooltip"
                     title="Minimize"></span>
                 </a>
@@ -68,9 +66,9 @@ class ToolBox extends React.Component {
             </div>
           </div>
         </div>
-        <div id={`toolbox-${this.ID}-collapse`} className="collapse panel-collapse in">
+        <div id={`toolbox-${this.props.ID}-collapse`} className="collapse panel-collapse in">
           <div className="panel-body">
-            <div className="panel-group no-margin" id={`toolbox-${this.ID}`}>
+            <div className="panel-group no-margin" id={`toolbox-${this.props.ID}`}>
               <TypeAhead
                     placeholder="Search tool"
                            data={this.props.tools}
@@ -100,14 +98,14 @@ class ToolBox extends React.Component {
                          name={compartment.name}
                          icon={compartment.icon}
                       tooltip={compartment.tooltip}
-                       parent={`toolbox-${this.ID}`}/>
+                       parent={`toolbox-${this.props.ID}`}/>
                   )
                 })
               }
             </div>
           </div>
           <div className="panel panel-default no-margin no-shadow no-border-left no-border-right no-border-bottom">
-            <div id={`toolbox-${this.ID}-tipview-collapse`} className="collapse panel-collapse in">
+            <div id={`toolbox-${this.props.ID}-tipview-collapse`} className="collapse panel-collapse in">
               <div className="panel-body">
                 {
                   activeTool ?
@@ -126,7 +124,7 @@ class ToolBox extends React.Component {
             <div className="btn-group btn-group-sm">
               <div data-toggle="tooltip" data-placement="top" title="Toggle Help">
                 <button className="btn btn-sm btn-primary" data-toggle="collapse"
-                  data-target={`#toolbox-${this.ID}-tipview-collapse`}>
+                  data-target={`#toolbox-${this.props.ID}-tipview-collapse`}>
                   <i className="fa fa-fw fa-question-circle-o"></i>
                 </button>
               </div>
@@ -140,11 +138,13 @@ class ToolBox extends React.Component {
 
 ToolBox.propTypes         =
 {
+            ID: PropTypes.string,
          title: PropTypes.string,
   compartments: PropTypes.array
 }
 ToolBox.defaultProps      =
 {
+            ID: shortid.generate(),
          title: "",
   compartments: [ ]
 }

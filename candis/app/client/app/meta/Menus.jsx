@@ -1,4 +1,7 @@
-import config from '../config'
+import config     from '../config'
+
+import DialogType from '../constant/DialogType'
+import { showDialog } from '../action/DialogAction'
 
 const Menus = [
   {
@@ -43,7 +46,14 @@ const Menus = [
            icon: `${config.routes.icons}/info.png`,
         tooltip: 'Show application information',
         onClick: (dispatch) => {
+          const dialog =
+          {
+             type: DialogType.ABOUT,
+            title: config.title
+          }
+          const action = showDialog(dialog)
 
+          dispatch(action)
         }
       },
       {

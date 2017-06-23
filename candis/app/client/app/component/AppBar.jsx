@@ -1,30 +1,46 @@
 import React      from 'react'
+import PropTypes  from 'prop-types'
+
 import shortid    from 'shortid'
 import classNames from 'classnames'
-
-import config     from '../config'
 
 class AppBar extends React.Component {
   constructor (props) {
     super (props)
-
-    this.ID = props.ID ? props.ID : shortid.generate()
   }
 
   render ( ) {
+    const props = this.props
+
     return (
-      <nav className={classNames("navbar navbar-default", this.props.className)}
-        id={`appbar-${this.ID}`}>
-        <div className="container">
+      <nav className={classNames("navbar navbar-default", props.classNames.root)}
+        id={`appbar-${this.props.ID}`}>
+        <div className={props.fluid ? "container-fluid" : "container"}>
           <div className="navbar-header">
-            <a className="navbar-brand" href="javascript:void(0);">
-              <img src={`${config.routes.images}/logo.png`} height="20"/>
-            </a>
+            {
+              props.image ?
+                <a className="navbar-brand" href="javascript:void(0);">
+                  <img src={props.image} width="20"/>
+                </a>
+                : false
+            }
           </div>
         </div>
       </nav>
     )
   }
+}
+
+AppBar.propTypes      =
+{
+     ID: PropTypes.string,
+  fluid: PropTypes.bool,
+  image: PropTypes.string
+}
+AppBar.defaultProps   =
+{
+     ID: shortid.generate(),
+  fluid: false
 }
 
 export default AppBar

@@ -3,6 +3,14 @@ import { connect } from 'react-redux'
 import classNames  from 'classnames'
 
 class FlowGraphEditor extends React.Component {
+  componentDidMount ( ) {
+    this.props.graph.nodes().map((ID) => {
+      jsplumb.ready(() => {
+        jsplumb.draggable(`node-${ID}`)
+      })
+    })
+  }
+
   render ( ) {
     const graph = this.props.graph
 
@@ -15,7 +23,8 @@ class FlowGraphEditor extends React.Component {
               meta     = JSON.parse(meta)
 
               return (
-                <a key={index} href="javascript:void(0);" onClick={() => {
+                <a id={`node-${ID}`} key={index} href="javascript:void(0);"
+                  onClick={() => {
                     this.props.dispatch(meta.onClick)
                   }}>
                   <span>
