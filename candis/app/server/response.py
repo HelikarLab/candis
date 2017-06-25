@@ -20,7 +20,7 @@ class Response(object):
         FAILURE = 'fail'
         ERROR   = 'error'
 
-    def __init__(self, status = None, code = 200):
+    def __init__(self, status = None, code = 200, data = { }):
         self.version = CONFIG.VERSION
         self.id      = get_rand_uuid_str()
         self.status  = assign_if_none(status, Response.Status.SUCCESS)
@@ -31,6 +31,8 @@ class Response(object):
         self.schema.id      = get_rand_uuid_str()
         self.schema.version = self.version
         self.schema.status  = self.status
+
+        self.set_data(data)
 
     def set_data(self, data):
         self.data        = data

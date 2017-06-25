@@ -1,7 +1,8 @@
 const FileFormat =
 {
-  CDATA: 'CDATA',
-    CEL: 'CEL'
+     CDATA: 'cdata',
+       CEL: 'cel',
+  PIPELINE: 'pipeline'
 };
 
 export default FileFormat

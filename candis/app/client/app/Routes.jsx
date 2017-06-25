@@ -3,10 +3,12 @@ import { Route, IndexRoute } from 'react-router'
 
 import config from './config'
 import App    from './component/App'
+import SignIn from './page/SignIn'
 
 const Routes = (
   <Route path={config.routes.base}>
     <IndexRoute component={App}/>
+    <Route path={config.routes.sign_in} component={SignIn}/>
   </Route>
 )
 

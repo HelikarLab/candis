@@ -13,6 +13,9 @@ app:
     documentation: "https://candis.readthedocs.io"
   routes:
     base: &base "/"
+    sign_in: !relurljoin [*base, "SignIn"]
+    sign_up: !relurljoin [*base, "SignUp"]
+
     assets: &assets !relurljoin [*base, "assets"]
     images: &images !relurljoin [*assets, "img"]
     icons: &icons !relurljoin [*images, "icons"]

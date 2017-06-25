@@ -6,7 +6,7 @@ import config          from '../config'
 import AppBar          from './AppBar'
 import MenuBar         from './MenuBar'
 import ToolBox         from './widget/toolbox/ToolBox'
-import DocumentEditor  from './widget/document/DocumentEditor'
+import DocumentPanel   from './widget/document/DocumentPanel'
 import Dialog          from './dialog/Dialog'
 
 import Menus           from '../meta/Menus'
@@ -30,7 +30,7 @@ class App extends React.Component {
               <ToolBox title="Tool Box" compartments={Compartments}/>
             </div>
             <div className="col-sm-9">
-              <DocumentEditor/>
+              <DocumentPanel/>
             </div>
           </div>
         </div>

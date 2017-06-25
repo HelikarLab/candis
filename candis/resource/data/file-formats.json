@@ -1,14 +1,18 @@
 [
   {
-    "name": "CEL",
+    "name": "cel",
     "extensions": [".cel", ".CEL"]
   },
   {
-    "name": "CDATA",
+    "name": "cdata",
     "extensions": [".cdata", ".CDATA"]
   },
   {
-    "name": "CSV",
+    "name": "csv",
     "extensions": [".csv", ".CSV"]
+  },
+  {
+    "name": "pipeline",
+    "extensions": [".cpipe", ".CPIPE"]
   }
 ]

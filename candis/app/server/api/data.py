@@ -11,7 +11,7 @@ from candis.util                import (
     assign_if_none, get_rand_uuid_str, json_load, get_timestamp_str
 )
 from candis.resource            import R
-from candis.data                import cdata
+from candis.ios                 import cdata, pipeline
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 
@@ -71,7 +71,7 @@ def discover_resource(path, level = None, filter_ = None):
     return tree
 
 @app.route(CONFIG.App.Routes.RESOURCE, methods = ['GET', 'POST'])
-def resource(filter_ = ['CDATA', 'CEL'], level = None):
+def resource(filter_ = ['cdata', 'cel'], level = None):
     response  = Response()
 
     startdir  = CONFIG.App.STARTDIR
@@ -107,7 +107,7 @@ def read():
 
             format_ = get_file_format(name)
 
-            if format_ == 'CDATA':
+            if format_ == 'cdata':
                 dataset = cdata.read(relpath)
 
                 response.set_data(dataset)
@@ -140,7 +140,7 @@ def write():
             format_ = parameters['format']
             buffer_ = parameters['buffer']
 
-            if format_ == 'CDATA':
+            if format_ == 'cdata':
                  file_  = '{name}.{ext}'.format(name = filename, ext = 'cdata')
                  path   = os.path.join(ABSPATH_STARTDIR, file_)
 
@@ -149,6 +149,15 @@ def write():
                  except TypeError as e:
                      # TODO: set response error: invalid buffer
                      pass
+            elif format_ == 'pipeline':
+                file_  = '{name}.{ext}'.format(name = filename, ext = 'cpipe')
+                path   = os.path.join(ABSPATH_STARTDIR, file_)
+
+                try:
+                    pipeline.write(path, buffer_)
+                except TypeError as e:
+                    # TODO: set response error: invalid buffer
+                    pass
         else:
             # TODO: set response error: buffer not provided
             pass

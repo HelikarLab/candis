@@ -1,4 +1,7 @@
-import config from '../config'
+import config     from '../config'
+
+import FileFormat from '../constant/FileFormat'
+import { write }  from '../action/AsynchronousAction'
 
 const Menus = [
   {
@@ -7,9 +10,26 @@ const Menus = [
       {
            text: 'New',
            icon: `${config.routes.icons}/document.png`,
-        tooltip: 'Create a new Experiment',
+        tooltip: 'Create a new Pipeline',
         onClick: (dispatch) => {
+          bootbox.prompt({
+                title: '<span class="font-bold">Pipeline Name</span>',
+            inputType: 'text',
+              buttons:
+              {
+                 cancel: { label: "Cancel", className: "btn-sm btn-primary" },
+                confirm: { label: "Create", className: "btn-sm btn-success" }
+              },
+                 size: "small",
+              animate: false,
+             callback: (name) => {
+               if ( name !== null ) {
+                 const action = write(name, FileFormat.PIPELINE)
 
+                 dispatch(action)
+               }
+             }
+          })
         }
       },
       {
@@ -21,13 +41,18 @@ const Menus = [
              message: "Are you sure you want to quit?",
              buttons:
              {
-                cancel: { label: "Cancel", className: "btn-default" },
-               confirm: { label: "Quit",   className: "btn-success" }
+                cancel: { label: "Cancel", className: "btn-sm btn-primary" },
+               confirm: { label: "Quit",   className: "btn-sm btn-success" }
              },
                 size: "small",
              animate: false,
             callback: (confirm) => {
+              // TODO: Handle confirm
+              if ( confirm ) {
 
+              } else {
+
+              }
             }
           })
         }

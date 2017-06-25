@@ -1,32 +1,34 @@
 {
+    "startdir": "CRES",
+    "container": "app",
+    "port": 5000,
     "lang": "en",
+    "host": "0.0.0.0",
+    "title": "candis v0.1.0",
+    "urls": {
+        "documentation": "https://candis.readthedocs.io"
+    },
     "encoding": "utf-8",
     "color": {
         "primary": "#E91E63"
     },
-    "host": "0.0.0.0",
-    "port": 5000,
-    "title": "candis v0.1.0",
     "routes": {
-        "icons": "/assets/img/icons",
-        "read": "/api/data/read",
-        "api": "/api",
+        "base": "/",
         "preprocess": {
             "methods": "/api/preprocess/methods"
         },
         "write": "/api/data/write",
-        "resource": "/api/data/resource",
-        "base": "/",
+        "api": "/api",
+        "sign_up": "/SignUp",
+        "icons": "/assets/img/icons",
+        "read": "/api/data/read",
+        "images": "/assets/img",
+        "assets": "/assets",
         "data": "/api/data",
         "model": {
             "methods": "/api/model/methods"
         },
-        "assets": "/assets",
-        "images": "/assets/img"
-    },
-    "urls": {
-        "documentation": "https://candis.readthedocs.io"
-    },
-    "startdir": "CRES",
-    "container": "app"
+        "sign_in": "/SignIn",
+        "resource": "/api/data/resource"
+    }
 }

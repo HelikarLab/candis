@@ -30,6 +30,68 @@ const getResource     = (dispatch) => {
        })
 }
 
+const write            = (name, format, buffer = { }) => {
+  const dispatch       = (dispatch) => {
+    const action       = requestWrite(name, format, buffer)
+    const parameters   = { name: name, format: format, buffer: buffer }
+
+    dispatch(action)
+
+    return axios.post(config.routes.write, parameters).then((response) => {
+      response         = response.data
+
+      if ( response.status == "success" ) {
+        const data     = response.data
+        const action   = successWrite(name, format, buffer, data)
+
+        dispatch(action)
+      } else {
+        const error    = response.error
+        const action   = errorWrite(name, format, buffer, error)
+
+        dispatch(action)
+      }
+    })
+  }
+
+  return dispatch
+}
+
+const requestWrite     = (name, format, buffer) => {
+  const file           = { name: name, format: format, buffer: buffer }
+  const action         = {
+       type: ActionType.Asynchronous.WRITE_REQUEST,
+    payload: file
+  }
+
+  return action
+}
+
+const successWrite    = (name, format, buffer, data) => {
+  console.log(data)
+  const file          = { name: name, format: format, buffer: buffer }
+  const payload       = { file: file, data: data }
+
+  const action        = {
+       type: ActionType.Asynchronous.WRITE_SUCCESS,
+    payload: payload
+  }
+
+  return action
+}
+
+const errorWrite      = (name, format, buffer, error) => {
+  const file          = { name: name, format: format, buffer: buffer }
+  const payload       = { file: file, error: error }
+
+  const action        = {
+       type: ActionType.Asynchronous.WRITE_ERROR,
+    payload: payload
+  }
+
+  return action
+}
+
 const writeFile       = (dispatch, params) => {
   dispatch({
     type: ActionType.WRITE_FILE_REQUEST
@@ -56,4 +118,4 @@ const writeFile       = (dispatch, params) => {
        })
 }
 
-export { getResource, writeFile }
+export { getResource, write, writeFile }
