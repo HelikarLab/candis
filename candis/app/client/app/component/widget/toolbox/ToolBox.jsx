@@ -10,10 +10,6 @@ import TipView     from './TipView'
 import { insertTool, onHoverTool } from '../../../action/ToolBoxAction'
 
 class ToolBox extends React.Component {
-  constructor (props) {
-    super (props)
-  }
-
   componentWillMount ( ) {
     this.props.compartments.forEach((_, index) => {
       let compartment  = this.props.compartments[index]
@@ -47,50 +43,51 @@ class ToolBox extends React.Component {
     const activeTool = this.props.activeTool
     const tools      = this.props.tools
 
+    const props      = this.props
+
     return (
       <div className="panel panel-default">
         <div className="panel-heading">
           <div className="row">
             <div className="col-xs-8">
               <div className="panel-title font-bold">
-                {this.props.title}
+                {props.title}
               </div>
             </div>
             <div className="col-xs-4">
               <div className="text-right">
-                <a href={`#toolbox-${this.props.ID}-collapse`} data-toggle="collapse">
-                  <span className="fa fa-fw fa-minus" data-toggle="tooltip"
-                    title="Minimize"></span>
+                <a href={`#toolbox-${props.ID}-collapse`} data-toggle="collapse">
+                  <span className="fa fa-fw fa-minus" data-toggle="tooltip" title="Minimize"/>
                 </a>
               </div>
             </div>
           </div>
         </div>
-        <div id={`toolbox-${this.props.ID}-collapse`} className="collapse panel-collapse in">
+        <div id={`toolbox-${props.ID}-collapse`} className="collapse panel-collapse in">
           <div className="panel-body">
-            <div className="panel-group no-margin" id={`toolbox-${this.props.ID}`}>
-              <TypeAhead
-                    placeholder="Search tool"
-                           data={this.props.tools}
-                           keys={["name", "tooltip", "description", "compartmentName"]}
-                        maximum={4}
-                    onMouseOver={(tool) => {
-                      this.props.dispatch(onHoverTool(tool))
-                    }}
-                    onMouseOut ={(tool) => {
-                      this.props.dispatch(onHoverTool(null))
-                    }}
+            <TypeAhead
+                  placeholder="Search tool"
+                         data={props.tools}
+                         keys={["name", "tooltip", "description", "compartmentName"]}
+                      maximum={4}
+                  onMouseOver={(tool) => {
+                    props.dispatch(onHoverTool(tool))
+                  }}
+                  onMouseOut ={(tool) => {
+                    props.dispatch(onHoverTool(null))
+                  }}
 
-                       onSelect={(tool) => {
-                         this.props.dispatch(tool.onClick)
-                       }}
-                            map={{
-                              title: "name",
-                               body: "compartmentName",
-                               icon: "icon"
-                            }}/>
+                     onSelect={(tool) => {
+                       props.dispatch(tool.onClick)
+                     }}
+                          map={{
+                            title: "name",
+                             body: "compartmentName",
+                             icon: "icon"
+                          }}/>
+            <div className="panel-group no-margin" id={`toolbox-${props.ID}`}>
               {
-                this.props.compartments.map((compartment, index) => {
+                props.compartments.map((compartment, index) => {
                   return (
                     <Compartment
                           key={index}
@@ -105,7 +102,7 @@ class ToolBox extends React.Component {
             </div>
           </div>
           <div className="panel panel-default no-margin no-shadow no-border-left no-border-right no-border-bottom">
-            <div id={`toolbox-${this.props.ID}-tipview-collapse`} className="collapse panel-collapse in">
+            <div id={`toolbox-${props.ID}-tipview-collapse`} className="collapse panel-collapse in">
               <div className="panel-body">
                 {
                   activeTool ?
@@ -124,7 +121,7 @@ class ToolBox extends React.Component {
             <div className="btn-group btn-group-sm">
               <div data-toggle="tooltip" data-placement="top" title="Toggle Help">
                 <button className="btn btn-sm btn-primary" data-toggle="collapse"
-                  data-target={`#toolbox-${this.props.ID}-tipview-collapse`}>
+                  data-target={`#toolbox-${props.ID}-tipview-collapse`}>
                   <i className="fa fa-fw fa-question-circle-o"></i>
                 </button>
               </div>

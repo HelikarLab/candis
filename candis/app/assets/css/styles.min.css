@@ -30,6 +30,10 @@
 .cursor-pointer {
   cursor: pointer; }
 
+.vertical-center {
+  display: flex;
+  align-items: center; }
+
 body {
   background-color: #eeeeee; }
 

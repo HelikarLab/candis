@@ -34,7 +34,7 @@ const Menus = [
       },
       {
            text: 'Open',
-           icon: `${config.routes.icons}/document.png`,
+           icon: `${config.routes.icons}/envelope-open.png`,
         tooltip: 'Open an existing Pipeline',
         onClick: (dispatch) => {
 
