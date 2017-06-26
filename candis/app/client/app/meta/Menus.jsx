@@ -103,6 +103,10 @@ const Menus = [
           bootbox.alert({
               title: title,
             message: message,
+            buttons:
+            {
+              ok: { label: "Ok", className: "btn-sm btn-primary" }
+            },
             animate: false
           })
         }

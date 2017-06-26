@@ -69,6 +69,7 @@ Check out a live demo of the application [here](https://cancerdiscover.herokuapp
 
 ### Dependencies
 * Production Dependencies
+  * R
   * Python 2.7+ or Python 3.5+
 * Development Dependencies
   * [Node.js](https://nodejs.org)

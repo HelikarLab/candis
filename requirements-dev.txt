@@ -7,4 +7,5 @@ requests
 tqdm
 Flask
 django-htmlmin
+networkx
 pytest
