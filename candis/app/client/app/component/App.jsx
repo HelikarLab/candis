@@ -13,17 +13,11 @@ import Menus           from '../meta/Menus'
 import Compartments    from '../meta/Compartments'
 
 class App extends React.Component {
-  constructor (props) {
-    super (props)
-  }
-
   render ( ) {
     return (
       <div>
-        <AppBar image={`${config.routes.images}/logo.png`} classNames={{
-          root: ["navbar-static-top", "no-margin"]
-        }}/>
-        <MenuBar classNames={{ root: "navbar-static-top" }} menus={Menus}/>
+        <AppBar image={`${config.routes.images}/logo.png`} classNames={{ root: "no-margin" }}/>
+        <MenuBar menus={Menus}/>
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-3">

@@ -5,16 +5,12 @@ import shortid    from 'shortid'
 import classNames from 'classnames'
 
 class AppBar extends React.Component {
-  constructor (props) {
-    super (props)
-  }
-
   render ( ) {
     const props = this.props
 
     return (
       <nav className={classNames("navbar navbar-default", props.classNames.root)}
-        id={`appbar-${this.props.ID}`}>
+        id={`appbar-${props.ID}`}>
         <div className={props.fluid ? "container-fluid" : "container"}>
           <div className="navbar-header">
             {
@@ -33,14 +29,16 @@ class AppBar extends React.Component {
 
 AppBar.propTypes      =
 {
-     ID: PropTypes.string,
-  fluid: PropTypes.bool,
-  image: PropTypes.string
+         ID: PropTypes.string,
+  clasNames: PropTypes.string,
+      fluid: PropTypes.bool,
+      image: PropTypes.string
 }
 AppBar.defaultProps   =
 {
-     ID: shortid.generate(),
-  fluid: false
+          ID: shortid.generate(),
+  classNames: { },
+       fluid: false
 }
 
 export default AppBar

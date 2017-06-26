@@ -8,31 +8,29 @@ import Media       from './widget/Media'
 import { getBSTTProps } from '../util'
 
 class MenuBar extends React.Component {
-  constructor (props) {
-    super (props)
-  }
-
   render ( ) {
+    const props = this.props
+
     return (
-      <div className={classNames("navbar navbar-default", this.props.classNames.root)}
-        id={`menubar-${this.props.ID}`}>
-        <div className={this.props.fluid ? "container-fluid" : "container"}>
+      <div className={classNames("navbar navbar-default", props.classNames.root)}
+        id={`menubar-${props.ID}`}>
+        <div className={props.fluid ? "container-fluid" : "container"}>
           {
-            this.props.menus.length ?
+            props.menus.length ?
               <span>
                 <div className="navbar-header">
                   <button className="collpased navbar-toggle"
                     data-toggle="collapse"
-                    data-target={`#menubar-${this.props.ID}-collapse`}>
+                    data-target={`#menubar-${props.ID}-collapse`}>
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                     <span className="icon-bar"></span>
                   </button>
                 </div>
-                <div id={`menubar-${this.props.ID}-collapse`} className="collapse navbar-collapse">
+                <div id={`menubar-${props.ID}-collapse`} className="collapse navbar-collapse">
                   <ul className="nav navbar-nav">
                     {
-                      this.props.menus.map((menu, index) => {
+                      props.menus.map((menu, index) => {
                         return (
                           <MenuBar.Menu key={index} {...menu}/>
                         )
@@ -48,23 +46,25 @@ class MenuBar extends React.Component {
   }
 }
 
-MenuBar.Menu = class extends React.Component {
+MenuBar.Menu    = class extends React.Component {
   render ( ) {
+    const props = this.props
+
     return (
       <li className="dropdown">
         <a href="javascript:void(0);" className="dropdown-toggle"
           data-toggle="dropdown">
-          {this.props.title}
+          {props.title}
         </a>
         <ul className="dropdown-menu">
           {
-            this.props.actions.map((action, index) => {
+            props.actions.map((action, index) => {
               const ttprops = getBSTTProps(action.tooltip)
 
               return (
                 <li key={index} {...ttprops}>
                   <a href="javascript:void(0);" onClick={() => {
-                      this.props.dispatch(action.onClick)
+                      props.dispatch(action.onClick)
                     }}>
                     <Media title={action.text} icon={action.icon}/>
                   </a>
@@ -88,15 +88,17 @@ MenuBar.Menu           = connect()(MenuBar.Menu)
 
 MenuBar.propTypes      =
 {
-     ID: PropTypes.string,
-  menus: PropTypes.array,
-  fluid: PropTypes.bool
+          ID: PropTypes.string,
+  classNames: PropTypes.string,
+       menus: PropTypes.array,
+       fluid: PropTypes.bool
 }
 MenuBar.defaultProps   =
 {
-     ID: shortid.generate(),
-  menus: [ ],
-  fluid: false
+          ID: shortid.generate(),
+  classNames: { },
+       menus: [ ],
+       fluid: false
 }
 
 export default MenuBar

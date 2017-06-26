@@ -10,14 +10,26 @@ const initialState  =
 const documents     = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.Asynchronous.WRITE_SUCCESS: {
-      const payload   = action.payload
-      const file      = payload.file
-      const data      = payload.data
+      const file      = action.payload.file
+      const data      = action.payload.data
 
-      const documnt   = { ID: shortid.generate(), title: file.name }
+      const document_ =
+      {
+            ID: shortid.generate(),
+         title: file.name,
+        active: true
+      }
       const documents = state.documents.slice()
 
-      documents.push(documnt)
+      documents.push(document_)
+
+      return {...state, documents: documents }
+    }
+
+    case ActionType.Documents.REMOVE_DOCUMENT: {
+      const documents = state.documents.slice().filter((doc) => {
+        doc.ID !== action.payload.ID
+      })
 
       return {...state, documents: documents }
     }

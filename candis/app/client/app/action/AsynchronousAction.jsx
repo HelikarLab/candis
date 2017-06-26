@@ -45,7 +45,7 @@ const write            = (name, format, buffer = { }) => {
         const action   = successWrite(name, format, buffer, data)
 
         dispatch(action)
-      } else {
+      } else if ( response.status == "error" ) {
         const error    = response.error
         const action   = errorWrite(name, format, buffer, error)
 

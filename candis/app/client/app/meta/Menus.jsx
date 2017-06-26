@@ -33,6 +33,14 @@ const Menus = [
         }
       },
       {
+           text: 'Open',
+           icon: `${config.routes.icons}/document.png`,
+        tooltip: 'Open an existing Pipeline',
+        onClick: (dispatch) => {
+
+        }
+      },
+      {
            text: 'Quit',
            icon: `${config.routes.icons}/quit.png`,
         tooltip: 'Quit the application',
@@ -49,9 +57,7 @@ const Menus = [
             callback: (confirm) => {
               // TODO: Handle confirm
               if ( confirm ) {
-
-              } else {
-
+                window.open(config.routes.sign_in, "_self")
               }
             }
           })
