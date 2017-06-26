@@ -86,7 +86,25 @@ const Menus = [
            icon: `${config.routes.icons}/info.png`,
         tooltip: 'Show application information',
         onClick: (dispatch) => {
+          const title   =
+          `
+            <span class="font-bold">
+              ${config.title}
+            </span>
+          `
+          const message =
+          `
+            <div class="wrapper">
+              <img class="img-responsive center-block" src="${config.routes.images}/logo-title.png"
+                style="max-height: 256px">
+            </div>
+          `
 
+          bootbox.alert({
+              title: title,
+            message: message,
+            animate: false
+          })
         }
       },
       {

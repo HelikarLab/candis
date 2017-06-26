@@ -16,7 +16,7 @@ class App extends React.Component {
   render ( ) {
     return (
       <div>
-        <AppBar image={`${config.routes.images}/logo.png`} classNames={{ root: "no-margin" }}/>
+        <AppBar image={`${config.routes.images}/logo.png`} classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
         <MenuBar menus={Menus}/>
         <div className="container-fluid">
           <div className="row">
