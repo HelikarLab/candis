@@ -2,12 +2,6 @@ import axios      from 'axios'
 
 import config     from '../config'
 
-import Dialog     from '../component/dialog/Dialog'
-
-import DialogType from '../constant/DialogType'
-import { showDialog, hideDialog } from '../action/DialogAction'
-import { getResource } from '../action/AsynchronousAction'
-
 const Compartments = [
   {
        name: 'Data',
@@ -17,87 +11,23 @@ const Compartments = [
         {
              name: 'Create',
              icon: `${config.routes.icons}/edit.png`,
-          tooltip: 'Create a new dataset',
+          tooltip: 'Create a new DataSet',
           onClick: (dispatch) => {
-            // const node   = {
-            //     label: 'Create',
-            //   onClick: (dispatch) => {
-            //      const action = showDialog({
-            //         type: DialogType.CREATE,
-            //        title: 'Create',
-            //         size: Dialog.LARGE,
-            //        props: {
-            //          classNames: {
-            //              root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-            //            footer: ['no-background', 'no-border']
-            //          },
-            //          onCreate: (dispatch) => {
-            //            let action = null
-            //
-            //            action     = hideDialog({
-            //              type: DialogType.CREATE
-            //            })
-            //
-            //            dispatch(action)
-            //          },
-            //          onCancel: (dispatch) => {
-            //            const action = hideDialog({
-            //              type: DialogType.CREATE
-            //            })
-            //
-            //            dispatch(action)
-            //          }
-            //        }
-            //      })
-            //
-            //      dispatch(action)
-            //   }
-            // }
-            // const action = addNode(node)
-            //
-            // dispatch(action)
-           }
+
+          }
         },
         {
              name: 'File',
              icon: `${config.routes.icons}/document.png`,
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
-            const action = showDialog({
-               type: DialogType.FILE,
-               size: Dialog.LARGE,
-              title: 'File',
-              props: {
-                classNames: {
-                    root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                  footer: ['no-background', 'no-border']
-                },
-                onSelect: (dispatch) => {
-                  let action   = null
 
-                  action       = hideDialog({
-                    type: DialogType.FILE
-                  })
-
-                  dispatch(action)
-                },
-                onCancel: (dispatch) => {
-                  const action = hideDialog({
-                    type: DialogType.FILE
-                  })
-
-                  dispatch(action)
-                }
-              }
-            })
-
-            dispatch(action)
           }
         },
         {
              name: 'Download',
              icon: `${config.routes.icons}/cloud-computing.png`,
-          tooltip: 'Download data from a remote host',
+          tooltip: 'Download a DataSet from a remote host',
           onClick: (dispatch) => {
 
           }
@@ -113,9 +43,8 @@ const Compartments = [
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
-      tools: [ ],
     fetcher: () => {
-      return axios.get(config.routes.preprocess.methods).then((response) => {
+      return axios.get(config.routes.api.preprocess.methods).then((response) => {
         response       = response.data
 
         if ( response.status == "success" ) {
@@ -142,42 +71,20 @@ const Compartments = [
   {
        name: 'Feature Selection',
        icon: `${config.routes.icons}/column-select.png`,
-    tooltip: 'List of Feature Selection Methods'
+    tooltip: 'List of Feature Selection Methods',
+      tools: [ ]
   },
   {
        name: 'Model',
        icon: `${config.routes.icons}/network.png`,
     tooltip: 'List of Models',
-      tools: [
-        {
-               name: 'k Nearest Neighbor'
-        },
-        {
-               name: 'Decision Tree',
-               icon: `${config.routes.icons}/tree-structure.png`,
-            tooltip: 'Classifier, Regressor'
-        },
-        {
-               name: 'Naive Bayes'
-        },
-        {
-               name: 'Random Forest'
-        },
-        {
-               name: 'Support Vector Machine',
-            tooltip: 'Classifier, Regressor'
-        },
-      ]
+      tools: [ ]
   },
   {
        name: 'Evaluate',
        icon: `${config.routes.icons}/clipboard.png`,
     tooltip: 'Tools for Model Evaluation',
-      tools: [
-        {
-          name: 'Predict'
-        }
-      ]
+      tools: [ ]
   }
 ]
 

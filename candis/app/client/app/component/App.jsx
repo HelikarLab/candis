@@ -7,7 +7,6 @@ import AppBar          from './AppBar'
 import MenuBar         from './MenuBar'
 import ToolBox         from './widget/toolbox/ToolBox'
 import DocumentPanel   from './widget/document/DocumentPanel'
-import Dialog          from './dialog/Dialog'
 
 import Menus           from '../meta/Menus'
 import Compartments    from '../meta/Compartments'
@@ -28,7 +27,6 @@ class App extends React.Component {
             </div>
           </div>
         </div>
-        <Dialog/>
       </div>
     )
   }

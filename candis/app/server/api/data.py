@@ -70,7 +70,7 @@ def discover_resource(path, level = None, filter_ = None):
 
     return tree
 
-@app.route(CONFIG.App.Routes.RESOURCE, methods = ['GET', 'POST'])
+@app.route(CONFIG.App.Routes.Api.Data.RESOURCE, methods = ['GET', 'POST'])
 def resource(filter_ = ['cdata', 'cel'], level = None):
     response  = Response()
 
@@ -90,7 +90,7 @@ def resource(filter_ = ['cdata', 'cel'], level = None):
 
     return json_, code
 
-@app.route(CONFIG.App.Routes.READ, methods = ['GET', 'POST'])
+@app.route(CONFIG.App.Routes.Api.Data.READ, methods = ['GET', 'POST'])
 def read():
     response    = Response()
 
@@ -124,7 +124,7 @@ def read():
 
     return json_, code
 
-@app.route(CONFIG.App.Routes.WRITE, methods = ['POST'])
+@app.route(CONFIG.App.Routes.Api.Data.WRITE, methods = ['POST'])
 def write():
     response   = Response()
 

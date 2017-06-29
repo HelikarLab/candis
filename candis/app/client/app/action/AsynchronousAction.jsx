@@ -37,7 +37,7 @@ const write            = (name, format, buffer = { }) => {
 
     dispatch(action)
 
-    return axios.post(config.routes.write, parameters).then((response) => {
+    return axios.post(config.routes.api.data.write, parameters).then((response) => {
       response         = response.data
 
       if ( response.status == "success" ) {

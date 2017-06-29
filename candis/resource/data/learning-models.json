@@ -1,26 +1,26 @@
 [
   {
        "name": "Supervised Learning",
-       "code": "spl",
+       "code": "lrn.sup",
     "methods": [
       {
            "name": "Regression",
-           "code": "spl.rgr",
+           "code": "lrn.sup.rgr",
         "methods": [
 
         ]
       },
       {
            "name": "Classification",
-           "code": "spl.cls",
+           "code": "lrn.sup.cls",
         "methods": [
-          
+
         ]
       }
     ]
   },
   {
     "name": "Unsupervised Learning",
-    "code": "usl"
+    "code": "lrn.usp"
   }
 ]

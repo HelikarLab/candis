@@ -8,7 +8,7 @@ import SignIn from './page/SignIn'
 const Routes = (
   <Route path={config.routes.base}>
     <IndexRoute component={App}/>
-    <Route path={config.routes.sign_in} component={SignIn}/>
+    <Route path={config.routes.signin} component={SignIn}/>
   </Route>
 )
 

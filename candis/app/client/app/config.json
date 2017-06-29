@@ -1,34 +1,39 @@
 {
-    "container": "app",
+    "color": {
+        "primary": "#E91E63"
+    },
     "urls": {
         "documentation": "https://candis.readthedocs.io"
     },
-    "port": 5000,
-    "title": "candis v0.1.0",
-    "host": "0.0.0.0",
-    "routes": {
-        "data": "/api/data",
-        "base": "/",
-        "icons": "/assets/img/icons",
-        "resource": "/api/data/resource",
-        "api": "/api",
-        "read": "/api/data/read",
-        "images": "/assets/img",
-        "sign_up": "/SignUp",
-        "write": "/api/data/write",
-        "preprocess": {
-            "methods": "/api/preprocess/methods"
-        },
-        "assets": "/assets",
-        "sign_in": "/SignIn",
-        "model": {
-            "methods": "/api/model/methods"
-        }
-    },
     "lang": "en",
-    "encoding": "utf-8",
+    "port": 5000,
+    "host": "0.0.0.0",
+    "title": "candis v0.1.0",
+    "routes": {
+        "images": "/assets/img",
+        "base": "/",
+        "signup": "/SignUp",
+        "icons": "/assets/img/icons",
+        "signin": "/SignIn",
+        "api": {
+            "data": {
+                "read": "/api/data/read",
+                "write": "/api/data/read",
+                "resource": "/api/data/resource"
+            },
+            "preprocess": {
+                "methods": "/api/preprocess/methods"
+            },
+            "featselect": {
+                "methods": "/api/featselect/methods"
+            },
+            "model": {
+                "methods": "/api/model/methods"
+            }
+        },
+        "assets": "/assets"
+    },
     "startdir": "CRES",
-    "color": {
-        "primary": "#E91E63"
-    }
+    "encoding": "utf-8",
+    "container": "app"
 }

@@ -11,7 +11,7 @@ from candis.resource            import R
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 
-@app.route(CONFIG.App.Routes.Model.METHODS, methods = ['GET'])
+@app.route(CONFIG.App.Routes.Api.Model.METHODS, methods = ['GET'])
 def methods():
     response  = Response()
 

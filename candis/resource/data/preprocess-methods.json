@@ -1,40 +1,40 @@
 [
   {
        "name": "Background Correction",
-       "code": "bgc",
+       "code": "prp.bgc",
     "methods": [
       {
         "name": "Robust Multi-Array Average",
-        "code": "bgc.rma",
-        "information": {
-          "description": "This is a test description."
+        "code": "prp.bgc.rma",
+        "info": {
+          "desc": ""
         }
       }
     ]
   },
   {
        "name": "Normalization",
-       "code": "nrm",
+       "code": "prp.nrm",
     "methods": [
       {
         "name": "Constant",
-        "code": "nrm.cst",
-        "information": {
-          "description": "This is a test description."
+        "code": "prp.nrm.cst",
+        "info": {
+          "desc": ""
         }
       }
     ]
   },
   {
        "name": "Phenotype Microarray Correction",
-       "code": "pmc",
+       "code": "prp.pmc",
     "methods": [
 
     ]
   },
   {
        "name": "Summarization",
-       "code": "pmc",
+       "code": "prp.sum",
     "methods": [
 
     ]

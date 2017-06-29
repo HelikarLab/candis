@@ -17,20 +17,20 @@ app:
     images: &images !relurljoin [*assets, "img"]
     icons: &icons !relurljoin [*images, "icons"]
 
-    sign_in: !relurljoin [*base, "SignIn"]
-    sign_up: !relurljoin [*base, "SignUp"]
+    signin: !relurljoin [*base, "SignIn"]
+    signup: !relurljoin [*base, "SignUp"]
 
-    preprocess:
-      methods: !relurljoin [*base, "api", "preprocess", "methods"]
-    model:
-      methods: !relurljoin [*base, "api", "model", "methods"]
-
-    api: &api !relurljoin [*base, "api"]
-    data: &data !relurljoin [*api, "data"]
-    resource: !relurljoin [*data, "resource"]
-    write: !relurljoin [*data, "write"]
-    read: !relurljoin [*data, "read"]
-
+    api:
+      data:
+        resource: !relurljoin [*base, "api", "data", "resource"]
+        read: !relurljoin [*base, "api", "data", "read"]
+        write: !relurljoin [*base, "api", "data", "read"]
+      preprocess:
+        methods: !relurljoin [*base, "api", "preprocess", "methods"]
+      featselect:
+        methods: !relurljoin [*base, "api", "featselect", "methods"]
+      model:
+        methods: !relurljoin [*base, "api", "model", "methods"]
 
   container: "app"
   startdir: "CRES"

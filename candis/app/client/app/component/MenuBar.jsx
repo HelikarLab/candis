@@ -89,7 +89,7 @@ MenuBar.Menu           = connect()(MenuBar.Menu)
 MenuBar.propTypes      =
 {
           ID: PropTypes.string,
-  classNames: PropTypes.string,
+  classNames: PropTypes.object,
        menus: PropTypes.array,
        fluid: PropTypes.bool
 }
