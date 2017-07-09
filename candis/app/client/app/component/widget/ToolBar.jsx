@@ -7,16 +7,16 @@ class ToolBar extends React.Component {
 
     return tools && tools.length ?
       (
-        <div className="btn-toolbar">
+        <div>
           {
             tools.map((tool, index) => {
               return (
-                <button key={index} className="btn no-background no-border no-shadow">
+                <a key={index} className="cursor-pointer">
                   {
                     tool.icon ?
                       <img src={tool.icon} width="20"/> : false
                   }
-                </button>
+                </a>
               )
             })
           }

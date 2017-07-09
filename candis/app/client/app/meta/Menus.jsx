@@ -26,7 +26,7 @@ const Menus = [
                if ( name !== null ) {
                  const action = write(name, FileFormat.PIPELINE)
 
-                 dispatch(action)
+                 dispatch(action) // returns promise
                }
              }
           })
@@ -37,7 +37,7 @@ const Menus = [
            icon: `${config.routes.icons}/envelope-open.png`,
         tooltip: 'Open an existing Pipeline',
         onClick: (dispatch) => {
-
+          // TODO: create "Open" dialog and display.
         }
       },
       {
@@ -72,7 +72,7 @@ const Menus = [
             icon: `${config.routes.icons}/settings.png`,
          tooltip: 'Open Settings View',
          onClick: (dispatch) => {
-
+           // TODO: create "Settings" dialog and display.
          }
       }
     ]

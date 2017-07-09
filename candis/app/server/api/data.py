@@ -133,36 +133,29 @@ def write():
             format_ = parameters['format']
             buffer_ = parameters['buffer']
 
-            if format_ == 'cdata':
-                if 'name' in parameters and parameters['name']:
-                    filename = parameters['name']
-                else:
-                    filename = get_timestamp_str('CDAT%Y%m%d%H%M%S')
-
-                file_  = '{name}.{ext}'.format(name = filename, ext = 'cdata')
-                path   = os.path.join(ABSPATH_STARTDIR, file_)
-
-                try:
-                    cdata.write(path, buffer_)
-
-                    response.set_data({ 'name': filename })
-                except TypeError as e:
-                    response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+            if format_   == 'cdata':
+                extension = 'cdata'
+                prefix    = 'CDAT'
+                writer    = cdata
             elif format_ == 'pipeline':
-                if 'name' in parameters and parameters['name']:
-                    filename = parameters['name']
-                else:
-                    filename = get_timestamp_str('PIPE%Y%m%d%H%M%S')
+                extension = 'cpipe'
+                prefix    = 'PIPE'
+                writer    = pipeline
 
-                file_  = '{name}.{ext}'.format(name = filename, ext = 'cpipe')
-                path   = os.path.join(ABSPATH_STARTDIR, file_)
+            if 'name' in parameters and parameters['name']:
+                filename = parameters['name']
+            else:
+                filename = prefix + get_timestamp_str('%Y%m%d%H%M%S')
 
-                try:
-                    pipeline.write(path, buffer_)
+            file_  = '{name}.{ext}'.format(name = filename, ext = extension)
+            path   = os.path.join(ABSPATH_STARTDIR, file_)
 
-                    response.set_data({ 'name': filename })
-                except TypeError as e:
-                    response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+            try:
+                writer.write(path, buffer_)
+
+                response.set_data({ 'name': filename })
+            except TypeError as e:
+                response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
         else:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
