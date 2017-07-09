@@ -1,6 +1,8 @@
+// This is the starting point of the application.
+
 import React    from 'react'
 import ReactDOM from 'react-dom'
-import { Router, browserHistory } from 'react-router'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
 import config   from './config'
@@ -10,9 +12,7 @@ import Routes   from './Routes'
 const container  = document.getElementById(config.container)
 const provider   = (
   <Provider store={Store}>
-    <Router
-      history={browserHistory}
-      children={Routes}/>
+    <Router children={Routes}/>
   </Provider>
 )
 

@@ -1,15 +1,15 @@
-import React from 'react'
-import { Route, IndexRoute } from 'react-router'
+import React  from 'react'
+import { Route } from 'react-router-dom'
 
 import config from './config'
 import App    from './component/App'
 import SignIn from './page/SignIn'
 
 const Routes = (
-  <Route path={config.routes.base}>
-    <IndexRoute component={App}/>
+  <div>
+    <Route path={config.routes.base}   component={App} exact/>
     <Route path={config.routes.signin} component={SignIn}/>
-  </Route>
+  </div>
 )
 
 export default Routes
