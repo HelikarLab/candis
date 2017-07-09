@@ -27,14 +27,14 @@ class AppBar extends React.Component {
   }
 }
 
-AppBar.propTypes      =
+AppBar.propTypes    =
 {
          ID: PropTypes.string,
   clasNames: PropTypes.string,
       fluid: PropTypes.bool,
       image: PropTypes.string
 }
-AppBar.defaultProps   =
+AppBar.defaultProps =
 {
           ID: shortid.generate(),
   classNames: { },

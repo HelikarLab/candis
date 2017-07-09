@@ -112,11 +112,9 @@ def read():
 
                 response.set_data(dataset)
         else:
-            # TODO: set response error: filename not provided
-            pass
+            response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
-        # TODO: set response error: path not provided
-        pass
+        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
     dict_       = response.to_dict()
     json_       = jsonify(dict_)
@@ -132,38 +130,43 @@ def write():
 
     if 'format' in parameters:
         if 'buffer' in parameters:
-            if 'name' in parameters:
-                filename = parameters['name']
-            else:
-                filename = get_timestamp_str()
-
             format_ = parameters['format']
             buffer_ = parameters['buffer']
 
             if format_ == 'cdata':
-                 file_  = '{name}.{ext}'.format(name = filename, ext = 'cdata')
-                 path   = os.path.join(ABSPATH_STARTDIR, file_)
+                if 'name' in parameters and parameters['name']:
+                    filename = parameters['name']
+                else:
+                    filename = get_timestamp_str('CDAT%Y%m%d%H%M%S')
 
-                 try:
-                     cdata.write(path, buffer_)
-                 except TypeError as e:
-                     # TODO: set response error: invalid buffer
-                     pass
+                file_  = '{name}.{ext}'.format(name = filename, ext = 'cdata')
+                path   = os.path.join(ABSPATH_STARTDIR, file_)
+
+                try:
+                    cdata.write(path, buffer_)
+
+                    response.set_data({ 'name': filename })
+                except TypeError as e:
+                    response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
             elif format_ == 'pipeline':
+                if 'name' in parameters and parameters['name']:
+                    filename = parameters['name']
+                else:
+                    filename = get_timestamp_str('PIPE%Y%m%d%H%M%S')
+
                 file_  = '{name}.{ext}'.format(name = filename, ext = 'cpipe')
                 path   = os.path.join(ABSPATH_STARTDIR, file_)
 
                 try:
                     pipeline.write(path, buffer_)
+
+                    response.set_data({ 'name': filename })
                 except TypeError as e:
-                    # TODO: set response error: invalid buffer
-                    pass
+                    response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
         else:
-            # TODO: set response error: buffer not provided
-            pass
+            response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
-        # TODO: set response error: format not provided
-        pass
+        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
     dict_      = response.to_dict()
     json_      = jsonify(dict_)

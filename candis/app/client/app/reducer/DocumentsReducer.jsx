@@ -26,6 +26,10 @@ const documents     = (state = initialState, action) => {
       return {...state, documents: documents }
     }
 
+    case ActionType.Asynchronous.WRITE_ERROR: {
+      
+    }
+
     case ActionType.Documents.REMOVE_DOCUMENT: {
       const documents = state.documents.slice().filter((doc) => {
         doc.ID !== action.payload.ID

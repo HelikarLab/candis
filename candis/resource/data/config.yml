@@ -24,7 +24,7 @@ app:
       data:
         resource: !relurljoin [*base, "api", "data", "resource"]
         read: !relurljoin [*base, "api", "data", "read"]
-        write: !relurljoin [*base, "api", "data", "read"]
+        write: !relurljoin [*base, "api", "data", "write"]
       preprocess:
         methods: !relurljoin [*base, "api", "preprocess", "methods"]
       featselect:

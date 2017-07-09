@@ -20,6 +20,9 @@ class Response(object):
         FAILURE = 'fail'
         ERROR   = 'error'
 
+    class Error(object):
+        UNPROCESSABLE_ENTITY = addict.Dict({ 'code': 422, 'message': 'Unprocessable Entity' })
+
     def __init__(self, status = None, code = 200, data = { }):
         self.version = CONFIG.VERSION
         self.id      = get_rand_uuid_str()
@@ -37,6 +40,11 @@ class Response(object):
     def set_data(self, data):
         self.data        = data
         self.schema.data = self.data
+
+    def set_error(self, error):
+        self.status = Response.Status.ERROR
+        self.error  = error
+        self.code   = self.error.code
 
     def to_dict(self):
         dict_ = dict(self.schema)

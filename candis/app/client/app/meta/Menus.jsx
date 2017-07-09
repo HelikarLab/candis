@@ -55,9 +55,8 @@ const Menus = [
                 size: "small",
              animate: false,
             callback: (confirm) => {
-              // TODO: Handle confirm
               if ( confirm ) {
-                window.open(config.routes.sign_in, "_self")
+                window.open(config.routes.signin, "_self")
               }
             }
           })
