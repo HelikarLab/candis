@@ -43,6 +43,15 @@ const Compartments = [
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
+      tools: [
+        {
+             name: 'k-Fold Cross-Validation',
+          tooltip: 'Split a dataset into k folds',
+          onClick: (dispatch) => {
+            
+          }
+        }
+      ],
     fetcher: () => {
       return axios.get(config.routes.api.preprocess.methods).then((response) => {
         response       = response.data

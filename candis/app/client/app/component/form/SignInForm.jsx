@@ -1,13 +1,24 @@
-import React from 'react'
+import React     from 'react'
+import PropTypes from 'prop-types'
 
 class SignInForm extends React.Component {
   constructor (props) {
     super (props)
+
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onSubmit (event) {
+    if ( !event.isDefaultPrevented() ) {
+      event.preventDefault()
+    }
+
+    this.props.onSubmit()
   }
 
   render ( ) {
     return (
-      <form>
+      <form onSubmit={this.onSubmit}>
         <div className="form-group">
           <button className="btn btn-block btn-brand-primary">
             <div className="text-center">
@@ -20,6 +31,11 @@ class SignInForm extends React.Component {
       </form>
     )
   }
+}
+
+SignInForm.propTypes =
+{
+  onSubmit: PropTypes.func.isRequired
 }
 
 export default SignInForm

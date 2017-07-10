@@ -5,6 +5,16 @@ import config from '../config'
 import SignInForm from '../component/form/SignInForm'
 
 class SignIn extends React.Component {
+  constructor (props) {
+    super (props)
+
+    this.onSubmit = this.onSubmit.bind(this)
+  }
+
+  onSubmit ( ) {
+    
+  }
+
   render ( ) {
     return (
       <div className="vertical-center" style={{
@@ -21,7 +31,7 @@ class SignIn extends React.Component {
           </div>
           <div className="panel panel-default no-background no-border no-shadow">
             <div className="panel-body">
-              <SignInForm/>
+              <SignInForm onSubmit={this.onSubmit}/>
             </div>
           </div>
         </div>
