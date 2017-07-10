@@ -33,6 +33,9 @@ docs:
 kill:
 	fuser -k $(SERVER_PORT)/tcp
 
+sass:
+	sass $(SOURCEDIR)/app/client/styles/App.scss:$(SOURCEDIR)/app/assets/css/styles.min.css --sourcemap=none --style compressed
+
 run:
 	$(PYTHON) -m candis & npm start
 

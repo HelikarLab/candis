@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "sass": "sass --watch --sourcemap=none candis/app/client/styles/App.scss:candis/app/assets/css/styles.min.css",
+    "sass": "sass --watch candis/app/client/styles/App.scss:candis/app/assets/css/styles.min.css --sourcemap=none --style compressed",
     "webpack": "webpack --watch",
     "start": "concurrently --kill-others \"npm run sass\" \"npm run webpack\""
   },

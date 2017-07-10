@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import shortid     from 'shortid'
 import classNames  from 'classnames'
 
+import config      from '../../../config'
+
 import ToolBar     from '../ToolBar'
 import ContextMenu from '../ContextMenu'
 
@@ -17,15 +19,25 @@ class DocumentPanel extends React.Component {
     this.tools         =
     [
       {
-           icon: '//placehold.it/300x300',
-        tooltip: ''
+           name: 'Run',
+           icon: `${config.routes.icons}/play-o.png`,
+        tooltip: 'Run the currently active pipeline'
+      },
+      {
+           name: 'Pause',
+           icon: `${config.routes.icons}/pause-o.png`,
+        tooltip: 'Pause the currently active pipeline'
+      },
+      {
+           name: 'Stop',
+           icon: `${config.routes.icons}/stop-o.png`,
+        tooltip: 'Stop the currently active pipeline'
       }
     ]
+
     this.contextmenus  =
     [
-      {
-        
-      }
+
     ]
   }
 
@@ -57,12 +69,12 @@ class DocumentPanel extends React.Component {
     return (
       <div>
         <div className="panel panel-default">
-          <div className="panel-heading">
+          <div className="panel-heading no-padding">
             <ToolBar tools={this.tools}/>
           </div>
-          <div className="panel-heading">
-            {
-              props.documents.length ?
+          {
+            props.documents.length ?
+              <div className="panel-heading">
                 <ul className="nav nav-pills">
                   {
                     props.documents.map((doc, index) => {
@@ -80,30 +92,37 @@ class DocumentPanel extends React.Component {
                       )
                     })
                   }
-                </ul> : false
-            }
-          </div>
-          <div className="panel-body">
-            {
-              props.documents.length ?
-                props.documents.map((doc, index) => {
-                  return (
-                    <div key={index} className={classNames("tab-pane")} id={`document-${doc.ID}`}>
+                </ul>
+              </div> : false
+          }
+          {
+            props.documents.length ?
+              <div className="panel-body">
+                {
+                  props.documents.map((doc, index) => {
+                    return (
+                      <div key={index} className={classNames("tab-pane")} id={`document-${doc.ID}`}>
 
-                    </div>
-                  )
-                }) : false
-            }
-          </div>
+                      </div>
+                    )
+                  })
+                }
+              </div> : false
+          }
         </div>
-        <ContextMenu ID={`contextmenu-${props.ID}`} menus={this.contextmenus}/>
       </div>
     )
   }
 }
 
-DocumentPanel.propTypes    = { ID: PropTypes.string }
-DocumentPanel.defaultProps = { ID: shortid.generate() }
+DocumentPanel.propTypes    =
+{
+  ID: PropTypes.string
+}
+DocumentPanel.defaultProps =
+{
+  ID: shortid.generate()
+}
 
 const mapStateToProps      = (state) => {
   const documents          = state.documents

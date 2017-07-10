@@ -1,0 +1,45 @@
+.btn-brand-primary {
+  color: $color-white;
+  background-color: $color-primary;
+  border-color: $color-primary-dark;
+}
+
+.btn-brand-primary:hover,
+.btn-brand-primary:focus,
+.btn-brand-primary:active,
+.btn-brand-primary.active,
+.open .dropdown-toggle.btn-brand-primary {
+  color: $color-white;
+  background-color: $color-primary-darkest;
+  border-color: $color-primary-dark;
+}
+
+.btn-brand-primary:active,
+.btn-brand-primary.active,
+.open .dropdown-toggle.btn-brand-primary {
+  background-image: none;
+}
+
+.btn-brand-primary.disabled,
+.btn-brand-primary[disabled],
+fieldset[disabled] .btn-brand-primary,
+.btn-brand-primary.disabled:hover,
+.btn-brand-primary[disabled]:hover,
+fieldset[disabled] .btn-brand-primary:hover,
+.btn-brand-primary.disabled:focus,
+.btn-brand-primary[disabled]:focus,
+fieldset[disabled] .btn-brand-primary:focus,
+.btn-brand-primary.disabled:active,
+.btn-brand-primary[disabled]:active,
+fieldset[disabled] .btn-brand-primary:active,
+.btn-brand-primary.disabled.active,
+.btn-brand-primary[disabled].active,
+fieldset[disabled] .btn-brand-primary.active {
+  background-color: $color-primary;
+  border-color: $color-primary-dark;
+}
+
+.btn-brand-primary .badge {
+  color: $color-primary;
+  background-color: $color-white;
+}

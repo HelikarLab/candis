@@ -26,7 +26,7 @@ const Menus = [
                if ( name !== null ) {
                  const action = write(name, FileFormat.PIPELINE)
 
-                 dispatch(action) // returns a promise
+                 dispatch(action)
                }
              }
           })

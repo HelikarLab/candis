@@ -1,20 +1,24 @@
 import React     from 'react'
 import PropTypes from 'prop-types'
 
+import { getBSTTProps } from '../../util'
+
 class ToolBar extends React.Component {
   render ( ) {
-    const tools = this.props.tools
+    const props = this.props
 
-    return tools && tools.length ?
+    return props.tools.length ?
       (
-        <div>
+        <div className="btn-toolbar">
           {
-            tools.map((tool, index) => {
+            props.tools.map((tool, index) => {
+              const ttprops = getBSTTProps(tool.tooltip)
+
               return (
-                <a key={index} className="cursor-pointer">
+                <a key={index} className="btn no-background no-border no-shadow" href="javascript:void(0);" {...ttprops}>
                   {
                     tool.icon ?
-                      <img src={tool.icon} width="20"/> : false
+                      <img src={tool.icon} width="24"/> : false
                   }
                 </a>
               )
@@ -29,6 +33,9 @@ ToolBar.propTypes    =
 {
   tools: PropTypes.array
 }
-ToolBar.defaultProps = { tools: [ ] }
+ToolBar.defaultProps =
+{
+  tools: [ ]
+}
 
 export default ToolBar

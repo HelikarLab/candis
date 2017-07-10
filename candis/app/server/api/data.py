@@ -18,6 +18,23 @@ from candis.app.server.response import Response
 FFORMATS         = json_load(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
 
+def get_filename_if_exists(filename, count = 1, format_ = ' ({count})'):
+    name, extension   = os.path.splitext(filename)
+
+    if os.path.exists(filename):
+        format_       = '{name}{format_}{extension}'.format(
+            name      = name,
+            format_   = format_,
+            extension = extension
+        )
+
+        while os.path.exists(format_.format(count = count)):
+            count += 1
+
+        filename   = format_.format(count = count)
+
+    return filename
+
 def get_file_format(file_):
     format_ = None
 
@@ -71,7 +88,7 @@ def discover_resource(path, level = None, filter_ = None):
     return tree
 
 @app.route(CONFIG.App.Routes.Api.Data.RESOURCE, methods = ['GET', 'POST'])
-def resource(filter_ = ['cdata', 'cel'], level = None):
+def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
     response  = Response()
 
     startdir  = CONFIG.App.STARTDIR
@@ -143,17 +160,24 @@ def write():
                 writer    = pipeline
 
             if 'name' in parameters and parameters['name']:
-                filename = parameters['name']
+                name = parameters['name']
             else:
-                filename = prefix + get_timestamp_str('%Y%m%d%H%M%S')
+                name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
 
-            file_  = '{name}.{ext}'.format(name = filename, ext = extension)
-            path   = os.path.join(ABSPATH_STARTDIR, file_)
+            fname  = '{name}.{ext}'.format(name = name, ext = extension)
+            path   = os.path.join(ABSPATH_STARTDIR, fname)
+            path   = get_filename_if_exists(path)
 
             try:
                 writer.write(path, buffer_)
 
-                response.set_data({ 'name': filename })
+                path, fname = os.path.split(path)
+
+                data        = addict.Dict()
+                data.path   = path
+                data.name   = fname
+
+                response.set_data(data)
             except TypeError as e:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
         else:
