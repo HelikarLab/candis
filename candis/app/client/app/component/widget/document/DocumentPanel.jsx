@@ -41,7 +41,7 @@ class DocumentPanel extends React.Component {
     ]
   }
 
-  onClose (doc) {
+  onClose (dokument) {
     const dispatch     = this.props.dispatch
 
     bootbox.confirm({
@@ -55,7 +55,7 @@ class DocumentPanel extends React.Component {
        animate: false,
       callback: (confirm) => {
         if ( confirm ) {
-          const action = removeDocument(doc)
+          const action = removeDocument(dokument)
 
           dispatch(action)
         }
@@ -77,15 +77,17 @@ class DocumentPanel extends React.Component {
               <div className="panel-heading">
                 <ul className="nav nav-pills">
                   {
-                    props.documents.map((doc, index) => {
+                    props.documents.map((dokument, index) => {
                       return (
                         <li key={index}>
-                          <a href={`#document-${doc.ID}`}
+                          <a href={`#document-${dokument.ID}`}
                             data-toggle="tab">
                             <span
                               data-toggle="context"
                               data-target={`#contextmenu-${props.ID}`}>
-                              {doc.title}
+                              {
+                                dokument.name.split('.')[0]
+                              }
                             </span>
                           </a>
                         </li>
@@ -99,9 +101,9 @@ class DocumentPanel extends React.Component {
             props.documents.length ?
               <div className="panel-body">
                 {
-                  props.documents.map((doc, index) => {
+                  props.documents.map((dokument, index) => {
                     return (
-                      <div key={index} className={classNames("tab-pane")} id={`document-${doc.ID}`}>
+                      <div key={index} className={classNames("tab-pane")} id={`document-${dokument.ID}`}>
 
                       </div>
                     )

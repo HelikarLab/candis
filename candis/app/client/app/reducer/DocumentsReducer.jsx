@@ -13,21 +13,22 @@ const documents     = (state = initialState, action) => {
       const file      = action.payload.file
       const data      = action.payload.data
 
-      const document_ =
+      const dokument  =
       {
             ID: shortid.generate(),
-         title: file.name,
+          path: file.path,
+          name: file.name,
         active: true
       }
       const documents = state.documents.slice()
 
-      documents.push(document_)
+      documents.push(dokument)
 
       return {...state, documents: documents }
     }
 
     case ActionType.Asynchronous.WRITE_ERROR: {
-      
+      // TODO: Handle error, display something.
     }
 
     case ActionType.Documents.REMOVE_DOCUMENT: {
