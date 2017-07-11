@@ -2,25 +2,25 @@ import shortid    from 'shortid'
 
 import ActionType from '../constant/ActionType'
 
-const initialState  =
+const initialState      =
 {
   documents: [ ]
 }
 
-const documents     = (state = initialState, action) => {
+const documentProcessor = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.Asynchronous.WRITE_SUCCESS: {
-      const file      = action.payload.file
-      const data      = action.payload.data
+      const file        = action.payload.file
+      const data        = action.payload.data
 
-      const dokument  =
+      const dokument    =
       {
             ID: shortid.generate(),
           path: file.path,
           name: file.name,
         active: true
       }
-      const documents = state.documents.slice()
+      const documents   = state.documents.slice()
 
       documents.push(dokument)
 
@@ -31,7 +31,7 @@ const documents     = (state = initialState, action) => {
       // TODO: Handle error, display something.
     }
 
-    case ActionType.Documents.REMOVE_DOCUMENT: {
+    case ActionType.DocumentProcessor.REMOVE_DOCUMENT: {
       const documents = state.documents.slice().filter((doc) => {
         doc.ID !== action.payload.ID
       })
@@ -43,4 +43,4 @@ const documents     = (state = initialState, action) => {
   return state
 }
 
-export default documents
+export default documentProcessor

@@ -18,7 +18,7 @@ class ToolBar extends React.Component {
               return (
                 <li key={index} {...ttattrs}>
                   <a href="javascript:void(0);">
-                    <img src={tool.icon} width="24"/>
+                    <img src={tool.icon} width={`${props.size}`}/>
                   </a>
                 </li>
               )
@@ -29,7 +29,17 @@ class ToolBar extends React.Component {
   }
 }
 
-ToolBar.propTypes    = { tools: PropTypes.array, classNames: PropTypes.object }
-ToolBar.defaultProps = { tools: [ ], classNames: { } }
+ToolBar.propTypes    = 
+{
+       tools: PropTypes.array,
+  classNames: PropTypes.object,
+        size: PropTypes.number
+}
+ToolBar.defaultProps = 
+{
+       tools: [ ],
+  classNames: { },
+        size: 24
+}
 
 export default ToolBar

@@ -1,10 +1,11 @@
-import React     from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
+import React         from 'react'
+import PropTypes     from 'prop-types'
+import { connect }   from 'react-redux'
 
-import config    from '../../../config'
+import config        from '../../../config'
 
-import ToolBar   from '../ToolBar'
+import ToolBar       from '../ToolBar'
+import DocumentPanel from './DocumentPanel'
 
 class DocumentProcessor extends React.Component {
   constructor (props) {
@@ -42,9 +43,18 @@ class DocumentProcessor extends React.Component {
             </div>
           </div>
         </div>
+        <DocumentPanel documents={props.documents}/>
       </div>
     )
   }
 }
 
-export default DocumentProcessor
+const mapStateToProps     = (state) => {
+  const documentProcessor = state.documentProcessor
+
+  return {
+    documents: documentProcessor.documents
+  }
+}
+
+export default connect(mapStateToProps)(DocumentProcessor)
