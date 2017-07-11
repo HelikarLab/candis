@@ -17,6 +17,8 @@ install:
 
 	npm install .
 
+	bundler install
+
 build:
 	$(PYTHON) -B -m builder
 

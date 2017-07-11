@@ -7,6 +7,7 @@ docs/build
 # Dependencies
 node_modules
 bower_components
+Gemfile.lock
 
 # Logs
 npm-debug.log
