@@ -1,5 +1,6 @@
-import React     from 'react'
-import PropTypes from 'prop-types'
+import React      from 'react'
+import PropTypes  from 'prop-types'
+import classNames from 'classnames'
 
 import { getBSTTProps } from '../../util'
 
@@ -9,33 +10,26 @@ class ToolBar extends React.Component {
 
     return props.tools.length ?
       (
-        <div className="btn-toolbar">
+        <ul className={classNames("list-inline", props.classNames.root)}>
           {
             props.tools.map((tool, index) => {
-              const ttprops = getBSTTProps(tool.tooltip)
+              const ttattrs = getBSTTProps(tool.tooltip)
 
               return (
-                <a key={index} className="btn no-background no-border no-shadow" href="javascript:void(0);" {...ttprops}>
-                  {
-                    tool.icon ?
-                      <img src={tool.icon} width="24"/> : false
-                  }
-                </a>
+                <li key={index} {...ttattrs}>
+                  <a href="javascript:void(0);">
+                    <img src={tool.icon} width="24"/>
+                  </a>
+                </li>
               )
             })
           }
-        </div>
+        </ul>
       ) : null
   }
 }
 
-ToolBar.propTypes    =
-{
-  tools: PropTypes.array
-}
-ToolBar.defaultProps =
-{
-  tools: [ ]
-}
+ToolBar.propTypes    = { tools: PropTypes.array, classNames: PropTypes.object }
+ToolBar.defaultProps = { tools: [ ], classNames: { } }
 
 export default ToolBar

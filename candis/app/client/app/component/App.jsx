@@ -1,14 +1,14 @@
-import React           from 'react'
+import React             from 'react'
 
-import config          from '../config'
+import config            from '../config'
 
-import AppBar          from './AppBar'
-import MenuBar         from './MenuBar'
-import ToolBox         from './widget/toolbox/ToolBox'
-import DocumentPanel   from './widget/document/DocumentPanel'
+import AppBar            from './AppBar'
+import MenuBar           from './MenuBar'
+import ToolBox           from './widget/toolbox/ToolBox'
+import DocumentProcessor from './widget/document/DocumentProcessor'
 
-import Menus           from '../meta/Menus'
-import Compartments    from '../meta/Compartments'
+import Menus             from '../meta/Menus'
+import Compartments      from '../meta/Compartments'
 
 class App extends React.Component {
   render ( ) {
@@ -22,7 +22,7 @@ class App extends React.Component {
               <ToolBox title="Tool Box" compartments={Compartments}/>
             </div>
             <div className="col-sm-9">
-              <DocumentPanel/>
+              <DocumentProcessor/>
             </div>
           </div>
         </div>
