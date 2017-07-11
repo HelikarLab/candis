@@ -40,10 +40,10 @@ class ToolBox extends React.Component {
   }
 
   render ( ) {
-    const activeTool = this.props.activeTool
-    const tools      = this.props.tools
+    const props  = this.props
 
-    const props      = this.props
+    const active = props.active
+    const tools  = props.tools
 
     return (
       <div className="panel panel-default">
@@ -105,11 +105,11 @@ class ToolBox extends React.Component {
             <div id={`toolbox-${props.ID}-tipview-collapse`} className="collapse panel-collapse in">
               <div className="panel-body">
                 {
-                  activeTool ?
+                  active ?
                     <TipView
-                        title={activeTool.name}
-                      content={activeTool.description ?
-                                activeTool.description : activeTool.tooltip
+                        title={active.name}
+                      content={active.description ?
+                                active.description : active.tooltip
                               }/> : false
                 }
               </div>
@@ -151,7 +151,7 @@ const mapStateToProps     = (state) => {
 
   return {
          tools: toolBox.tools,
-    activeTool: toolBox.activeTool
+    active: toolBox.active
   }
 }
 

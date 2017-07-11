@@ -20,5 +20,13 @@
   </a>
 </p>
 
+* #### High Priority
+  * [ ] Open Documents
+  * [ ] Graph Editor [WIP]
+
+* #### Medium Priority
+  * [ ] Context Menu for Documents (Rename, Close, etc. actions)
+
 * #### Low Priority
   * [ ] Authentication Flow
+  * [ ] Handling multiple tabs on Document Processor

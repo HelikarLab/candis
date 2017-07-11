@@ -11,8 +11,8 @@ def main(argv = None):
 
 	host     = CONFIG.App.HOST
 	port     = get_free_port(seed = CONFIG.App.PORT)
-	debug    = CONFIG.DEBUG
-	startdir = CONFIG.App.STARTDIR 
+	debug    = CONFIG.App.DEBUG
+	startdir = CONFIG.App.STARTDIR
 
 	makedirs(startdir, exists_ok = True)
 

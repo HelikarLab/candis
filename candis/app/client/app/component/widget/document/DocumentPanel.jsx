@@ -1,5 +1,8 @@
-import React     from 'react'
-import PropTypes from 'prop-types'
+import React       from 'react'
+import PropTypes   from 'prop-types'
+import classNames  from 'classnames'
+
+import GraphEditor from '../GraphEditor'
 
 class DocumentPanel extends React.Component {
   render ( ) {
@@ -16,7 +19,7 @@ class DocumentPanel extends React.Component {
 
                   return (
                     <li key={index}>
-                      <a href="javascript:void(0);">
+                      <a href={`#document-${dokument.ID}`} data-toggle="tab">
                         {title}
                       </a>
                     </li>
@@ -28,10 +31,10 @@ class DocumentPanel extends React.Component {
           <div className="panel-body">
             <div className="tab-content">
               {
-                props.documents.map((dokument, idnex) => {
+                props.documents.map((dokument, index) => {
                   return (
-                    <div className="tab-pane">
-
+                    <div key={index} className="tab-pane" id={`#document-${dokument.ID}`}>
+                      <GraphEditor/>
                     </div>
                   )
                 })
@@ -43,7 +46,7 @@ class DocumentPanel extends React.Component {
   }
 }
 
-DocumentPanel.propTypes    = { documents: PropTypes.array }
-DocumentPanel.defaultProps = { documents: [ ] }
+DocumentPanel.propTypes     = { documents: PropTypes.array }
+DocumentPanel.defaultProps  = { documents: [ ] }
 
 export default DocumentPanel

@@ -63,7 +63,7 @@ const Compartments = [
             const tool = {
                  name: method.name,
               onClick: (dispatch) => {
-
+                
               }
             }
 

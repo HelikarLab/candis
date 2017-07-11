@@ -29,11 +29,12 @@ const documentProcessor = (state = initialState, action) => {
 
     case ActionType.Asynchronous.WRITE_ERROR: {
       // TODO: Handle error, display something.
+      // bootbox.alert('');
     }
 
     case ActionType.DocumentProcessor.REMOVE_DOCUMENT: {
-      const documents = state.documents.slice().filter((doc) => {
-        doc.ID !== action.payload.ID
+      const documents = state.documents.slice().filter((dokument) => {
+        dokument.ID !== action.payload.ID
       })
 
       return {...state, documents: documents }

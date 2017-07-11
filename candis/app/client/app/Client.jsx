@@ -9,8 +9,8 @@ import config   from './config'
 import Store    from './Store'
 import Routes   from './Routes'
 
-const container  = document.getElementById(config.container)
-const provider   = (
+const container = document.getElementById(config.container)
+const provider  = (
   <Provider store={Store}>
     <Router children={Routes}/>
   </Provider>
