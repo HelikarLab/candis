@@ -1,0 +1,4 @@
+[submodule "CancerDiscover"]
+	path = CancerDiscover
+	url = https://github.com/achillesrasquinha/CancerDiscover.git
+	branch = master

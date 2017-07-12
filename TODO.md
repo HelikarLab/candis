@@ -26,6 +26,7 @@
 
 * #### Medium Priority
   * [ ] Context Menu for Documents (Rename, Close, etc. actions)
+  * [ ] Documentation
 
 * #### Low Priority
   * [ ] Authentication Flow

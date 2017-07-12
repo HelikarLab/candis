@@ -1,8 +1,5 @@
-six
 addict
 pyyaml
 requests
-tqdm
 Flask
 django-htmlmin
-networkx

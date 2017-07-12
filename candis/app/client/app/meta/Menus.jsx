@@ -24,7 +24,7 @@ const Menus = [
               animate: false,
              callback: (name) => {
                if ( name !== null ) {
-                 const output = { name: `${name}.cpipe` }
+                 const output = { name: `${name}` }
                  const action = write(output, FileFormat.PIPELINE)
 
                  dispatch(action)
@@ -116,7 +116,7 @@ const Menus = [
            icon: `${config.routes.icons}/documentation.png`,
         tooltip: 'View Documentation',
         onClick: () => {
-          window.open(config.urls.documentation)
+          window.open(config.urls.docs)
         }
       }
     ]

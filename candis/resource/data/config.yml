@@ -11,7 +11,7 @@ app:
   color:
     primary: "#E91E63"
   urls:
-    documentation: "https://candis.readthedocs.io"
+    docs: "https://candis.readthedocs.io"
   routes:
     base: &base "/"
     assets: &assets !relurljoin [*base, "assets"]
