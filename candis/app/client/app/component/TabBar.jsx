@@ -16,7 +16,9 @@ class TabBar extends React.Component {
           {
             props.tabs.map((tab, index) => {
               return (
-                <TabBar.Tab key={index} {...tab}/>
+                <TabBar.Tab key={index} {...tab} onClick={() => {
+                  props.onClick(tab)
+                }}/>
               )
             })
           }
@@ -30,8 +32,10 @@ TabBar.Tab          = class extends React.Component {
     const props     = this.props
 
     return (
-      <li>
-        <a href="javascript:void(0);">
+      <li id={`tab-${props.ID}`} className={props.active ? "active" : null}>
+        <a href="javascript:void(0);" onClick={() => {
+          props.onClick()
+        }}>
           {props.title}
         </a>
       </li>
@@ -40,24 +44,28 @@ TabBar.Tab          = class extends React.Component {
 }
 
 TabBar.Tab.propTypes    = 
-{
-     ID: PropTypes.string,
-  title: PropTypes.string.isRequired
+{  
+       ID: PropTypes.string,
+    title: PropTypes.string.isRequired,
+  onClick: PropTypes.func
 }
 TabBar.Tab.defaultProps = 
 {
-     ID: shortid.generate()
+       ID: shortid.generate(),
+  onClick: () => { }
 }
 
 TabBar.propTypes        =
 {
-  tabs: PropTypes.array,
-  menu: PropTypes.array
+     tabs: PropTypes.array,
+     menu: PropTypes.array,
+  onClick: PropTypes.func
 }
 TabBar.defaultProps     =
 {
-  tabs: [ ],
-  menu: [ ]
+     tabs: [ ],
+     menu: [ ],
+  onClick: () => { }
 }
 
 export default TabBar

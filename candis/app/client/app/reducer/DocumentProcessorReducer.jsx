@@ -4,7 +4,8 @@ import ActionType from '../constant/ActionType'
 
 const initialState      =
 {
-  documents: [ ]
+  documents: [ ],
+     active: null
 }
 
 const documentProcessor = (state = initialState, action) => {
@@ -17,19 +18,24 @@ const documentProcessor = (state = initialState, action) => {
       {
             ID: shortid.generate(),
           path: file.path,
-          name: file.name,
-        active: true
+          name: file.name
       }
       const documents   = state.documents.slice()
 
       documents.push(dokument)
 
-      return {...state, documents: documents }
+      return {...state, documents: documents, active: dokument.ID }
     }
 
     case ActionType.Asynchronous.WRITE_ERROR: {
       // TODO: Handle error, display something.
       // bootbox.alert('');
+    }
+
+    case ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT: {
+      const dokument = action.payload
+
+      return {...state, active: dokument.ID }
     }
 
     case ActionType.DocumentProcessor.REMOVE_DOCUMENT: {

@@ -6,6 +6,7 @@ import config        from '../../../config'
 
 import ToolBar       from '../ToolBar'
 import DocumentPanel from './DocumentPanel'
+import { setActiveDocument } from '../../../action/DocumentProcessorAction'
 
 class DocumentProcessor extends React.Component {
   constructor (props) {
@@ -43,7 +44,9 @@ class DocumentProcessor extends React.Component {
             </div>
           </div>
         </div>
-        <DocumentPanel documents={props.documents}/>
+        <DocumentPanel documents={props.documents} active={props.active} onActive={(dokument) => {
+          props.dispatch(setActiveDocument(dokument))
+        }}/>
       </div>
     )
   }
@@ -53,7 +56,8 @@ const mapStateToProps     = (state) => {
   const documentProcessor = state.documentProcessor
 
   return {
-    documents: documentProcessor.documents
+    documents: documentProcessor.documents,
+       active: documentProcessor.active
   }
 }
 
