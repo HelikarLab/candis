@@ -1,6 +1,5 @@
 import React       from 'react'
 import PropTypes   from 'prop-types'
-import { connect } from 'react-redux'
 import shortid     from 'shortid'
 import classNames  from 'classnames'
 
@@ -32,7 +31,9 @@ class MenuBar extends React.Component {
                     {
                       props.menus.map((menu, index) => {
                         return (
-                          <MenuBar.Menu key={index} {...menu}/>
+                          <MenuBar.Menu key={index} {...menu} onClick={(action) => {
+                            props.onClick(action)
+                          }}/>
                         )
                       })
                     }
@@ -64,7 +65,7 @@ MenuBar.Menu    = class extends React.Component {
               return (
                 <li key={index} {...ttprops}>
                   <a href="javascript:void(0);" onClick={() => {
-                      props.dispatch(action.onClick)
+                      props.onClick(action)
                     }}>
                     <Media title={action.text} icon={action.icon}/>
                   </a>
@@ -78,27 +79,32 @@ MenuBar.Menu    = class extends React.Component {
   }
 }
 
-MenuBar.Menu.propTypes =
+MenuBar.Menu.propTypes    =
 {
     title: PropTypes.string.isRequired,
-  actions:  PropTypes.array.isRequired
+  actions: PropTypes.array.isRequired,
+  onClick: PropTypes.func,
+}
+MenuBar.Menu.defaultProps = 
+{
+  onClick: () => { }
 }
 
-MenuBar.Menu           = connect()(MenuBar.Menu)
-
-MenuBar.propTypes      =
+MenuBar.propTypes         =
 {
           ID: PropTypes.string,
   classNames: PropTypes.object,
        menus: PropTypes.array,
-       fluid: PropTypes.bool
+       fluid: PropTypes.bool,
+     onClick: PropTypes.func,
 }
-MenuBar.defaultProps   =
+MenuBar.defaultProps      =
 {
           ID: shortid.generate(),
   classNames: { },
        menus: [ ],
-       fluid: false
+       fluid: false,
+     onClick: (action) => { }
 }
 
 export default MenuBar

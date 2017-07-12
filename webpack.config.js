@@ -6,6 +6,8 @@ var paths          = { };
 paths.BASE         = path.join(__dirname, 'candis', 'app');
 paths.APP          = path.join(paths.BASE, 'client', 'app');
 
+var config         = require(path.join(paths.APP, 'config'));
+
 module.exports     = {
   entry: [
     path.join(paths.APP, 'Client.jsx'),
@@ -24,13 +26,19 @@ module.exports     = {
       }
     ]
   },
-  plugins: [
-    // new UglifyJSPlugin({
-    //   output: {
-    //     comments: false
-    //   }
-    // })
-  ],
+  plugins: config.debug ? 
+    [
+      // debug plugins go here.
+    ]
+      : 
+    [
+      // production plugins go here.
+      new UglifyJSPlugin({
+        output: {
+          comments: false
+        }
+      })
+    ],
   resolve: {
     modules: ['node_modules', 'bower_components'],
     extensions: ['.js', '.jsx', '.json'],
