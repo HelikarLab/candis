@@ -14,4 +14,12 @@ class GraphEditor extends React.Component {
 GraphEditor.propTypes    = { graph: PropTypes.object }
 GraphEditor.defaultProps = { graph: new Graph({ multigraph: true }) }
 
-export default GraphEditor
+const mapStateToProps    = (state, props) => {
+	const graphEditor    = state.graphEditor
+
+	return {
+		graph: graphEditor.graph
+	}
+}
+
+export default connect(mapStateToProps)(GraphEditor)

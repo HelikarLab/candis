@@ -6,7 +6,12 @@ import config   from './config'
 
 import Reducers from './reducer'
 
-const middleware = applyMiddleware(thunk, logger)
-const Store      = createStore(Reducers, middleware)
+const middlewares = [thunk]
+
+if ( config.debug ) {
+	middlewares.push(logger)
+}
+
+const Store       = createStore(Reducers, applyMiddleware(...middlewares))
 
 export default Store

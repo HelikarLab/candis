@@ -38,7 +38,8 @@ AppBar.defaultProps =
 {
           ID: shortid.generate(),
   classNames: { },
-       fluid: false
+       fluid: false,
+       image: null
 }
 
 export default AppBar

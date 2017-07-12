@@ -93,7 +93,12 @@ const Compartments = [
        name: 'Evaluate',
        icon: `${config.routes.icons}/clipboard.png`,
     tooltip: 'Tools for Model Evaluation',
-      tools: [ ]
+      tools: [
+        {
+             name: 'Predict',
+          tooltip: 'Perform a prediction'
+        }
+      ]
   }
 ]
 
