@@ -172,10 +172,55 @@ const Compartments = [
           const data   = response.data
 
           const tools  = data.map((method) => {
+            const options = method.methods.map((option) => {
+              return { name: option.name, description: option.info.desc }
+            })
+
             const tool = {
                  name: method.name,
               onClick: (dispatch) => {
-                
+                console.log(method)
+                //
+                  const node   = {
+                      label: method.name,
+                    onClick: (dispatch) => {
+                       const action = showDialog({
+                          type: DialogType.SELECT,
+                         title: method.name,
+                         props: {
+                           classNames: {
+                               root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                             footer: ['no-background', 'no-border']
+                           },
+                            options: options,
+                           onSelect: (dispatch) => {
+                             let action = null
+
+                             action     = hideDialog({
+                               type: DialogType.SELECT
+                             })
+
+                             dispatch(action)
+                           },
+                           onCancel: (dispatch) => {
+                             const action = hideDialog({
+                               type: DialogType.SELECT
+                             })
+
+                             dispatch(action)
+                           }
+                         }
+                       })
+
+                       dispatch(action)
+                    }
+                  }
+                  const action = addNode(node)
+
+                  dispatch(action)
+
+                //
+
               }
             }
 

@@ -29,4 +29,4 @@
 
 * #### Low Priority
   * [ ] Authentication Flow
-  * [ ] Handling multiple tabs on Document Processor
+  * [ ] Handling multiple tabs on Document Processor (Add Horizontal Scroll)

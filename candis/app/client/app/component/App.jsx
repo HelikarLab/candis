@@ -4,7 +4,7 @@ import { connect }       from 'react-redux'
 import config            from '../config'
 
 import AppBar            from './AppBar'
-import MenuBar           from './MenuBar'
+import MenuBar           from './widget/MenuBar'
 import ToolBox           from './widget/toolbox/ToolBox'
 import DocumentProcessor from './widget/document/DocumentProcessor'
 import { getResource }   from '../action/AsynchronousAction'

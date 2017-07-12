@@ -9,11 +9,13 @@ import { hideDialog } from '../../action/DialogAction'
 
 import CreatePanel    from '../panel/CreatePanel'
 import FilePanel      from '../panel/FilePanel'
+import SelectPanel    from '../panel/SelectPanel'
 
 const COMPONENTS =
 {
   [DialogType.CREATE]: CreatePanel,
-    [DialogType.FILE]:   FilePanel
+    [DialogType.FILE]: FilePanel,
+  [DialogType.SELECT]: SelectPanel
 }
 
 class Dialog extends React.Component {

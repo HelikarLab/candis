@@ -2,7 +2,7 @@ import React       from 'react'
 import PropTypes   from 'prop-types'
 import classNames  from 'classnames'
 
-import TabBar      from '../../TabBar'
+import TabBar      from '../TabBar'
 import GraphEditor from '../GraphEditor'
 
 class DocumentPanel extends React.Component {

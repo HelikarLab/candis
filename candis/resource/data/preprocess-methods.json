@@ -7,7 +7,7 @@
         "name": "Robust Multi-Array Average",
         "code": "prp.bgc.rma",
         "info": {
-          "desc": ""
+          "desc": "These are background adjustment implementations for the rma method Irizarry et al. (2003). They differ only in how they estimate a set of parameters (generally you should use rma in preference to rma2. In both cases PM probe intensities are corrected by using a global model for the distribution of probe intensities. The model is suggested by looking at plots of the empirical distribution of probe intensities. In particular the observed PM probes are modeled as the sum of a normal noise component $N$ (Normal with mean $µ$ and variance $σ^2$) and a exponential signal component $S$ (exponential with mean $α$). To avoid any possibility of negatives, the normal is truncated at zero. Given we have O the observed intensity, this then leads to an adjustment. $$E(s|O = o) = a + b \\\\frac{a}{b}$$"
         }
       }
     ]

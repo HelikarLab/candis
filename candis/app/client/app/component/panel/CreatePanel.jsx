@@ -5,7 +5,7 @@ import DataEditor    from '../widget/DataEditor'
 import XEditable     from '../widget/XEditable'
 
 import FileFormat    from '../../constant/FileFormat'
-import { writeFile } from '../../action/AsynchronousAction'
+import { write }     from '../../action/AsynchronousAction'
 
 class CreatePanel extends React.Component {
   constructor (props) {
@@ -50,7 +50,7 @@ class CreatePanel extends React.Component {
       buffer: buffer }
 
     dispatch((dispatcher) => {
-      writeFile(dispatcher, params)
+      write(dispatcher, params)
     })
 
     dispatch(this.props.onCreate)
