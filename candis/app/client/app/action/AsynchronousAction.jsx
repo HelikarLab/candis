@@ -30,10 +30,10 @@ const getResource     = (dispatch) => {
        })
 }
 
-const write            = (name, format, buffer = { }) => {
+const write            = (output, format, buffer = { }) => {
   const dispatch       = (dispatch) => {
-    const action       = requestWrite(name, format, buffer)
-    const parameters   = { name: name, format: format, buffer: buffer }
+    const action       = requestWrite(output, format, buffer)
+    const parameters   = { output: output, format: format, buffer: buffer }
 
     dispatch(action)
 
@@ -42,12 +42,12 @@ const write            = (name, format, buffer = { }) => {
 
       if ( response.status == "success" ) {
         const data     = response.data
-        const action   = successWrite(data.name, format, buffer, data)
+        const action   = successWrite(output, format, buffer, data)
 
         dispatch(action)
       } else if ( response.status == "error" ) {
         const error    = response.error
-        const action   = errorWrite(name, format, buffer, error)
+        const action   = errorWrite(output, format, buffer, error)
 
         dispatch(action)
       }
@@ -57,8 +57,8 @@ const write            = (name, format, buffer = { }) => {
   return dispatch
 }
 
-const requestWrite     = (name, format, buffer) => {
-  const file           = { name: name, format: format, buffer: buffer }
+const requestWrite     = (output, format, buffer) => {
+  const file           = { output: output, format: format, buffer: buffer }
   const action         = {
        type: ActionType.Asynchronous.WRITE_REQUEST,
     payload: file
@@ -67,8 +67,8 @@ const requestWrite     = (name, format, buffer) => {
   return action
 }
 
-const successWrite     = (name, format, buffer, data) => {
-  const file           = { name: name, format: format, buffer: buffer }
+const successWrite     = (output, format, buffer, data) => {
+  const file           = { output: output, format: format, buffer: buffer }
   const payload        = { file: file, data: data }
 
   const action         = {
@@ -79,8 +79,8 @@ const successWrite     = (name, format, buffer, data) => {
   return action
 }
 
-const errorWrite       = (name, format, buffer, error) => {
-  const file           = { name: name, format: format, buffer: buffer }
+const errorWrite       = (output, format, buffer, error) => {
+  const file           = { output: output, format: format, buffer: buffer }
   const payload        = { file: file, error: error }
 
   const action         = {

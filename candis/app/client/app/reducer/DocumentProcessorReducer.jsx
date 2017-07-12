@@ -13,12 +13,13 @@ const documentProcessor = (state = initialState, action) => {
     case ActionType.Asynchronous.WRITE_SUCCESS: {
       const file        = action.payload.file
       const data        = action.payload.data
+      const output      = data.output
 
       const dokument    =
       {
             ID: shortid.generate(),
-          path: file.path,
-          name: file.name
+          path: output.path,
+          name: output.name
       }
       const documents   = state.documents.slice()
 
