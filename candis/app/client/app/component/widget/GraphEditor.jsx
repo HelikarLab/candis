@@ -1,25 +1,45 @@
 import React       from 'react'
-import PropTypes   from 'prop-types'
 import { connect } from 'react-redux'
-import { Graph }    from 'graphlib'
+import classNames  from 'classnames'
 
 class GraphEditor extends React.Component {
   render ( ) {
-    const props = this.props
+    const graph = this.props.graph
 
-    return null
+    return (
+      <div className={classNames("panel panel-default")}>
+        <div className="panel-body">
+          {
+            graph.nodes().map((ID, index) => {
+              let meta = graph.node(ID)
+              meta     = JSON.parse(meta)
+              return (
+                <a key={index} href="javascript:void(0);" onClick={() => {
+                    this.props.dispatch(meta.onClick)
+                  }}>
+                  <span>
+                    <h2 className="no-margin">
+                      <span className="label label-default">
+                        {meta.label}
+                      </span>
+                    </h2>
+                  </span>
+                </a>
+              )
+            })
+          }
+        </div>
+      </div>
+    )
   }
 }
 
-GraphEditor.propTypes    = { graph: PropTypes.object }
-GraphEditor.defaultProps = { graph: new Graph({ multigraph: true }) }
+const mapStateToProps   = (state) => {
+  const graphEditor = state.graphEditor
 
-const mapStateToProps    = (state, props) => {
-	const graphEditor    = state.graphEditor
-
-	return {
-		graph: graphEditor.graph
-	}
+  return {
+    graph: graphEditor.graph
+  }
 }
 
 export default connect(mapStateToProps)(GraphEditor)

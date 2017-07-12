@@ -3,6 +3,7 @@ import PropTypes   from 'prop-types'
 import classNames  from 'classnames'
 
 import TabBar      from '../../TabBar'
+import GraphEditor from '../GraphEditor'
 
 class DocumentPanel extends React.Component {
   constructor (props) {
@@ -39,7 +40,7 @@ class DocumentPanel extends React.Component {
           </div>
           <div className="panel-body">
             {
-              
+              <GraphEditor/>
             }
           </div>
         </div>

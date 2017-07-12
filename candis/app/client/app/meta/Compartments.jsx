@@ -1,6 +1,8 @@
 import axios      from 'axios'
 
 import config     from '../config'
+import { addNode } from '../action/GraphEditorAction'
+import { showDialog, hideDialog } from '../action/DialogAction'
 
 const Compartments = [
   {
@@ -13,7 +15,43 @@ const Compartments = [
              icon: `${config.routes.icons}/edit.png`,
           tooltip: 'Create a new DataSet',
           onClick: (dispatch) => {
+            const node   = {
+                label: 'Create',
+              onClick: (dispatch) => {
+                 const action = showDialog({
+                    type: DialogType.CREATE,
+                   title: 'Create',
+                    size: Dialog.LARGE,
+                   props: {
+                     classNames: {
+                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                       footer: ['no-background', 'no-border']
+                     },
+                     onCreate: (dispatch) => {
+                       let action = null
 
+                       action     = hideDialog({
+                         type: DialogType.CREATE
+                       })
+
+                       dispatch(action)
+                     },
+                     onCancel: (dispatch) => {
+                       const action = hideDialog({
+                         type: DialogType.CREATE
+                       })
+
+                       dispatch(action)
+                     }
+                   }
+                 })
+
+                 dispatch(action)
+              }
+            }
+            const action = addNode(node)
+
+            dispatch(action)
           }
         },
         {
