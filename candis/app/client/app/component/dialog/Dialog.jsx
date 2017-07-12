@@ -25,9 +25,12 @@ class Dialog extends React.Component {
     const dialog    = this.props.dialog
     let   modal     = null
 
+    console.log(dialog)
+
     if ( dialog ) {
       if ( dialog.type ) {
         if ( dialog.display ) {
+            console.log(dialog.type)
             const Component = COMPONENTS[dialog.type]
             const large     = dialog.size == Dialog.LARGE
             const small     = dialog.size == Dialog.SMALL

@@ -8,7 +8,7 @@ const getResource     = (dispatch) => {
     type: ActionType.GET_RESOURCE_REQUEST
   })
 
-  axios.post(config.routes.resource)
+  axios.post(config.routes.api.data.resource)
        .then((response) => {
           response = response.data
 

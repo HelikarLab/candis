@@ -1,4 +1,5 @@
 import React             from 'react'
+import { connect }       from 'react-redux'
 
 import config            from '../config'
 
@@ -6,11 +7,17 @@ import AppBar            from './AppBar'
 import MenuBar           from './MenuBar'
 import ToolBox           from './widget/toolbox/ToolBox'
 import DocumentProcessor from './widget/document/DocumentProcessor'
+import { getResource }   from '../action/AsynchronousAction'
+import Dialog            from './dialog/Dialog'
 
 import Menus             from '../meta/Menus'
 import Compartments      from '../meta/Compartments'
 
 class App extends React.Component {
+  componentWillMount ( ) {
+    this.props.dispatch(getResource)
+  }
+
   render ( ) {
     return (
       <div>
@@ -26,9 +33,10 @@ class App extends React.Component {
             </div>
           </div>
         </div>
+        <Dialog/>
       </div>
     )
   }
 }
 
-export default App
+export default connect()(App)

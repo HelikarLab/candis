@@ -3,6 +3,8 @@ import axios      from 'axios'
 import config     from '../config'
 import { addNode } from '../action/GraphEditorAction'
 import { showDialog, hideDialog } from '../action/DialogAction'
+import Dialog     from '../component/dialog/Dialog'
+import DialogType from '../constant/DialogType'
 
 const Compartments = [
   {
@@ -59,7 +61,43 @@ const Compartments = [
              icon: `${config.routes.icons}/document.png`,
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
+            const node   = {
+                label: 'File',
+              onClick: (dispatch) => {
+                 const action = showDialog({
+                    type: DialogType.FILE,
+                   title: 'File',
+                    size: Dialog.LARGE,
+                   props: {
+                     classNames: {
+                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                       footer: ['no-background', 'no-border']
+                     },
+                     onCreate: (dispatch) => {
+                       let action = null
 
+                       action     = hideDialog({
+                         type: DialogType.FILE
+                       })
+
+                       dispatch(action)
+                     },
+                     onCancel: (dispatch) => {
+                       const action = hideDialog({
+                         type: DialogType.FILE
+                       })
+
+                       dispatch(action)
+                     }
+                   }
+                 })
+
+                 dispatch(action)
+              }
+            }
+            const action = addNode(node)
+
+            dispatch(action)
           }
         },
         {
@@ -67,7 +105,7 @@ const Compartments = [
              icon: `${config.routes.icons}/cloud-computing.png`,
           tooltip: 'Download a DataSet from a remote host',
           onClick: (dispatch) => {
-
+            
           }
         }
       ]
@@ -86,7 +124,43 @@ const Compartments = [
              name: 'k-Fold Cross-Validation',
           tooltip: 'Split a dataset into k folds',
           onClick: (dispatch) => {
-            
+            const node   = {
+                label: 'Create',
+              onClick: (dispatch) => {
+                 const action = showDialog({
+                    type: DialogType.CREATE,
+                   title: 'Create',
+                    size: Dialog.LARGE,
+                   props: {
+                     classNames: {
+                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
+                       footer: ['no-background', 'no-border']
+                     },
+                     onCreate: (dispatch) => {
+                       let action = null
+
+                       action     = hideDialog({
+                         type: DialogType.CREATE
+                       })
+
+                       dispatch(action)
+                     },
+                     onCancel: (dispatch) => {
+                       const action = hideDialog({
+                         type: DialogType.CREATE
+                       })
+
+                       dispatch(action)
+                     }
+                   }
+                 })
+
+                 dispatch(action)
+              }
+            }
+            const action = addNode(node)
+
+            dispatch(action)
           }
         }
       ],

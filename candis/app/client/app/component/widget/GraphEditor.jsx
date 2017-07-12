@@ -1,6 +1,6 @@
 import React       from 'react'
 import { connect } from 'react-redux'
-import classNames  from 'classnames'
+import classNames   from 'classnames'
 
 class GraphEditor extends React.Component {
   render ( ) {
@@ -12,7 +12,7 @@ class GraphEditor extends React.Component {
           {
             graph.nodes().map((ID, index) => {
               let meta = graph.node(ID)
-              meta     = JSON.parse(meta)
+
               return (
                 <a key={index} href="javascript:void(0);" onClick={() => {
                     this.props.dispatch(meta.onClick)
