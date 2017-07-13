@@ -244,7 +244,45 @@ const Compartments = [
        name: 'Model',
        icon: `${config.routes.icons}/network.png`,
     tooltip: 'List of Models',
-      tools: [ ]
+    fetcher: () => {
+      return axios.get(config.routes.api.model.methods).then((response) => {
+        response       = response.data
+
+        if ( response.status == "success" ) {
+          const data    = response.data
+          console.log(data)
+          const methods = data[0].methods[1].methods
+          console.log(methods)
+
+          const tools  = methods.map((method) => {
+            const tool = {
+                 name: method.name,
+              onClick: (dispatch) => {
+                //
+                  const node   = {
+                      label: method.name,
+                    onClick: (dispatch) => {
+                       // 
+                    }
+                  }
+                  const action = addNode(node)
+
+                  dispatch(action)
+
+                //
+
+              }
+            }
+
+            return tool
+          })
+
+          return tools
+        } else {
+          return [ ]
+        }
+      })
+    }
   },
   {
        name: 'Evaluate',

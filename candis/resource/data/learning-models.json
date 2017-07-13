@@ -14,7 +14,18 @@
            "name": "Classification",
            "code": "lrn.sup.cls",
         "methods": [
-
+          {
+            "name": "Decision Tree",
+            "code": "lrn.sup.cls.dtr"
+          },
+          {
+            "name": "Naive Bayes",
+            "code": "lrn.sup.cls.nby"
+          },
+          {
+            "name": "Random Forest",
+            "code": "lrn.sup.cls.rfo"
+          }
         ]
       }
     ]

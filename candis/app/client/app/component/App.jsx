@@ -19,7 +19,9 @@ class App extends React.Component {
     
     return (
       <div>
-        <AppBar image={`${config.routes.images}/logo.png`} classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
+        <AppBar
+               image={`${config.routes.images}/logo.png`}
+          classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
         <MenuBar menus={Menus} onClick={(action) => {
           props.dispatch(action.onClick)
         }}/>

@@ -18,8 +18,9 @@ class AppBar extends React.Component {
     }
 
     return (
-      <nav className={classNames("navbar navbar-default", props.classNames.root)}
-        id={`appbar-${props.ID}`}>
+      <nav     
+               id={`appbar-${props.ID}`}
+        className={classNames("navbar navbar-default", props.classNames.root)}>
         <div className={props.fluid ? "container-fluid" : "container"}>
           <div className="navbar-header">
             {
@@ -41,7 +42,7 @@ AppBar.propTypes    =
   clasNames: PropTypes.string,
       fluid: PropTypes.bool,
       image: PropTypes.string,
-      title: PropTypes.string,
+      title: PropTypes.string
 }
 AppBar.defaultProps =
 {
@@ -49,7 +50,7 @@ AppBar.defaultProps =
   classNames: { },
        fluid: false,
        image: null,
-       title: null,
+       title: null
 }
 
 export default AppBar

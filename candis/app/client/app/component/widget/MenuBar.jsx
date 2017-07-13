@@ -11,14 +11,16 @@ class MenuBar extends React.Component {
     const props = this.props
 
     return (
-      <div className={classNames("navbar navbar-default", props.classNames.root)}
-        id={`menubar-${props.ID}`}>
+      <div
+               id={`menubar-${props.ID}`}
+        className={classNames("navbar navbar-default", props.classNames.root)}>
         <div className={props.fluid ? "container-fluid" : "container"}>
           {
             props.menus.length ?
               <span>
                 <div className="navbar-header">
-                  <button className="collpased navbar-toggle"
+                  <button
+                      className="collpased navbar-toggle"
                     data-toggle="collapse"
                     data-target={`#menubar-${props.ID}-collapse`}>
                     <span className="icon-bar"></span>
@@ -31,9 +33,11 @@ class MenuBar extends React.Component {
                     {
                       props.menus.map((menu, index) => {
                         return (
-                          <MenuBar.Menu key={index} {...menu} onClick={(action) => {
-                            props.onClick(action)
-                          }}/>
+                          <MenuBar.Menu
+                                key={index} {...menu}
+                            onClick={(action) => {
+                              props.onClick(action)
+                            }}/>
                         )
                       })
                     }

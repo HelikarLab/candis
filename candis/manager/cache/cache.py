@@ -2,7 +2,7 @@
 import os, errno
 
 # imports - module imports
-from candis.util import assign_if_none
+from candis.util import assign_if_none, makedirs
 
 class Cache(object):
     '''
@@ -20,8 +20,4 @@ class Cache(object):
         self.dirpath  = os.path.join(self.location, self.dirname)
 
     def create(self, ignore_exists = True):
-        try:
-            os.makedirs(path)
-        except OSError as e:
-            if not ignore_exists or e.errno != errno.EEXISTS:
-                raise
+        pass

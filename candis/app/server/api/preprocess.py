@@ -12,7 +12,7 @@ from candis.app.server.app      import app
 from candis.app.server.response import Response
 
 @app.route(CONFIG.App.Routes.Api.Preprocess.METHODS, methods = ['GET'])
-def methods():
+def pmethods():
     response  = Response()
 
     path      = os.path.join(R.Path.DATA, 'preprocess-methods.json')

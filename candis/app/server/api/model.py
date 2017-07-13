@@ -12,10 +12,10 @@ from candis.app.server.app      import app
 from candis.app.server.response import Response
 
 @app.route(CONFIG.App.Routes.Api.Model.METHODS, methods = ['GET'])
-def methods():
+def mmethods():
     response  = Response()
 
-    path      = os.path.join(R.Path.DATA, 'learning-methods.json')
+    path      = os.path.join(R.Path.DATA, 'learning-models.json')
     methods   = json_load(path)
 
     response.set_data(methods)

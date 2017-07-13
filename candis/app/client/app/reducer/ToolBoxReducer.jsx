@@ -18,7 +18,7 @@ const toolBox      = (state = initialState, action) => {
     case ActionType.ON_HOVER_TOOL: {
       const tool   = action.payload
 
-      return {...state, activeTool: tool}
+      return {...state, active: tool}
     }
   }
 

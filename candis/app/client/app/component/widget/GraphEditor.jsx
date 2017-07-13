@@ -3,20 +3,27 @@ import { connect } from 'react-redux'
 import classNames   from 'classnames'
 
 class GraphEditor extends React.Component {
+
+  componentDidUpdate(prevProps, prevState) {
+    jsPlumb.ready(() => {
+      jsPlumb.draggable($('.node'))
+    })
+  }
+
   render ( ) {
     const graph = this.props.graph
 
     return (
-      <div className={classNames("panel panel-default")}>
-        <div className="panel-body">
+      <div className={classNames("panel panel-default no-border no-shadow no-background")}>
+        <div className="panel-body" style={{ height: "100vh" }}>
           {
             graph.nodes().map((ID, index) => {
               let meta = graph.node(ID)
 
               return (
-                <a key={index} href="javascript:void(0);" onClick={() => {
+                <a className="node" id={`node-${ID}`} key={index} href="javascript:void(0);" onClick={() => {
                     this.props.dispatch(meta.onClick)
-                  }}>
+                  }} style={{position: "absolute"}}>
                   <span>
                     <h2 className="no-margin">
                       <span className="label label-default">

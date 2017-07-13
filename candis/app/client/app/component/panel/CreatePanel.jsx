@@ -46,12 +46,10 @@ class CreatePanel extends React.Component {
     const buffer      = { attributes: attributes, data: rows }
     const dispatch    = this.props.dispatch
 
-    const params      = { format: FileFormat.CDATA, name: filename,
-      buffer: buffer }
+    const output      = { name: filename }
+    const action      = write(output, FileFormat.CDATA, buffer)
 
-    dispatch((dispatcher) => {
-      write(dispatcher, params)
-    })
+    dispatch(action)
 
     dispatch(this.props.onCreate)
   }

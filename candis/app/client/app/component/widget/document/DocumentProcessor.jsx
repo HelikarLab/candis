@@ -16,18 +16,27 @@ class DocumentProcessor extends React.Component {
     [
       {
            name: 'Run',
-           icon: `${config.routes.icons}/play-o.png`,
-        tooltip: 'Run the currently active pipeline'
+         faicon: 'play',
+        tooltip: 'Run the currently active pipeline',
+        onClick: ( ) => {
+
+        }
       },
       {
            name: 'Pause',
-           icon: `${config.routes.icons}/pause-o.png`,
-        tooltip: 'Pause the currently active pipeline'
+         faicon: 'pause',
+        tooltip: 'Pause the currently active pipeline',
+        onClick: ( ) => {
+          
+        }
       },
       {
            name: 'Stop',
-           icon: `${config.routes.icons}/stop-o.png`,
-        tooltip: 'Stop the currently active pipeline'
+         faicon: 'stop',
+        tooltip: 'Stop the currently active pipeline',
+        onClick: ( ) => {
+          
+        }
       }
     ]
   }
@@ -37,16 +46,16 @@ class DocumentProcessor extends React.Component {
 
     return (
       <div>
-        <div className="panel panel-default">
-          <div className="panel-body">
+        <div className="panel panel-default no-shadow">
+          <div className="panel-heading">
             <div className="text-center">
               <ToolBar tools={this.tools} classNames={{ root: "no-margin" }}/>
             </div>
           </div>
         </div>
-        <DocumentPanel documents={props.documents} active={props.active} onActive={(dokument) => {
-          props.dispatch(setActiveDocument(dokument))
-        }}/>
+        <DocumentPanel
+          documents={props.documents}
+             active={props.active}/>
       </div>
     )
   }
@@ -54,11 +63,10 @@ class DocumentProcessor extends React.Component {
 
 const mapStateToProps     = (state) => {
   const documentProcessor = state.documentProcessor
+  const documents         = documentProcessor.documents
+  const active            = documentProcessor.active
 
-  return {
-    documents: documentProcessor.documents,
-       active: documentProcessor.active
-  }
+  return { documents: documents, active: active }
 }
 
 export default connect(mapStateToProps)(DocumentProcessor)

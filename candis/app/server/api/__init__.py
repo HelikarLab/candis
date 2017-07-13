@@ -3,5 +3,8 @@ from candis.app.server.api.data import (
     resource, read, write
 )
 from candis.app.server.api.preprocess import (
-    methods
+    pmethods
+)
+from candis.app.server.api.model import (
+	mmethods
 )

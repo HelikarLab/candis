@@ -1,6 +1,7 @@
 import shortid    from 'shortid'
 
 import ActionType from '../constant/ActionType'
+import FileFormat from '../constant/FileFormat'
 
 const initialState      =
 {
@@ -11,21 +12,25 @@ const initialState      =
 const documentProcessor = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.Asynchronous.WRITE_SUCCESS: {
-      const file        = action.payload.file
-      const data        = action.payload.data
-      const output      = data.output
+      if ( action.payload.file.format == FileFormat.PIPELINE ) {
+        const file        = action.payload.file
+        const data        = action.payload.data
+        const output      = data.output
 
-      const dokument    =
-      {
-            ID: shortid.generate(),
-          path: output.path,
-          name: output.name
+        const dokument    =
+        {
+              ID: shortid.generate(),
+            path: output.path,
+            name: output.name
+        }
+        const documents   = state.documents.slice()
+
+        documents.push(dokument)
+
+        return {...state, documents: documents, active: dokument.ID }
       }
-      const documents   = state.documents.slice()
 
-      documents.push(dokument)
-
-      return {...state, documents: documents, active: dokument.ID }
+      
     }
 
     case ActionType.Asynchronous.WRITE_ERROR: {

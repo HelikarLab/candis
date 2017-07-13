@@ -143,7 +143,7 @@ def read():
 def write():
     response   = Response()
 
-    parameters  = request.get_json()
+    parameters = request.get_json()
 
     if 'format' in parameters:
         if 'buffer' in parameters:
@@ -159,8 +159,11 @@ def write():
                 prefix    = 'PIPE'
                 writer    = pipeline
 
-            if 'name' in parameters and parameters['name']:
-                name = parameters['name']
+            if 'output' in parameters and 'name' in parameters['output']:
+                if not parameters['output']['name']:
+                    name = parameters['output']['name']
+                else:
+                    name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
             else:
                 name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
 
@@ -174,8 +177,8 @@ def write():
                 path, fname = os.path.split(path)
 
                 data        = addict.Dict()
-                data.path   = path
-                data.name   = fname
+                data.output.path = path
+                data.output.name   = fname
 
                 response.set_data(data)
             except TypeError as e:

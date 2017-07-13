@@ -30,7 +30,7 @@ class FilePanel extends React.Component {
     const parameters = JSON.parse(value.value)
     const that       = this
 
-    axios.post(config.routes.read, parameters)
+    axios.post(config.routes.api.data.read, parameters)
          .then((response) => {
            response = response.data
 

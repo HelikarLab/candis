@@ -48,7 +48,15 @@ class DocumentPanel extends React.Component {
   }
 }
 
-DocumentPanel.propTypes     = { documents: PropTypes.array }
-DocumentPanel.defaultProps  = { documents: [ ] }
+DocumentPanel.propTypes     = 
+{
+  documents: PropTypes.array,
+     active: PropTypes.object
+}
+DocumentPanel.defaultProps  =
+{
+  documents: [ ], 
+     active: null
+}
 
 export default DocumentPanel
