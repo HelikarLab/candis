@@ -81,7 +81,7 @@ class Compartment extends React.Component {
                         }} {...ttattrs}>
                           <Media
                             title={tool.name}
-                             body={tool.description ? tool.description : tool.tooltip}
+                             body={tool.tooltip}
                              icon={tool.icon}/>
                         </a>
                       </li>

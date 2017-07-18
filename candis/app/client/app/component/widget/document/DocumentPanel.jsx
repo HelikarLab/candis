@@ -13,13 +13,14 @@ class DocumentPanel extends React.Component {
   render ( ) {
     const props  = this.props
 
+    const active = props.active
     const tabs   = props.documents.map((dokument) => {
       const name = dokument.output.name.split('.')[0]
 
       return {
             ID: dokument.ID,
          title: name,
-        active: props.active.ID == dokument.ID
+        active: active.ID == dokument.ID
       }
     })
 
@@ -39,7 +40,7 @@ class DocumentPanel extends React.Component {
           </div>
           <div className="panel-body">
             {
-              <GraphEditor/>
+              
             }
           </div>
         </div>

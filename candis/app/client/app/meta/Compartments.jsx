@@ -244,11 +244,11 @@ const Compartments = [
           const data    = response.data
           const tools   = data.map((method) => {
             const tool  = {
-                 name: method.name,
-              tooltip: method.type,
-              onClick: (dispatch) => {
-                
-              }
+                     name: method.name,
+              description: method.info.desc.short,
+                  onClick: (dispatch) => {
+                    
+                  }
             }
 
             return tool

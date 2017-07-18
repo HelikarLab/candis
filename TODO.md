@@ -26,9 +26,11 @@
 
 * #### Medium Priority
   * [ ] Context Menu for Documents (Rename, Close, etc. actions)
+  * [ ] Refresh Button for each ToolBox Compartment
   * [ ] Documentation
 
 * #### Low Priority
   * [x] Authentication Flow
   * [ ] Handling multiple tabs on Document Processor (Add Horizontal Scroll)
   * [ ] Random Forest Icon
+  * [ ] Fixed-Width ToolBox (75% for Compartments, 25% for Help Widget).
