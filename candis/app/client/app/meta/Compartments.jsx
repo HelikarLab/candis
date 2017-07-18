@@ -179,8 +179,6 @@ const Compartments = [
             const tool = {
                  name: method.name,
               onClick: (dispatch) => {
-                console.log(method)
-                //
                   const node   = {
                       label: method.name,
                     onClick: (dispatch) => {
@@ -238,7 +236,30 @@ const Compartments = [
        name: 'Feature Selection',
        icon: `${config.routes.icons}/column-select.png`,
     tooltip: 'List of Feature Selection Methods',
-      tools: [ ]
+    fetcher: () => {
+      return axios.get(config.routes.api.model.methods).then((response) => {
+        response        = response.data
+
+        if ( response.status == "success" ) {
+          const data    = response.data
+          const tools   = data.map((method) => {
+            const tool  = {
+                 name: method.name,
+              tooltip: method.type,
+              onClick: (dispatch) => {
+                
+              }
+            }
+
+            return tool
+          })
+
+          return tools
+        } else {
+          return [ ]
+        }
+      })
+    }
   },
   {
        name: 'Model',
@@ -246,31 +267,17 @@ const Compartments = [
     tooltip: 'List of Models',
     fetcher: () => {
       return axios.get(config.routes.api.model.methods).then((response) => {
-        response       = response.data
+        response        = response.data
 
         if ( response.status == "success" ) {
           const data    = response.data
-          console.log(data)
-          const methods = data[0].methods[1].methods
-          console.log(methods)
-
-          const tools  = methods.map((method) => {
-            const tool = {
+          const tools   = data.map((method) => {
+            const tool  = {
                  name: method.name,
+                 icon: method.icon,
+              tooltip: method.type,
               onClick: (dispatch) => {
-                //
-                  const node   = {
-                      label: method.name,
-                    onClick: (dispatch) => {
-                       // 
-                    }
-                  }
-                  const action = addNode(node)
-
-                  dispatch(action)
-
-                //
-
+                
               }
             }
 

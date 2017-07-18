@@ -31,3 +31,4 @@
 * #### Low Priority
   * [x] Authentication Flow
   * [ ] Handling multiple tabs on Document Processor (Add Horizontal Scroll)
+  * [ ] Random Forest Icon
