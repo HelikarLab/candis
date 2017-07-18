@@ -55,13 +55,16 @@ class DocumentProcessor extends React.Component {
         </div>
         <DocumentPanel
           documents={props.documents}
-             active={props.active}/>
+             active={props.active}
+           onActive={(dokument) => {
+              props.dispatch(setActiveDocument(dokument))
+           }}/>
       </div>
     )
   }
 }
 
-const mapStateToProps     = (state) => {
+const mapStateToProps     = (state, props) => {
   const documentProcessor = state.documentProcessor
   const documents         = documentProcessor.documents
   const active            = documentProcessor.active

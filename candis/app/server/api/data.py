@@ -143,7 +143,7 @@ def read():
 def write():
     response   = Response()
 
-    parameters = request.get_json()
+    parameters = addict.Dict(request.get_json())
 
     if 'format' in parameters:
         if 'buffer' in parameters:
@@ -159,9 +159,9 @@ def write():
                 prefix    = 'PIPE'
                 writer    = pipeline
 
-            if 'output' in parameters and 'name' in parameters['output']:
-                if not parameters['output']['name']:
-                    name = parameters['output']['name']
+            if 'output' in parameters and 'name' in parameters.output:
+                if parameters.output.name:
+                    name = parameters.output.name
                 else:
                     name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
             else:

@@ -13,7 +13,7 @@ class SignInForm extends React.Component {
       event.preventDefault()
     }
 
-    this.props.onSubmit()
+    this.props.onSuccess()
   }
 
   render ( ) {
@@ -35,7 +35,7 @@ class SignInForm extends React.Component {
 
 SignInForm.propTypes =
 {
-  onSubmit: PropTypes.func.isRequired
+  onSuccess: PropTypes.func.isRequired
 }
 
 export default SignInForm

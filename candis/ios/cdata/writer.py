@@ -18,6 +18,7 @@ def get_attribute_tag(attr):
     return tag
 
 def write(path, dataset, delimiter = ','):
+    print(dataset)
     with open(path, 'w') as f:
         writer  = csv.writer(f, delimiter = delimiter)
         cnames  = [ ]

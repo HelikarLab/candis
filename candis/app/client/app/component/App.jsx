@@ -1,4 +1,5 @@
 import React             from 'react'
+import { Redirect }      from 'react-router-dom'
 import { connect }       from 'react-redux'
 
 import config            from '../config'
@@ -22,7 +23,9 @@ class App extends React.Component {
         <AppBar
                image={`${config.routes.images}/logo.png`}
           classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
-        <MenuBar menus={Menus} onClick={(action) => {
+        <MenuBar
+            menus={Menus}
+          onClick={(action) => {
           props.dispatch(action.onClick)
         }}/>
         <div className="container-fluid">
@@ -41,4 +44,13 @@ class App extends React.Component {
   }
 }
 
-export default connect()(App)
+// const mapStateToProps = (state, props) => {
+//   const app           = state.app
+
+//   return {
+//     authenticated: app.authenticated
+//   }
+// }
+const mapStateToProps = null
+
+export default connect(mapStateToProps)(App)

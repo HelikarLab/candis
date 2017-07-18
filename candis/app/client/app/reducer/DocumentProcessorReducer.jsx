@@ -20,14 +20,13 @@ const documentProcessor = (state = initialState, action) => {
         const dokument    =
         {
               ID: shortid.generate(),
-            path: output.path,
-            name: output.name
+          output: output
         }
         const documents   = state.documents.slice()
 
         documents.push(dokument)
 
-        return {...state, documents: documents, active: dokument.ID }
+        return {...state, documents: documents, active: dokument }
       }
 
       
@@ -41,7 +40,7 @@ const documentProcessor = (state = initialState, action) => {
     case ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT: {
       const dokument = action.payload
 
-      return {...state, active: dokument.ID }
+      return {...state, active: dokument }
     }
 
     case ActionType.DocumentProcessor.REMOVE_DOCUMENT: {

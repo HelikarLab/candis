@@ -5,7 +5,7 @@ import DataEditor    from '../widget/DataEditor'
 import XEditable     from '../widget/XEditable'
 
 import FileFormat    from '../../constant/FileFormat'
-import { write }     from '../../action/AsynchronousAction'
+import { write } from '../../action/AsynchronousAction'
 
 class CreatePanel extends React.Component {
   constructor (props) {

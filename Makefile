@@ -3,7 +3,8 @@
 
 PYTHON      ?= python
 BASEDIR      = $(realpath .)
-SOURCEDIR    = $(realpath candis)
+PACKAGE      = candis
+SOURCEDIR    = $(realpath $(PACKAGE))
 DOCSDIR      = $(realpath docs)
 
 SERVER_HOST  = 0.0.0.0
@@ -39,7 +40,7 @@ sass:
 	sass $(SOURCEDIR)/app/client/styles/App.scss:$(SOURCEDIR)/app/assets/css/styles.min.css --sourcemap=none --style compressed
 
 run:
-	$(PYTHON) -m candis & npm start
+	$(PYTHON) -m $(PACKAGE) & npm start
 
 loc:
 	( find $(SOURCEDIR) -name "*.py"  -print0 | xargs -0 cat ) | wc -l

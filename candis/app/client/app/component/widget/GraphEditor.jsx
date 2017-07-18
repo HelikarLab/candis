@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import classNames   from 'classnames'
 
 class GraphEditor extends React.Component {
-
   componentDidUpdate(prevProps, prevState) {
     jsPlumb.ready(() => {
       jsPlumb.draggable($('.node'))

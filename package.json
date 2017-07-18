@@ -28,6 +28,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "concurrently": "^3.5.0",
+    "react-hot-loader": "^3.0.0-beta.7",
     "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.0.0"

@@ -67,6 +67,8 @@ class DataEditor extends React.Component {
     setTimeout(() => {
       that.refs.grid.updateMetrics()
     }, 1000)
+
+    this.props.dispatch(getResource)
   }
 
   render ( ) {
