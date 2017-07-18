@@ -33,7 +33,7 @@
 ### Installation
 Download or clone the repository as follows:
 ```console
-$ git clone http://github.com/achillesrasquinha/candis.git && cd candis
+$ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd candis
 ```
 
 Install necessary dependencies:
