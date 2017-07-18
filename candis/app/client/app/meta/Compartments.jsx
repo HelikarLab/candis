@@ -237,7 +237,7 @@ const Compartments = [
        icon: `${config.routes.icons}/column-select.png`,
     tooltip: 'List of Feature Selection Methods',
     fetcher: () => {
-      return axios.get(config.routes.api.model.methods).then((response) => {
+      return axios.get(config.routes.api.featselect.methods).then((response) => {
         response        = response.data
 
         if ( response.status == "success" ) {
