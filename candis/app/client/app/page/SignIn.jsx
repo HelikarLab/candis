@@ -24,10 +24,11 @@ class SignIn extends React.Component {
 
   render ( ) {
     const props    = this.props
+    const { from } = props.location.state || { from: { pathname: config.routes.base } }
 
     return props.authenticated ? 
       (
-        <Redirect to={config.routes.base}/>
+        <Redirect to={from}/>
       )
       : 
       (
@@ -54,7 +55,10 @@ class SignIn extends React.Component {
   }
 }
 
-SignIn.propTypes      = { authenticated: PropTypes.bool.isRequired }
+SignIn.propTypes      = 
+{
+  authenticated: PropTypes.bool.isRequired
+}
 
 const mapStateToProps = (state, props) => {
   const app           = state.app
