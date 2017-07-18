@@ -7,11 +7,13 @@ import config      from '../config'
 
 class PrivateRoute extends Route {
 	render ( ) {
-		const {authenticated, component, ...rest} = this.props
+		const props         = this.props
+		const authenticated = props.authenticated
+		const Component     = props.component
 
 		return <Route render={(props) => {
 				return authenticated ? 
-					<component {...props}/>
+					<Component {...props}/>
 						: <Redirect to={{
 							pathname: config.routes.signin,
 							   state: { from: props.location }
