@@ -12,24 +12,23 @@ const initialState      =
 const documentProcessor = (state = initialState, action) => {
   switch (action.type) {
     case ActionType.Asynchronous.WRITE_SUCCESS: {
-      if ( action.payload.file.format == FileFormat.PIPELINE ) {
-        const file        = action.payload.file
-        const data        = action.payload.data
-        const output      = data.output
+      const file        = action.payload.file
 
-        const dokument    =
+      if ( file.format == FileFormat.PIPELINE ) {
+        const data      = action.payload.data
+
+        const dokument  =
         {
               ID: shortid.generate(),
-          output: output
+          output: data.output,
+            data: data.data
         }
-        const documents   = state.documents.slice()
+        const documents = state.documents.slice()
 
         documents.push(dokument)
 
         return {...state, documents: documents, active: dokument }
       }
-
-      
     }
 
     case ActionType.Asynchronous.WRITE_ERROR: {
@@ -44,6 +43,7 @@ const documentProcessor = (state = initialState, action) => {
     }
 
     case ActionType.DocumentProcessor.REMOVE_DOCUMENT: {
+      const ID        = action.payload.ID
       const documents = state.documents.slice().filter((dokument) => {
         dokument.ID !== action.payload.ID
       })

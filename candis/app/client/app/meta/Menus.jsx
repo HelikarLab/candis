@@ -24,7 +24,7 @@ const Menus = [
               animate: false,
              callback: (name) => {
                if ( name !== null ) {
-                 const output = { name: `${name}` }
+                 const output = { name: name }
                  const action = write(output, FileFormat.PIPELINE)
 
                  dispatch(action)

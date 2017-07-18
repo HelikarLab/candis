@@ -1,5 +1,4 @@
 import React             from 'react'
-import { Redirect }      from 'react-router-dom'
 import { connect }       from 'react-redux'
 
 import config            from '../config'
@@ -48,7 +47,7 @@ const mapStateToProps = (state, props) => {
   const app           = state.app
 
   return {
-    authenticated: app.authenticated
+    
   }
 }
 

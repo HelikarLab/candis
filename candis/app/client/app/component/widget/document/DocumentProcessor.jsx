@@ -64,10 +64,10 @@ class DocumentProcessor extends React.Component {
   }
 }
 
-const mapStateToProps     = (state, props) => {
-  const documentProcessor = state.documentProcessor
-  const documents         = documentProcessor.documents
-  const active            = documentProcessor.active
+const mapStateToProps       = (state, props) => {
+  const documentProcessor   = state.documentProcessor
+  const documents           = documentProcessor.documents
+  const active              = documentProcessor.active
 
   return { documents: documents, active: active }
 }
