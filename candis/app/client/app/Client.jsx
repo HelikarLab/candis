@@ -1,5 +1,4 @@
 // This is the starting point of the application.
-
 import React    from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'

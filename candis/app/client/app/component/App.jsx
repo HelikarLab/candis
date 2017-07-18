@@ -44,13 +44,12 @@ class App extends React.Component {
   }
 }
 
-// const mapStateToProps = (state, props) => {
-//   const app           = state.app
+const mapStateToProps = (state, props) => {
+  const app           = state.app
 
-//   return {
-//     authenticated: app.authenticated
-//   }
-// }
-const mapStateToProps = null
+  return {
+    authenticated: app.authenticated
+  }
+}
 
 export default connect(mapStateToProps)(App)

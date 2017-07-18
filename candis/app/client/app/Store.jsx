@@ -8,9 +8,7 @@ import Reducers from './reducer'
 
 const middlewares = [thunk]
 
-if ( config.debug ) {
-	middlewares.push(logger)
-}
+if ( config.debug ) { middlewares.push(logger) }
 
 const Store       = createStore(Reducers, applyMiddleware(...middlewares))
 

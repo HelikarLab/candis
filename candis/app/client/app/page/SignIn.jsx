@@ -1,9 +1,12 @@
-import React  from 'react'
+import React        from 'react'
+import PropTypes    from 'prop-types'
 import { Redirect } from 'react-router-dom'
+import { connect }  from 'react-redux'
 
-import config from '../config'
+import config       from '../config'
 
-import SignInForm from '../component/form/SignInForm'
+import SignInForm   from '../component/form/SignInForm'
+import { setAuthenticated } from '../action/AppAction'
 
 class SignIn extends React.Component {
   constructor (props) {
@@ -14,13 +17,15 @@ class SignIn extends React.Component {
   }
 
   onSuccess ( ) {
-    this.setState({
-      success: true
-    })
+    const props    = this.props
+
+    props.dispatch(setAuthenticated(true))
   }
 
   render ( ) {
-    return this.state.success ? 
+    const props    = this.props
+
+    return props.authenticated ? 
       (
         <Redirect to={config.routes.base}/>
       )
@@ -49,6 +54,14 @@ class SignIn extends React.Component {
   }
 }
 
-SignIn.defaultState = { success: false }
+SignIn.propTypes      = { authenticated: PropTypes.bool.isRequired }
 
-export default SignIn
+const mapStateToProps = (state, props) => {
+  const app           = state.app
+
+  return {
+    authenticated: app.authenticated
+  }
+}
+
+export default connect(mapStateToProps)(SignIn)

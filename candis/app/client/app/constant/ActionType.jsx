@@ -1,5 +1,10 @@
 const ActionType =
 {
+  App:
+  {
+    SET_AUTHENTICATED: 'ACTION_TYPE_APP_SET_AUTHENTICATED'
+  },
+
   Asynchronous:
   {
               WRITE: 'ACTION_TYPE_ASYNCHRONOUS_WRITE',
@@ -7,10 +12,12 @@ const ActionType =
       WRITE_SUCCESS: 'ACTION_TYPE_ASYNCHRONOUS_WRITE_SUCCESS',
         WRITE_ERROR: 'ACTION_TYPE_ASYNCHRONOUS_WRITE_ERROR'
   },
+  
   Data:
   {
     
   },
+  
   DocumentProcessor:
   {
     SET_ACTIVE_DOCUMENT: 'ACTION_TYPE_SET_ACTIVE_DOCUMENT',
