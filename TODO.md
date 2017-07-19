@@ -27,6 +27,7 @@
 * #### Medium Priority
   * [ ] Context Menu for Documents (Rename, Close, etc. actions)
   * [ ] Refresh Button for each ToolBox Compartment
+  * [ ] Display loader and error during asynchronous actions.
   * [ ] Documentation
 
 * #### Low Priority

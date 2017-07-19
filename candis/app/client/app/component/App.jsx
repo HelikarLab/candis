@@ -8,7 +8,7 @@ import AppBar            from './AppBar'
 import MenuBar           from './widget/MenuBar'
 import ToolBox           from './widget/toolbox/ToolBox'
 import DocumentProcessor from './widget/document/DocumentProcessor'
-import Dialog            from './dialog/Dialog'
+import Dialog            from './widget/Dialog'
 
 import Menus             from '../meta/Menus'
 import Compartments      from '../meta/Compartments'

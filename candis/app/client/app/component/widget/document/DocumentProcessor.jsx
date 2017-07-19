@@ -14,30 +14,30 @@ class DocumentProcessor extends React.Component {
 
     this.tools =
     [
-      {
-           name: 'Run',
-         faicon: 'play',
-        tooltip: 'Run the currently active pipeline',
-        onClick: ( ) => {
+      // {
+      //      name: 'Run',
+      //    faicon: 'play',
+      //   tooltip: 'Run the currently active pipeline',
+      //   onClick: ( ) => {
 
-        }
-      },
-      {
-           name: 'Pause',
-         faicon: 'pause',
-        tooltip: 'Pause the currently active pipeline',
-        onClick: ( ) => {
+      //   }
+      // },
+      // {
+      //      name: 'Pause',
+      //    faicon: 'pause',
+      //   tooltip: 'Pause the currently active pipeline',
+      //   onClick: ( ) => {
           
-        }
-      },
-      {
-           name: 'Stop',
-         faicon: 'stop',
-        tooltip: 'Stop the currently active pipeline',
-        onClick: ( ) => {
+      //   }
+      // },
+      // {
+      //      name: 'Stop',
+      //    faicon: 'stop',
+      //   tooltip: 'Stop the currently active pipeline',
+      //   onClick: ( ) => {
           
-        }
-      }
+      //   }
+      // }
     ]
   }
 

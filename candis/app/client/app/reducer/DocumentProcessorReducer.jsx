@@ -20,20 +20,15 @@ const documentProcessor = (state = initialState, action) => {
         const dokument  =
         {
               ID: shortid.generate(),
-          output: data.output,
-            data: data.data
+          output: data.output
         }
+
         const documents = state.documents.slice()
 
         documents.push(dokument)
 
         return {...state, documents: documents, active: dokument }
       }
-    }
-
-    case ActionType.Asynchronous.WRITE_ERROR: {
-      // TODO: Handle error, display something.
-      // bootbox.alert('');
     }
 
     case ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT: {
@@ -49,6 +44,14 @@ const documentProcessor = (state = initialState, action) => {
       })
 
       return {...state, documents: documents }
+    }
+
+    case ActionType.DocumentProcessor.PUSH_STAGE: {
+      const dokument   = state.active
+
+      if ( dokument !== null ) {
+        const stage    = action.payload
+      }
     }
   }
 

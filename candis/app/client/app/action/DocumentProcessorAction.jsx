@@ -18,4 +18,13 @@ const removeDocument    = (dokument) => {
   return action
 }
 
-export { setActiveDocument, removeDocument }
+const pushStage         = (stage) => {
+  const action          = {
+       type: ActionType.DocumentProcessor.PUSH_STAGE,
+    payload: stage
+  }
+
+  return action
+}
+
+export { setActiveDocument, removeDocument, pushStage }

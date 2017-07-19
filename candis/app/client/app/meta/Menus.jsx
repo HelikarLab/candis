@@ -33,14 +33,14 @@ const Menus = [
           })
         }
       },
-      {
-           text: 'Open',
-           icon: `${config.routes.icons}/envelope-open.png`,
-        tooltip: 'Open an existing Pipeline',
-        onClick: (dispatch) => {
-          // TODO: create "Open" dialog and display.
-        }
-      },
+      // {
+      //      text: 'Open',
+      //      icon: `${config.routes.icons}/envelope-open.png`,
+      //   tooltip: 'Open an existing Pipeline',
+      //   onClick: (dispatch) => {
+      //     // TODO: create "Open" dialog and display.
+      //   }
+      // },
       {
            text: 'Quit',
            icon: `${config.routes.icons}/quit.png`,
@@ -65,19 +65,19 @@ const Menus = [
       }
     ]
   },
-  {
-      title: 'Options',
-    actions: [
-      {
-            text: 'Settings',
-            icon: `${config.routes.icons}/settings.png`,
-         tooltip: 'Open Settings View',
-         onClick: (dispatch) => {
-           // TODO: create "Settings" dialog and display.
-         }
-      }
-    ]
-  },
+  // {
+  //     title: 'Options',
+  //   actions: [
+  //     {
+  //           text: 'Settings',
+  //           icon: `${config.routes.icons}/settings.png`,
+  //        tooltip: 'Open Settings View',
+  //        onClick: (dispatch) => {
+  //          // TODO: create "Settings" dialog and display.
+  //        }
+  //     }
+  //   ]
+  // },
   {
       title: 'Help',
     actions: [

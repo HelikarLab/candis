@@ -1,9 +1,10 @@
-import axios      from 'axios'
+import axios         from 'axios'
 
-import config     from '../config'
-import { addNode } from '../action/GraphEditorAction'
+import config        from '../config'
+import { pushStage } from '../action/DocumentProcessorAction'
+
 import { showDialog, hideDialog } from '../action/DialogAction'
-import Dialog     from '../component/dialog/Dialog'
+import Dialog     from '../component/widget/Dialog'
 import DialogType from '../constant/DialogType'
 
 const Compartments = [
@@ -17,41 +18,12 @@ const Compartments = [
              icon: `${config.routes.icons}/edit.png`,
           tooltip: 'Create a new DataSet',
           onClick: (dispatch) => {
-            const node   = {
-                label: 'Create',
-              onClick: (dispatch) => {
-                 const action = showDialog({
-                    type: DialogType.CREATE,
-                   title: 'Create',
-                    size: Dialog.LARGE,
-                   props: {
-                     classNames: {
-                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                       footer: ['no-background', 'no-border']
-                     },
-                     onCreate: (dispatch) => {
-                       let action = null
-
-                       action     = hideDialog({
-                         type: DialogType.CREATE
-                       })
-
-                       dispatch(action)
-                     },
-                     onCancel: (dispatch) => {
-                       const action = hideDialog({
-                         type: DialogType.CREATE
-                       })
-
-                       dispatch(action)
-                     }
-                   }
-                 })
-
-                 dispatch(action)
-              }
-            }
-            const action = addNode(node)
+            const action = pushStage({
+                   name: 'Create',
+                onClick: (dispatch) => {
+                  // dialog action
+                }
+            })
 
             dispatch(action)
           }
@@ -61,43 +33,7 @@ const Compartments = [
              icon: `${config.routes.icons}/document.png`,
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
-            const node   = {
-                label: 'File',
-              onClick: (dispatch) => {
-                 const action = showDialog({
-                    type: DialogType.FILE,
-                   title: 'File',
-                    size: Dialog.LARGE,
-                   props: {
-                     classNames: {
-                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                       footer: ['no-background', 'no-border']
-                     },
-                     onCreate: (dispatch) => {
-                       let action = null
-
-                       action     = hideDialog({
-                         type: DialogType.FILE
-                       })
-
-                       dispatch(action)
-                     },
-                     onCancel: (dispatch) => {
-                       const action = hideDialog({
-                         type: DialogType.FILE
-                       })
-
-                       dispatch(action)
-                     }
-                   }
-                 })
-
-                 dispatch(action)
-              }
-            }
-            const action = addNode(node)
-
-            dispatch(action)
+            
           }
         },
         {
@@ -124,113 +60,10 @@ const Compartments = [
              name: 'k-Fold Cross-Validation',
           tooltip: 'Split a dataset into k folds',
           onClick: (dispatch) => {
-            const node   = {
-                label: 'Create',
-              onClick: (dispatch) => {
-                 const action = showDialog({
-                    type: DialogType.CREATE,
-                   title: 'Create',
-                    size: Dialog.LARGE,
-                   props: {
-                     classNames: {
-                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                       footer: ['no-background', 'no-border']
-                     },
-                     onCreate: (dispatch) => {
-                       let action = null
-
-                       action     = hideDialog({
-                         type: DialogType.CREATE
-                       })
-
-                       dispatch(action)
-                     },
-                     onCancel: (dispatch) => {
-                       const action = hideDialog({
-                         type: DialogType.CREATE
-                       })
-
-                       dispatch(action)
-                     }
-                   }
-                 })
-
-                 dispatch(action)
-              }
-            }
-            const action = addNode(node)
-
-            dispatch(action)
+            
           }
         }
-      ],
-    fetcher: () => {
-      return axios.get(config.routes.api.preprocess.methods).then((response) => {
-        response       = response.data
-
-        if ( response.status == "success" ) {
-          const data   = response.data
-
-          const tools  = data.map((method) => {
-            const options = method.methods.map((option) => {
-              return { name: option.name, description: option.info.desc }
-            })
-
-            const tool = {
-                 name: method.name,
-              onClick: (dispatch) => {
-                  const node   = {
-                      label: method.name,
-                    onClick: (dispatch) => {
-                       const action = showDialog({
-                          type: DialogType.SELECT,
-                         title: method.name,
-                         props: {
-                           classNames: {
-                               root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                             footer: ['no-background', 'no-border']
-                           },
-                            options: options,
-                           onSelect: (dispatch) => {
-                             let action = null
-
-                             action     = hideDialog({
-                               type: DialogType.SELECT
-                             })
-
-                             dispatch(action)
-                           },
-                           onCancel: (dispatch) => {
-                             const action = hideDialog({
-                               type: DialogType.SELECT
-                             })
-
-                             dispatch(action)
-                           }
-                         }
-                       })
-
-                       dispatch(action)
-                    }
-                  }
-                  const action = addNode(node)
-
-                  dispatch(action)
-
-                //
-
-              }
-            }
-
-            return tool
-          })
-
-          return tools
-        } else {
-          return [ ]
-        }
-      })
-    }
+      ]
   },
   {
        name: 'Feature Selection',
