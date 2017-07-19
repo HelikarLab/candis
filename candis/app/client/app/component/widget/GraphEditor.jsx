@@ -14,7 +14,7 @@ class GraphEditor extends React.Component {
 
     return (
       <div className={classNames("panel panel-default no-border no-shadow no-background")}>
-        <div className="panel-body" style={{ height: "100vh" }}>
+        <div className="panel-body" style={{ height: "100%" }}>
           {
             graph.nodes().map((ID, index) => {
               let meta = graph.node(ID)
@@ -26,7 +26,7 @@ class GraphEditor extends React.Component {
                   <span>
                     <h2 className="no-margin">
                       <span className="label label-default">
-                        {meta.label}
+                        {meta.name}
                       </span>
                     </h2>
                   </span>
@@ -48,4 +48,4 @@ const mapStateToProps   = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(GraphEditor)
+export default connect()(GraphEditor)

@@ -1,4 +1,6 @@
 import shortid    from 'shortid'
+import graphlib   from 'graphlib'
+import cloneDeep  from 'lodash.clonedeep'
 
 import ActionType from '../constant/ActionType'
 import FileFormat from '../constant/FileFormat'
@@ -16,11 +18,13 @@ const documentProcessor = (state = initialState, action) => {
 
       if ( file.format == FileFormat.PIPELINE ) {
         const data      = action.payload.data
+        const graph     = new graphlib.Graph()
 
         const dokument  =
         {
               ID: shortid.generate(),
-          output: data.output
+          output: data.output,
+            data: graph
         }
 
         const documents = state.documents.slice()
@@ -46,11 +50,16 @@ const documentProcessor = (state = initialState, action) => {
       return {...state, documents: documents }
     }
 
-    case ActionType.DocumentProcessor.PUSH_STAGE: {
-      const dokument   = state.active
+    case ActionType.DocumentProcessor.SET_STAGE: {
+      const dokument   = cloneDeep(state.active)
 
       if ( dokument !== null ) {
+        const ID       = shortid.generate()
         const stage    = action.payload
+
+        dokument.data.setNode(ID, stage)
+
+        return {...state, active: dokument }
       }
     }
   }

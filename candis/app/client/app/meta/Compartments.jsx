@@ -1,7 +1,7 @@
-import axios         from 'axios'
+import axios        from 'axios'
 
-import config        from '../config'
-import { pushStage } from '../action/DocumentProcessorAction'
+import config       from '../config'
+import { setStage } from '../action/DocumentProcessorAction'
 
 import { showDialog, hideDialog } from '../action/DialogAction'
 import Dialog     from '../component/widget/Dialog'
@@ -18,7 +18,7 @@ const Compartments = [
              icon: `${config.routes.icons}/edit.png`,
           tooltip: 'Create a new DataSet',
           onClick: (dispatch) => {
-            const action = pushStage({
+            const action = setStage({
                    name: 'Create',
                 onClick: (dispatch) => {
                   // dialog action

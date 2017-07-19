@@ -40,7 +40,9 @@ class DocumentPanel extends React.Component {
           </div>
           <div className="panel-body">
             {
-              
+              active ?
+                <GraphEditor
+                  graph={active.data}/> : null
             }
           </div>
         </div>

@@ -111,12 +111,12 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
 def read():
     response    = Response()
 
-    parameters  = request.get_json()
+    parameters  = addict.Dict(request.get_json())
 
     if 'path' in parameters:
         if 'name' in parameters:
-            path    = parameters['path']
-            name    = parameters['name']
+            path    = parameters.path
+            name    = parameters.name
 
             relpath = os.path.join(path, name)
 
@@ -141,49 +141,50 @@ def read():
 
 @app.route(CONFIG.App.Routes.Api.Data.WRITE, methods = ['POST'])
 def write():
-    response   = Response()
+    response    = Response()
 
-    parameters = addict.Dict(request.get_json())
+    parameters  = addict.Dict(request.get_json())
 
     if 'format' in parameters:
-        if 'buffer' in parameters:
-            format_ = parameters['format']
-            buffer_ = parameters['buffer']
-
-            if format_   == 'cdata':
-                extension = 'cdata'
-                prefix    = 'CDAT'
-                writer    = cdata
-            elif format_ == 'pipeline':
-                extension = 'cpipe'
-                prefix    = 'PIPE'
-                writer    = pipeline
-
-            if 'output' in parameters and 'name' in parameters.output:
-                if parameters.output.name:
-                    name = parameters.output.name
-                else:
-                    name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
-            else:
-                name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
-
-            fname  = '{name}.{ext}'.format(name = name, ext = extension)
-            path   = os.path.join(ABSPATH_STARTDIR, fname)
-            path   = get_filename_if_exists(path)
-
-            try:
-                writer.write(path, buffer_)
-
-                path, fname = os.path.split(path)
-
-                data        = addict.Dict()
-                data.output.path = path
-                data.output.name   = fname
-
-                response.set_data(data)
-            except TypeError as e:
-                response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+        format_ = parameters.format
+        
+        if 'buffer' in parameters and parameters.buffer:
+            buffer_ = parameters.buffer
         else:
+            buffer_ = None
+
+        if format_   == 'cdata':
+            extension = 'cdata'
+            prefix    = 'CDAT'
+            handler   = cdata
+        elif format_ == 'pipeline':
+            extension = 'cpipe'
+            prefix    = 'PIPE'
+            handler   = pipeline
+
+        if 'output' in parameters and 'name' in parameters.output and parameters.output.name:
+            name = parameters.output.name
+        else:
+            name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
+
+        fname  = '{name}.{ext}'.format(name = name, ext = extension)
+        path   = os.path.join(ABSPATH_STARTDIR, fname)
+        path   = get_filename_if_exists(path)
+
+        try:
+            handler.write(path, buffer_)
+
+            data             = addict.Dict()
+
+            data.data        = handler.read(path)
+            
+            path, fname      = os.path.split(path)
+
+            data.output.path = path
+            data.output.name = fname
+
+            response.set_data(data)
+        except TypeError as e:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY)

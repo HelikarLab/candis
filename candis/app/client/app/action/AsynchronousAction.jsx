@@ -30,7 +30,7 @@ const getResource     = (dispatch) => {
        })
 }
 
-const write            = (output, format, buffer = { }) => {
+const write            = (output, format, buffer = null) => {
   const dispatch       = (dispatch) => {
     const action       = requestWrite(output, format, buffer)
     const parameters   = { output: output, format: format, buffer: buffer }
