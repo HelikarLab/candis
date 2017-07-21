@@ -14,23 +14,22 @@ class ToolBar extends React.Component {
           {
             props.tools.map((tool, index) => {
               const ttattrs = getBSTTProps(tool.tooltip)
-              let   holder  = null
+              var   holder  = null
 
               if ( tool.icon ) {
-                holder = (
-                  <img src={tool.icon} width={`${props.size}`}/>
-                )
-              } else if ( tool.faicon ) {
-                holder = (
-                  <i className={`fa fa-fw fa-${tool.faicon}`}/>
-                )
+                holder = (<img src={tool.icon} width={`${props.size}`}/>)
+              } else 
+              if ( tool.faicon ) {
+                holder = (<i className={`fa fa-fw fa-${tool.faicon}`}/>)
               } else {
                 holder = tool.name
               }
 
               return (
                 <li key={index} {...ttattrs}>
-                  <a href="javascript:void(0);">
+                  <a href="javascript:void(0);" onClick={() => {
+                    tool.onClick()
+                  }}>
                     {holder}
                   </a>
                 </li>

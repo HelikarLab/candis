@@ -1,4 +1,5 @@
 import React             from 'react'
+import PropTypes         from 'prop-types'
 import { connect }       from 'react-redux'
 
 import config            from '../config'
@@ -21,12 +22,13 @@ class App extends React.Component {
       <div>
         <AppBar
                image={`${config.routes.images}/logo.png`}
-          classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
+          classNames={{ root: ["no-border-bottom", "no-margin"] }}
+                user={props.user}/>
         <MenuBar
             menus={Menus}
           onClick={(action) => {
-          props.dispatch(action.onClick)
-        }}/>
+            props.dispatch(action.onClick)
+          }}/>
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-3">
@@ -43,11 +45,14 @@ class App extends React.Component {
   }
 }
 
+App.propTypes         = { user: PropTypes.object }
+App.defaultProps      = { user: null }
+
 const mapStateToProps = (state, props) => {
   const app           = state.app
 
   return {
-    
+    user: app.user
   }
 }
 

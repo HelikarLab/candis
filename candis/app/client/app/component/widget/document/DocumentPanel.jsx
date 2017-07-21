@@ -12,17 +12,17 @@ class DocumentPanel extends React.Component {
 
   render ( ) {
     const props  = this.props
-
-    const active = props.active
+    
     const tabs   = props.documents.map((dokument) => {
       const name = dokument.output.name.split('.')[0]
 
       return {
             ID: dokument.ID,
          title: name,
-        active: active.ID == dokument.ID
+        active: dokument.active
       }
     })
+    const active = props.active
 
     return props.documents.length ?
       (
@@ -30,9 +30,9 @@ class DocumentPanel extends React.Component {
           <div className="panel-heading">
             <TabBar
                  tabs={tabs}
-              onClick={(tab) => {
-                const dokument = props.documents.filter((dokument) => {
-                  return dokument.ID == tab.ID
+              onClick={(tab)     => {
+                const dokument   = props.documents.filter((dokument) => {
+                  return tab.ID == dokument.ID
                 })[0]
 
                 props.onActive(dokument)
@@ -42,7 +42,9 @@ class DocumentPanel extends React.Component {
             {
               active ?
                 <GraphEditor
-                  graph={active.data}/> : null
+                       graph={active.data}
+                  classNames={{ root: ["no-background", "no-border", "no-shadow", "no-margin"] }}/>
+                : null
             }
           </div>
         </div>
@@ -50,7 +52,17 @@ class DocumentPanel extends React.Component {
   }
 }
 
-DocumentPanel.propTypes    = { documents: PropTypes.array, active: PropTypes.object }
-DocumentPanel.defaultProps = { documents: [ ], active: null }
+DocumentPanel.propTypes    = 
+{
+  documents: PropTypes.array,
+   onActive: PropTypes.func,
+     active: PropTypes.object
+}
+DocumentPanel.defaultProps =
+{
+  documents: [ ],
+   onActive: (dokument) => { },
+     active: null
+}
 
 export default DocumentPanel

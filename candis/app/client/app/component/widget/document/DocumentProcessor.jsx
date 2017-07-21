@@ -2,7 +2,7 @@ import React         from 'react'
 import PropTypes     from 'prop-types'
 import { connect }   from 'react-redux'
 
-import config        from '../../../config'
+import axios         from 'axios'
 
 import ToolBar       from '../ToolBar'
 import DocumentPanel from './DocumentPanel'
@@ -14,30 +14,38 @@ class DocumentProcessor extends React.Component {
 
     this.tools =
     [
-      // {
-      //      name: 'Run',
-      //    faicon: 'play',
-      //   tooltip: 'Run the currently active pipeline',
-      //   onClick: ( ) => {
+      {
+           name: 'Run',
+         faicon: 'play',
+        tooltip: 'Run the currently active pipeline',
+        onClick: ( ) => {
+          NProgress.set(0.0)
 
-      //   }
-      // },
-      // {
-      //      name: 'Pause',
-      //    faicon: 'pause',
-      //   tooltip: 'Pause the currently active pipeline',
-      //   onClick: ( ) => {
+          var dialog = bootbox.dialog({ title: 'Normalizing...' })
+
+          axios.get('/api/run').then(() => {
+            console.log('run')
+
+            NProgress.set(1.0)
+          })
+        }
+      },
+      {
+           name: 'Pause',
+         faicon: 'pause',
+        tooltip: 'Pause the currently active pipeline',
+        onClick: ( ) => {
           
-      //   }
-      // },
-      // {
-      //      name: 'Stop',
-      //    faicon: 'stop',
-      //   tooltip: 'Stop the currently active pipeline',
-      //   onClick: ( ) => {
+        }
+      },
+      {
+           name: 'Stop',
+         faicon: 'stop',
+        tooltip: 'Stop the currently active pipeline',
+        onClick: ( ) => {
           
-      //   }
-      // }
+        }
+      }
     ]
   }
 
@@ -64,10 +72,13 @@ class DocumentProcessor extends React.Component {
   }
 }
 
-const mapStateToProps       = (state, props) => {
-  const documentProcessor   = state.documentProcessor
-  const documents           = documentProcessor.documents
-  const active              = documentProcessor.active
+DocumentProcessor.propTypes    = { documents: PropTypes.array }
+DocumentProcessor.defaultProps = { documents: [ ] }
+
+const mapStateToProps          = (state, props) => {
+  const documentProcessor      = state.documentProcessor
+  const documents              = documentProcessor.documents
+  const active                 = documentProcessor.active
 
   return { documents: documents, active: active }
 }

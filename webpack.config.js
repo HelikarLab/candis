@@ -15,7 +15,8 @@ module.exports     = {
   ],
   output: {
     path: path.join(paths.BASE, 'assets', 'js'),
-    filename: 'bundle.min.js'
+    filename: 'bundle.min.js',
+    publicPath: 'http://' + config.host + ':' + config.port
   },
   module: {
     rules: [

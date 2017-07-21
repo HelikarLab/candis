@@ -6,36 +6,32 @@ import { connect }  from 'react-redux'
 import config       from '../config'
 
 import SignInForm   from '../component/form/SignInForm'
-import { setAuthenticated } from '../action/AppAction'
+import { setUser }  from '../action/AppAction'
 
 class SignIn extends React.Component {
   constructor (props) {
     super (props)
 
     this.onSuccess = this.onSuccess.bind(this)
-    this.state     = SignIn.defaultState
   }
 
-  onSuccess ( ) {
+  onSuccess (user) {
     const props    = this.props
 
-    props.dispatch(setAuthenticated(true))
+    const action   = setUser(user)
+
+    props.dispatch(action)
   }
 
   render ( ) {
-    const props    = this.props
-    const { from } = props.location.state || { from: { pathname: config.routes.base } }
+    const props = this.props
+    const to    = props.location.state.from || { pathname: config.routes.base }
 
-    return props.authenticated ? 
-      (
-        <Redirect to={from}/>
-      )
+    return props.user !== null ? 
+      (<Redirect to={to}/>)
       : 
       (
-        <div className="vertical-center" style={{
-            minHeight: '100%',
-            minHeight: '100vh'
-          }}>
+        <div className="jumbotron no-margin vertical-center">
           <div className="container-fluid">
             <div className="panel panel-default no-margin no-background no-border no-shadow">
               <div className="panel-body">
@@ -55,16 +51,14 @@ class SignIn extends React.Component {
   }
 }
 
-SignIn.propTypes      = 
-{
-  authenticated: PropTypes.bool.isRequired
-}
+SignIn.propTypes      = { user: PropTypes.object }
+SignIn.defaultProps   = { user: null }
 
 const mapStateToProps = (state, props) => {
   const app           = state.app
 
   return {
-    authenticated: app.authenticated
+    user: app.user
   }
 }
 

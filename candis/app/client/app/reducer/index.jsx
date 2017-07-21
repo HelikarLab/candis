@@ -8,7 +8,7 @@ import dialog            from './DialogReducer'
 import dataEditor        from './DataEditorReducer'
 import data              from './DataReducer'
 
-const Reducers = combineReducers({
+const Reducer = combineReducers({
 				  app: app,
               toolBox: toolBox,
 	documentProcessor: documentProcessor,
@@ -18,4 +18,4 @@ const Reducers = combineReducers({
                  data: data
 })
 
-export default Reducers
+export default Reducer

@@ -7,6 +7,10 @@ import XEditable     from '../widget/XEditable'
 import FileFormat    from '../../constant/FileFormat'
 import { write } from '../../action/AsynchronousAction'
 
+// RAW
+import { getResource } from '../../action/AsynchronousAction'
+// end
+
 class CreatePanel extends React.Component {
   constructor (props) {
     super (props)
@@ -25,6 +29,12 @@ class CreatePanel extends React.Component {
       [event.target.name]: event.target.value
     })
   }
+
+  // RAW
+  componentDidMount() {
+    this.props.dispatch(getResource())
+  }
+  // end
 
   onCreate ( ) {
     const data        = this.state.data
@@ -46,8 +56,8 @@ class CreatePanel extends React.Component {
     const buffer      = { attributes: attributes, data: rows }
     const dispatch    = this.props.dispatch
 
-    const output      = { name: filename }
-    const action      = write(output, FileFormat.CDATA, buffer)
+    const output      = { name: `${filename}.cdata`, format: FileFormat.CDATA }
+    const action      = write(output, buffer)
 
     dispatch(action)
 

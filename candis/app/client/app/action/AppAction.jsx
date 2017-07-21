@@ -1,12 +1,15 @@
 import ActionType from '../constant/ActionType'
 
-const setAuthenticated = (authenticated) => {
-  const action = {
-       type: ActionType.App.SET_AUTHENTICATED,
-    payload: authenticated
-  }
+const setUser  = (user) => {
+  const action = { type: ActionType.App.SET_USER, payload: user }
 
   return action
 }
 
-export { setAuthenticated }
+const exit     = ( ) => {
+  const action = { type: ActionType.App.EXIT }
+
+  return action
+}
+
+export { setUser, exit }

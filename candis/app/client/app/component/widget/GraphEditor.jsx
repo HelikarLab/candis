@@ -1,51 +1,50 @@
 import React       from 'react'
+import PropTypes   from 'prop-types'
 import { connect } from 'react-redux'
-import classNames   from 'classnames'
+import classNames  from 'classnames'
+import randomColor from 'randomcolor'
 
 class GraphEditor extends React.Component {
-  componentDidUpdate(prevProps, prevState) {
-    jsPlumb.ready(() => {
-      jsPlumb.draggable($('.node'))
-    })
-  }
-
   render ( ) {
-    const graph = this.props.graph
+    const props = this.props
+    const graph = props.graph
 
-    return (
-      <div className={classNames("panel panel-default no-border no-shadow no-background")}>
-        <div className="panel-body" style={{ height: "100%" }}>
-          {
-            graph.nodes().map((ID, index) => {
-              let meta = graph.node(ID)
+    return graph ?
+      (
+        <div className={classNames("panel panel-default", props.classNames.root)}>
+          <div className="panel-body" style={{ minHeight: '100vh' }}>
+            {
+              graph.nodes().map((ID) => {
+                var node = graph.node(ID)
 
-              return (
-                <a className="node" id={`node-${ID}`} key={index} href="javascript:void(0);" onClick={() => {
-                    this.props.dispatch(meta.onClick)
-                  }} style={{position: "absolute"}}>
-                  <span>
-                    <h2 className="no-margin">
+                return (
+                  <a href="javascript:void(0);" onDoubleClick={() => {
+                    props.dispatch(node.onClick)
+                  }}>
+                    <h4 className="no-margin">
                       <span className="label label-default">
-                        {meta.name}
+                        {node.label}
                       </span>
-                    </h2>
-                  </span>
-                </a>
-              )
-            })
-          }
+                    </h4>
+                  </a>
+                )
+              })
+            }
+          </div>
         </div>
-      </div>
-    )
+      ) : null
   }
 }
 
-const mapStateToProps   = (state) => {
-  const graphEditor = state.graphEditor
-
-  return {
-    graph: graphEditor.graph
-  }
+GraphEditor.propTypes    =
+{
+       graph: PropTypes.object,
+  classNames: PropTypes.object
+}
+GraphEditor.defaultProps = 
+{
+       graph: null,
+  classNames: { }
 }
 
 export default connect()(GraphEditor)

@@ -13,21 +13,25 @@ class SignInForm extends React.Component {
       event.preventDefault()
     }
 
-    this.props.onSuccess()
+    const props = this.props
+
+    // STUB
+    const user  = { }
+    // end STUB
+
+    props.onSuccess(user)
   }
 
   render ( ) {
     return (
       <form onSubmit={this.onSubmit}>
-        <div className="form-group">
-          <button className="btn btn-block btn-brand-primary">
-            <div className="text-center">
-              <div className="text-uppercase font-bold">
-                Sign In
-              </div>
+        <button className="btn btn-block btn-brand-primary">
+          <div className="text-center">
+            <div className="text-uppercase font-bold">
+              Sign In
             </div>
-          </button>
-        </div>
+          </div>
+        </button>
       </form>
     )
   }

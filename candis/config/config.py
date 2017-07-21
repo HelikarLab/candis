@@ -46,7 +46,7 @@ class Config(object):
             # if check_mutable_mapping(value, raise_err = False):
             if isinstance(value, collections.Mapping):
                 # set node name as capitalcase with corresponding value.
-                attr = key.capitalize()
+                attr = key if key.isupper() else key.capitalize()
                 aval = Config(value)
 
             self.append(attr, aval)

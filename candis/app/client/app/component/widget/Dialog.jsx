@@ -27,8 +27,6 @@ class Dialog extends React.Component {
     const dialog    = this.props.dialog
     let   modal     = null
 
-    console.log(dialog)
-
     if ( dialog ) {
       if ( dialog.type ) {
         if ( dialog.display ) {

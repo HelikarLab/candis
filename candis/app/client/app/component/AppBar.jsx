@@ -7,13 +7,12 @@ import classNames from 'classnames'
 class AppBar extends React.Component {
   render ( ) {
     const props = this.props
-    let   brand = null
+    var   brand = null
 
     if ( props.image ) {
-      brand = (
-        <img src={props.image} width="20"/>
-      )
-    } else if ( props.title ) {
+      brand = (<img src={props.image} width="20"/>)
+    } else 
+    if ( props.title ) {
       brand = props.title
     }
 
@@ -38,11 +37,11 @@ class AppBar extends React.Component {
 
 AppBar.propTypes    =
 {
-         ID: PropTypes.string,
-  clasNames: PropTypes.string,
-      fluid: PropTypes.bool,
-      image: PropTypes.string,
-      title: PropTypes.string
+          ID: PropTypes.string,
+  classNames: PropTypes.object,
+       fluid: PropTypes.bool,
+       image: PropTypes.string,
+       title: PropTypes.string
 }
 AppBar.defaultProps =
 {

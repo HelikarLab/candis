@@ -12,7 +12,7 @@ import package
 
 ABSPATH_ROOTDIR              = os.path.dirname(os.path.abspath(__file__))
 RELPATH_FILES_CLEAN          = ['build', 'dist', '{name}.egg-info'.format(name = package.name), '.cache']
-RELPATH_WALK_FILES_EXT_CLEAN = ['.pyc']
+RELPATH_WALK_FILES_EXT_CLEAN = ['.pyc', '.DS_Store']
 RELPATH_WALK_DIRS_CLEAN      = ['__pycache__']
 
 class CleanCommand(Clean):

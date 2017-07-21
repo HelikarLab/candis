@@ -22,7 +22,9 @@ def main(argv = None):
     >>> candis.main() # Launch the Rich Internet Application (RIA)
     '''
     code   = os.EX_OK
-    # parser = ArgumentParser()
+
+    # config = CONFIG.CLI
+    # parser = ArgumentParser(config)
     # args   = parser.parse(argv)
 
     if not argv:

@@ -139,56 +139,69 @@ def read():
 
     return json_, code
 
+# TODO: Create a default handler that accepts JSON serializable data.
+# HINT: Can be written better?
 @app.route(CONFIG.App.Routes.Api.Data.WRITE, methods = ['POST'])
-def write():
-    response    = Response()
+def write(output = { 'name': '', 'path': '', 'format': None }, buffer_ = { }, handler = None):
+    response     = Response()
 
-    parameters  = addict.Dict(request.get_json())
+    parameters   = addict.Dict(request.get_json())
 
-    if 'format' in parameters:
-        format_ = parameters.format
-        
-        if 'buffer' in parameters and parameters.buffer:
-            buffer_ = parameters.buffer
-        else:
-            buffer_ = None
+    if 'output' in parameters:
+        output   = addict.Dict({ **output, **parameters.output }) # merge dicts, Python 3.5+
 
-        if format_   == 'cdata':
-            extension = 'cdata'
-            prefix    = 'CDAT'
-            handler   = cdata
-        elif format_ == 'pipeline':
-            extension = 'cpipe'
-            prefix    = 'PIPE'
-            handler   = pipeline
+    output.path  = os.path.join(ABSPATH_STARTDIR, output.path)
+    output.name  = output.name.strip() # remove padding spaces
 
-        if 'output' in parameters and 'name' in parameters.output and parameters.output.name:
-            name = parameters.output.name
-        else:
-            name = prefix + get_timestamp_str('%Y%m%d%H%M%S')
+    if output.format:
+        if   output.format == 'cdata':
+             if output.name in ['', '.cdata', '.CDATA']: # no filename?
+                name = get_timestamp_str('CDAT%Y%m%d%H%M%S.cdata')
+             else:
+                name = output.name
 
-        fname  = '{name}.{ext}'.format(name = name, ext = extension)
-        path   = os.path.join(ABSPATH_STARTDIR, fname)
-        path   = get_filename_if_exists(path)
+             output.name, handler = name, cdata
+        elif output.format == 'pipeline':
+             if output.name in ['', '.cpipe', '.CPIPE']:
+                name = get_timestamp_str('PIPE%Y%m%d%H%M%S.cpipe')
+             else:
+                name = output.name
 
-        try:
-            handler.write(path, buffer_)
+             output.name, handler = name, pipeline
 
-            data             = addict.Dict()
+    if 'buffer' in parameters:
+        buffer_  = parameters.buffer
 
-            data.data        = handler.read(path)
-            
-            path, fname      = os.path.split(path)
+    fpath        = os.path.join(output.path, output.name)
 
-            data.output.path = path
-            data.output.name = fname
+    try:
+        handler.write(fpath, buffer_)
 
-            response.set_data(data)
-        except TypeError as e:
-            response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
-    else:
+        data         = addict.Dict()
+        data.output  = output
+        data.data    = handler.read(fpath)
+
+        response.set_data(data)
+    except TypeError as e:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
+    dict_      = response.to_dict()
+    json_      = jsonify(dict_)
+    code       = response.code
+
+    return json_, code
+
+@app.route('/api/run', methods = ['GET', 'POST'])
+def run():
+    response = Response()
+
+    path     = os.path.abspath(os.path.join(ABSPATH_STARTDIR, '../CancerDiscover', 'Scripts'))
+
+    import subprocess
+    subprocess.call(['Rscript', os.path.join(path, 'normalization.R')])
+
+    print('responding')
+    
     dict_      = response.to_dict()
     json_      = jsonify(dict_)
     code       = response.code

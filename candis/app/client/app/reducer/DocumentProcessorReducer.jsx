@@ -1,66 +1,113 @@
 import shortid    from 'shortid'
 import graphlib   from 'graphlib'
+import isEqual    from 'lodash.isequal'
 import cloneDeep  from 'lodash.clonedeep'
 
 import ActionType from '../constant/ActionType'
 import FileFormat from '../constant/FileFormat'
 
-const initialState      =
+const initialState        =
 {
   documents: [ ],
-     active: null
+     active: null,
+      nodes: { }
 }
 
-const documentProcessor = (state = initialState, action) => {
+const documentProcessor   = (state = initialState, action) => {
   switch (action.type) {
-    case ActionType.Asynchronous.WRITE_SUCCESS: {
-      const file        = action.payload.file
+    // TODO: Can be written better?
+    case ActionType.Asynchronous.WRITE_SUCCESS: 
+    {
+      const meta          = action.payload.data
+      var   active        = null
 
-      if ( file.format == FileFormat.PIPELINE ) {
-        const data      = action.payload.data
-        const graph     = new graphlib.Graph()
-
-        const dokument  =
+      if ( meta.output.format == FileFormat.PIPELINE ) 
+      {
+        const documents   = state.documents.slice().map((dokument) => 
         {
-              ID: shortid.generate(),
-          output: data.output,
-            data: graph
+          const exists    = isEqual(dokument.output, meta.output)
+          if ( exists ) 
+          {
+            const graph   = new graphlib.Graph()
+            meta.data.nodes.forEach((node) =>
+            {
+              const repr  = 
+              {
+                   code: node.code,
+                  label: node.label,
+                onClick: state.nodes[node.code].onClick
+              }
+              graph.setNode(node.ID, repr)
+            })
+
+            dokument.data = graph
+            active        = dokument
+
+            // TODO: links
+          }
+
+          return {...dokument, active: exists }
+        })
+
+        if ( !active ) {
+          const graph  = new graphlib.Graph()
+          meta.data.nodes.forEach((node) =>
+          {
+            const repr = 
+            {
+                 code: node.code,
+                label: node.label,
+              onClick: state.nodes[node.code].onClick
+            }
+
+            graph.setNode(node.ID, repr)
+          })
+
+          // TODO: links
+
+          active       =
+          {
+                ID: shortid.generate(),
+            output: meta.output,
+              data: graph,
+            active: true
+          }
+
+          documents.push(active)
         }
 
-        const documents = state.documents.slice()
-
-        documents.push(dokument)
-
-        return {...state, documents: documents, active: dokument }
+        return {...state, documents: documents, active: active }
       }
+
+      break
     }
 
-    case ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT: {
-      const dokument = action.payload
-
-      return {...state, active: dokument }
-    }
-
-    case ActionType.DocumentProcessor.REMOVE_DOCUMENT: {
-      const ID        = action.payload.ID
-      const documents = state.documents.slice().filter((dokument) => {
-        dokument.ID !== action.payload.ID
+    case ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT:
+    {
+      const active       = action.payload
+      const documents    = state.documents.slice().map((dokument) =>
+      {
+        return {...dokument, active: isEqual(dokument.output, active.output) }
       })
 
-      return {...state, documents: documents }
+      return {...state, documents: documents, active: active }
     }
 
-    case ActionType.DocumentProcessor.SET_STAGE: {
-      const dokument   = cloneDeep(state.active)
+    case ActionType.DocumentProcessor.SET_NODE:
+    {
+      const node         = action.payload
+      var   nodes        = state.nodes
 
-      if ( dokument !== null ) {
-        const ID       = shortid.generate()
-        const stage    = action.payload
-
-        dokument.data.setNode(ID, stage)
-
-        return {...state, active: dokument }
+      if ( !state.nodes[node.code] ) 
+      {
+        nodes            = cloneDeep(state.nodes)
+        nodes[node.code] = 
+        {
+          onClick: node.onClick
+        }
       }
+
+      return {...state, nodes: nodes }
     }
   }
 

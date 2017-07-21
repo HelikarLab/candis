@@ -5,14 +5,14 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
 import config   from './config'
-import Store    from './Store'
-import Routes   from './Routes'
+import store    from './store'
+import routes   from './routes'
 
 const container = document.getElementById(config.container)
 const provider  = (
-  <Provider store={Store}>
-    <Router children={Routes}/>
-  </Provider>
+	<Provider store={store}>
+		<Router children={routes}/>
+	</Provider>
 )
 
 ReactDOM.render(provider, container)

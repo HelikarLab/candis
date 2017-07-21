@@ -1,5 +1,6 @@
 import React       from 'react'
 import PropTypes   from 'prop-types'
+
 import shortid     from 'shortid'
 import classNames  from 'classnames'
 
@@ -36,7 +37,7 @@ class MenuBar extends React.Component {
                           <MenuBar.Menu
                                 key={index} {...menu}
                             onClick={(action) => {
-                              props.onClick(action)
+                              props.onClick(action, menu)
                             }}/>
                         )
                       })
@@ -87,11 +88,7 @@ MenuBar.Menu.propTypes    =
 {
     title: PropTypes.string.isRequired,
   actions: PropTypes.array.isRequired,
-  onClick: PropTypes.func,
-}
-MenuBar.Menu.defaultProps = 
-{
-  onClick: () => { }
+  onClick: PropTypes.func.isRequired,
 }
 
 MenuBar.propTypes         =
@@ -100,15 +97,14 @@ MenuBar.propTypes         =
   classNames: PropTypes.object,
        menus: PropTypes.array,
        fluid: PropTypes.bool,
-     onClick: PropTypes.func,
+     onClick: PropTypes.func.isRequired,
 }
 MenuBar.defaultProps      =
 {
           ID: shortid.generate(),
   classNames: { },
        menus: [ ],
-       fluid: false,
-     onClick: (action) => { }
+       fluid: false
 }
 
 export default MenuBar

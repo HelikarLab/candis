@@ -9,8 +9,8 @@ from candis.util import assign_if_none
 
 def write(path, pipeline = None):
     pipeline = assign_if_none(pipeline, addict.Dict({
-        'stages': [ ],
-         'links': [ ]
+        'nodes': [ ],
+        'links': [ ]
     }))
 
     with open(path, mode = 'w') as f:

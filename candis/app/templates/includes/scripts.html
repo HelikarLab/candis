@@ -10,30 +10,29 @@
 <!-- bootbox.js v4.4.0 -->
 <script
   src="{{ url_for('static', filename = 'js/vendor/bootbox.min.js') }}"></script>
-<!-- Bootstrap X-Editable v3.3.7 -->
+<!-- Bootstrap X-Editable -->
 <script
   src="{{ url_for('static', filename = 'js/vendor/bootstrap-editable.min.js') }}"></script>
-<!-- Bootstrap X-Editable v3.3.7 -->
+<!-- NProgress -->
+<script
+  src="{{ url_for('static', filename = 'js/vendor/nprogress.min.js') }}"></script>
+<!-- Bootstrap ContextMenu -->
 <script
   src="{{ url_for('static', filename = 'js/vendor/bootstrap-contextmenu.min.js') }}"></script>
 <!-- MathJax -->
-<!-- <script
-  src="{{ url_for('static', filename = 'js/vendor/MathJax.js') }}"></script> -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+          inlineMath: [["$", "$"]],
+      processEscapes: true
+    }
+  });
+</script>
+<script
+  src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <!-- jsPlumb v2.4.2 -->
 <script
   src="{{ url_for('static', filename = 'js/vendor/jsplumb.min.js') }}"></script>
 <!-- bundle -->
 <script
   src="{{ url_for('static', filename = 'js/bundle.min.js') }}"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/javascript"
-    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>

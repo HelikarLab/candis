@@ -1,6 +1,7 @@
 import config     from '../config'
 
 import FileFormat from '../constant/FileFormat'
+import { exit }   from '../action/AppAction'
 import { write }  from '../action/AsynchronousAction'
 
 const Menus = [
@@ -24,8 +25,8 @@ const Menus = [
               animate: false,
              callback: (name) => {
                if ( name !== null ) {
-                 const output = { name: name }
-                 const action = write(output, FileFormat.PIPELINE)
+                 const output = { name: `${name}.cpipe`, format: FileFormat.PIPELINE }
+                 const action = write(output)
 
                  dispatch(action)
                }
@@ -33,14 +34,14 @@ const Menus = [
           })
         }
       },
-      // {
-      //      text: 'Open',
-      //      icon: `${config.routes.icons}/envelope-open.png`,
-      //   tooltip: 'Open an existing Pipeline',
-      //   onClick: (dispatch) => {
-      //     // TODO: create "Open" dialog and display.
-      //   }
-      // },
+      {
+           text: 'Open',
+           icon: `${config.routes.icons}/envelope-open.png`,
+        tooltip: 'Open an existing Pipeline',
+        onClick: (dispatch) => {
+          // TODO: create "Open" dialog and display.
+        }
+      },
       {
            text: 'Quit',
            icon: `${config.routes.icons}/quit.png`,
@@ -57,7 +58,9 @@ const Menus = [
              animate: false,
             callback: (confirm) => {
               if ( confirm ) {
-                window.open(config.routes.signin, "_self")
+                const action = exit()
+
+                dispatch(action)
               }
             }
           })
@@ -65,19 +68,19 @@ const Menus = [
       }
     ]
   },
-  // {
-  //     title: 'Options',
-  //   actions: [
-  //     {
-  //           text: 'Settings',
-  //           icon: `${config.routes.icons}/settings.png`,
-  //        tooltip: 'Open Settings View',
-  //        onClick: (dispatch) => {
-  //          // TODO: create "Settings" dialog and display.
-  //        }
-  //     }
-  //   ]
-  // },
+  {
+      title: 'Options',
+    actions: [
+      {
+            text: 'Settings',
+            icon: `${config.routes.icons}/settings.png`,
+         tooltip: 'Open Settings View',
+         onClick: (dispatch) => {
+           // TODO: create "Settings" dialog and display.
+         }
+      }
+    ]
+  },
   {
       title: 'Help',
     actions: [

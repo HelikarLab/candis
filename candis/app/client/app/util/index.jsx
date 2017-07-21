@@ -1,5 +1,5 @@
 const getBSTTProps = (tooltip, options = { position: "top" }) => {
-  let ttprops         = tooltip ?
+  let ttprops      = tooltip ?
     {
          "data-toggle": "tooltip",
       "data-placement": options.position,

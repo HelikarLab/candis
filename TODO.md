@@ -32,6 +32,7 @@
 
 * #### Low Priority
   * [x] Authentication Flow
+  * [ ] Settings Dialog and Manager
   * [ ] Handling multiple tabs on Document Processor (Add Horizontal Scroll)
   * [ ] Random Forest Icon
   * [ ] Fixed-Width ToolBox (75% for Compartments, 25% for Help Widget)

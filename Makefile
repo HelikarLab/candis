@@ -23,6 +23,12 @@ install:
 build:
 	$(PYTHON) -B -m builder
 
+clean-force:
+	rm -rf node_modules bower_components
+	rm -rf $(DOCSDIR)/build
+
+	make clean
+
 clean:
 	rm -rf .sass-cache
 

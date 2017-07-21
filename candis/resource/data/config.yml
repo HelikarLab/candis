@@ -1,6 +1,7 @@
 name: &name "candis"
 version: &version "0.1.0"
 debug: &debug true
+CLI: 
 app:
   debug: *debug
   host: "0.0.0.0"

@@ -25,10 +25,14 @@ class Media extends React.Component {
   }
 }
 
-Media.propTypes =
+Media.propTypes    =
 {
    icon: PropTypes.string,
   title: PropTypes.string.isRequired
+}
+Media.defaultProps = 
+{
+   icon: null
 }
 
 export default Media
