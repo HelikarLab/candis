@@ -72,7 +72,7 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 ```
 
 ### Features
-* Converting a CDATA (with paths to DNA microarray files) to an **ARFF** file
+* Converting a CDATA to an **ARFF** file
 
   ```python
   >>> import candis
