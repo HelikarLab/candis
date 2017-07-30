@@ -1,15 +1,14 @@
-import axios       from 'axios'
+import axios     from 'axios'
+import shortid   from 'shortid'
 
-import config      from '../config'
-import { setNode } from '../action/DocumentProcessorAction'
+import config    from '../config'
 
-// RAW
-import DialogType  from '../constant/DialogType'
-import Dialog      from '../component/widget/Dialog'
-import { showDialog, hideDialog } from '../action/DialogAction'
-// end raw
+import Component from '../constant/Component'
+import modal     from '../action/ModalAction'
+import { setNode, updateNode } from '../action/DocumentProcessorAction'
 
-const Compartments = [
+const Compartments = 
+[
   {
        name: 'Data',
        icon: `${config.routes.icons}/database.png`,
@@ -20,47 +19,46 @@ const Compartments = [
              icon: `${config.routes.icons}/edit.png`,
           tooltip: 'Create a new DataSet',
           onClick: (dispatch) => {
-            const node = 
+            var   name    = null
+            var   data    = null
+            const dialog  = 
             {
-                 code: 'dat.crt',
-                label: 'Create',
-              onClick: (dispatch) =>
-              {
-                // RAW
-                const action = showDialog({
-                    type: DialogType.CREATE,
-                   title: 'Create',
-                    size: Dialog.LARGE,
-                   props: {
-                     classNames: {
-                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                       footer: ['no-background', 'no-border']
-                     },
-                     onCreate: (dispatch) => {
-                       let action = null
+              component: Component.FileEditor,
+                  title: 'Create',
+                   size: 'lg',
+                buttons: 
+                [
+                  {
+                        label: "Ok",
+                    className: "btn-primary",
+                      onClick: ( ) =>
+                      {
+                        var action = modal.hide()
 
-                       action     = hideDialog({
-                         type: DialogType.CREATE
-                       })
+                        dispatch(action)
+                      } 
+                  },
+                  {
+                        label: "Cancel",
+                      onClick: ( ) => 
+                      {
+                        var action = modal.hide()
 
-                       dispatch(action)
-                     },
-                     onCancel: (dispatch) => {
-                       const action = hideDialog({
-                         type: DialogType.CREATE
-                       })
-
-                       dispatch(action)
-                     }
-                   }
-                })
-                // end raw
-
-                dispatch(action)
-              }
+                        dispatch(action)
+                      }
+                  }
+                ],
+                  props: 
+                  {
+                    classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                      onChange: 
+                      {
+                        name: (changed) => { name = changed },
+                        data: (changed) => { data = changed }
+                      }
+                  }
             }
-
-            const action = setNode(node)
+            const action  = modal.show(dialog)
 
             dispatch(action)
           }
@@ -70,47 +68,63 @@ const Compartments = [
              icon: `${config.routes.icons}/document.png`,
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
-            const node   = 
+            const ID      = shortid.generate()
+            const stage   = 
             {
+                   ID: ID,
+                 name: 'File',
                  code: 'dat.fle',
-                label: 'File',
               onClick: (dispatch) =>
               {
-                // RAW
-                const action = showDialog({
-                    type: DialogType.FILE,
-                   title: 'File',
-                    size: Dialog.LARGE,
-                   props: {
-                     classNames: {
-                         root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                       footer: ['no-background', 'no-border']
-                     },
-                     onSelect: (dispatch) => {
-                       var action = null
+                var   output  = null
+                const dialog  = 
+                {
+                  component: Component.FileViewer,
+                      title: 'File',
+                       size: 'lg',
+                    buttons: 
+                    [
+                      {
+                            label: "Select",
+                        className: "btn-primary",
+                          onClick: ( ) =>
+                          {
+                            var action = null
+                            var update = { value: `${output.path}/${output.name}`,
+                              status: "READY" }
 
-                       action     = hideDialog({
-                         type: DialogType.FILE
-                       })
+                            action     = updateNode(ID, update)
 
-                       dispatch(action)
-                     },
-                     onCancel: (dispatch) => {
-                       const action = hideDialog({
-                         type: DialogType.FILE
-                       })
+                            dispatch(action)
 
-                       dispatch(action)
-                     }
-                   }
-                 })
+                            var action = modal.hide()
 
-                 dispatch(action)
-                 // end
-              }
-            }
+                            dispatch(action)
+                          } 
+                      },
+                      {
+                            label: "Cancel",
+                          onClick: ( ) => 
+                          {
+                            var action = modal.hide()
 
-            const action = setNode(node)
+                            dispatch(action)
+                          }
+                      }
+                    ], // end dialog.buttons
+                      props: 
+                      {
+                        classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                          onSelect: (selected) => { output = selected }
+                      } // end dialog.props
+                } // end dialog
+                const action  = modal.show(dialog)
+
+                dispatch(action)
+              } // end stage.onClick
+            } // end stage
+
+            const action = setNode(stage)
 
             dispatch(action)
           }
@@ -139,11 +153,49 @@ const Compartments = [
              name: 'k-Fold Cross-Validation',
           tooltip: 'Split a dataset into k folds',
           onClick: (dispatch) => {
-            
+            const ID      = shortid.generate()
+            const stage   = 
+            {
+                   ID: ID,
+                 name: 'k-Fold Cross-Validation',
+                 code: 'prp.kcv',
+              onClick: (dispatch) =>
+              {
+                bootbox.prompt({
+                      title: '<span class="font-bold">Number of Folds</span>',
+                  inputType: 'number',
+                  className: '#input-k-fold',
+                    buttons:
+                    {
+                       cancel: { label: "Cancel", className: "btn-sm btn-primary" },
+                      confirm: { label: "Ok",     className: "btn-sm btn-success" }
+                    },
+                       size: "small",
+                    animate: false,
+                   callback: (folds) => {
+                     if ( folds !== null ) {
+                        const action = updateNode(ID, { value: folds, status: "READY" })
+
+                        dispatch(action)
+                     }
+                   }
+                })
+
+                // HACK
+                $(document).ready(() => {
+                  $('#input-k-fold').attr('minlength', 0);
+                })
+              } // end stage.onClick
+            } // end stage
+
+            const action = setNode(stage)
+
+            dispatch(action)
           }
         }
       ],
-    fetcher: () => {
+    fetcher: ( ) =>
+    {
       return axios.get(config.routes.api.preprocess.methods).then((response) => {
         response       = response.data
 
@@ -152,18 +204,22 @@ const Compartments = [
 
           const tools  = data.map((method) => {
             const options = method.methods.map((option) => {
-              return { name: option.name, description: option.info.desc }
+              return { name: option.name, description: option.info.desc,
+                meta: option }
             })
 
             const tool = {
                  name: method.name,
               onClick: (dispatch) => {
-                  const node   = {
+                  const ID     = shortid.generate()
+                  const stage   = {
+                         ID: ID,
                        code: method.code,
-                      label: method.name,
+                       name: method.name,
+                     status: "RESOURCE_REQUIRED",
                     onClick: (dispatch) => {
-                       const action = showDialog({
-                          type: DialogType.SELECT,
+                       const action = modal.show({
+                         component: Component.SelectViewer,
                          title: method.name,
                          props: {
                            classNames: {
@@ -171,19 +227,19 @@ const Compartments = [
                              footer: ['no-background', 'no-border']
                            },
                             options: options,
-                           onSelect: (dispatch) => {
-                             let action = null
+                           onSelect: (dispatch, option) => {
+                             var action = null
+                             action     = updateNode(ID, { value: option.name, code: option.code,
+                              status: "READY" })
 
-                             action     = hideDialog({
-                               type: DialogType.SELECT
-                             })
+                             dispatch(action)
+
+                             action     = modal.hide()
 
                              dispatch(action)
                            },
                            onCancel: (dispatch) => {
-                             const action = hideDialog({
-                               type: DialogType.SELECT
-                             })
+                             const action = modal.hide()
 
                              dispatch(action)
                            }
@@ -194,7 +250,7 @@ const Compartments = [
                     }
                   }
 
-                  const action = setNode(node)
+                  const action = setNode(stage)
 
                   dispatch(action)
               }
@@ -214,30 +270,31 @@ const Compartments = [
        name: 'Feature Selection',
        icon: `${config.routes.icons}/column-select.png`,
     tooltip: 'List of Feature Selection Methods',
-    fetcher: () =>
+    fetcher: ( ) =>
     {
-      return axios.get(config.routes.api.featselect.methods).then((response) => {
-        response       = response.data
-        var tools      = [ ]
+      return axios.get(config.routes.api.featselect.methods).then(({ data }) => {
+        const response = data
+        var   tools    = [ ]
 
-        if ( response.status == "success" ) 
-        {
+        if ( response.status == "success" ) {
           const data   = response.data
-          tools        = data.map((method) => 
-          {
+          tools        = data.map((method) => {
             const desc = method.desc
             const tool = 
             {
                      name: method.name,
                      icon: method.icon,
               description: desc.short,
-                  onClick: (dispatch) => 
+                  onClick: (dispatch) =>
                   {
-                    const node        = 
+                    const ID      = shortid.generate()
+                    const stage   = 
                     {
+                           ID: ID,
+                         name: method.name,
                          code: method.code,
-                        label: method.name,
-                      onClick: (dispatch) => 
+                       status: "READY",
+                      onClick: (dispatch) =>
                       {
                         const title    = 
                         `
@@ -245,17 +302,20 @@ const Compartments = [
                           ${method.name}
                         </div>
                         `
-                        ,     detail   = desc.long || desc.short || method.type
+                        ,     detail   = desc.long || desc.short
                         ,     message  = 
                         ` 
                         <div class="text-justify">
                           ${detail.replace(/\n/g, '<br/>')}
                         </div>
                         `
-                        ,     dialog   = bootbox.dialog({
+
+                        const dialog   = bootbox.dialog({
                             title: title,
                           message: message,
-                          buttons: { ok: { label: "Ok"} }
+                          buttons: { ok: { label: "Ok"} },
+                             size: 'large',
+                          animate: false
                         })
 
                          dialog.init(() => {
@@ -263,12 +323,13 @@ const Compartments = [
                             var $element = dialog.find('.bootbox-body');
 
                             MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
-                          }, 1000)
+                          }, 500)
                         })
-                      }
-                    }
-                    const action       = setNode(node)
+                      } // end stage.onClick
+                    } // end stage
 
+                    const action = setNode(stage)
+                    
                     dispatch(action)
                   }
             }
@@ -285,31 +346,33 @@ const Compartments = [
        name: 'Model',
        icon: `${config.routes.icons}/network.png`,
     tooltip: 'List of Models',
-    fetcher: () => 
+    fetcher: ( ) => 
     {
-      return axios.get(config.routes.api.model.methods).then((response) => {
-        response       = response.data
-        var tools      = [ ]
+      return axios.get(config.routes.api.model.methods).then(({ data }) => {
+        const response = data
+        var   tools    = [ ]
 
-        if ( response.status == "success" ) 
-        {
+        if ( response.status == "success" ) {
           const data   = response.data
-          tools        = data.map((method) => 
-          {
+          tools        = data.map((method) => {
             const desc = method.desc
             const tool = 
             {
                      name: method.name,
-                     icon: method.icon,
                   tooltip: method.type,
+                     icon: method.icon,
               description: desc.short || method.type,
-                  onClick: (dispatch) => 
+                  onClick: (dispatch) =>
                   {
-                    const node        = 
+                    // TODO: The following snippet requires a component - LaTeXReader
+                    const ID      = shortid.generate()
+                    const stage   = 
                     {
+                           ID: ID,
+                         name: method.name,
                          code: method.code,
-                        label: method.name,
-                      onClick: (dispatch) => 
+                       status: "READY",
+                      onClick: (dispatch) =>
                       {
                         const title    = 
                         `
@@ -324,20 +387,27 @@ const Compartments = [
                           ${detail.replace(/\n/g, '<br/>')}
                         </div>
                         `
-                        ,     dialog   = bootbox.dialog({title:title, message:message,
-                          buttons: { ok: { label: "Ok"} } })
+
+                        const dialog   = bootbox.dialog({
+                            title: title,
+                          message: message,
+                          buttons: { ok: { label: "Ok"} },
+                             size: 'large',
+                          animate: false
+                        })
 
                          dialog.init(() => {
                           setTimeout(() => {
                             var $element = dialog.find('.bootbox-body');
 
                             MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
-                          }, 1000)
+                          }, 500)
                         })
-                      }
-                    }
-                    const action       = setNode(node)
+                      } // end stage.onClick
+                    } // end stage
 
+                    const action = setNode(stage)
+                    
                     dispatch(action)
                   }
             }
@@ -357,7 +427,15 @@ const Compartments = [
       tools: [
         {
              name: 'Predict',
-          tooltip: 'Perform a prediction'
+          tooltip: 'Perform a prediction',
+          onClick: (dispatch) => {
+            bootbox.alert({
+              message: '<div class="font-bold">To be implemented</div>',
+                 size: "small",
+              animate: false,
+              buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
+            })
+          }
         }
       ]
   }

@@ -28,7 +28,7 @@ class ToolBar extends React.Component {
               return (
                 <li key={index} {...ttattrs}>
                   <a href="javascript:void(0);" onClick={() => {
-                    tool.onClick()
+                    props.onClick(tool)
                   }}>
                     {holder}
                   </a>
@@ -45,7 +45,8 @@ ToolBar.propTypes    =
 {
        tools: PropTypes.array,
   classNames: PropTypes.object,
-        size: PropTypes.number
+        size: PropTypes.number,
+     onClick: PropTypes.func.isRequired
 }
 ToolBar.defaultProps = 
 {

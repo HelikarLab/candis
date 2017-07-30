@@ -40,13 +40,13 @@ docs:
 	cd $(DOCSDIR) && make html
 
 kill:
-	fuser -k $(SERVER_PORT)/tcp
+	lsof -i TCP:$(SERVER_PORT) | grep LISTEN | awk '{print $2}' | xargs kill -9
 
 sass:
 	sass $(SOURCEDIR)/app/client/styles/App.scss:$(SOURCEDIR)/app/assets/css/styles.min.css --sourcemap=none --style compressed
 
 run:
-	$(PYTHON) -m $(PACKAGE) & npm start
+	npm start & $(PYTHON) -m $(PACKAGE)
 
 loc:
 	( find $(SOURCEDIR) -name "*.py"  -print0 | xargs -0 cat ) | wc -l

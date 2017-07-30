@@ -67,5 +67,13 @@ const updateRows   = (fromRow, toRow, update) => {
   return action
 }
 
+const refresh = ( ) => {
+  const action = {
+    type: ActionType.DataEditor.REFRESH
+  }
+
+  return action
+}
+
 export { insertRow, insertColumn, selectRow, deselectRow, deleteRow,
-  deleteColumn, updateRows }
+  deleteColumn, updateRows, refresh }

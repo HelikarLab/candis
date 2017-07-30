@@ -1,7 +1,5 @@
 import ActionType   from '../constant/ActionType'
 
-import Compartments from '../meta/Compartments'
-
 const initialState = { tools: [ ] }
 
 const toolBox      = (state = initialState, action) => {

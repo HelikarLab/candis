@@ -43,7 +43,20 @@
        "name": "Phenotype Microarray Correction",
        "code": "prp.pmc",
     "methods": [
-
+      {
+        "name": "MAS",
+        "code": "prp.pmc.mas",
+        "info": {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Subtract MM",
+        "code": "prp.pmc.smm",
+        "info": {
+          "desc": ""
+        }
+      }
     ]
   },
   {

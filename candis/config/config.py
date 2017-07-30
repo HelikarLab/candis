@@ -48,6 +48,10 @@ class Config(object):
                 # set node name as capitalcase with corresponding value.
                 attr = key if key.isupper() else key.capitalize()
                 aval = Config(value)
+            # check whether a sub-object is of type list-like.
+            if isinstance(value, list):
+                attr = key.upper()
+                aval = [Config(v) if isinstance(v, collections.Mapping) else v for v in value]
 
             self.append(attr, aval)
 
@@ -57,6 +61,11 @@ class Config(object):
         self.children.append(child)
 
         setattr(self, name, value)
+
+    def getattr(self, attr):
+        if not hasattr(self, attr):
+            return None
+        return attr
 
     def __repr__(self, indent = 2):
         string = pprint.pformat(self.schema, indent = indent)

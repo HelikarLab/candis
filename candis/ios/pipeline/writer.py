@@ -8,10 +8,7 @@ import addict
 from candis.util import assign_if_none
 
 def write(path, pipeline = None):
-    pipeline = assign_if_none(pipeline, addict.Dict({
-        'nodes': [ ],
-        'links': [ ]
-    }))
+    pipeline = assign_if_none(pipeline, [ ])
 
     with open(path, mode = 'w') as f:
         json.dump(pipeline, f, indent = 4)

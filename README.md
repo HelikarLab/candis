@@ -1,5 +1,5 @@
 <div align="center">
-  <img src=".github/logo-title.png" width="512">
+  <img src=".github/logo-w-title.png" width="512">
 </div>
 
 ---
@@ -27,6 +27,7 @@
 ### Table of Contents
 * [Installation](#installation)
 * [Usage](#usage)
+* [Features](#features)
 * [Dependencies](#dependencies)
 * [License](#license)
 
@@ -64,12 +65,32 @@ via Python
 >>> candis.main()
 ```
 
+**Using the CLI (Command Line Interface)**
+
+```
+$ candis --cdata path/to/data.cdata --config path/to/config.json
+```
+
+### Features
+* Converting a CDATA (with paths to DNA microarray files) to an **ARFF** file
+
+  ```python
+  >>> import candis
+  >>> cdata = candis.cdata.read('path/to/data.cdata')
+  ```
+
+  Then, simply use the `CData.toARFF` API:
+  ```python
+  >>> cdata.toARFF('path/to/data.arff')
+  ```
+
 ### Demo
 Check out a live demo of the application [here](https://cancerdiscover.herokuapp.com).
 
 ### Dependencies
 * Production Dependencies
   * R
+  * WEKA (***NOTE:*** Requires Java)
   * Python 2.7+ or Python 3.5+
 * Development Dependencies
   * [Node.js](https://nodejs.org)

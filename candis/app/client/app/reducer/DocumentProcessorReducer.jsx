@@ -6,70 +6,74 @@ import cloneDeep  from 'lodash.clonedeep'
 import ActionType from '../constant/ActionType'
 import FileFormat from '../constant/FileFormat'
 
-const initialState        =
+const initial             =
 {
   documents: [ ],
      active: null,
-      nodes: { }
+      nodes: { },
+    running: false,
 }
 
-const documentProcessor   = (state = initialState, action) => {
+const documentProcessor   = (state = initial, action) => {
   switch (action.type) {
-    // TODO: Can be written better?
-    case ActionType.Asynchronous.WRITE_SUCCESS: 
-    {
+    case ActionType.Asynchronous.WRITE_SUCCESS: {
       const meta          = action.payload.data
       var   active        = null
 
-      if ( meta.output.format == FileFormat.PIPELINE ) 
+      if ( meta.output.format == FileFormat.PIPELINE )
       {
         const documents   = state.documents.slice().map((dokument) => 
         {
           const exists    = isEqual(dokument.output, meta.output)
           if ( exists ) 
           {
-            const graph   = new graphlib.Graph()
-            meta.data.nodes.forEach((node) =>
+            const pipe    = [ ]
+            meta.data.forEach((stage) =>
             {
-              const repr  = 
+              const node = 
               {
-                   code: node.code,
-                  label: node.label,
-                onClick: state.nodes[node.code].onClick
+                     ID: stage.ID,
+                   code: stage.code,
+                   name: stage.name,
+                  label: stage.label,
+                onClick: state.nodes[stage.code].onClick,
+                  value: stage.value,
+                 status: stage.status
               }
-              graph.setNode(node.ID, repr)
+
+              pipe.push(node)
             })
 
-            dokument.data = graph
+            dokument.data = pipe
             active        = dokument
-
-            // TODO: links
           }
 
           return {...dokument, active: exists }
         })
 
         if ( !active ) {
-          const graph  = new graphlib.Graph()
-          meta.data.nodes.forEach((node) =>
+          const pipe   = [ ]
+          meta.data.forEach((stage) =>
           {
-            const repr = 
+            const node = 
             {
-                 code: node.code,
-                label: node.label,
-              onClick: state.nodes[node.code].onClick
+                   ID: stage.ID,
+                 code: stage.code,
+                 name: stage.name,
+                label: stage.label,
+              onClick: state.nodes[stage.code].onClick,
+                value: stage.value,
+               status: stage.status
             }
 
-            graph.setNode(node.ID, repr)
+            pipe.push(node)
           })
-
-          // TODO: links
 
           active       =
           {
                 ID: shortid.generate(),
             output: meta.output,
-              data: graph,
+              data: pipe,
             active: true
           }
 
@@ -109,6 +113,12 @@ const documentProcessor   = (state = initialState, action) => {
 
       return {...state, nodes: nodes }
     }
+
+    case ActionType.App.RUN_PIPELINE_REQUEST:
+      return {...state, running: true }
+
+    case ActionType.App.RUN_PIPELINE_SUCCESS:
+      return {...state, running: false }
   }
 
   return state

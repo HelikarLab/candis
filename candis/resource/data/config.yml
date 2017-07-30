@@ -1,7 +1,16 @@
 name: &name "candis"
 version: &version "0.1.0"
 debug: &debug true
-CLI: 
+CLI:
+  arguments:
+    - name: ["-d", "--cdata"]
+      help: "path to CDATA file"
+
+    - name: ["-c", "--config"]
+      help: "path to config file"
+
+    - name: ["--arff"]
+      help: "path to generated ARFF file"
 app:
   debug: *debug
   host: "0.0.0.0"
@@ -20,7 +29,6 @@ app:
     icons: &icons !relurljoin [*images, "icons"]
 
     signin: !relurljoin [*base, "SignIn"]
-    signup: !relurljoin [*base, "SignUp"]
 
     api:
       data:

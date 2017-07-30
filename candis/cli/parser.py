@@ -6,7 +6,13 @@ class ArgumentParser(argparse.ArgumentParser):
         self.super  = super(ArgumentParser, self)
         self.config = config
 
-    def parse(self):
-        args = self.parse_args()
+        self.super.__init__(*args, **kwargs)
+        
+        for argument in self.config.ARGUMENTS:
+          self.add_argument(*argument.NAME,
+            help    = argument.HELP)
+
+    def parse(self, argv = None):
+        args        = self.parse_args(argv)
 
         return args

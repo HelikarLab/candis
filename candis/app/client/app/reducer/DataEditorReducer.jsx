@@ -112,9 +112,10 @@ const dataEditor   = (state = initialState, action) => {
 
           let options   = files.map((file, index) => {
             return {
-                 id: index,
+                 id: shortid.generate(),
               value: file.name,
-              title: index,
+              title: shortid.generate(),
+              text: file.name,
             }
           })
 
@@ -123,6 +124,10 @@ const dataEditor   = (state = initialState, action) => {
       })
 
       return {...state, columns: columns }
+    }
+
+    case ActionType.DataEditor.REFRESH: {
+      return initialState;
     }
   }
 

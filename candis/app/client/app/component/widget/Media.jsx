@@ -1,24 +1,30 @@
 import React     from 'react';
 import PropTypes from 'prop-types'
 
-class Media extends React.Component {
-  render ( ) {
+class Media extends React.Component 
+{
+  render ( ) 
+  {
+    const props = this.props
+
     return (
       <div className="media">
         {
-          this.props.icon ?
+          props.icon ?
             <div className="media-left">
-              <img className="media-object" width="20px" height="20px"
-                src={this.props.icon}/>
-            </div> : false
+              <img className="media-object" src={props.icon} width="20" height="20"/>
+            </div> : null
         }
         <div className="media-body">
           <div className="media-heading no-margin">
-            {this.props.title}
+            {props.title}
           </div>
-          <small>
-            {this.props.body}
-          </small>
+          {
+            props.body ?
+              <small>
+                {props.body}
+              </small> : null
+          }
         </div>
       </div>
     )
@@ -28,11 +34,13 @@ class Media extends React.Component {
 Media.propTypes    =
 {
    icon: PropTypes.string,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+   body: PropTypes.string
 }
 Media.defaultProps = 
 {
-   icon: null
+   icon: null,
+   body: null
 }
 
 export default Media

@@ -61,16 +61,6 @@ class DataEditor extends React.Component {
     ]
   }
 
-  componentDidMount ( ) {
-    // horrible fix for an even more horrible bug
-    const that    = this
-    setTimeout(() => {
-      that.refs.grid.updateMetrics()
-    }, 1000)
-
-    this.props.dispatch(getResource)
-  }
-
   render ( ) {
     const that = this
     return (
@@ -137,7 +127,7 @@ class DataEditor extends React.Component {
                 })
               })
             }}/>
-        </div>{/* a hack which doesn't work, what's the harm anyway? */}
+          </div>
       </div>
     )
   }

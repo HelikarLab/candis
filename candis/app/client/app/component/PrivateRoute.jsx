@@ -29,7 +29,7 @@ PrivateRoute.propTypes    = { user: PropTypes.object }
 PrivateRoute.defaultProps = { user: null }
 
 const mapStateToProps     = (state, props) => {
-	const app             = state.app
+	const app               = state.app
 
 	return {
 		user: app.user

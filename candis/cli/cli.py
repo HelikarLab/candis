@@ -5,6 +5,7 @@ import os
 from candis.util import assign_if_none
 from candis.cli.parser import ArgumentParser
 from candis.config import CONFIG
+from candis.ios import cdata
 from candis import app
 
 def main(argv = None):
@@ -23,11 +24,21 @@ def main(argv = None):
     '''
     code   = os.EX_OK
 
-    # config = CONFIG.CLI
-    # parser = ArgumentParser(config)
-    # args   = parser.parse(argv)
+    parser = ArgumentParser(CONFIG.CLI)
+    args   = parser.parse(argv)
 
     if not argv:
         code = app.main()
+    else:
+        if args.cdata:
+            path = args.cdata
+            data = cdata.read(path)
+
+            if not args.arff:
+                path = '{path}.arff'.format(path = os.path.splitext(path)[0])
+            else:
+                path = args.arff
+
+            data.toARFF(path)
 
     return code

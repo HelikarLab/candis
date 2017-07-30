@@ -12,7 +12,7 @@ const Routes = (
     	     path={config.routes.base}
     	component={App}/>
     <Route
-    		 path={config.routes.signin}
+    		   path={config.routes.signin}
     	component={SignIn}/>
   </div>
 )

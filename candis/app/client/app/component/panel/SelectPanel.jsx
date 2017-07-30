@@ -36,12 +36,11 @@ class SelectPanel extends React.Component {
     setTimeout(function ( ) {
       MathJax.Hub.Queue(["Typeset",MathJax.Hub,"MathJax"]);
     }, 1000)
-
-    
   }
 
   onSelect ( ) {
-    this.props.dispatch(this.props.onSelect)
+    const data = JSON.parse(this.state.select.value)
+    this.props.onSelect(this.props.dispatch, data.meta)
   }
 
   onCancel ( ) {
@@ -52,7 +51,7 @@ class SelectPanel extends React.Component {
     const that    = this
     const options = that.props.options.map((option) => {
       return { label: option.name,
-        value: `{"description": "${option.description}"}` }
+        value: `{"description": "${option.description}", "meta": ${JSON.stringify(option.meta)}}` }
     })
 
     return (

@@ -193,14 +193,75 @@ def write(output = { 'name': '', 'path': '', 'format': None }, buffer_ = { }, ha
 
 @app.route('/api/run', methods = ['GET', 'POST'])
 def run():
-    response = Response()
+    response   = Response()
 
-    path     = os.path.abspath(os.path.join(ABSPATH_STARTDIR, '../CancerDiscover', 'Scripts'))
+    parameters = addict.Dict(request.get_json())
+
+    discover_path =  os.path.abspath(os.path.join(ABSPATH_STARTDIR, '../CancerDiscover'))
+    scripts  = os.path.join(discover_path, 'Scripts')
+    conf     = os.path.join(discover_path, 'Scripts', 'Configuration.txt')
+    bgCorrrect = 'rma'
+    normal     = 'quantiles'
+    pmCorrect  = 'pmonly'
+
+    if 'path' in parameters and 'name' in parameters:
+        pipe   = pipeline.read(os.path.join(parameters.path, parameters.name))
+
+        for i, stage in enumerate(pipe):
+            if stage['status'] == 'RESOURCE_REQUIRED':
+                response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+                break
+            elif stage['code'] == 'dat.fle':
+                dataset = cdata.read(stage['value'])
+                import pandas as pd
+                df      = pd.DataFrame.from_records(dataset['data'])
+                df.to_csv(os.path.join(discover_path, 'DataFiles', 'sampleList.txt'), mode = 'w', header = False, index = False)
+                
+                print('successfully wrote sampleList.txt')
+                pipe[i]['status'] = 'FINISHED'
+
+                pipeline.write(os.path.join(parameters.path, parameters.name), pipe)
+
+            elif stage['code'] == 'prp.bgc.rma':
+                bgCorrrect = 'rma'
+            elif stage['code'] == 'prp.bgc.mas':
+                bgCorrrect = 'mas'
+            elif stage['code'] == 'prp.nrm.cst':
+                normal = 'constant'
+            elif stage['code'] == 'prp.nrm.crt':
+                normal = 'contrast'
+            elif stage['code'] == 'prp.pmc.mas':
+                normal = 'mas'
+            elif stage['code'] == 'prp.pmc.smm':
+                normal = 'subtractmm'
+    else:
+        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+
+
+
+    # path     = os.path.abspath(os.path.join(ABSPATH_STARTDIR, '../CancerDiscover'))
+    
+
+    # pipefile = pipeline.read(os.path.join(parameters.path, parameters.name))
+
+    # print(pipefile)
+
+    # bgCorrrect ="rma"
 
     import subprocess
-    subprocess.call(['Rscript', os.path.join(path, 'normalization.R')])
+    print('copying files')
+    subprocess.call(['cp', '-R', os.path.join(discover_path, 'SampleData/*'), os.path.join(discover_path, 'DataFiles')])
 
-    print('responding')
+    print('adding configuration')
+
+    configso = open(conf).read()
+    print(configso)
+    open(conf, "w").write("$pathToProject={}\n".format(discover_path) + configso)
+
+    import subprocess
+    subprocess.call(['bash', os.path.join(scripts, 'initialization.bash')])
+    subprocess.call(['Rscript', os.path.join(scripts, 'normalization.R')])
+
     
     dict_      = response.to_dict()
     json_      = jsonify(dict_)

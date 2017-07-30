@@ -3,6 +3,13 @@ sphinx
 addict
 pyyaml
 requests
+
+numpy
+pandas
+rpy2
+liac-arff
+python-weka-wrapper3
+
 Flask
 django-htmlmin
 pytest

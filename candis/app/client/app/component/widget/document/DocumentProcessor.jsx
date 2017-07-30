@@ -6,7 +6,7 @@ import axios         from 'axios'
 
 import ToolBar       from '../ToolBar'
 import DocumentPanel from './DocumentPanel'
-import { setActiveDocument } from '../../../action/DocumentProcessorAction'
+import { setActiveDocument, run } from '../../../action/DocumentProcessorAction'
 
 class DocumentProcessor extends React.Component {
   constructor (props) {
@@ -19,22 +19,17 @@ class DocumentProcessor extends React.Component {
          faicon: 'play',
         tooltip: 'Run the currently active pipeline',
         onClick: ( ) => {
-          NProgress.set(0.0)
+          const output = this.props.active.output
+          const action = run(output)
 
-          var dialog = bootbox.dialog({ title: 'Normalizing...' })
-
-          axios.get('/api/run').then(() => {
-            console.log('run')
-
-            NProgress.set(1.0)
-          })
+          this.props.dispatch(action)
         }
       },
       {
            name: 'Pause',
          faicon: 'pause',
         tooltip: 'Pause the currently active pipeline',
-        onClick: ( ) => {
+        onClick: (dispatch) => {
           
         }
       },
@@ -42,7 +37,7 @@ class DocumentProcessor extends React.Component {
            name: 'Stop',
          faicon: 'stop',
         tooltip: 'Stop the currently active pipeline',
-        onClick: ( ) => {
+        onClick: (dispatch) => {
           
         }
       }
@@ -57,7 +52,19 @@ class DocumentProcessor extends React.Component {
         <div className="panel panel-default no-shadow">
           <div className="panel-heading">
             <div className="text-center">
-              <ToolBar tools={this.tools} classNames={{ root: "no-margin" }}/>
+              {
+                !props.running ?
+                  <ToolBar
+                         tools={this.tools}
+                    classNames={{ root: "no-margin" }}
+                       onClick={(tool) => {
+                          tool.onClick()
+                       }}/> : 
+                   <div className="progress">
+                      <div className="progress-bar" style={{ width: '60%' }}>
+                      </div>
+                    </div> 
+              }
             </div>
           </div>
         </div>

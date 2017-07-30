@@ -1,25 +1,29 @@
-import ActionType    from '../constant/ActionType'
+import ActionType from '../constant/ActionType'
 
-const initialState  = { user: null }
-const app           = (state = initialState, action) => {
+const initial       = 
+{
+  user: null
+}
+const app           = (state = initial, action) => {
   switch (action.type) {
+    case ActionType.App.SIGNIN_REQUEST:
+    case ActionType.App.SIGNOUT_REQUEST:
+    case ActionType.Asynchronous.WRITE_REQUEST:
+      nprogress.set(0.0)
+
+      break
+
+    case ActionType.App.SIGNIN_SUCCESS:
+    case ActionType.App.SIGNIN_ERROR:
+    case ActionType.App.SIGNOUT_SUCCESS:
+    case ActionType.App.SIGNOUT_ERROR:
+    case ActionType.Asynchronous.WRITE_SUCCESS:
+      nprogress.set(1.0)
+
+      break
+
     case ActionType.App.SET_USER:
       return { ...state, user: action.payload }
-
-    case ActionType.Asynchronous.WRITE_REQUEST:
-      NProgress.set(0.0)
-
-      break
-
-    case ActionType.Asynchronous.WRITE_SUCCESS:
-      NProgress.set(1.0)
-
-      break
-
-    case ActionType.App.EXIT:
-      // STUB
-      return {...state, user: null }
-      // end STUB
   }
 
   return state

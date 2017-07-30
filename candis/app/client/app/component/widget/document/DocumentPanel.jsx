@@ -1,15 +1,11 @@
-import React       from 'react'
-import PropTypes   from 'prop-types'
-import classNames  from 'classnames'
+import React          from 'react'
+import PropTypes      from 'prop-types'
+import classNames     from 'classnames'
 
-import TabBar      from '../TabBar'
-import GraphEditor from '../GraphEditor'
+import TabBar         from '../TabBar'
+import DocumentEditor from './DocumentEditor'
 
 class DocumentPanel extends React.Component {
-  constructor (props) {
-    super (props)
-  }
-
   render ( ) {
     const props  = this.props
     
@@ -38,15 +34,11 @@ class DocumentPanel extends React.Component {
                 props.onActive(dokument)
               }}/>
           </div>
-          <div className="panel-body">
-            {
-              active ?
-                <GraphEditor
-                       graph={active.data}
-                  classNames={{ root: ["no-background", "no-border", "no-shadow", "no-margin"] }}/>
-                : null
-            }
-          </div>
+          {
+            active ?
+              <DocumentEditor
+                data={active.data}/> : null
+          }
         </div>
       ) : null
   }

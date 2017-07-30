@@ -1,8 +1,9 @@
-import config     from '../config'
+import config      from '../config'
 
-import FileFormat from '../constant/FileFormat'
-import { exit }   from '../action/AppAction'
-import { write }  from '../action/AsynchronousAction'
+import ActionType  from '../constant/ActionType'
+import FileFormat  from '../constant/FileFormat'
+import { signout } from '../action/AppAction'
+import { write }   from '../action/AsynchronousAction'
 
 const Menus = [
   {
@@ -25,10 +26,10 @@ const Menus = [
               animate: false,
              callback: (name) => {
                if ( name !== null ) {
-                 const output = { name: `${name}.cpipe`, format: FileFormat.PIPELINE }
-                 const action = write(output)
+                const output = { name: `${name}.cpipe`, format: FileFormat.PIPELINE }
+                const action = write(output)
 
-                 dispatch(action)
+                dispatch(action)
                }
              }
           })
@@ -58,9 +59,15 @@ const Menus = [
              animate: false,
             callback: (confirm) => {
               if ( confirm ) {
-                const action = exit()
+                dispatch({
+                  type: ActionType.App.SIGNOUT_REQUEST,
+                })
 
-                dispatch(action)
+                dispatch(signout())
+
+                dispatch({
+                  type: ActionType.App.SIGNOUT_SUCCESS
+                })
               }
             }
           })
@@ -98,7 +105,7 @@ const Menus = [
           const message =
           `
             <div class="wrapper">
-              <img class="img-responsive center-block" src="${config.routes.images}/logo-title.png"
+              <img class="img-responsive center-block" src="${config.routes.images}/logo-w-title.png"
                 style="max-height: 256px">
             </div>
           `

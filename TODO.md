@@ -1,5 +1,5 @@
 <div align="center">
-  <img src=".github/logo.png" width="512">
+  <img src=".github/logo-w-title.png" width="512">
 </div>
 
 ---
@@ -31,7 +31,6 @@
   * [ ] Documentation
 
 * #### Low Priority
-  * [x] Authentication Flow
   * [ ] Settings Dialog and Manager
   * [ ] Handling multiple tabs on Document Processor (Add Horizontal Scroll)
   * [ ] Random Forest Icon
