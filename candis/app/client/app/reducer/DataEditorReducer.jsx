@@ -6,7 +6,7 @@ import ActionType    from '../constant/ActionType'
 import AttributeType from '../constant/AttributeType'
 import FileFormat    from '../constant/FileFormat'
 
-import { filterFiles } from '../util'
+import { getFiles } from '../util'
 
 const initialState = {
      data: { },
@@ -108,7 +108,7 @@ const dataEditor   = (state = initialState, action) => {
 
       columns.forEach((column) => {
         if ( column.type == AttributeType.FILE ) {
-          let files     = filterFiles(resource, column.allowed)
+          let files     = getFiles(resource, column.allowed)
 
           let options   = files.map((file, index) => {
             return {

@@ -13,7 +13,16 @@ import Modal             from './widget/Modal'
 import menus             from '../meta/menus'
 import compartments      from '../meta/compartments'
 
+import { getResource }   from '../action/AsynchronousAction'
+
 class App extends React.Component {
+  componentWillMount ( ) {
+    const props  = this.props
+    const action = getResource()
+
+    props.dispatch(action)
+  }
+
   render ( ) {
     const props  = this.props
     

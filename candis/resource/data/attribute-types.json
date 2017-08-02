@@ -2,5 +2,13 @@
   {
     "name": "file",
      "tag": "!file"
+  },
+  {
+  	"name": "cel",
+  	 "tag": "!cel"
+  },
+  {
+  	"name": "class",
+  	 "tag": "!class"
   }
 ]

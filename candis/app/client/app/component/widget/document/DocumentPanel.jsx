@@ -3,7 +3,7 @@ import PropTypes      from 'prop-types'
 import classNames     from 'classnames'
 
 import TabBar         from '../TabBar'
-import DocumentEditor from './DocumentEditor'
+import PipelineEditor from '../PipelineEditor'
 
 class DocumentPanel extends React.Component {
   render ( ) {
@@ -36,8 +36,8 @@ class DocumentPanel extends React.Component {
           </div>
           {
             active ?
-              <DocumentEditor
-                data={active.data}/> : null
+              <PipelineEditor
+                stages={active.data}/> : null
           }
         </div>
       ) : null

@@ -7,57 +7,12 @@ import store      from '../store'
 import { write }  from './AsynchronousAction'
 
 const setActiveDocument = (dokument) => {
-  const action          = { type: ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT, payload: dokument }
-
-  return action
-}
-
-const setNode           = (node) => {
-  const dispatcher      = (dispatch) => {
-    const dokument      = store.getState().documentProcessor.active
-
-    if ( dokument !== null ) 
-    {
-      const buffer      = [ ]
-      dokument.data.forEach((node) => 
-      {
-        const stage     = 
-        {
-              ID: node.ID,
-            code: node.code,
-            name: node.name,
-           label: node.label,
-           value: node.value,
-          status: node.status
-        }
-
-        buffer.push(stage)
-      })
-
-      buffer.push({
-            ID: node.ID     || shortid.generate(),
-          code: node.code,
-          name: node.name,
-         label: node.label,
-         value: node.value,
-        status: node.status || "RESOURCE_REQUIRED"
-      })
-
-      var action        = 
-      {
-           type: ActionType.DocumentProcessor.SET_NODE,
-        payload: node
-      }
-
-      dispatch(action)
-
-      action            = write(dokument.output, buffer)
-
-      dispatch(action)
-    }
+  const action          = {
+       type: ActionType.DocumentProcessor.SET_ACTIVE_DOCUMENT,
+    payload: dokument
   }
 
-  return dispatcher
+  return action
 }
 
 const updateNode        = (ID, update) => {
@@ -103,26 +58,56 @@ const updateNode        = (ID, update) => {
   return dispatcher
 }
 
-const run               = (output) => 
+const stage = 
 {
-  const dispatcher      = (dispatch) =>
-  {
-    var action          = { type: ActionType.App.RUN_PIPELINE_REQUEST }
+     set: (stage) =>
+     {
+        const dispatch = (dispatch) =>
+        {
+          const dokument      = store.getState().documentProcessor.active
 
-    dispatch(action)
-    console.log(output)
+          if ( dokument !== null ) 
+          {
+            var buffer        = dokument.data.map((node) => {
+              const step      = 
+              {
+                    ID: node.ID,
+                  code: node.code,
+                  name: node.name,
+                 value: node.value,
+                 label: node.label,
+                status: node.status
+              }
 
-    axios.post('/api/run', output).then(({ data }) => {
-      const response = data
+              return step
+            })
 
-      if ( response.success == "success" )
-      {
-        dispatch({ type: ActionType.App.RUN_PIPELINE_SUCCESS })
-      }
-    })
-  }
+            buffer.push({
+                  ID: stage.ID     || shortid.generate(),
+                code: stage.code,
+                name: stage.name,
+               label: stage.label,
+               value: stage.value,
+              status: stage.status || Pipeline.Status.RESOURCE_REQUIRED
+            })
 
-  return dispatcher
+            var action        = 
+            {
+                 type: ActionType.DocumentProcessor.SET_STAGE,
+              payload: stage
+            }
+
+            dispatch(action)
+
+            action            = write(dokument.output, buffer)
+
+            dispatch(action)
+          }
+        }
+
+        return dispatch
+     },
+  update: updateNode
 }
 
-export { setActiveDocument, setNode, updateNode, run }
+export { setActiveDocument, stage, updateNode }

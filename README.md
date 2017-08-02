@@ -85,6 +85,17 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
   >>> cdata.toARFF('path/to/data.arff')
   ```
 
+* Running a `Pipeline`.
+  ```python
+  >>> import candis
+  >>> pipeline = candis.Pipeline()
+  >>> pipeline.run('path/to/data.cdata')
+  >>> pipeline.status
+  >>> while pipeline.active:
+  ...     print(pipeline.status)
+  >>>
+  ```
+
 ### Demo
 Check out a live demo of the application [here](https://cancerdiscover.herokuapp.com).
 

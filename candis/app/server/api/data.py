@@ -11,6 +11,7 @@ from candis.util                import (
     assign_if_none, get_rand_uuid_str, get_timestamp_str, merge_dicts
 )
 from candis.resource            import R
+from candis.ios                 import cdata, pipeline
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
@@ -115,21 +116,16 @@ def read():
 
     parameters  = addict.Dict(request.get_json())
 
-    if 'path' in parameters:
-        if 'name' in parameters:
-            path    = parameters.path
-            name    = parameters.name
+    if parameters.path and parameters.name and parameters.format:
+        relpath = os.path.join(parameters.path, parameters.name)
 
-            relpath = os.path.join(path, name)
+        # TODO: Check if file exists, else respond error.
 
-            # TODO: check if file exists, set error if not.
+        if parameters.format == 'cdata':
+            cdat  = cdata.read(relpath)
+            dict_ = cdat.to_dict()
 
-            format_ = get_file_format(name)
-
-            if format_ == 'cdata':
-                dataset = cdata.read(relpath)
-
-                response.set_data(dataset)
+            response.set_data(dict_)
         else:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
@@ -144,19 +140,18 @@ def read():
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
-def write(output = { 'name': '', 'path': '', 'format': None }, buffer_ = { }):
+def write(output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
     parameters   = addict.Dict(request.get_json())
 
-    if 'output' in parameters:
+    if parameters.output:
         output   = addict.Dict(merge_dicts(output, parameters.output))
 
     output.path  = os.path.join(ABSPATH_STARTDIR, output.path)
     output.name  = output.name.strip() # remove padding spaces
 
-    if 'buffer' in parameters:
-        buffer_  = parameters.buffer
+    buffer_      = parameters.buffer
 
     if output.format:
         if   output.format == 'cdata':

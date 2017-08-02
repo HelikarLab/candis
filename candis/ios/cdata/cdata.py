@@ -1,5 +1,7 @@
 # importsm - standard imports
 import os
+import re
+import json
 
 # imports - third-party imports
 import addict
@@ -8,8 +10,50 @@ from rpy2.robjects.packages import importr
 from rpy2                   import robjects
 
 # imports - module imports
-from candis.config import CONFIG
-from candis.util   import assign_if_none
+from candis.config   import CONFIG
+from candis.resource import R
+from candis.util     import assign_if_none
+from candis.ios      import json as JSON
+
+ATTRIBUTE_TYPES = JSON.read(os.path.join(R.Path.DATA, 'attribute-types.json'))
+
+def get_attribute_pattern():
+    wrapper     = '({regex})?'
+    regex       = '|'.join([attt['tag'] for attt in ATTRIBUTE_TYPES])
+
+    pattern     = re.compile(wrapper.format(regex = regex))
+
+    return pattern
+
+ATTRIBUTE_PATTERN = get_attribute_pattern()
+
+def get_attribute_type(attr, data):
+    kind          = None
+    for attt in ATTRIBUTE_TYPES:
+        if attt['tag'] in attr:
+            kind  = attt['name']
+
+    if not kind:
+        # TODO: check attribute type using data provided
+        kind      = ''
+
+    return kind
+
+def sanitize_attribute(attr):
+    name = re.sub(ATTRIBUTE_PATTERN, '', attr)
+    name = name.strip()
+
+    return name
+
+def get_attribute_metadata(attr, data):
+    kind = get_attribute_type(attr, data)
+    name = sanitize_attribute(attr)
+
+    meta = addict.Dict()
+    meta.type = kind
+    meta.name = name
+
+    return meta
 
 class CData(object):
     CONFIG = CONFIG.Pipeline.Preprocess
@@ -52,8 +96,6 @@ class CData(object):
         cdat.data    = data
         cdat.clss    = cdat.data[cclass]
         cdat.iclss   = columns.index(cclass)
-
-        print(cdat.iclss)
 
         return cdat
 
@@ -106,6 +148,21 @@ class CData(object):
                 arff.dump(meta, f)
 
             os.remove(name)
+
+    def to_dict(self):
+        data       = self.data.copy()
+
+        meta       = addict.Dict()
+        meta.attrs = list()
+        for column in data.columns:
+            attr   = get_attribute_metadata(column, data[column])
+            data   = data.rename(columns = { column: attr.name })
+            meta.attrs.append(attr)
+
+        records    = json.loads(data.to_json(orient = 'records'))
+        meta.data  = records
+
+        return meta
 
     def __repr__(self):
         string = self.data.to_string()

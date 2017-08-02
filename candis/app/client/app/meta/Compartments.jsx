@@ -4,8 +4,9 @@ import shortid   from 'shortid'
 import config    from '../config'
 
 import Component from '../constant/Component'
+import Pipeline  from '../constant/Pipeline'
 import modal     from '../action/ModalAction'
-import { setNode, updateNode } from '../action/DocumentProcessorAction'
+import { stage } from '../action/DocumentProcessorAction'
 
 const Compartments = 
 [
@@ -69,11 +70,11 @@ const Compartments =
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
             const ID      = shortid.generate()
-            const stage   = 
+            const meta    = 
             {
                    ID: ID,
                  name: 'File',
-                 code: 'dat.fle',
+                 code: 'dat.fil',
               onClick: (dispatch) =>
               {
                 var   output  = null
@@ -89,15 +90,19 @@ const Compartments =
                         className: "btn-primary",
                           onClick: ( ) =>
                           {
-                            var action = null
-                            var update = { value: `${output.path}/${output.name}`,
-                              status: "READY" }
+                            var action;
+                            var update = 
+                            {
+                               value: output,
+                               label: `${output.path}/${output.name}`,
+                              status: Pipeline.Status.RESOURCE_READY
+                            }
 
-                            action     = updateNode(ID, update)
+                            action     = stage.update(ID, update)
 
                             dispatch(action)
 
-                            var action = modal.hide()
+                            action     = modal.hide()
 
                             dispatch(action)
                           } 
@@ -121,10 +126,10 @@ const Compartments =
                 const action  = modal.show(dialog)
 
                 dispatch(action)
-              } // end stage.onClick
-            } // end stage
+              } // end node.onClick
+            } // end node
 
-            const action = setNode(stage)
+            const action = stage.set(meta)
 
             dispatch(action)
           }

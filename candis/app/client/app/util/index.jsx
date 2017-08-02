@@ -10,8 +10,8 @@ const getBSTTProps = (tooltip, options = { position: "top" }) => {
 }
 
 // TODO: can be written better.
-const filterFiles = (resource, filter = null) => {
-  let collection  = [ ]
+const getFiles     = (resource, filter = null) => {
+  let collection   = [ ]
 
   resource.files.forEach((file) => {
     if ( filter == null || filter.includes(file.format) ) {
@@ -20,7 +20,7 @@ const filterFiles = (resource, filter = null) => {
   })
 
   resource.dirs.map((dir) => {
-    return { path: dir.resource.path, files: filterFiles(dir.resource) }
+    return { path: dir.resource.path, files: getFiles(dir.resource) }
   })
   .forEach(({ path, files }) => {
     files.forEach((file) => {
@@ -33,4 +33,4 @@ const filterFiles = (resource, filter = null) => {
   return collection
 }
 
-export { getBSTTProps, filterFiles }
+export { getBSTTProps, getFiles }

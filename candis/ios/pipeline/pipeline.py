@@ -8,7 +8,7 @@ import addict
 import numpy as np
 from weka.core                import jvm as JVM
 from weka.core.converters     import Loader
-from weka.filters             import Filter # Cross-Validation
+from weka.filters             import Filter
 from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
 
 # imports - module imports
@@ -19,9 +19,9 @@ from candis.util   import assign_if_none
 class Pipeline(object):
     CONFIG   = CONFIG.Pipeline
 
-    PENDING  = addict.Dict({ 'name': 'pending' })
-    RUNNING  = addict.Dict({ 'name': 'running' })
-    FAILED   = addict.Dict({ 'name': 'failed'  })
+    PENDING  = 'PENDING' # addict.Dict({ 'name': 'pending' })
+    RUNNING  = 'RUNNING' # addict.Dict({ 'name': 'running' })
+    FAILED   = 'FAILED'  # addict.Dict({ 'name': 'failed'  })
 
     def __init__(self, config = { }):
         self.status = Pipeline.PENDING
@@ -56,9 +56,8 @@ class Pipeline(object):
 
         para        = self.config
 
-        # data.toARFF(name, express_config = para.Preprocess)
-
-        # Runner Thread
+        # cdat.toARFF(name, express_config = para.Preprocess)
+        
         JVM.start()
 
         JVM.stop()

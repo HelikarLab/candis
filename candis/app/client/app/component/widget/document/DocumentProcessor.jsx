@@ -6,7 +6,7 @@ import axios         from 'axios'
 
 import ToolBar       from '../ToolBar'
 import DocumentPanel from './DocumentPanel'
-import { setActiveDocument, run } from '../../../action/DocumentProcessorAction'
+import { setActiveDocument } from '../../../action/DocumentProcessorAction'
 
 class DocumentProcessor extends React.Component {
   constructor (props) {
@@ -19,10 +19,7 @@ class DocumentProcessor extends React.Component {
          faicon: 'play',
         tooltip: 'Run the currently active pipeline',
         onClick: ( ) => {
-          const output = this.props.active.output
-          const action = run(output)
-
-          this.props.dispatch(action)
+          
         }
       },
       {
@@ -52,19 +49,12 @@ class DocumentProcessor extends React.Component {
         <div className="panel panel-default no-shadow">
           <div className="panel-heading">
             <div className="text-center">
-              {
-                !props.running ?
-                  <ToolBar
-                         tools={this.tools}
-                    classNames={{ root: "no-margin" }}
-                       onClick={(tool) => {
-                          tool.onClick()
-                       }}/> : 
-                   <div className="progress">
-                      <div className="progress-bar" style={{ width: '60%' }}>
-                      </div>
-                    </div> 
-              }
+              <ToolBar
+                     tools={this.tools}
+                classNames={{ root: "no-margin" }}
+                   onClick={(tool) => {
+                      tool.onClick()
+                   }}/>
             </div>
           </div>
         </div>

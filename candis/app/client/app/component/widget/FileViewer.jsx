@@ -1,14 +1,17 @@
 import React           from 'react'
+import PropTypes       from 'prop-types'
+import { connect }     from 'react-redux'
+
 import Select          from 'react-select'
 import ReactDataGrid   from 'react-data-grid'
-import { connect }     from 'react-redux'
 import classNames      from 'classnames'
 
 import axios           from 'axios'
 
 import config          from '../../config'
+
 import FileFormat      from '../../constant/FileFormat'
-import { filterFiles } from '../../util'
+import { getFiles }    from '../../util'
 import { getResource } from '../../action/AsynchronousAction'
 
 class FileViewer extends React.Component {
@@ -22,55 +25,56 @@ class FileViewer extends React.Component {
 
   onChange (value) {
     this.setState({
-      select: value
+      output: value
     })
 
-    const parameters = JSON.parse(value.value)
-    const that       = this
+    const parameters  = JSON.parse(value.value)
 
-    axios.post(config.routes.api.data.read, parameters)
-         .then((response) => {
-           response = response.data
+    axios.post(config.routes.api.data.read, parameters).then(({ data }) => {
+      const response  = data
 
-           if ( response.status == "success" ) {
-             const dataset = response.data
+       if ( response.status == "success" ) {
+        const dataset = response.data
+        const columns = dataset.attrs.map((attr, index) => {
+          return { key: attr.name, name: attr.name }
+        })
+        const data    = dataset.data
 
-             const columns = dataset.attributes.map((attribute, index) => {
-               return {...attribute, key: attribute.name}
-             })
-             const rows    = dataset.data
+        this.setState({
+          data: { columns: columns, rows: data }
+        })
 
-             that.setState({
-               data: { columns: columns, rows: rows }
-             })
-           }
-         })
-
-    this.props.onSelect(parameters)
+        this.props.onSelect(parameters)
+      } else
+      if ( response.status == "error" ) {
+        // TODO: Show an error
+      }
+    })
   }
 
   render ( ) {
-    const that = this
+    const props  = this.props
+    const state  = this.state
+    const data   = state.data
 
     return (
-      <div className={classNames("panel panel-default", this.props.classNames.root)}>
+      <div className={classNames("panel panel-default", props.classNames.root)}>
         <div className="panel-body">
           <div className="form-group">
             <Select
-                options={this.props.files}
-                   name="select"
-                  value={this.state.select}
+                options={props.options}
+                   name="output"
+                  value={state.output}
                onChange={this.onChange}
               clearable={false}/>
           </div>
           <div>
             <ReactDataGrid
-                      ref="grid"
-                  columns={this.state.data.columns}
+                  columns={data.columns}
                 rowGetter={(index) => {
-                  return that.state.data.rows[index]
+                  return data.rows[index]
                 }}
-                rowsCount={this.state.data.rows.length}/>
+                rowsCount={data.rows.length}/>
           </div>
         </div>
       </div>
@@ -78,25 +82,34 @@ class FileViewer extends React.Component {
   }
 }
 
+FileViewer.propTypes     = 
+{
+  classNames: PropTypes.object
+}
+FileViewer.defaultProps  =
+{
+  classNames: { }
+}
+
 FileViewer.defaultStates =
 {
-  select: { },
+  output: { },
     data: { columns: [ ], rows: [ ] }
 }
 
 const mapStateToProps   = (state) => {
   const data            = state.data
-  const files           = filterFiles(data.resource, [FileFormat.CDATA])
+  const files           = getFiles(data.resource, FileFormat.CDATA)
 
   const options         = files.map((file) => {
     return {
-      value: `{"path": "${file.path}", "name": "${file.name}"}`,
+      value: `{"path": "${file.path}", "name": "${file.name}", "format": "${file.format}"}`,
       label: file.name
     }
   })
 
   return {
-    files: options
+    options: options
   }
 }
 
