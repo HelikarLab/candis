@@ -1,5 +1,4 @@
 import shortid    from 'shortid'
-import graphlib   from 'graphlib'
 import isEqual    from 'lodash.isequal'
 import cloneDeep  from 'lodash.clonedeep'
 
@@ -35,6 +34,7 @@ const documentProcessor   = (state = initial, action) => {
                      ID: stage.ID,
                    code: stage.code,
                    name: stage.name,
+                   icon: state.nodes[stage.code].icon,
                   label: stage.label,
                 onClick: state.nodes[stage.code].onClick,
                   value: stage.value,
@@ -60,6 +60,7 @@ const documentProcessor   = (state = initial, action) => {
                    ID: stage.ID,
                  code: stage.code,
                  name: stage.name,
+                 icon: state.nodes[stage.code].icon,
                 label: stage.label,
               onClick: state.nodes[stage.code].onClick,
                 value: stage.value,
@@ -97,7 +98,7 @@ const documentProcessor   = (state = initial, action) => {
       return {...state, documents: documents, active: active }
     }
 
-    case ActionType.DocumentProcessor.SET_NODE:
+    case ActionType.DocumentProcessor.SET_STAGE:
     {
       const node         = action.payload
       var   nodes        = state.nodes
@@ -107,7 +108,8 @@ const documentProcessor   = (state = initial, action) => {
         nodes            = cloneDeep(state.nodes)
         nodes[node.code] = 
         {
-          onClick: node.onClick
+          onClick: node.onClick,
+             icon: node.icon
         }
       }
 

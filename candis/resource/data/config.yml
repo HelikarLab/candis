@@ -48,6 +48,7 @@ app:
         methods: !relurljoin [*base, "api", "featselect", "methods"]
       model:
         methods: !relurljoin [*base, "api", "model", "methods"]
+      run: !relurljoin [*base, "api", "run"]
 
   container: "app"
   startdir: "CRES"

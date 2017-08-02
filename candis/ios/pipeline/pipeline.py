@@ -14,6 +14,7 @@ from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
 # imports - module imports
 from candis.config import CONFIG
 from candis.ios    import cdata
+from candis.ios    import json as JSON
 from candis.util   import assign_if_none
 
 class Pipeline(object):
@@ -35,6 +36,18 @@ class Pipeline(object):
     def set_status(self, status):
         self.status = status
 
+    def load(path):
+        if not os.path.isabs(path):
+            path    = os.path.abspath(path)
+        if not os.path.exists(path):
+            raise IOError('{path} does not exist.'.format(path = path))
+        if not os.path.isfile(path):
+          raise IOError('{path} is not a valid input file.'.format(path = path))
+
+        stages = JSON.read(path)
+
+
+
     def run(self, path, delimitter = ',', heap_size = 512, seed = None):
         self.set_status(Pipeline.RUNNING)
 
@@ -44,7 +57,7 @@ class Pipeline(object):
         if not os.path.exists(path):
           self.set_status(Pipeline.FAILED)
 
-          raise IOError('{path} does not exists.'.format(path = path))
+          raise IOError('{path} does not exist.'.format(path = path))
 
         if not os.path.isfile(path):
           self.set_status(Pipeline.FAILED)
@@ -59,5 +72,7 @@ class Pipeline(object):
         # cdat.toARFF(name, express_config = para.Preprocess)
         
         JVM.start()
+
+
 
         JVM.stop()

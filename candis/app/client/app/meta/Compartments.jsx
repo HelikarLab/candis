@@ -75,6 +75,7 @@ const Compartments =
                    ID: ID,
                  name: 'File',
                  code: 'dat.fil',
+                 icon: `${config.routes.icons}/document.png`,
               onClick: (dispatch) =>
               {
                 var   output  = null
@@ -126,8 +127,8 @@ const Compartments =
                 const action  = modal.show(dialog)
 
                 dispatch(action)
-              } // end node.onClick
-            } // end node
+              } // end meta.onClick
+            } // end meta
 
             const action = stage.set(meta)
 
@@ -139,7 +140,12 @@ const Compartments =
              icon: `${config.routes.icons}/cloud-computing.png`,
           tooltip: 'Download a DataSet from a remote host',
           onClick: (dispatch) => {
-
+            bootbox.alert({
+              message: '<div class="font-bold">To be implemented</div>',
+                 size: "small",
+              animate: false,
+              buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
+            })
           }
         }
       ]
@@ -156,13 +162,15 @@ const Compartments =
       tools: [
         {
              name: 'k-Fold Cross-Validation',
+             icon: `${config.routes.icons}/cross-validation.png`,
           tooltip: 'Split a dataset into k folds',
           onClick: (dispatch) => {
-            const ID      = shortid.generate()
-            const stage   = 
+            const ID     = shortid.generate()
+            const meta   = 
             {
                    ID: ID,
                  name: 'k-Fold Cross-Validation',
+                 icon: `${config.routes.icons}/cross-validation.png`,
                  code: 'prp.kcv',
               onClick: (dispatch) =>
               {
@@ -179,7 +187,8 @@ const Compartments =
                     animate: false,
                    callback: (folds) => {
                      if ( folds !== null ) {
-                        const action = updateNode(ID, { value: folds, status: "READY" })
+                        const update = { value: folds, label: `${folds} folds`, status: Pipeline.Status.RESOURCE_READY }
+                        const action = stage.update(ID, update)
 
                         dispatch(action)
                      }
@@ -190,10 +199,10 @@ const Compartments =
                 $(document).ready(() => {
                   $('#input-k-fold').attr('minlength', 0);
                 })
-              } // end stage.onClick
-            } // end stage
+              } // end meta.onClick
+            } // end meta
 
-            const action = setNode(stage)
+            const action = stage.set(meta)
 
             dispatch(action)
           }
@@ -201,65 +210,86 @@ const Compartments =
       ],
     fetcher: ( ) =>
     {
-      return axios.get(config.routes.api.preprocess.methods).then((response) => {
-        response       = response.data
+      return axios.get(config.routes.api.preprocess.methods).then(({ data }) => {
+        const response    = data
 
         if ( response.status == "success" ) {
-          const data   = response.data
+          const data      = response.data
 
-          const tools  = data.map((method) => {
-            const options = method.methods.map((option) => {
-              return { name: option.name, description: option.info.desc,
-                meta: option }
-            })
-
-            const tool = {
+          const tools     = data.map((method) => {
+            const tool    = 
+            {
                  name: method.name,
               onClick: (dispatch) => {
-                  const ID     = shortid.generate()
-                  const stage   = {
+                  const options = method.methods.map((option) => 
+                  {
+                    return { label: option.name, value: JSON.stringify(option) }
+                  })
+
+                  const ID      = shortid.generate()
+                  const meta    = {
                          ID: ID,
                        code: method.code,
                        name: method.name,
-                     status: "RESOURCE_REQUIRED",
                     onClick: (dispatch) => {
-                       const action = modal.show({
-                         component: Component.SelectViewer,
-                         title: method.name,
-                         props: {
-                           classNames: {
-                               root: ['no-background', 'no-border', 'no-shadow', 'no-margin'],
-                             footer: ['no-background', 'no-border']
-                           },
-                            options: options,
-                           onSelect: (dispatch, option) => {
-                             var action = null
-                             action     = updateNode(ID, { value: option.name, code: option.code,
-                              status: "READY" })
+                      var   option = null
+                      const dialog =
+                      {
+                        component: Component.SelectViewer,
+                            title: method.name,
+                          buttons: 
+                          [
+                            {
+                                  label: "Select",
+                              className: "btn-primary",
+                                onClick: ( ) =>
+                                {
+                                      method = JSON.parse(option.value)
+                                  var update = 
+                                  {
+                                      code: method.code,
+                                     label: method.name,
+                                     value: method.value,
+                                    status: Pipeline.Status.RESOURCE_READY
+                                  }
 
-                             dispatch(action)
+                                  var action = stage.update(ID, update)
 
-                             action     = modal.hide()
+                                  dispatch(action)
 
-                             dispatch(action)
-                           },
-                           onCancel: (dispatch) => {
-                             const action = modal.hide()
+                                  action     = modal.hide()
 
-                             dispatch(action)
-                           }
-                         }
-                       })
+                                  dispatch(action)
+                                } 
+                            },
+                            {
+                                  label: "Cancel",
+                                onClick: ( ) => 
+                                {
+                                  var action = modal.hide()
 
-                       dispatch(action)
-                    }
-                  }
+                                  dispatch(action)
+                                }
+                            }
+                          ], // end dialog.buttons
+                            props: 
+                            {
+                              classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                                 options: options,
+                                onChange: (changed) => { option = changed }
+                            } // end dialog.props
+                      }
+                      const action = modal.show(dialog)
 
-                  const action = setNode(stage)
+                      dispatch(action)
+                    } // end meta.onClick
+                  } // end meta
+
+                  const action = stage.set(meta)
 
                   dispatch(action)
-              }
-            }
+              } // end tool.onClick
+            } // end tool
 
             return tool
           })
@@ -330,8 +360,8 @@ const Compartments =
                             MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
                           }, 500)
                         })
-                      } // end stage.onClick
-                    } // end stage
+                      } // end meta.onClick
+                    } // end meta
 
                     const action = setNode(stage)
                     
@@ -408,7 +438,7 @@ const Compartments =
                             MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
                           }, 500)
                         })
-                      } // end stage.onClick
+                      } // end meta.onClick
                     } // end stage
 
                     const action = setNode(stage)

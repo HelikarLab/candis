@@ -3,9 +3,11 @@ import {connect}  from 'react-redux'
 import {SortableContainer} from 'react-sortable-hoc'
 import classNames from 'classnames'
 
+import Media      from './Media'
+
 import Pipeline   from '../../constant/Pipeline'
 
-class PipelineEditor extends SortableContainer
+class PipelineEditor extends React.Component
 {
 	render ( ) 
 	{
@@ -24,15 +26,10 @@ class PipelineEditor extends SortableContainer
 									props.dispatch(stage.onClick)
 								}}>
 									<div style={{ color: '#FFF' }}>
-										<h4 className="font-bold">
-											{stage.name}
-										</h4>
-										{
-											stage.label ?
-												<small>
-													{stage.label}
-												</small> : null
-										}
+										<Media
+											title={stage.name}
+											 icon={stage.icon}
+											 body={stage.label}/>
 									</div>
 								</a>
 							</li>
