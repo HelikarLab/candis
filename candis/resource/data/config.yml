@@ -1,6 +1,13 @@
 name: &name "candis"
 version: &version "0.1.0"
 debug: &debug true
+pipeline:
+  preprocess:
+    normalization: "quantiles"
+    background_correction: "rma"
+    phenotype_microarray_correction: "pmonly"
+    summary: "medianpolish"
+    folds: 2
 CLI:
   arguments:
     - name: ["-d", "--cdata"]
@@ -30,7 +37,7 @@ app:
 
     signin: !relurljoin [*base, "SignIn"]
 
-    api:
+    API:
       data:
         resource: !relurljoin [*base, "api", "data", "resource"]
         read: !relurljoin [*base, "api", "data", "read"]

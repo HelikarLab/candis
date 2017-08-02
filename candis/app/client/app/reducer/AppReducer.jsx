@@ -8,7 +8,6 @@ const app           = (state = initial, action) => {
   switch (action.type) {
     case ActionType.App.SIGNIN_REQUEST:
     case ActionType.App.SIGNOUT_REQUEST:
-    case ActionType.Asynchronous.WRITE_REQUEST:
       nprogress.set(0.0)
 
       break
@@ -18,6 +17,8 @@ const app           = (state = initial, action) => {
     case ActionType.App.SIGNOUT_SUCCESS:
     case ActionType.App.SIGNOUT_ERROR:
     case ActionType.Asynchronous.WRITE_SUCCESS:
+    case ActionType.Asynchronous.GET_RESOURCE_SUCCESS:
+    case ActionType.Asynchronous.GET_RESOURCE_ERROR:
       nprogress.set(1.0)
 
       break

@@ -102,8 +102,8 @@ const dataEditor   = (state = initialState, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.GET_RESOURCE_SUCCESS: {
-      let resource = action.payload
+    case ActionType.Asynchronous.GET_RESOURCE_SUCCESS: {
+      let resource = action.payload.data
       let columns  = state.columns.slice()
 
       columns.forEach((column) => {

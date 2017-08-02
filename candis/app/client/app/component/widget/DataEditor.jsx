@@ -4,6 +4,8 @@ import ReactDataGrid  from 'react-data-grid'
 
 import config         from '../../config'
 
+import ToolBar        from './ToolBar'
+
 import { insertRow, insertColumn, deleteRow, deleteColumn, selectRow, deselectRow,
   updateRows } from '../../action/DataEditorAction'
 import { getResource } from '../../action/AsynchronousAction'
@@ -12,14 +14,13 @@ class DataEditor extends React.Component {
   constructor (props) {
     super (props)
 
-    const that = this
     this.tools =
     [
       {
            icon: `${config.routes.icons}/insert-row.png`,
         tooltip: 'Insert Row',
-        onClick: (dispatch) => {
-          const action = insertRow(that.props.rows)
+        onClick: (props, dispatch) => {
+          const action = insertRow(props.rows)
 
           dispatch(action)
         }
@@ -27,8 +28,8 @@ class DataEditor extends React.Component {
       {
            icon: `${config.routes.icons}/insert-column.png`,
         tooltip: 'Insert Column',
-        onClick: (dispatch) => {
-          const action = insertColumn(that.props.columns)
+        onClick: (props, dispatch) => {
+          const action = insertColumn(props.columns)
 
           dispatch(action)
         }
@@ -36,8 +37,8 @@ class DataEditor extends React.Component {
       {
            icon: `${config.routes.icons}/delete-row.png`,
         tooltip: 'Delete Row',
-        onClick: (dispatch) => {
-          that.props.rows.forEach((row) => {
+        onClick: (props, dispatch) => {
+          props.rows.forEach((row) => {
             if ( row.selected ) {
               const action = deleteRow(row)
 
@@ -56,36 +57,32 @@ class DataEditor extends React.Component {
       {
            icon: `${config.routes.icons}/reload.png`,
         tooltip: 'Refresh',
-        onClick: getResource
+        onClick: (dispatch) => {
+
+        }
       }
     ]
   }
 
+  componentWillMount() {
+    
+    const props  = this.props
+    const action = getResource()
+
+    props.dispatch(action)
+  }
+
   render ( ) {
-    const that = this
+    const props  = this.props
+
     return (
-      <div className="wrapper">
+      <div>
         <div className="panel panel-default no-background no-border no-shadow">
           <div className="panel-body">
             <div className="text-right">
-              {
-                this.tools.map((tool, index) => {
-                  const tooltip = tool.tooltip
-                  const ttattrs = tooltip ?
-                    {
-                         "data-toggle": "tooltip",
-                      "data-placement": "top",
-                                 title: tooltip
-                    } : { }
-
-                  return (
-                    <button key={index} className="btn no-background no-border no-shadow"
-                      {...ttattrs} onClick={() => { that.props.dispatch(tool.onClick) }}>
-                      <img width="20" src={tool.icon}/>
-                    </button>
-                  )
-                })
-              }
+              <ToolBar tools={this.tools} onClick={(tool) => {
+                tool.onClick(props, props.dispatch)
+              }}/>
             </div>
           </div>
         </div>
@@ -93,9 +90,9 @@ class DataEditor extends React.Component {
           <ReactDataGrid
                           ref="grid"
              enableCellSelect={true}
-                      columns={this.props.columns}
-                    rowGetter={(index) => { return that.props.rows[index] }}
-                    rowsCount={this.props.rows.length}
+                      columns={props.columns}
+                    rowGetter={(index) => { return props.rows[index] }}
+                    rowsCount={props.rows.length}
                  rowSelection={{
                         showCheckbox: true,
                    enableShiftSelect: true,
@@ -103,27 +100,27 @@ class DataEditor extends React.Component {
                         rows.forEach((row) => {
                           const action = selectRow(row)
 
-                          that.props.dispatch(action)
+                          props.dispatch(action)
                         })
                       },
                     onRowsDeselected: (rows) => {
                         rows.forEach((row) => {
                           const action = deselectRow(row)
 
-                          that.props.dispatch(action)
+                          props.dispatch(action)
                         })
                     },
                             selectBy: { isSelectedKey: 'selected' }
                  }}
             onGridRowsUpdated={({ fromRow, toRow, updated }) => {
-              that.props.dispatch((dispatch) => {
+              props.dispatch((dispatch) => {
                 const action  = updateRows(fromRow, toRow, updated)
 
                 dispatch(action)
 
-                that.props.onChangeData({
-                  columns: that.props.columns,
-                     rows: that.props.rows
+                props.onChangeData({
+                  columns: props.columns,
+                     rows: props.rows
                 })
               })
             }}/>

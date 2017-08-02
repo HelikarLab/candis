@@ -57,14 +57,22 @@ def makedirs(path, exists_ok = False):
 				raise e
 
 def json_load(path):
-	data = None
+		data = None
 
-	with open(path) as f:
-		data = json.load(f)
+		with open(path) as f:
+				data = json.load(f)
 
-	return data
+		return data
 
 def get_timestamp_str(format_):
-	string = time.strftime(format_)
+		string = time.strftime(format_)
 
-	return string
+		return string
+
+def merge_dicts(*args):
+		merged = dict()
+
+		for dict_ in args:
+				merged.update(dict_)
+
+		return merged

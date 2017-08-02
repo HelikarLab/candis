@@ -2,11 +2,11 @@
 import os
 
 # imports - module imports
-from candis.util import assign_if_none
+from candis.util       import assign_if_none
 from candis.cli.parser import ArgumentParser
-from candis.config import CONFIG
-from candis.ios import cdata
-from candis import app
+from candis.config     import CONFIG
+from candis.ios        import Pipeline
+from candis            import app
 
 def main(argv = None):
     '''
@@ -31,14 +31,9 @@ def main(argv = None):
         code = app.main()
     else:
         if args.cdata:
+            pipe = Pipeline()
             path = args.cdata
-            data = cdata.read(path)
 
-            if not args.arff:
-                path = '{path}.arff'.format(path = os.path.splitext(path)[0])
-            else:
-                path = args.arff
-
-            data.toARFF(path)
+            data = pipe.run(path)
 
     return code

@@ -80,6 +80,7 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
   ```
 
   Then, simply use the `CData.toARFF` API:
+  
   ```python
   >>> cdata.toARFF('path/to/data.arff')
   ```

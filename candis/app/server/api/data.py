@@ -8,14 +8,14 @@ import addict
 # imports - module imports
 from candis.config              import CONFIG
 from candis.util                import (
-    assign_if_none, get_rand_uuid_str, json_load, get_timestamp_str
+    assign_if_none, get_rand_uuid_str, get_timestamp_str, merge_dicts
 )
 from candis.resource            import R
-from candis.ios                 import cdata, pipeline
+from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 
-FFORMATS         = json_load(os.path.join(R.Path.DATA, 'file-formats.json'))
+FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
 
 def get_filename_if_exists(filename, count = 1, format_ = ' ({count})'):
@@ -87,27 +87,29 @@ def discover_resource(path, level = None, filter_ = None):
 
     return tree
 
-@app.route(CONFIG.App.Routes.Api.Data.RESOURCE, methods = ['GET', 'POST'])
+@app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
-    response  = Response()
+    response   = Response()
 
-    startdir  = CONFIG.App.STARTDIR
+    parameters = addict.Dict(request.get_json())
+    
+    path       = CONFIG.App.STARTDIR if 'path' not in parameters else os.path.join(CONFIG.App.STARTDIR, parameters.path)
 
-    tree      = discover_resource(
-      path    = startdir,
-      level   = level,
-      filter_ = filter_
+    tree       = discover_resource(
+      path     = path,
+      level    = level,
+      filter_  = filter_
     )
 
     response.set_data(tree)
 
-    dict_     = response.to_dict()
-    json_     = jsonify(dict_)
-    code      = response.code
+    dict_      = response.to_dict()
+    json_      = jsonify(dict_)
+    code       = response.code
 
     return json_, code
 
-@app.route(CONFIG.App.Routes.Api.Data.READ, methods = ['GET', 'POST'])
+@app.route(CONFIG.App.Routes.API.Data.READ, methods = ['GET', 'POST'])
 def read():
     response    = Response()
 
@@ -141,128 +143,53 @@ def read():
 
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
-@app.route(CONFIG.App.Routes.Api.Data.WRITE, methods = ['POST'])
-def write(output = { 'name': '', 'path': '', 'format': None }, buffer_ = { }, handler = None):
+@app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
+def write(output = { 'name': '', 'path': '', 'format': None }, buffer_ = { }):
     response     = Response()
 
     parameters   = addict.Dict(request.get_json())
 
     if 'output' in parameters:
-        output   = addict.Dict({ **output, **parameters.output }) # merge dicts, Python 3.5+
+        output   = addict.Dict(merge_dicts(output, parameters.output))
 
     output.path  = os.path.join(ABSPATH_STARTDIR, output.path)
     output.name  = output.name.strip() # remove padding spaces
 
+    if 'buffer' in parameters:
+        buffer_  = parameters.buffer
+
     if output.format:
         if   output.format == 'cdata':
-             if output.name in ['', '.cdata', '.CDATA']: # no filename?
+             if output.name in ['', '.cdata', '.CDATA']:
                 name = get_timestamp_str('CDAT%Y%m%d%H%M%S.cdata')
              else:
                 name = output.name
 
-             output.name, handler = name, cdata
+             output.name = name
         elif output.format == 'pipeline':
              if output.name in ['', '.cpipe', '.CPIPE']:
                 name = get_timestamp_str('PIPE%Y%m%d%H%M%S.cpipe')
              else:
                 name = output.name
 
-             output.name, handler = name, pipeline
+             output.name = name
 
-    if 'buffer' in parameters:
-        buffer_  = parameters.buffer
+             if not buffer_:
+                buffer_  = [ ]
 
-    fpath        = os.path.join(output.path, output.name)
+    opath        = os.path.join(output.path, output.name)
 
     try:
-        handler.write(fpath, buffer_)
+        JSON.write(opath, buffer_)
 
         data         = addict.Dict()
         data.output  = output
-        data.data    = handler.read(fpath)
+        data.data    = JSON.read(opath)
 
         response.set_data(data)
     except TypeError as e:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
-    dict_      = response.to_dict()
-    json_      = jsonify(dict_)
-    code       = response.code
-
-    return json_, code
-
-@app.route('/api/run', methods = ['GET', 'POST'])
-def run():
-    response   = Response()
-
-    parameters = addict.Dict(request.get_json())
-
-    discover_path =  os.path.abspath(os.path.join(ABSPATH_STARTDIR, '../CancerDiscover'))
-    scripts  = os.path.join(discover_path, 'Scripts')
-    conf     = os.path.join(discover_path, 'Scripts', 'Configuration.txt')
-    bgCorrrect = 'rma'
-    normal     = 'quantiles'
-    pmCorrect  = 'pmonly'
-
-    if 'path' in parameters and 'name' in parameters:
-        pipe   = pipeline.read(os.path.join(parameters.path, parameters.name))
-
-        for i, stage in enumerate(pipe):
-            if stage['status'] == 'RESOURCE_REQUIRED':
-                response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
-                break
-            elif stage['code'] == 'dat.fle':
-                dataset = cdata.read(stage['value'])
-                import pandas as pd
-                df      = pd.DataFrame.from_records(dataset['data'])
-                df.to_csv(os.path.join(discover_path, 'DataFiles', 'sampleList.txt'), mode = 'w', header = False, index = False)
-                
-                print('successfully wrote sampleList.txt')
-                pipe[i]['status'] = 'FINISHED'
-
-                pipeline.write(os.path.join(parameters.path, parameters.name), pipe)
-
-            elif stage['code'] == 'prp.bgc.rma':
-                bgCorrrect = 'rma'
-            elif stage['code'] == 'prp.bgc.mas':
-                bgCorrrect = 'mas'
-            elif stage['code'] == 'prp.nrm.cst':
-                normal = 'constant'
-            elif stage['code'] == 'prp.nrm.crt':
-                normal = 'contrast'
-            elif stage['code'] == 'prp.pmc.mas':
-                normal = 'mas'
-            elif stage['code'] == 'prp.pmc.smm':
-                normal = 'subtractmm'
-    else:
-        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
-
-
-
-    # path     = os.path.abspath(os.path.join(ABSPATH_STARTDIR, '../CancerDiscover'))
-    
-
-    # pipefile = pipeline.read(os.path.join(parameters.path, parameters.name))
-
-    # print(pipefile)
-
-    # bgCorrrect ="rma"
-
-    import subprocess
-    print('copying files')
-    subprocess.call(['cp', '-R', os.path.join(discover_path, 'SampleData/*'), os.path.join(discover_path, 'DataFiles')])
-
-    print('adding configuration')
-
-    configso = open(conf).read()
-    print(configso)
-    open(conf, "w").write("$pathToProject={}\n".format(discover_path) + configso)
-
-    import subprocess
-    subprocess.call(['bash', os.path.join(scripts, 'initialization.bash')])
-    subprocess.call(['Rscript', os.path.join(scripts, 'normalization.R')])
-
-    
     dict_      = response.to_dict()
     json_      = jsonify(dict_)
     code       = response.code

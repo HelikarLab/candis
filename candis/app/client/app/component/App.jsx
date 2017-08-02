@@ -15,7 +15,7 @@ import compartments      from '../meta/compartments'
 
 class App extends React.Component {
   render ( ) {
-    const props = this.props
+    const props  = this.props
     
     return (
       <div>

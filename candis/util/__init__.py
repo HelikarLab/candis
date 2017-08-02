@@ -6,5 +6,6 @@ from candis.util.util import (
 	get_free_port,
 	makedirs,
 	json_load,
-	get_timestamp_str
+	get_timestamp_str,
+	merge_dicts
 )
