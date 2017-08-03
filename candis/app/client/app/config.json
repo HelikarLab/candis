@@ -1,40 +1,42 @@
 {
-    "port": 5000,
-    "urls": {
-        "docs": "https://candis.readthedocs.io"
-    },
     "container": "app",
-    "host": "0.0.0.0",
+    "lang": "en",
+    "title": "candis v0.1.0",
     "routes": {
-        "signin": "/SignIn",
-        "signup": "/SignUp",
-        "assets": "/assets",
-        "base": "/",
         "api": {
+            "pipeline": {
+                "run": "/api/run"
+            },
+            "data": {
+                "read": "/api/data/read",
+                "resource": "/api/data/resource",
+                "write": "/api/data/write"
+            },
             "featselect": {
                 "methods": "/api/featselect/methods"
             },
-            "data": {
-                "resource": "/api/data/resource",
-                "read": "/api/data/read",
-                "write": "/api/data/write"
+            "preprocess": {
+                "methods": "/api/preprocess/methods"
             },
             "model": {
                 "methods": "/api/model/methods"
-            },
-            "preprocess": {
-                "methods": "/api/preprocess/methods"
             }
         },
-        "icons": "/assets/img/icons",
-        "images": "/assets/img"
+        "signin": "/SignIn",
+        "images": "/assets/img",
+        "assets": "/assets",
+        "base": "/",
+        "icons": "/assets/img/icons"
     },
+    "port": 5000,
+    "debug": true,
+    "encoding": "utf-8",
     "color": {
         "primary": "#E91E63"
     },
-    "title": "candis v0.1.0",
-    "encoding": "utf-8",
     "startdir": "CRES",
-    "debug": true,
-    "lang": "en"
+    "host": "0.0.0.0",
+    "urls": {
+        "docs": "https://candis.readthedocs.io"
+    }
 }

@@ -247,7 +247,6 @@ const Compartments =
                                       method = JSON.parse(option.value)
                                   var update = 
                                   {
-                                      code: method.code,
                                      label: method.name,
                                      value: method.value,
                                     status: Pipeline.Status.RESOURCE_READY

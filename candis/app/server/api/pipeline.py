@@ -29,10 +29,15 @@ def run():
         # TODO: Check if file exists, else respond error.
 
         if parameters.format == 'pipeline':
-        		pipe   = Pipeline.load(relpath)
-        		
+            pipe   = Pipeline.load(relpath)
 
-            response.set_data(dict_)
+            if pipe.empty:
+                response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Empty Pipeline.')
+            elif pipe.status == Pipeline.PENDING:
+                response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Resource not found.')
+            else:
+                if pipe.message:
+                    response.set_error(Response.Error.UNPROCESSABLE_ENTITY, pipe.message)
         else:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
@@ -42,4 +47,4 @@ def run():
     json_       = jsonify(dict_)
     code        = response.code
 
-    return json_, code
+    return json_

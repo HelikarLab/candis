@@ -65,51 +65,93 @@ const stage =
 
         return dispatch
      },
-  update: (ID, update) => 
-  {
-    const dispatch = (dispatch) =>
-    {
-      const dokument      = store.getState().documentProcessor.active
-
-      if ( dokument !== null ) 
+      update: (ID, update) => 
       {
-        var copy          = null
-        var buffer        = dokument.data.map((node) => {
-          var   step      = 
-          {
-                ID: node.ID,
-              code: node.code,
-              name: node.name,
-             value: node.value,
-             label: node.label,
-            status: node.status
-          }
-
-          if ( step.ID == ID )
-          {
-            step = {...step, ...update}
-            copy = {...node, ...update}
-          }
-
-          return step
-        })
-
-        var action        = 
+        const dispatch = (dispatch) =>
         {
-             type: ActionType.DocumentProcessor.SET_STAGE,
-          payload: copy
+          const dokument      = store.getState().documentProcessor.active
+
+          if ( dokument !== null ) 
+          {
+            var copy          = null
+            var buffer        = dokument.data.map((node) => {
+              var   step      = 
+              {
+                    ID: node.ID,
+                  code: node.code,
+                  name: node.name,
+                 value: node.value,
+                 label: node.label,
+                status: node.status
+              }
+
+              if ( node.ID == ID )
+              {
+                step = {...step, ...update}
+                copy = {...node, ...update}
+              }
+
+              return step
+            })
+
+            var action        = 
+            {
+                 type: ActionType.DocumentProcessor.SET_STAGE,
+              payload: copy
+            }
+
+            dispatch(action)
+
+            action            = write(dokument.output, buffer)
+
+            dispatch(action)
+          }
         }
 
-        dispatch(action)
+        return dispatch
+      },
+      remove: (ID) => 
+      {
+        const dispatch = (dispatch) =>
+        {
+          const dokument      = store.getState().documentProcessor.active
 
-        action            = write(dokument.output, buffer)
+          if ( dokument !== null ) 
+          {
+            var buffer        = [ ]
+            dokument.data.forEach((node) => {
+              if ( node.ID != ID )
+              {
+                var   step = 
+                {
+                      ID: node.ID,
+                    code: node.code,
+                    name: node.name,
+                   value: node.value,
+                   label: node.label,
+                  status: node.status
+                }
 
-        dispatch(action)
+                buffer.push(step)
+
+                var action        = 
+                {
+                     type: ActionType.DocumentProcessor.SET_STAGE,
+                  payload: node
+                }
+
+                dispatch(action)
+              }
+            })
+
+            var action = write(dokument.output, buffer)
+
+            dispatch(action)
+          }
+        }
+
+        return dispatch
       }
-    }
-
-    return dispatch
-  }
 }
 
 export { setActiveDocument, stage }

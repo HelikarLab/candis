@@ -41,10 +41,22 @@ class Response(object):
         self.data        = data
         self.schema.data = self.data
 
-    def set_error(self, error):
-        self.status = Response.Status.ERROR
-        self.error  = error
-        self.code   = self.error.code
+    def set_error(self, error, messages = [ ]):
+        self.status  = Response.Status.ERROR
+        self.error   = error
+        self.code    = self.error.code
+
+        if  messages:
+            if isinstance(messages, str):
+                messages = [messages]
+
+            self.error.errors = [ ]
+
+            for message in messages:
+                self.error.errors.append(addict.Dict({ 'message': message }))
+
+        self.schema.status = self.status
+        self.schema.error  = self.error
 
     def to_dict(self):
         dict_ = dict(self.schema)

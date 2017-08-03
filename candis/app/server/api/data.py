@@ -115,17 +115,25 @@ def read():
     response    = Response()
 
     parameters  = addict.Dict(request.get_json())
+    print(parameters)
 
     if parameters.path and parameters.name and parameters.format:
-        relpath = os.path.join(parameters.path, parameters.name)
+        path    = os.path.join(parameters.path, parameters.name)
 
         # TODO: Check if file exists, else respond error.
+        dict_   = { }
 
         if parameters.format == 'cdata':
-            cdat  = cdata.read(relpath)
+            cdat  = cdata.read(path)
             dict_ = cdat.to_dict()
 
             response.set_data(dict_)
+        elif parameters.format == 'pipeline':
+            data        = addict.Dict()
+            data.output = parameters
+            data.data   = JSON.read(path)
+
+            response.set_data(data)
         else:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:

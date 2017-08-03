@@ -11,3 +11,6 @@ from candis.app.server.api.featselect import (
 from candis.app.server.api.model      import (
 	mmethods
 )
+from candis.app.server.api.pipeline   import (
+	run
+)

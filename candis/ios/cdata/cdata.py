@@ -141,7 +141,9 @@ class CData(object):
 
             meta = addict.Dict()
             meta.relation   = 'affy'
-            meta.attributes = [(ID, 'NUMERIC') for ID in AIDs] + [('CLASS', uniq)]
+            attrs           = [(ID, 'NUMERIC') for ID in AIDs]
+
+            meta.attributes = attrs + [('CLASS', uniq)]
             meta.data       = list(vals.values)
 
             with open(path, mode = 'w') as f:

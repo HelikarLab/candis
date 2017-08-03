@@ -123,4 +123,63 @@ const getResourceError   = (path, error) => {
   return action
 }
 
-export { write, getResource }
+const read              = (output) => {
+  const dispatch         = (dispatch) => {
+    const action         = requestRead(output)
+
+    dispatch(action)
+
+    return axios.post(config.routes.api.data.read, output).then(({ data }) => {
+      const response     = data
+
+      if ( response.status == "success" ) {
+        const data       = response.data
+        const action     = successRead(output, data)
+
+        dispatch(action)
+      } else
+      if ( response.status == "error" ) {
+        const error      = response.error
+        const action     = errorRead(output, error)
+
+        dispatch(action)
+      }
+    })
+  }
+
+  return dispatch
+}
+
+const requestRead       = (output) => {
+  const action           = {
+       type: ActionType.Asynchronous.READ_REQUEST,
+    payload: output
+  }
+
+  return action
+}
+
+const successRead       = (output, data) => {
+  console.log(data)
+  const payload          = { output: output, data: data }
+
+  const action           = {
+       type: ActionType.Asynchronous.READ_SUCCESS,
+    payload: payload
+  }
+
+  return action
+}
+
+const errorRead         = (output, error) => {
+  const payload          = { output: output, error: error }
+
+  const action           = {
+       type: ActionType.Asynchronous.READ_ERROR,
+    payload: payload
+  }
+
+  return action
+}
+
+export { read, write, getResource }

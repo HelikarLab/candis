@@ -8,6 +8,21 @@ pipeline:
     phenotype_microarray_correction: "pmonly"
     summary: "medianpolish"
     folds: 2
+  feature_selection:
+    - use: true
+      search:
+        name: BestFirst
+        options: ["-D", "1", "-N", "5"]
+      evaluator: 
+        name: CfsSubsetEval
+        options: []
+    - use: true
+      search:
+        name: ""
+        options:
+      evaluator:
+        name: ""
+        options: ""
 CLI:
   arguments:
     - name: ["-d", "--cdata"]
@@ -48,7 +63,8 @@ app:
         methods: !relurljoin [*base, "api", "featselect", "methods"]
       model:
         methods: !relurljoin [*base, "api", "model", "methods"]
-      run: !relurljoin [*base, "api", "run"]
+      pipeline:
+        run: !relurljoin [*base, "api", "run"]
 
   container: "app"
   startdir: "CRES"

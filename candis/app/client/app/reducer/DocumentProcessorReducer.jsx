@@ -11,10 +11,15 @@ const initial             =
      active: null,
       nodes: { },
     running: false,
+    runningLog: null,
+     errors: [ ]
 }
 
 const documentProcessor   = (state = initial, action) => {
   switch (action.type) {
+    case ActionType.Asynchronous.READ_SUCCESS: 
+      return {...state, runningLog: action.payload.data.data }
+
     case ActionType.Asynchronous.WRITE_SUCCESS: {
       const meta          = action.payload.data
       var   active        = null
@@ -81,7 +86,7 @@ const documentProcessor   = (state = initial, action) => {
           documents.push(active)
         }
 
-        return {...state, documents: documents, active: active }
+        return {...state, documents: documents, active: active, errors: [ ] }
       }
 
       break
@@ -95,7 +100,7 @@ const documentProcessor   = (state = initial, action) => {
         return {...dokument, active: isEqual(dokument.output, active.output) }
       })
 
-      return {...state, documents: documents, active: active }
+      return {...state, documents: documents, active: active, errors: [ ] }
     }
 
     case ActionType.DocumentProcessor.SET_STAGE:
@@ -113,14 +118,14 @@ const documentProcessor   = (state = initial, action) => {
         }
       }
 
-      return {...state, nodes: nodes }
+      return {...state, nodes: nodes, errors: [ ] }
     }
 
-    case ActionType.App.RUN_PIPELINE_REQUEST:
+    case ActionType.Pipeline.RUN_SUCCESS:
       return {...state, running: true }
 
-    case ActionType.App.RUN_PIPELINE_SUCCESS:
-      return {...state, running: false }
+    case ActionType.Pipeline.RUN_ERROR:
+      return {...state, errors: action.payload.error.errors }
   }
 
   return state
