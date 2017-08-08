@@ -14,7 +14,7 @@ maintainers       = [
 ]
 license           = 'GNU GPL v3'
 modules           = [
-
+	'candis'
 ]
 test_modules      = [
 

@@ -5,6 +5,7 @@ import json
 
 # imports - third-party imports
 import addict
+import numpy  as np
 import pandas as pd, arff
 from rpy2.robjects.packages import importr
 from rpy2                   import robjects
@@ -29,13 +30,17 @@ ATTRIBUTE_PATTERN = get_attribute_pattern()
 
 def get_attribute_type(attr, data):
     kind          = None
+    dtype         = data.dtype
     for attt in ATTRIBUTE_TYPES:
         if attt['tag'] in attr:
             kind  = attt['name']
 
     if not kind:
         # TODO: check attribute type using data provided
-        kind      = ''
+        if dtype is np.dtype('O'):
+            kind  = 'nominal'
+        if np.issubdtype(dtype, np.number):
+            kind  = 'numeric'
 
     return kind
 
@@ -71,7 +76,7 @@ class CData(object):
         if len(cclass) == 0:
             raise ValueError('No class attribute found.')
         if len(cclass) != 1:
-            raise ValueError('Various class attributes found.')
+            raise ValueError('More than one class attribute found.')
 
         cclass       = cclass[0]
 
@@ -135,16 +140,34 @@ class CData(object):
               
             eset = pd.read_csv(name, sep = '\t')
             AIDs = eset.ix[:, 0] # Affymetrix IDs
-            vals = eset.ix[:,1:].T.assign(label = self.clss.values)
-
-            uniq = list(self.clss.unique())
+            data = eset.ix[:,1:].T
 
             meta = addict.Dict()
-            meta.relation   = 'affy'
-            attrs           = [(ID, 'NUMERIC') for ID in AIDs]
+            meta.relation    = 'affy'
+            attrs            = [(ID, 'NUMERIC') for ID in AIDs]
 
-            meta.attributes = attrs + [('CLASS', uniq)]
-            meta.data       = list(vals.values)
+            for column in self.data.columns:
+                attr         = get_attribute_metadata(column, self.data[column])
+                if not attr.type in ('file', 'cel', 'class'):
+
+                    if attr.type is 'nominal':
+                        vals = list(self.data[column].unique())
+                        form = [(attr.name, vals)]
+                    
+                    if attr.type is 'numeric':
+                        form = [(attr.name, 'NUMERIC')]
+                    
+                    attrs   += form
+                    data     = data.assign(**{ attr.name: self.data[column].values })
+
+
+            cvals            = list(self.clss.unique())
+
+            attrs           += [('CLASS', cvals)]
+            data             = data.assign(label = self.clss.values)
+
+            meta.attributes  = attrs
+            meta.data        = list(data.values)
 
             with open(path, mode = 'w') as f:
                 arff.dump(meta, f)

@@ -10,5 +10,9 @@
   {
   	"name": "class",
   	 "tag": "!class"
+  },
+  {
+    "name": "nominal",
+     "tag": "!nominal"
   }
 ]

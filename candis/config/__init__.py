@@ -8,4 +8,4 @@ def get_config(filename = None):
 
     return config
 
-CONFIG = get_config()
+CONFIG     = get_config()
