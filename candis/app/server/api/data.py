@@ -115,7 +115,6 @@ def read():
     response    = Response()
 
     parameters  = addict.Dict(request.get_json())
-    print(parameters)
 
     if parameters.path and parameters.name and parameters.format:
         path    = os.path.join(parameters.path, parameters.name)

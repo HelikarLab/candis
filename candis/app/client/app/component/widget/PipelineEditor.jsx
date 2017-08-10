@@ -14,26 +14,14 @@ class PipelineEditor extends React.Component
 	{
 		const props = this.props
 
-		const dummy = (
-			<a href="javascript:void(0);" onClick={() => {
-				const action = stage.remove(node.ID)
-				props.dispatch(action)
-			}}>
-				<div style={{ color: '#FFF' }} className="text-right">
-					&times;
-				</div>
-			</a>
-		)
-
 		return (
 			<ul className="list-group">
 				{
 					props.stages.map((node, index) => {
 						return (
 							<li key={index} className={classNames("list-group-item", 
-								{  "list-group-item-danger": node.status == Pipeline.Status.RESOURCE_REQUIRED },
-								{ "list-group-item-warning": node.status == Pipeline.Status.RESOURCE_READY },
-								{ "list-group-item-success": node.status == Pipeline.Status.COMPLETE }
+								{  "list-group-item-danger": node.status == Pipeline.Status.PENDING },
+								{ "list-group-item-warning": node.status == Pipeline.Status.READY }
 							)}>
 								<div>
 									<div className="row">

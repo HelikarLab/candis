@@ -1,4 +1,5 @@
 gunicorn
+jupyter
 sphinx
 addict
 pyyaml

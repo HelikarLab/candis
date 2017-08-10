@@ -12,6 +12,7 @@ from candis.util                import (
 )
 from candis.resource            import R
 from candis.ios                 import Pipeline
+from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 
@@ -29,15 +30,15 @@ def run():
         # TODO: Check if file exists, else respond error.
 
         if parameters.format == 'pipeline':
-            pipe   = Pipeline.load(relpath)
+            try:
+                cdat, pipe = Pipeline.load(relpath)
+                pipe.run(cdat, verbose = CONFIG.DEBUG)
 
-            if pipe.empty:
-                response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Empty Pipeline.')
-            elif pipe.status == Pipeline.PENDING:
-                response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Resource not found.')
-            else:
-                if pipe.message:
-                    response.set_error(Response.Error.UNPROCESSABLE_ENTITY, pipe.message)
+                while pipe.status == Pipeline.RUNNING:
+                    JSON.write(relpath, pipe.stages)
+
+            except (IOError, ValueError) as e:
+                response.set_error(Response.Error.UNPROCESSABLE_ENTITY, str(e))
         else:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
     else:
@@ -47,4 +48,4 @@ def run():
     json_       = jsonify(dict_)
     code        = response.code
 
-    return json_
+    return json_, code

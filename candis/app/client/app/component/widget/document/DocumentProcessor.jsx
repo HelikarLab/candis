@@ -15,10 +15,6 @@ import Media from '../Media'
 import Pipeline from '../../../constant/Pipeline'
 
 class DocumentProcessor extends React.Component {
-  componentWillUpdate(nextProps, nextState) {
-    
-  }
-
   componentDidUpdate(prevProps, prevState) {
     const props = this.props
     if ( props.errors.length ) 

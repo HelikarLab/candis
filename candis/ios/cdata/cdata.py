@@ -2,6 +2,10 @@
 import os
 import re
 import json
+try:
+    from io import StringIO # Python 3
+except ImportError:
+    from StringIO import StringIO # Python 2
 
 # imports - third-party imports
 import addict
@@ -115,8 +119,6 @@ class CData(object):
         if not paths:
             raise ValueError('No valid DNA microarray found.')
         else:
-            head, tail = os.path.split(path)
-
             importr('affy')
 
             robj = robjects.r('read.affybatch')
@@ -134,7 +136,7 @@ class CData(object):
                        verbose = verbose
             )
 
-            name = os.path.join(head, '.tmp_eset')
+            name = '.tmp.eset'
             robj = robjects.r('write.exprs')
             robj(eset, file = name)
               
@@ -169,8 +171,11 @@ class CData(object):
             meta.attributes  = attrs
             meta.data        = list(data.values)
 
-            with open(path, mode = 'w') as f:
-                arff.dump(meta, f)
+            handle           = open(path, mode = 'w') if isinstance(path, str) else path
+
+            arff.dump(meta, handle)
+            
+            handle.close()
 
             os.remove(name)
 

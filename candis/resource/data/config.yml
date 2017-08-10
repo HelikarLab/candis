@@ -12,17 +12,10 @@ pipeline:
     - use: true
       search:
         name: BestFirst
-        options: ["-D", "1", "-N", "5"]
+        options: []
       evaluator: 
         name: CfsSubsetEval
         options: []
-    - use: true
-      search:
-        name: ""
-        options:
-      evaluator:
-        name: ""
-        options: ""
 CLI:
   arguments:
     - name: ["-d", "--cdata"]

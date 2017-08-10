@@ -19,11 +19,14 @@ const pipeline     =
 				if ( response.status == "success" ) {
 					const action = pipeline.runSuccess(output, response.data)
 					dispatch(action)
-				} else 
-				if ( response.status == "error" ) {
-					const action = pipeline.runError(output, response.error)
-					dispatch(action)
 				}
+			})
+			.catch(({ response }) => {
+				response     = response.data
+				const error  = response.error
+				const action = pipeline.runError(output, error)
+				
+				dispatch(action)
 			})
 		}
 

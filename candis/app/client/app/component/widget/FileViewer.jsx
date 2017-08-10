@@ -45,9 +45,6 @@ class FileViewer extends React.Component {
         })
 
         this.props.onSelect(parameters)
-      } else
-      if ( response.status == "error" ) {
-        // TODO: Show an error
       }
     })
   }

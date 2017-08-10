@@ -87,13 +87,10 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 
 * Running a `Pipeline`.
   ```python
-  >>> import candis
-  >>> pipeline = candis.Pipeline()
-  >>> pipeline.run('path/to/data.cdata')
-  >>> pipeline.status
-  >>> while pipeline.active:
-  ...     print(pipeline.status)
-  >>>
+  >>> pipe = candis.Pipeline()
+  >>> pipe.run(cdata)
+  >>> while pipe.status == candis.Pipeline.RUNNING:
+  ...     # do something while pipeline is running
   ```
 
 ### Demo

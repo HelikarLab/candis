@@ -74,7 +74,7 @@ const Compartments =
             {
                    ID: ID,
                  name: 'File',
-                 code: 'dat.fil',
+                 code: 'dat.fle',
                  icon: `${config.routes.icons}/document.png`,
               onClick: (dispatch) =>
               {
@@ -96,7 +96,7 @@ const Compartments =
                             {
                                value: output,
                                label: `${output.path}/${output.name}`,
-                              status: Pipeline.Status.RESOURCE_READY
+                              status: Pipeline.Status.READY
                             }
 
                             action     = stage.update(ID, update)
@@ -187,7 +187,7 @@ const Compartments =
                     animate: false,
                    callback: (folds) => {
                      if ( folds !== null ) {
-                        const update = { value: folds, label: `${folds} folds`, status: Pipeline.Status.RESOURCE_READY }
+                        const update = { value: folds, label: `${folds} folds`, status: Pipeline.Status.READY }
                         const action = stage.update(ID, update)
 
                         dispatch(action)
@@ -249,7 +249,7 @@ const Compartments =
                                   {
                                      label: method.name,
                                      value: method.value,
-                                    status: Pipeline.Status.RESOURCE_READY
+                                    status: Pipeline.Status.READY
                                   }
 
                                   var action = stage.update(ID, update)

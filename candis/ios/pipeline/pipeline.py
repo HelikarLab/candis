@@ -1,7 +1,11 @@
 # imports - standard imports
-import sys, os
+import sys, os, warnings
 import random
 import threading
+try:
+    from io import StringIO # Python 3
+except ImportError:
+    from StringIO import StringIO # Python 2
 
 # imports - third-party imports
 import addict
@@ -14,40 +18,22 @@ from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
 # imports - module imports
 from candis.config import CONFIG
 from candis.ios    import cdata
-from candis.ios    import json as JSON
+from candis.ios    import pipeline
 from candis.util   import assign_if_none, get_rand_uuid_str
-
-# importsm - standard imports
-import os
-import re
-import json
-
-# imports - third-party imports
-import addict
-import pandas as pd, arff
-from rpy2.robjects.packages import importr
-from rpy2                   import robjects
-
-# imports - module imports
-from candis.config   import CONFIG
-from candis.resource import R
-from candis.util     import assign_if_none
-from candis.ios      import json as JSON
 
 class Pipeline(object):
     CONFIG   = CONFIG.Pipeline
 
-    PENDING  = 'PENDING' # addict.Dict({ 'name': 'pending' })
+    PENDING  = 'PENDING'
     READY    = 'READY'
+    RUNNING  = 'RUNNING'
     COMPLETE = 'COMPLETE'
-    RUNNING  = 'RUNNING' # addict.Dict({ 'name': 'running' })
-    FAILED   = 'FAILED'  # addict.Dict({ 'name': 'failed'  })
 
     def __init__(self, config = { }):
-        self.status = Pipeline.PENDING
-        self.config = Pipeline.CONFIG
-        self.empty  = True
-        self.message = ''
+        self.status  = Pipeline.PENDING
+        self.config  = Pipeline.CONFIG
+        self.thread  = None
+        self.stages  = [ ]
 
         self.set_config(config)
 
@@ -55,171 +41,198 @@ class Pipeline(object):
         self.config.update(config)
 
     def set_status(self, status):
-        self.status = status
+        self.status  = status
 
+    def add_stages(self, *args):
+        self.stages += args
+
+        if any(stage == Pipeline.PENDING for stage in self.stages):
+            self.set_status(Pipeline.PENDING)
+        if all(stage == Pipeline.READY   for stage in self.stages):
+            self.set_status(Pipeline.READY)
+
+    # raise IOError, ValueError.
     def load(path):
         if not os.path.isabs(path):
-            path    = os.path.abspath(path)
+            path     = os.path.abspath(path)
+
         if not os.path.exists(path):
             raise IOError('{path} does not exist.'.format(path = path))
         if not os.path.isfile(path):
-          raise IOError('{path} is not a valid input file.'.format(path = path))
+            raise IOError('{path} is not a valid file.'.format(path = path))
 
-        stages      = JSON.read(path)
-        pipeline    = Pipeline()
-        pipeline.set_status(Pipeline.READY)
+        objekt       = Pipeline()
+        stages       = [addict.Dict(stage) for stage in pipeline.read(path)]
+        update       = [ ]
 
-        if len(stages) != 0:
-            pipeline.empty = False
+        fpath        = [addict.Dict(stage) for stage in stages if stage.code == 'dat.fle']
+        if len(fpath) == 0:
+            raise ValueError('No valid input found.')
+        if len(fpath)  > 1:
+            raise ValueError('More than one input file found.')
+        fpath        = fpath[0]
 
-        ready       = True
+        if any(stage.status == Pipeline.PENDING for stage in stages):
+            raise ValueError('Resource pending.')
 
-        for stage in stages:
-            stage   = addict.Dict(stage)
-            if stage.status == 'RESOURCE_REQUIRED':
-                ready = False
-                break
-        if not ready:
-            pipeline.set_status(Pipeline.PENDING)
-            return pipeline
+        dpath        = os.path.join(fpath.value.path, fpath.value.name)
+        data         = cdata.read(dpath)
+        fpath.status = Pipeline.READY
+        objekt.add_stages(fpath)
 
-        # check if file input is provided
-        file        = [stage for stage in stages if stage['code'] == 'dat.fil']
-        new_stages  = [ ]
-        print(file)
-        if len(file) == 0:
-            pipeline.message = 'No valid file input provided.'
-            return pipeline
-        if len(file) > 1:
-            pipeline.message = 'More than one input file provided.'
-            return pipeline
-        file        = file[0]
-        file['status'] = Pipeline.RUNNING
-        new_stages.append(file)
+        config       = addict.Dict()
 
-        preprocess = [stage for stage in stages if stage['code'].startswith('prp')]
-        preconfig  = addict.Dict()
-        for pre in preprocess:
-            if pre['code'] == 'prp.bgc':
-                preconfig.background_correction = pre['value']
-            else:
-                new_stages.append({ "label": "Robust Multi-Array Average", "code": "prp.bgc", "ID": get_rand_uuid_str(), "status": "RUNNING", "value": "rma", "name": "Background Correction"})
-            if pre['code'] == 'prp.nrm':
-                preconfig.normalization = pre['value']
-            else:
-                new_stages.append({ "label": "Quantiles", "code": "prp.nrm", "ID": get_rand_uuid_str(), "status": "RUNNING", "value": "quantiles", "name": "Normalization" })
-            if pre['code'] == 'prp.pmc':
-                preconfig.phenotype_microarray_correction = pre['value']
-            else:
-                new_stages.append({ "label": "PM Only", "code": "prp.pmc", "ID": get_rand_uuid_str(), "status": "RUNNING", "value": "pmonly", "name": "Phenotype Microarray Correction" })
-            if pre['code'] == 'prp.sum':
-                preconfig.summary = pre['value']
-            else:
-                new_stages.append({ "label": "Median Polish", "code": "prp.sum", "ID": get_rand_uuid_str(), "status": "RUNNING", "value": "medianpolish", "name": "Summarization" })
-            if pre['code'] == 'prp.kcv':
-                preconfig.folds = int(pre['value'])
-            else:
-                new_stages.append({ "label": "2", "code": "prp.kcv", "ID": get_rand_uuid_str(), "status": "RUNNING", "value": "2", "name": "k-Fold Cross-Validation" })
+        # Background Correction
+        stageprpbgc  = [stage for stage in stages if stage.code.startswith('prp.bgc')]
+        if len(stageprpbgc)  > 1:
+            raise ValueError('More than one Background Correction method provided.')
+        if len(stageprpbgc) == 0:
+            stageprpbgc     = addict.Dict(
+            {
+                   'ID': get_rand_uuid_str(),
+                 'code': 'prp.bgc',
+                 'name': 'Background Correction',
+                'value': 'rma',
+                'label': 'Robust Multi-Array Average'
+            })
+        else:
+            stageprpbgc     = stageprpbgc[0]
+        stageprpbgc.status  = Pipeline.READY
+        config.preprocess.background_correction \
+        = stageprpbgc.value
+        objekt.add_stages(stageprpbgc)
 
-        JSON.write(path, new_stages)
+        # Normalization
+        stageprpnrm  = [stage for stage in stages if stage.code.startswith('prp.nrm')]
+        if len(stageprpnrm)  > 1:
+            raise ValueError('More than one Normalization method provided.')
+        if len(stageprpnrm) == 0:
+            stageprpnrm     = addict.Dict({
+                   'ID': get_rand_uuid_str(),
+                 'code': 'prp.nrm',
+                 'name': 'Normalization',
+                'value': 'quantiles',
+                'label': 'Quantiles'
+            })
+        else:
+            stageprpnrm    = stageprpnrm[0]
+        stageprpnrm.status = Pipeline.READY
+        config.preprocess.normalization \
+        = stageprpnrm.value
+        objekt.add_stages(stageprpnrm)
 
-        for i, stage in enumerate(new_stages):
-            stage = addict.Dict(stage)
+        # Phenotype Microarray Correction
+        stageprppmc  = [stage for stage in stages if stage.code.startswith('prp.pmc')]
+        if len(stageprppmc)  > 1:
+            raise ValueError('More than one Phenotype Microarray Correction method provided.')
+        if len(stageprppmc) == 0:
+            stageprppmc     = addict.Dict({
+                   'ID': get_rand_uuid_str(),
+                 'code': 'prp.pmc',
+                 'name': 'Phenotype Microarray Correction',
+                'value': 'pmonly',
+                'label': 'PM Only'
+            })
+        else:
+            stageprppmc    = stageprppmc[0]
+        stageprppmc.status = Pipeline.READY
+        config.preprocess.phenotype_microarray_correction \
+        = stageprppmc.value
+        objekt.add_stages(stageprppmc)
 
-            if stage.code == 'dat.fil':
-                value                   = os.path.join(stage.value.path, stage.value.name)
-                new_stages[i]['status'] = Pipeline.RUNNING
-                new_stages[i]['log']    = 'Reading File'
+        # Summarization
+        stageprpsum  = [stage for stage in stages if stage.code.startswith('prp.sum')]
+        if len(stageprpsum)  > 1:
+            raise ValueError('More than one Summarization method provided.')
+        if len(stageprpsum) == 0:
+            stageprpsum     = addict.Dict({
+                   'ID': get_rand_uuid_str(),
+                 'code': 'prp.sum',
+                 'name': 'Summarization',
+                'value': 'medianpolish',
+                'label': 'Median Polish'
+            })
+        else:
+            stageprpsum    = stageprpsum[0]
+        stageprpsum.status = Pipeline.READY
+        config.preprocess.normalization \
+        = stageprpsum.value
+        objekt.add_stages(stageprpsum)
 
-                JSON.write(path, new_stages)
+        # k-Fold Cross Validation
+        stageprpkcv  = [stage for stage in stages if stage.code.startswith('prp.kcv')]
+        if len(stageprpkcv)  > 1:
+            raise ValueError('More than one fold value provided.')
+        if len(stageprpkcv) == 0:
+            stageprpkcv     = addict.Dict({
+                   'ID': get_rand_uuid_str(),
+                 'code': 'prp.kcv',
+                 'name': 'k-Fold Cross Validation',
+                'value': 2,
+                'label': 2
+            })
+        else:
+            stageprpkcv    = stageprpkcv[0]
+        stageprpkcv.status = Pipeline.READY
+        config.preprocess.normalization \
+        = int(stageprpkcv.value)
+        objekt.add_stages(stageprpkcv)
 
-                name        = '{path}.arff'.format(path = os.path.splitext(value)[0])
-                cdat        = cdata.read(value)
+        objekt.set_config(config)
 
-                new_stages[i]['status'] = Pipeline.COMPLETE
-                new_stages[i]['log']    = 'File Found'
+        return data, objekt
 
-                JSON.write(path, new_stages)
-            
-
-            JSON.write(path, new_stages)
-
-        for i, stage in enumerate(new_stages):
-            stage = addict.Dict(stage)
-
-            if stage.code == 'prp.bgc':
-                new_stages[i]['status'] = Pipeline.RUNNING
-                new_stages[i]['log']    = 'Preprocessing...'
-
-                JSON.write(path, new_stages)
-
-                cdat.toARFF(name, verbose = True, express_config = preconfig)
-
-                new_stages[i]['status'] = Pipeline.COMPLETE
-                new_stages[i]['log']    = 'Complete...'
-
-                JSON.write(path, new_stages)
-
-        return pipeline
-
-    def run(self, path, delimitter = ',', heap_size = 512, seed = None):
+    def runner(self, cdat, heap_size = 512, seed = None, save = False, verbose = False):
         self.set_status(Pipeline.RUNNING)
 
-        if not os.path.isabs(path):
-          path      = os.path.abspath(path)
+        para = self.config
 
-        if not os.path.exists(path):
-          self.set_status(Pipeline.FAILED)
+        for i, stage in enumerate(self.stages):
+            if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
+                self.stages[i].status = Pipeline.RUNNING
 
-          raise IOError('{path} does not exist.'.format(path = path))
+        name = '{name}.arff'.format(name = get_rand_uuid_str())
+        cdat.toARFF(name, express_config = para.Preprocess, verbose = verbose)
 
-        if not os.path.isfile(path):
-          self.set_status(Pipeline.FAILED)
+        for i, stage in enumerate(self.stages):
+            if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
+                self.stages[i].status = Pipeline.COMPLETE
 
-          raise IOError('{path} is not a valid input file.'.format(path = path))
-
-        name        = '{path}.arff'.format(path = os.path.splitext(path)[0])
-        cdat        = cdata.read(path, delimitter = delimitter)
-
-        para        = self.config
-
-        cdat.toARFF(name, express_config = para.Preprocess, verbose = True)
-        
         JVM.start()
 
         load = Loader(classname = 'weka.core.converters.ArffLoader')
-        data = load.load_file(name)
+        data = loader.load_file(load)
         data.class_index = cdat.iclss
 
-        # cross-validation
-        print('cross validating')
-        seed = assign_if_none(seed, random.randint(0, 1000))
+        for i, stage in enumerate(self.stages):
+            if stage.code == 'prp.kcv':
+                self.stages[i].status = Pipeline.RUNNING
 
+        # TODO - Check if this seed is worth it.
+        seed = assign_if_none(seed, random.randint(0, 1000))
         opts = ['-S', str(seed), '-N', str(para.Preprocess.FOLDS)]
         wobj = Filter(classname = 'weka.filters.supervised.instance.StratifiedRemoveFolds', options = opts + ['-V'])
         wobj.inputformat(data)
         
         tran = wobj.filter(data)
-        print(tran)
+        if save:
+            savr = Saver(classname = 'weka.core.converters.ArffSaver')
+            savr.save_file('{name}_train.arff'.format(name = name))
 
         wobj.options = opts
         test = wobj.filter(data)
-        print(test)
 
-        # end cross-validation
-        # ----- feature selection ------
-        comb   = [comb for comb in para.feature_selection if comb.use]
-        for c in comb:
-          meta = c.search
-          srch = ASSearch(classname = 'weka.attributeSelection.{klass}'.format(klass = meta.name), options = encode(meta.options))
-          meta = c.evaluator
-          ewal = ASEvaluation(classname = 'weka.attributeSelection.{klass}'.format(klass = meta.name), options = encode(meta.options))
-          
-          attr = AttributeSelection()
-          attr.search(srch)
-          attr.evaluator(ewal)
-          attr.select_attributes(tran)
-
-          print(attr.selected_attributes)
+        for i, stage in enumerate(self.stages):
+            if stage.code == 'prp.kcv':
+                self.stages[i].status = Pipeline.COMPLETE
 
         JVM.stop()
+
+        self.set_status(Pipeline.COMPLETE)
+
+    def run(self, cdat, heap_size = 512, seed = None, save = False, verbose = False):
+        if not self.thread:
+            self.thread = threading.Thread(target = self.runner, args = (cdat, heap_size, seed, save, verbose))
+            self.thread.start()
+        else:
+            warnings.warn('Pipeline currently active.')

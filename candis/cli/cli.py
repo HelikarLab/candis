@@ -34,6 +34,6 @@ def main(argv = None):
             pipe = Pipeline()
             path = args.cdata
 
-            data = pipe.run(path)
+            pipe.run(path)
 
     return code

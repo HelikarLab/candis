@@ -7,7 +7,7 @@ const modal          = (state = initial, action) => {
       return {...state, modal: action.payload, display: true }
 
     case ActionType.Modal.HIDE:
-      return {...state, display: false }
+      return initial
   }
 
   return state
