@@ -28,11 +28,10 @@ def run():
         relpath    = os.path.join(parameters.path, parameters.name)
 
         # TODO: Check if file exists, else respond error.
-
         if parameters.format == 'pipeline':
             try:
                 cdat, pipe = Pipeline.load(relpath)
-                pipe.run(cdat, verbose = CONFIG.DEBUG)
+                pipe.run(cdat, save = CONFIG.DEBUG, verbose = CONFIG.DEBUG)
 
                 while pipe.status == Pipeline.RUNNING:
                     JSON.write(relpath, pipe.stages)

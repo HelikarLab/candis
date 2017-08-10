@@ -14,10 +14,8 @@ npm-debug.log
 
 # Cache
 .sass-cache
-notebooks/.ipynb_checkpoints
 
 # misc
 CRES
 snippet
 .DS_Store
-notebooks/data

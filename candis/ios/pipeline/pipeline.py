@@ -221,10 +221,29 @@ class Pipeline(object):
 
         wobj.options = opts
         test = wobj.filter(data)
+        if save:
+            savr = Saver(classname = 'weka.core.converters.ArffSaver')
+            savr.save_file('{name}_test.arff', format(name = name))
 
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
                 self.stages[i].status = Pipeline.COMPLETE
+
+        for comb in para.FEATURE_SELECTION:
+            if comb.use:
+                srch = ASSearch(classname = 'weka.attributeSelection.{classname}'.format(
+                    classname = comb.search.name,
+                    options   = assign_if_none(comb.search.options, [ ])
+                ))
+                ewal = ASEvaluation(classname = 'weka.attributeSelection.{classname}'.format(
+                    classname = comb.evaluation.name,
+                    options   = assign_if_none(comb.evaluation.options, [ ])
+                ))
+
+                attr = AttributeSelection()
+                attr.search(srch)
+                attr.evaluator(ewal)
+                attr.select_attributes(train)
 
         JVM.stop()
 

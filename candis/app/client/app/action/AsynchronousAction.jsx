@@ -10,21 +10,16 @@ const write              = (output, buffer = null) => {
 
     dispatch(action)
 
-    return axios.post(config.routes.api.data.write, parameters).then(({ data }) => {
-      const response     = data
+    axios.post(config.routes.api.data.write, parameters).then(({ data }) => {
+      data               = data.data
+      const action       = successWrite(output, buffer, data)
 
-      if ( response.status == "success" ) {
-        const data       = response.data
-        const action     = successWrite(output, buffer, data)
+      dispatch(action)
+    }).catch(({ response }) => {
+      error              = response.data.error
+      const action       = errorWrite(output, buffer, error)
 
-        dispatch(action)
-      } else
-      if ( response.status == "error" ) {
-        const error      = response.error
-        const action     = errorWrite(output, buffer, error)
-
-        dispatch(action)
-      }
+      dispatch(action)
     })
   }
 
@@ -71,22 +66,17 @@ const getResource        = (path = null) => {
     const parameters     = { path: path }
 
     dispatch(action)
-  
-    axios.get(config.routes.api.data.resource, parameters).then(({ data }) => {
-      const response     = data
 
-      if ( response.status == "success" ) {
-        const data       = response.data
-        const action     = getResourceSuccess(path, data)
+    axios.post(config.routes.api.data.resource, parameters).then(({ data }) => {
+      data               = data.data
+      const action       = getResourceSuccess(path, data)
 
-        dispatch(action)
-      } else
-      if ( response.status == "error" ) {
-        const error      = response.error
-        const action     = getResourceError(path, error)
+      dispatch(action)
+    }).catch(({ response }) => {
+      error              = response.data.error
+      const action       = getResourceError(path, error)
 
-        dispatch(action)
-      }
+      dispatch(action)
     })
   }
 
@@ -123,7 +113,7 @@ const getResourceError   = (path, error) => {
   return action
 }
 
-const read              = (output) => {
+const read               = (output) => {
   const dispatch         = (dispatch) => {
     const action         = requestRead(output)
 
@@ -160,7 +150,6 @@ const requestRead       = (output) => {
 }
 
 const successRead       = (output, data) => {
-  console.log(data)
   const payload          = { output: output, data: data }
 
   const action           = {

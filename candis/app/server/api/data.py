@@ -94,7 +94,7 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
 
     parameters = addict.Dict(request.get_json())
     
-    path       = CONFIG.App.STARTDIR if 'path' not in parameters else os.path.join(CONFIG.App.STARTDIR, parameters.path)
+    path       = CONFIG.App.STARTDIR if not parameters.path else os.path.join(CONFIG.App.STARTDIR, parameters.path)
 
     tree       = discover_resource(
       path     = path,
