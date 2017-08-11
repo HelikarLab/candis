@@ -2,6 +2,7 @@
 import os
 
 # imports - third-party imports
+import addict
 from flask import request, jsonify
 
 # imports - module imports
@@ -15,8 +16,8 @@ from candis.app.server.response import Response
 def fmethods():
     response  = Response()
 
-    path      = os.path.join(R.Path.DATA, 'featselect-methods.json')
-    methods   = json_load(path)
+    schema    = addict.Dict(CONFIG.Pipeline.schema)
+    methods   = schema.feature_selection
 
     response.set_data(methods)
 

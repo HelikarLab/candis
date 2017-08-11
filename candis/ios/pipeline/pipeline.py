@@ -11,14 +11,17 @@ except ImportError:
 import addict
 import numpy as np
 from weka.core                import jvm as JVM
-from weka.core.converters     import Loader
+from weka.core.converters     import Loader, Saver
+from weka.core                import serialization as serializer
 from weka.filters             import Filter
 from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
+from weka.classifiers         import Classifier
 
 # imports - module imports
 from candis.config import CONFIG
 from candis.ios    import cdata
 from candis.ios    import pipeline
+from candis.ios    import json as JSON
 from candis.util   import assign_if_none, get_rand_uuid_str
 
 class Pipeline(object):
@@ -63,6 +66,10 @@ class Pipeline(object):
 
         objekt       = Pipeline()
         stages       = [addict.Dict(stage) for stage in pipeline.read(path)]
+        
+        if len(stages) == 0:
+            raise ValueError('Pipeline is empty.')
+
         update       = [ ]
 
         fpath        = [addict.Dict(stage) for stage in stages if stage.code == 'dat.fle']
@@ -174,17 +181,24 @@ class Pipeline(object):
         else:
             stageprpkcv    = stageprpkcv[0]
         stageprpkcv.status = Pipeline.READY
-        config.preprocess.normalization \
+        config.preprocess.folds \
         = int(stageprpkcv.value)
         objekt.add_stages(stageprpkcv)
+
+        # Feature Selection
+        stageats     = [stage for stage in stages if stage.code.startswith('ats')]
+        config.feature_selection \
+        = [stage.value for stage in stageats]
+        objekt.add_stages(*stageats)
 
         objekt.set_config(config)
 
         return data, objekt
 
-    def runner(self, cdat, heap_size = 512, seed = None, save = False, verbose = False):
+    def runner(self, cdat, heap_size = 512, seed = None, verbose = True):
         self.set_status(Pipeline.RUNNING)
 
+        summ = addict.Dict()
         para = self.config
 
         for i, stage in enumerate(self.stages):
@@ -198,10 +212,10 @@ class Pipeline(object):
             if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
                 self.stages[i].status = Pipeline.COMPLETE
 
-        JVM.start()
+        JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
 
         load = Loader(classname = 'weka.core.converters.ArffLoader')
-        data = loader.load_file(load)
+        data = load.load_file(name)
         data.class_index = cdat.iclss
 
         for i, stage in enumerate(self.stages):
@@ -215,43 +229,60 @@ class Pipeline(object):
         wobj.inputformat(data)
         
         tran = wobj.filter(data)
-        if save:
-            savr = Saver(classname = 'weka.core.converters.ArffSaver')
-            savr.save_file('{name}_train.arff'.format(name = name))
 
         wobj.options = opts
         test = wobj.filter(data)
-        if save:
-            savr = Saver(classname = 'weka.core.converters.ArffSaver')
-            savr.save_file('{name}_test.arff', format(name = name))
 
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
                 self.stages[i].status = Pipeline.COMPLETE
 
+        feat = [ ]
         for comb in para.FEATURE_SELECTION:
-            if comb.use:
+            if comb.USE:
                 srch = ASSearch(classname = 'weka.attributeSelection.{classname}'.format(
-                    classname = comb.search.name,
-                    options   = assign_if_none(comb.search.options, [ ])
+                    classname = comb.Search.NAME,
+                    options   = assign_if_none(comb.Search.OPTIONS, [ ])
                 ))
                 ewal = ASEvaluation(classname = 'weka.attributeSelection.{classname}'.format(
-                    classname = comb.evaluation.name,
-                    options   = assign_if_none(comb.evaluation.options, [ ])
+                    classname = comb.Evaluator.NAME,
+                    options   = assign_if_none(comb.Evaluator.OPTIONS, [ ])
                 ))
 
                 attr = AttributeSelection()
                 attr.search(srch)
                 attr.evaluator(ewal)
-                attr.select_attributes(train)
+                attr.select_attributes(tran)
+
+                meta = addict.Dict()
+                meta.search    = comb.Search.NAME
+                meta.evaluator = comb.Evaluator.NAME
+                meta.features  = [tran.attribute(index).name for index in attr.selected_attributes]
+
+                feat.append(meta)
+
+        summ.feature_selection = feat
+
+        clss = [ ]
+        for model in para.MODEL:
+            if model.use:
+                classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(
+                    classname = model.NAME,
+                    options   = assign_if_none(model.OPTIONS, [ ])
+                ))
+                classifier.build_classifier(tran)
+
+                serializer.write('{classname}.model'.format(
+                    classname = model.NAME
+                ))
 
         JVM.stop()
 
         self.set_status(Pipeline.COMPLETE)
 
-    def run(self, cdat, heap_size = 512, seed = None, save = False, verbose = False):
+    def run(self, cdat, heap_size = 16384, seed = None, verbose = False):
         if not self.thread:
-            self.thread = threading.Thread(target = self.runner, args = (cdat, heap_size, seed, save, verbose))
+            self.thread = threading.Thread(target = self.runner, args = (cdat, heap_size, seed, verbose))
             self.thread.start()
         else:
             warnings.warn('Pipeline currently active.')

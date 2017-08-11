@@ -9,6 +9,8 @@ numpy
 pandas
 rpy2
 liac-arff
+
+https://github.com/LeeKamentsky/python-javabridge/archive/master.zip
 python-weka-wrapper3
 
 Flask

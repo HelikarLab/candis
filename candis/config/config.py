@@ -26,7 +26,6 @@ class Config(object):
     '''
     def __init__(self, schema = None):
         # check_mapping(schema)
-
         self.schema   = assign_if_none(schema, { })
 
         self.children = [ ]
@@ -35,7 +34,6 @@ class Config(object):
 
     def update(self, schema):
         # check_mapping(schema)
-
         self.schema.update(schema)
 
         for key, value in self.schema.items():
@@ -61,11 +59,6 @@ class Config(object):
         self.children.append(child)
 
         setattr(self, name, value)
-
-    def getattr(self, attr):
-        if not hasattr(self, attr):
-            return None
-        return attr
 
     def __repr__(self, indent = 2):
         string = pprint.pformat(self.schema, indent = indent)

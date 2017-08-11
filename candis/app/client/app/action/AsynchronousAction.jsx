@@ -119,28 +119,23 @@ const read               = (output) => {
 
     dispatch(action)
 
-    return axios.post(config.routes.api.data.read, output).then(({ data }) => {
-      const response     = data
+    axios.post(config.routes.api.data.read, output).then(({ data }) => {
+      data               = data.data
+      const action       = successRead(output, data)
 
-      if ( response.status == "success" ) {
-        const data       = response.data
-        const action     = successRead(output, data)
+      dispatch(action)
+    }).catch(({ response }) => {
+      error              = response.data.error
+      const action       = errorRead(output, error)
 
-        dispatch(action)
-      } else
-      if ( response.status == "error" ) {
-        const error      = response.error
-        const action     = errorRead(output, error)
-
-        dispatch(action)
-      }
+      dispatch(action)
     })
   }
 
   return dispatch
 }
 
-const requestRead       = (output) => {
+const requestRead        = (output) => {
   const action           = {
        type: ActionType.Asynchronous.READ_REQUEST,
     payload: output
@@ -149,7 +144,7 @@ const requestRead       = (output) => {
   return action
 }
 
-const successRead       = (output, data) => {
+const successRead        = (output, data) => {
   const payload          = { output: output, data: data }
 
   const action           = {
@@ -160,7 +155,7 @@ const successRead       = (output, data) => {
   return action
 }
 
-const errorRead         = (output, error) => {
+const errorRead          = (output, error) => {
   const payload          = { output: output, error: error }
 
   const action           = {

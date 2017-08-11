@@ -9,23 +9,18 @@ import ToolBar       from '../ToolBar'
 import DocumentPanel from './DocumentPanel'
 import { read }      from '../../../action/AsynchronousAction'
 import { setActiveDocument } from '../../../action/DocumentProcessorAction'
-import PipelineEditor from '../PipelineEditor'
 import pipeline      from '../../../action/PipelineAction'
-import Media from '../Media'
-import Pipeline from '../../../constant/Pipeline'
+import Pipeline      from '../../../constant/Pipeline'
 
 class DocumentProcessor extends React.Component {
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate ( ) {
     const props = this.props
+    
     if ( props.errors.length ) 
     {
       props.errors.forEach((err) => {
-        bootbox.alert({
-          message: `<div class="font-bold">${err.message}</div>`,
-             size: "small",
-          animate: false,
-          buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
-        })
+        toastr.clear()
+        toastr.error(err.message, 'Error')
       })
     }
 
@@ -33,6 +28,7 @@ class DocumentProcessor extends React.Component {
     {
       const output = props.active.output
       const action = read(output)
+
       props.dispatch(action)
     }
   }
@@ -53,101 +49,37 @@ class DocumentProcessor extends React.Component {
             props.dispatch(action)
           } else
           {
-            bootbox.alert({
-              message: '<div class="font-bold">No Active Pipeline</div>',
-                 size: "small",
-              animate: false,
-              buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
-            })
+            toastr.error('No active Pipeline', 'Error')
           }
         }
-      },
-      // {
-      //      name: 'Pause',
-      //    faicon: 'pause',
-      //   tooltip: 'Pause the currently active pipeline',
-      //   onClick: (dispatch) => {
-      //     if ( props.active )
-      //     {
-      //       // const output = props.active.output
-      //       // const action = pipeline.run(output)
-      //       // props.dispatch(action)
-      //     } else
-      //     {
-      //       bootbox.alert({
-      //         message: '<div class="font-bold">No Active Pipeline</div>',
-      //            size: "small",
-      //         animate: false,
-      //         buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
-      //       })
-      //     }
-      //   }
-      // },
-      // {
-      //      name: 'Stop',
-      //    faicon: 'stop',
-      //   tooltip: 'Stop the currently active pipeline',
-      //   onClick: () => {
-      //     if ( props.active )
-      //     {
-      //       // const output = props.active.output
-      //       // const action = pipeline.run(output)
-      //       // props.dispatch(action)
-      //     } else
-      //     {
-      //       bootbox.alert({
-      //         message: '<div class="font-bold">No Active Pipeline</div>',
-      //            size: "small",
-      //         animate: false,
-      //         buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
-      //       })
-      //     }
-      //   }
-      // }
+      }
     ]
 
     return (
       <div>
         {
-          props.runningLog ?
-            <div className="panel panel-default no-border no-shadow no-background">
-              <div className="panel-body">
-                <ul className="list-group">
-                  {
-                    props.runningLog.map((node, index) => {
-                      return (
-                        <li key={index} className={classNames("list-group-item", 
-                          {  "list-group-item-danger": node.status == Pipeline.Status.RESOURCE_REQUIRED },
-                          { "list-group-item-warning": node.status == Pipeline.Status.RESOURCE_READY },
-                          { "list-group-item-success": node.status == Pipeline.Status.COMPLETE }
-                        )}>
-                          <div>
-                            <Media
-                              title={node.name}
-                               icon={node.icon}
-                               body={node.label}/>
-                            {
-                              node.status == Pipeline.Status.RUNNING ?
-                                <div className="progress progress-striped active no-padding">
-                                  <div className="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{ width: "100%" }}>
-                                  </div>
-                                </div> : null
-                            }
-                            {
-                              node.log ?
-                                <small>
-                                  {node.log}
-                                </small> : null
-                            }
-                          </div>
-                        </li>
-                      )
-                    })
-                  }
-                </ul>
-              </div>
-            </div> : null
-        } 
+          props.status.length ?
+            <ul className="list-group">
+              {
+                status.map((stage, index) => 
+                {
+                  return (
+                    <li key={index} className={classNames("list-group-item", 
+                        { "list-group-item-warning": stage.status == Pipeline.Status.READY },
+                        { "list-group-item-success": stage.status == Pipeline.Status.COMPLETE }
+                      )}>
+                      {
+                        stage.status == Pipeline.Status.RUNNING ?
+                          <div className="progress progress-striped active">
+                            <div className="progress-bar" style={{ width: "100%" }}/>
+                          </div> : null
+                      }
+                    </li>
+                  )
+                })
+              }
+            </ul> : null
+        }
         {
           props.running ?
             null 
@@ -187,9 +119,9 @@ const mapStateToProps          = (state, props) => {
   const active                 = documentProcessor.active
   const errors                 = documentProcessor.errors
   const running                = documentProcessor.running
-  const runningLog             = documentProcessor.runningLog
+  const status                 = documentProcessor.status
 
-  return { documents: documents, active: active, errors: errors, running: running, runningLog: runningLog }
+  return { documents: documents, active: active, errors: errors, running: running, status: status }
 }
 
 export default connect(mapStateToProps)(DocumentProcessor)

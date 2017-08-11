@@ -16,6 +16,6 @@ def main(argv = None):
 
 	makedirs(startdir, exists_ok = True)
 
-	app.run(host = host, port = port, debug = debug)
+	app.run(host = host, port = port, debug = debug, threaded = True)
 
 	return code

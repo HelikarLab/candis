@@ -9,13 +9,126 @@ pipeline:
     summary: "medianpolish"
     folds: 2
   feature_selection:
-    - use: true
+    - use: false
       search:
         name: BestFirst
-        options: []
+        options: ['-D', '1', '-N', '5']
       evaluator: 
         name: CfsSubsetEval
-        options: []
+    - use: false
+      search:
+        name: GeneticSearch
+        options: ['-Z', '20', '-G', '20', '-C', '0.6', '-M', '0.033', '-R', '20', '-S', '1']
+      evaluator: 
+        name: CfsSubsetEval
+    - use: false
+      search:
+        name: GreedyStepwise
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: CfsSubsetEval
+    - use: false
+      search:
+        name: LinearForwardSelection
+        options: ['-D', '0', '-N', '5', '-I', '-K', '50', '-T', '0']
+      evaluator: 
+        name: CfsSubsetEval
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: ChiSquaredAttributeEval
+    - use: false
+      search:
+        name: BestFirst
+        options: ['-D', '1', '-N', '5']
+      evaluator: 
+        name: ConsistencySubsetEval
+    - use: false
+      search:
+        name: GeneticSearch
+        options: ['-Z', '20', '-G', '20', '-C', '0.6', '-M', '0.033', '-R', '20', '-S', '1']
+      evaluator: 
+        name: ConsistencySubsetEval
+    - use: false
+      search:
+        name: LinearForwardSelection
+        options: ['-D', '0', '-N', '5', '-I', '-K', '50', '-T', '0']
+      evaluator: 
+        name: ConsistencySubsetEval
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: FilteredAttributeEval
+        options: ['-W', 'weka.attributeSelection.InfoGainAttributeEval', '-F', 'weka.filters.supervised.instance.SpreadSubsample', '-M', '0.0', '-X', '0.0', '-S', '1']
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: GainRatioAttributeEval
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: LatentSemanticAnalysis
+        options: 
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: LatentSemanticAnalysis
+        options: ['-R', '0.95', '-A', '5']
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: OneRAttributeEval
+        options: ['-S', '1', '-F', '10', '-B', '6']
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: ReliefFAttributeEval
+        options: ['-M', '-1', '-D', '1', '-K', '10']
+    - use: false
+      search:
+        name: Ranker
+        options: ['-T', '-1.7976931348623157E308', '-N', '-1']
+      evaluator: 
+        name: SymmetricalUncertAttributeEval
+    - use: false
+      search:
+        name: GeneticSearch
+        options: ['-Z', '20', '-G', '20', '-C', '0.6', '-M', '0.033', '-R', '20', '-S', '1']
+      evaluator: 
+        name: WrapperSubsetEval
+        options: ['-B', 'weka.classifiers.rules.ZeroR', '-F', '5', '-T', '0.01', '-R', '1']
+    - use: false
+      search:
+        name: RankSearch
+        options: ['-Z', '20', '-G', '20', '-C', '0.6', '-M', '0.033', '-R', '20', '-S', '1']
+      evaluator: 
+        name: WrapperSubsetEval
+        options: ['-B', 'weka.classifiers.rules.ZeroR', '-F', '5', '-T', '0.01', '-R', '1']
+  model:
+    - use: true
+      name: bayes.NaiveBayes
+    - use: false
+      name: trees.J48
+    - use: false
+      name: functions.SMO
+    - use: false
+      name: lazy.IBk
+    - use: false
+      name: trees.RandomForest
 CLI:
   arguments:
     - name: ["-d", "--cdata"]

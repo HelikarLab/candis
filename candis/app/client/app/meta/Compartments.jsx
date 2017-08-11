@@ -311,68 +311,68 @@ const Compartments =
         var   tools    = [ ]
 
         if ( response.status == "success" ) {
-          const data   = response.data
-          tools        = data.map((method) => {
-            const desc = method.desc
-            const tool = 
+          const data      = response.data
+
+          const tools     = data.map((method) => {
+            const name    = `${method.search.name.replace(/([A-Z])/g, ' $1')} + ${method.evaluator.name.replace(/([A-Z])/g, ' $1')}`
+            const tool    = 
             {
-                     name: method.name,
-                     icon: method.icon,
-              description: desc.short,
-                  onClick: (dispatch) =>
-                  {
-                    const ID      = shortid.generate()
-                    const stage   = 
+                 name: name,
+              onClick: (dispatch) => {
+                  const ID      = shortid.generate()
+                  const meta    = {
+                         ID: ID,
+                       code: 'ats',
+                       name: name,
+                      value: { ...method, use: true },
+                     status: Pipeline.Status.READY,
+                    onClick: (dispatch) => 
                     {
-                           ID: ID,
-                         name: method.name,
-                         code: method.code,
-                       status: "READY",
-                      onClick: (dispatch) =>
-                      {
-                        const title    = 
-                        `
-                        <div class="font-bold">
-                          ${method.name}
-                        </div>
-                        `
-                        ,     detail   = desc.long || desc.short
-                        ,     message  = 
-                        ` 
-                        <div class="text-justify">
-                          ${detail.replace(/\n/g, '<br/>')}
-                        </div>
-                        `
+                        // const title    = 
+                        // `
+                        // <div class="font-bold">
+                        //   ${method.name}
+                        // </div>
+                        // `
+                        // ,     detail   = desc.long || desc.short
+                        // ,     message  = 
+                        // ` 
+                        // <div class="text-justify">
+                        //   ${detail.replace(/\n/g, '<br/>')}
+                        // </div>
+                        // `
 
-                        const dialog   = bootbox.dialog({
-                            title: title,
-                          message: message,
-                          buttons: { ok: { label: "Ok"} },
-                             size: 'large',
-                          animate: false
-                        })
+                        // const dialog   = bootbox.dialog({
+                        //     title: title,
+                        //   message: message,
+                        //   buttons: { ok: { label: "Ok"} },
+                        //      size: 'large',
+                        //   animate: false
+                        // })
 
-                         dialog.init(() => {
-                          setTimeout(() => {
-                            var $element = dialog.find('.bootbox-body');
+                        //  dialog.init(() => {
+                        //   setTimeout(() => {
+                        //     var $element = dialog.find('.bootbox-body');
 
-                            MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
-                          }, 500)
-                        })
-                      } // end meta.onClick
-                    } // end meta
+                        //     MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
+                        //   }, 500)
+                        // })
+                    } // end meta.onClick
+                  } // end meta
 
-                    const action = setNode(stage)
-                    
-                    dispatch(action)
-                  }
-            }
+                  const action = stage.set(meta)
+
+                  dispatch(action)
+              } // end tool.onClick
+            } // end tool
 
             return tool
           })
-        }
 
-        return tools
+          return tools
+        } else {
+          return [ ]
+        }
       })
     }
   },
