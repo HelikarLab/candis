@@ -38,8 +38,15 @@ $ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd can
 ```
 
 Install necessary dependencies:
+
+***Python***
 ```console
 $ pip install -r requirements.txt
+```
+
+***R***
+```console
+$ cd R && Rscript setup.R
 ```
 
 Then, go ahead and simply:
@@ -80,7 +87,7 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
   ```
 
   Then, simply use the `CData.toARFF` API:
-  
+
   ```python
   >>> cdata.toARFF('path/to/data.arff')
   ```

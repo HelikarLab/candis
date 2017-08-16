@@ -7,6 +7,7 @@ pandas
 rpy2
 liac-arff
 
+cython
 https://github.com/LeeKamentsky/python-javabridge/archive/master.zip
 python-weka-wrapper3
 
