@@ -1,5 +1,6 @@
 # imports - standard imports
 import os
+import json
 
 # imports - third-party imports
 from flask import request, jsonify
@@ -127,8 +128,11 @@ def read():
 
             response.set_data(data)
         elif parameters.format == 'pipeline':
-            data = JSON.read(path)
-
+            try:
+                data = JSON.read(path)
+            except json.decoder.JSONDecodeError as e:
+                data = [ ]
+                
             response.set_data(data)
         else:
             response.set_error(Response.Error.UNPROCESSABLE_ENTITY)

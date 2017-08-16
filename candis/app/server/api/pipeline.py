@@ -1,5 +1,6 @@
 # imports - standard imports
 import os
+import time
 
 # imports - third-party imports
 from flask import request, jsonify
@@ -14,27 +15,37 @@ from candis.resource            import R
 from candis.ios                 import Pipeline
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
+from candis.app.server.app      import socketio
 from candis.app.server.response import Response
 
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Pipeline.RUN, methods = ['POST'])
-def run():
-    response       = Response()
+def run(delay = 5):
+    response         = Response()
 
-    parameters     = addict.Dict(request.get_json())
+    parameters       = addict.Dict(request.get_json())
 
     if parameters.path and parameters.name and parameters.format:
-        relpath    = os.path.join(parameters.path, parameters.name)
+        relpath      = os.path.join(parameters.path, parameters.name)
 
         # TODO: Check if file exists, else respond error.
         if parameters.format == 'pipeline':
             try:
-                cdat, pipe = Pipeline.load(relpath)
+                cdat, pipe  = Pipeline.load(relpath)
                 pipe.run(cdat, verbose = CONFIG.DEBUG)
 
-                # while pipe.status == Pipeline.RUNNING:
-                #     JSON.write(relpath, pipe.stages)
+                while pipe.status == Pipeline.RUNNING:
+                    status        = addict.Dict()
+                    status.stages = pipe.stages
+                    status.logs   = pipe.logs
+
+                    socketio.emit('status', status)
+
+                    time.sleep(delay)
+
+                JSON.write(relpath, pipe.stages)
+
             except (IOError, ValueError) as e:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, str(e))
         else:

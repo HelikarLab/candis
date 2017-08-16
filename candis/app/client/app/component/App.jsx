@@ -25,7 +25,7 @@ class App extends React.Component {
 
   render ( ) {
     const props  = this.props
-    
+
     return (
       <div>
         <AppBar
@@ -54,7 +54,7 @@ class App extends React.Component {
 
 const mapStateToProps = (state, props) => {
   const app           = state.app
-  
+
   return {
     user: app.user
   }

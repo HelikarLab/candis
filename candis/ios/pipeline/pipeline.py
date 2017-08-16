@@ -36,6 +36,7 @@ class Pipeline(object):
         self.status  = Pipeline.PENDING
         self.config  = Pipeline.CONFIG
         self.thread  = None
+        self.logs    = [ ]
         self.stages  = [ ]
 
         self.set_config(config)
@@ -193,20 +194,42 @@ class Pipeline(object):
 
         objekt.set_config(config)
 
+        stagelrn     = [stage for stage in stages if stage.code.startswith('lrn')]
+        config.model \
+        = [stage.value for stage in stagelrn]
+        objekt.add_stages(*stagelrn)
+
         return data, objekt
 
-    def runner(self, cdat, heap_size = 512, seed = None, verbose = True):
+    def runner(self, cdat, heap_size = 16384, seed = None, verbose = True):
         self.set_status(Pipeline.RUNNING)
+
+        self.logs.append('Initializing Pipeline')
 
         summ = addict.Dict()
         para = self.config
 
+        self.logs.append('Reading Pipeline Configuration')
+
+        head = ''
+        name = get_rand_uuid_str()
+
+        self.logs.append('Reading Input File')
+
         for i, stage in enumerate(self.stages):
             if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
                 self.stages[i].status = Pipeline.RUNNING
+            if stage.code ==  'dat.fle':
+                head    = os.path.abspath(stage.value.path)
+                name, _ = os.path.splitext(stage.value.name)
 
-        name = '{name}.arff'.format(name = get_rand_uuid_str())
-        cdat.toARFF(name, express_config = para.Preprocess, verbose = verbose)
+        self.logs.append('Parsing to ARFF')
+
+        path = os.path.join(head, '{name}.arff'.format(name = name))
+        # cdat.toARFF(path, express_config = para.Preprocess, verbose = verbose)
+
+        self.logs.append('Saved ARFF at {path}'.format(path = path))
+        self.logs.append('Splitting to Training and Testing Sets')
 
         for i, stage in enumerate(self.stages):
             if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
@@ -215,7 +238,8 @@ class Pipeline(object):
         JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
 
         load = Loader(classname = 'weka.core.converters.ArffLoader')
-        data = load.load_file(name)
+        save =  Saver(classname = 'weka.core.converters.ArffSaver')
+        data = load.load_file(path)
         data.class_index = cdat.iclss
 
         for i, stage in enumerate(self.stages):
@@ -229,13 +253,17 @@ class Pipeline(object):
         wobj.inputformat(data)
 
         tran = wobj.filter(data)
+        save.save_file(tran, os.path.join(head, '{name}_train.arff'.format(name = name)))
 
         wobj.options = opts
         test = wobj.filter(data)
+        save.save_file(test, os.path.join(head,  '{name}_test.arff'.format(name = name)))
 
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
                 self.stages[i].status = Pipeline.COMPLETE
+
+        self.logs.append('Performing Feature Selection')
 
         feat = [ ]
         for comb in para.FEATURE_SELECTION:
@@ -263,20 +291,21 @@ class Pipeline(object):
 
         summ.feature_selection = feat
 
-        clss = [ ]
         for model in para.MODEL:
-            if model.use:
+            if model.USE:
                 classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(
                     classname = model.NAME,
                     options   = assign_if_none(model.OPTIONS, [ ])
                 ))
                 classifier.build_classifier(tran)
 
-                serializer.write('{classname}.model'.format(
+                serializer.write(os.path.join(head, '{classname}.model'.format(
                     classname = model.NAME
-                ))
+                )))
 
         JVM.stop()
+
+        JSON.write(os.path.join(head, '{name}.summary.json'.format(name = name)), summ)
 
         self.set_status(Pipeline.COMPLETE)
 

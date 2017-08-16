@@ -3,39 +3,45 @@ import PropTypes     from 'prop-types'
 import { connect }   from 'react-redux'
 import classNames    from 'classnames'
 
-import axios         from 'axios'
+import io            from 'socket.io-client'
 
 import ToolBar       from '../ToolBar'
+import Media         from '../Media'
 import DocumentPanel from './DocumentPanel'
-import { read }      from '../../../action/AsynchronousAction'
+
+import config        from '../../../config'
 import { setActiveDocument } from '../../../action/DocumentProcessorAction'
 import pipeline      from '../../../action/PipelineAction'
 import Pipeline      from '../../../constant/Pipeline'
 
-class DocumentProcessor extends React.Component {
-  componentDidUpdate ( ) {
+class DocumentProcessor extends React.Component
+{
+  constructor (props)
+  {
+    super (props)
+
+    this.socket = io.connect(`http://${config.host}:${config.port}`)
+    this.state  = DocumentProcessor.defaultStates
+  }
+
+  componentDidUpdate ( )
+  {
     const props = this.props
-    
-    if ( props.errors.length ) 
+
+    if ( props.running )
     {
-      props.errors.forEach((err) => {
-        toastr.clear()
-        toastr.error(err.message, 'Error')
+      this.socket.on('status', (status) => {
+        this.setState({
+          status: status
+        })
       })
-    }
-
-    if ( props.running ) 
-    {
-      const output = props.active.output
-      const action = read(output)
-
-      props.dispatch(action)
     }
   }
 
   render ( ) {
-    const props = this.props
-    const tools = 
+    const props  = this.props
+    const status = this.state.status
+    const tools  =
     [
       {
            name: 'Run',
@@ -46,6 +52,7 @@ class DocumentProcessor extends React.Component {
           {
             const output = props.active.output
             const action = pipeline.run(output)
+
             props.dispatch(action)
           } else
           {
@@ -55,73 +62,89 @@ class DocumentProcessor extends React.Component {
       }
     ]
 
+    props.errors.forEach((err) => {
+      toastr.clear()
+      toastr.error(err.message, 'Error')
+    })
+
+    status.logs.forEach((log) => {
+      toastr.clear()
+      toastr.success(log)
+    })
+
     return (
       <div>
+        <div className="panel panel-default no-shadow">
+          <div className="panel-heading">
+            <div className="text-center">
+              {
+                props.running && status.logs.length ?
+                  null
+                  :
+                  <ToolBar
+                         tools={tools}
+                    classNames={{ root: "no-margin" }}
+                       onClick={(tool) => {
+                          tool.onClick()
+                       }}/>
+              }
+            </div>
+          </div>
+        </div>
         {
-          props.status.length ?
+          props.running && status.stages.length ?
             <ul className="list-group">
               {
-                status.map((stage, index) => 
+                status.stages.map((stage, index) =>
                 {
                   return (
-                    <li key={index} className={classNames("list-group-item", 
+                    <li key={index} className={classNames("list-group-item",
                         { "list-group-item-warning": stage.status == Pipeline.Status.READY },
                         { "list-group-item-success": stage.status == Pipeline.Status.COMPLETE }
                       )}>
+                      <p>
+                        <Media
+                          title={stage.name}
+                           body={stage.label}/>
+                      </p>
                       {
                         stage.status == Pipeline.Status.RUNNING ?
-                          <div className="progress progress-striped active">
+                          <div className="progress progress-striped active no-margin">
                             <div className="progress-bar" style={{ width: "100%" }}/>
-                          </div> : null
+                          </div>
+                          : null
                       }
                     </li>
                   )
                 })
               }
-            </ul> : null
-        }
-        {
-          props.running ?
-            null 
+            </ul>
             :
-            <div>
-                <div className="panel panel-default no-shadow">
-                  <div className="panel-heading">
-                    <div className="text-center">
-                      <ToolBar
-                             tools={tools}
-                        classNames={{ root: "no-margin" }}
-                           onClick={(tool) => {
-                              tool.onClick()
-                           }}/>
-                    </div>
-                  </div>
-                </div>
-                <DocumentPanel
-                  documents={props.documents}
-                     active={props.active}
-                   onActive={(dokument) => {
-                      props.dispatch(setActiveDocument(dokument))
-                   }}/>
-              </div>
+            <DocumentPanel
+              documents={props.documents}
+                 active={props.active}
+               onActive={(dokument) => {
+                  props.dispatch(setActiveDocument(dokument))
+               }}/>
         }
       </div>
     )
   }
 }
 
-DocumentProcessor.propTypes    = { documents: PropTypes.array }
-DocumentProcessor.defaultProps = { documents: [ ] }
+DocumentProcessor.propTypes     = { documents: PropTypes.array }
+DocumentProcessor.defaultProps  = { documents: [ ] }
 
-const mapStateToProps          = (state, props) => {
-  const documentProcessor      = state.documentProcessor
-  const documents              = documentProcessor.documents
-  const active                 = documentProcessor.active
-  const errors                 = documentProcessor.errors
-  const running                = documentProcessor.running
-  const status                 = documentProcessor.status
+DocumentProcessor.defaultStates = { status: { logs: [ ], stages: [ ] } }
 
-  return { documents: documents, active: active, errors: errors, running: running, status: status }
+const mapStateToProps           = (state, props) => {
+  const documentProcessor       = state.documentProcessor
+  const documents               = documentProcessor.documents
+  const active                  = documentProcessor.active
+  const errors                  = documentProcessor.errors
+  const running                 = documentProcessor.running
+
+  return { documents: documents, active: active, errors: errors, running: running }
 }
 
 export default connect(mapStateToProps)(DocumentProcessor)

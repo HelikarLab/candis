@@ -1,9 +1,11 @@
-const Pipeline = 
+const Pipeline =
 {
 	Status:
 	{
-		PENDING: "PENDING",
-		  READY: "READY"
+		 PENDING: "PENDING",
+		 RUNNING: "RUNNING",
+		   READY: "READY",
+		COMPLETE: "COMPLETE"
 	}
 }
 

@@ -10,31 +10,28 @@ const initial             =
   documents: [ ],
      active: null,
       nodes: { },
-    running: false,
+    running: null,
      status: [ ],
      errors: [ ]
 }
 
 const documentProcessor   = (state = initial, action) => {
   switch (action.type) {
-    case ActionType.Asynchronous.READ_SUCCESS: 
-      return { ...state, status: action.payload.data, errors: [ ] }
-
     case ActionType.Asynchronous.WRITE_SUCCESS: {
       const meta          = action.payload.data
       var   active        = null
 
       if ( meta.output.format == FileFormat.PIPELINE )
       {
-        const documents   = state.documents.slice().map((dokument) => 
+        const documents   = state.documents.slice().map((dokument) =>
         {
           const exists    = isEqual(dokument.output, meta.output)
-          if ( exists ) 
+          if ( exists )
           {
             const pipe    = [ ]
             meta.data.forEach((stage) =>
             {
-              const node = 
+              const node =
               {
                      ID: stage.ID,
                    code: stage.code,
@@ -60,7 +57,7 @@ const documentProcessor   = (state = initial, action) => {
           const pipe   = [ ]
           meta.data.forEach((stage) =>
           {
-            const node = 
+            const node =
             {
                    ID: stage.ID,
                  code: stage.code,
@@ -108,10 +105,10 @@ const documentProcessor   = (state = initial, action) => {
       const node         = action.payload
       var   nodes        = state.nodes
 
-      if ( !state.nodes[node.code] ) 
+      if ( !state.nodes[node.code] )
       {
         nodes            = cloneDeep(state.nodes)
-        nodes[node.code] = 
+        nodes[node.code] =
         {
           onClick: node.onClick,
              icon: node.icon
@@ -122,13 +119,16 @@ const documentProcessor   = (state = initial, action) => {
     }
 
     case ActionType.Pipeline.RUN_REQUEST:
-      return {...state, running: true }
+      nprogress.set(0.0)
+      return {...state, running: action.payload }
 
     case ActionType.Pipeline.RUN_SUCCESS:
-      return {...state, running: false }
+      nprogress.set(1.0)
+      return {...state, running: null }
 
     case ActionType.Pipeline.RUN_ERROR:
-      return {...state, running: false, errors: action.payload.error.errors }
+      nprogress.set(1.0)
+      return {...state, running: null, errors: action.payload.error.errors }
   }
 
   return state

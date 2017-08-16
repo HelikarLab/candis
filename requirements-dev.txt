@@ -16,4 +16,5 @@ python-weka-wrapper3
 
 Flask
 django-htmlmin
+flask-socketio
 pytest

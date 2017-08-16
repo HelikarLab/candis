@@ -16,7 +16,7 @@ const write              = (output, buffer = null) => {
 
       dispatch(action)
     }).catch(({ response }) => {
-      error              = response.data.error
+      const error        = response.data.error
       const action       = errorWrite(output, buffer, error)
 
       dispatch(action)
@@ -73,7 +73,7 @@ const getResource        = (path = null) => {
 
       dispatch(action)
     }).catch(({ response }) => {
-      error              = response.data.error
+      const error        = response.data.error
       const action       = getResourceError(path, error)
 
       dispatch(action)
@@ -125,7 +125,7 @@ const read               = (output) => {
 
       dispatch(action)
     }).catch(({ response }) => {
-      error              = response.data.error
+      const error        = response.data.error
       const action       = errorRead(output, error)
 
       dispatch(action)

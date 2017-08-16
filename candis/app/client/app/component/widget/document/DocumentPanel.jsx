@@ -8,7 +8,7 @@ import PipelineEditor from '../PipelineEditor'
 class DocumentPanel extends React.Component {
   render ( ) {
     const props  = this.props
-    
+
     const tabs   = props.documents.map((dokument) => {
       const name = dokument.output.name.split('.')[0]
 
@@ -44,7 +44,7 @@ class DocumentPanel extends React.Component {
   }
 }
 
-DocumentPanel.propTypes    = 
+DocumentPanel.propTypes    =
 {
   documents: PropTypes.array,
    onActive: PropTypes.func,

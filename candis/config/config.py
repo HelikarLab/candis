@@ -60,6 +60,9 @@ class Config(object):
 
         setattr(self, name, value)
 
+    def __getattr__(self, item):
+        return None
+
     def __repr__(self, indent = 2):
         string = pprint.pformat(self.schema, indent = indent)
 

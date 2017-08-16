@@ -10,7 +10,7 @@ import { stage }  from '../../action/DocumentProcessorAction'
 
 class PipelineEditor extends React.Component
 {
-	render ( ) 
+	render ( )
 	{
 		const props = this.props
 
@@ -19,7 +19,7 @@ class PipelineEditor extends React.Component
 				{
 					props.stages.map((node, index) => {
 						return (
-							<li key={index} className={classNames("list-group-item", 
+							<li key={index} className={classNames("list-group-item",
 								{  "list-group-item-danger": node.status == Pipeline.Status.PENDING },
 								{ "list-group-item-warning": node.status == Pipeline.Status.READY }
 							)}>
@@ -38,16 +38,9 @@ class PipelineEditor extends React.Component
 											</a>
 										</div>
 										<div className="col-xs-3" >
-											
+
 										</div>
 									</div>
-									{
-										node.status == Pipeline.Status.RUNNING ?
-											<div className="progress progress-striped active no-padding">
-			                  <div className="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style={{ width: "100%" }}>
-			                  </div>
-			                </div> : null
-									}
 								</div>
 							</li>
 						)

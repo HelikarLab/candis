@@ -1,14 +1,17 @@
 # imports - third-party imports
-from flask import Flask
+from flask          import Flask
+from flask_socketio import SocketIO
 from htmlmin.minify import html_minify
 
 # imports - module imports
+from candis.config   import CONFIG
 from candis.resource import R
 
-app = Flask(__name__,
+app      = Flask(__name__,
     template_folder = R.Path.TEMPLATES,
     static_folder   = R.Path.ASSETS
 )
+socketio = SocketIO(app)
 
 @app.after_request
 def minify(response):

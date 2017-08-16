@@ -4,9 +4,9 @@ import config     from '../config'
 
 import ActionType from '../constant/ActionType'
 
-const pipeline     = 
+const pipeline     =
 {
-	run: (output) => 
+	run: (output) =>
 	{
 		const dispatch = (dispatch) =>
 		{
@@ -14,40 +14,37 @@ const pipeline     =
 			dispatch(action)
 
 			axios.post(config.routes.api.pipeline.run, output).then(({ data }) => {
-				const response = data
+				data         = data.data
+				const action = pipeline.runSuccess(output, data)
 
-				if ( response.status == "success" ) {
-					const action = pipeline.runSuccess(output, response.data)
-					dispatch(action)
-				}
+				dispatch(action)
 			})
 			.catch(({ response }) => {
-				response     = response.data
-				const error  = response.error
+				const error  = response.data.error
 				const action = pipeline.runError(output, error)
-				
+
 				dispatch(action)
 			})
 		}
 
 		return dispatch
 	},
-	runRequest: (output) => 
+	runRequest: (output) =>
 	{
-		const action = 
+		const action =
 		{
-			type: ActionType.Pipeline.RUN_REQUEST,
+			   type: ActionType.Pipeline.RUN_REQUEST,
 			payload: output
 		}
 
 		return action
 	},
-	runSuccess: (output, data) => 
+	runSuccess: (output, data) =>
 	{
 		const payload = { output: output, data: data }
-		const action = 
+		const action  =
 		{
-			type: ActionType.Pipeline.RUN_SUCCESS,
+			   type: ActionType.Pipeline.RUN_SUCCESS,
 			payload: payload
 		}
 
@@ -56,9 +53,9 @@ const pipeline     =
 	runError: (output, error) =>
 	{
 		const payload = { output: output, error: error }
-		const action = 
+		const action =
 		{
-			type: ActionType.Pipeline.RUN_ERROR,
+			   type: ActionType.Pipeline.RUN_ERROR,
 			payload: payload
 		}
 

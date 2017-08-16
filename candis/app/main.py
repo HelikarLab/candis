@@ -5,6 +5,7 @@ import os
 from candis.config import CONFIG
 from candis.util   import get_free_port, makedirs
 from candis.app    import app
+from candis.app    import socketio
 
 def main(argv = None):
 	code     = os.EX_OK
@@ -16,6 +17,6 @@ def main(argv = None):
 
 	makedirs(startdir, exists_ok = True)
 
-	app.run(host = host, port = port, debug = debug, threaded = True)
+	socketio.run(app, host = host, port = port, debug = debug)
 
 	return code

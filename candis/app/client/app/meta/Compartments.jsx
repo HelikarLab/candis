@@ -8,7 +8,7 @@ import Pipeline  from '../constant/Pipeline'
 import modal     from '../action/ModalAction'
 import { stage } from '../action/DocumentProcessorAction'
 
-const Compartments = 
+const Compartments =
 [
   {
        name: 'Data',
@@ -22,12 +22,12 @@ const Compartments =
           onClick: (dispatch) => {
             var   name    = null
             var   data    = null
-            const dialog  = 
+            const dialog  =
             {
               component: Component.FileEditor,
                   title: 'Create',
                    size: 'lg',
-                buttons: 
+                buttons:
                 [
                   {
                         label: "Ok",
@@ -37,11 +37,11 @@ const Compartments =
                         var action = modal.hide()
 
                         dispatch(action)
-                      } 
+                      }
                   },
                   {
                         label: "Cancel",
-                      onClick: ( ) => 
+                      onClick: ( ) =>
                       {
                         var action = modal.hide()
 
@@ -49,10 +49,10 @@ const Compartments =
                       }
                   }
                 ],
-                  props: 
+                  props:
                   {
                     classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
-                      onChange: 
+                      onChange:
                       {
                         name: (changed) => { name = changed },
                         data: (changed) => { data = changed }
@@ -70,7 +70,7 @@ const Compartments =
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
             const ID      = shortid.generate()
-            const meta    = 
+            const meta    =
             {
                    ID: ID,
                  name: 'File',
@@ -79,12 +79,12 @@ const Compartments =
               onClick: (dispatch) =>
               {
                 var   output  = null
-                const dialog  = 
+                const dialog  =
                 {
                   component: Component.FileViewer,
                       title: 'File',
                        size: 'lg',
-                    buttons: 
+                    buttons:
                     [
                       {
                             label: "Select",
@@ -92,7 +92,7 @@ const Compartments =
                           onClick: ( ) =>
                           {
                             var action;
-                            var update = 
+                            var update =
                             {
                                value: output,
                                label: `${output.path}/${output.name}`,
@@ -106,11 +106,11 @@ const Compartments =
                             action     = modal.hide()
 
                             dispatch(action)
-                          } 
+                          }
                       },
                       {
                             label: "Cancel",
-                          onClick: ( ) => 
+                          onClick: ( ) =>
                           {
                             var action = modal.hide()
 
@@ -118,7 +118,7 @@ const Compartments =
                           }
                       }
                     ], // end dialog.buttons
-                      props: 
+                      props:
                       {
                         classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
                           onSelect: (selected) => { output = selected }
@@ -166,7 +166,7 @@ const Compartments =
           tooltip: 'Split a dataset into k folds',
           onClick: (dispatch) => {
             const ID     = shortid.generate()
-            const meta   = 
+            const meta   =
             {
                    ID: ID,
                  name: 'k-Fold Cross-Validation',
@@ -217,11 +217,11 @@ const Compartments =
           const data      = response.data
 
           const tools     = data.map((method) => {
-            const tool    = 
+            const tool    =
             {
                  name: method.name,
               onClick: (dispatch) => {
-                  const options = method.methods.map((option) => 
+                  const options = method.methods.map((option) =>
                   {
                     return { label: option.name, value: JSON.stringify(option) }
                   })
@@ -237,7 +237,7 @@ const Compartments =
                       {
                         component: Component.SelectViewer,
                             title: method.name,
-                          buttons: 
+                          buttons:
                           [
                             {
                                   label: "Select",
@@ -245,7 +245,7 @@ const Compartments =
                                 onClick: ( ) =>
                                 {
                                       method = JSON.parse(option.value)
-                                  var update = 
+                                  var update =
                                   {
                                      label: method.name,
                                      value: method.value,
@@ -259,11 +259,11 @@ const Compartments =
                                   action     = modal.hide()
 
                                   dispatch(action)
-                                } 
+                                }
                             },
                             {
                                   label: "Cancel",
-                                onClick: ( ) => 
+                                onClick: ( ) =>
                                 {
                                   var action = modal.hide()
 
@@ -271,7 +271,7 @@ const Compartments =
                                 }
                             }
                           ], // end dialog.buttons
-                            props: 
+                            props:
                             {
                               classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
                                  options: options,
@@ -315,7 +315,7 @@ const Compartments =
 
           const tools     = data.map((method) => {
             const name    = `${method.search.name.replace(/([A-Z])/g, ' $1')} + ${method.evaluator.name.replace(/([A-Z])/g, ' $1')}`
-            const tool    = 
+            const tool    =
             {
                  name: name,
               onClick: (dispatch) => {
@@ -326,17 +326,17 @@ const Compartments =
                        name: name,
                       value: { ...method, use: true },
                      status: Pipeline.Status.READY,
-                    onClick: (dispatch) => 
+                    onClick: (dispatch) =>
                     {
-                        // const title    = 
+                        // const title    =
                         // `
                         // <div class="font-bold">
                         //   ${method.name}
                         // </div>
                         // `
                         // ,     detail   = desc.long || desc.short
-                        // ,     message  = 
-                        // ` 
+                        // ,     message  =
+                        // `
                         // <div class="text-justify">
                         //   ${detail.replace(/\n/g, '<br/>')}
                         // </div>
@@ -380,7 +380,7 @@ const Compartments =
        name: 'Model',
        icon: `${config.routes.icons}/network.png`,
     tooltip: 'List of Models',
-    fetcher: ( ) => 
+    fetcher: ( ) =>
     {
       return axios.get(config.routes.api.model.methods).then(({ data }) => {
         const response = data
@@ -390,7 +390,7 @@ const Compartments =
           const data   = response.data
           tools        = data.map((method) => {
             const desc = method.desc
-            const tool = 
+            const tool =
             {
                      name: method.name,
                   tooltip: method.type,
@@ -400,23 +400,24 @@ const Compartments =
                   {
                     // TODO: The following snippet requires a component - LaTeXReader
                     const ID      = shortid.generate()
-                    const stage   = 
+                    const stage   =
                     {
                            ID: ID,
                          name: method.name,
-                         code: method.code,
+                         code: 'lrn',
+                        value: { ...method, use: true },
                        status: "READY",
                       onClick: (dispatch) =>
                       {
-                        const title    = 
+                        const title    =
                         `
                         <div class="font-bold">
                           ${method.name}
                         </div>
                         `
                         ,     detail   = desc.long || desc.short || method.type
-                        ,     message  = 
-                        ` 
+                        ,     message  =
+                        `
                         <div class="text-justify">
                           ${detail.replace(/\n/g, '<br/>')}
                         </div>
@@ -441,7 +442,7 @@ const Compartments =
                     } // end stage
 
                     const action = setNode(stage)
-                    
+
                     dispatch(action)
                   }
             }
