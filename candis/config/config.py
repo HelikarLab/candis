@@ -34,7 +34,7 @@ class Config(object):
 
     def update(self, schema):
         # check_mapping(schema)
-        self.schema.update(schema)
+        self.schema.update(dict(schema))
 
         for key, value in self.schema.items():
             # assuming (key, value) to be a leaf node.

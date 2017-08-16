@@ -139,7 +139,7 @@ class CData(object):
             name = '.tmp.eset'
             robj = robjects.r('write.exprs')
             robj(eset, file = name)
-              
+
             eset = pd.read_csv(name, sep = '\t')
             AIDs = eset.ix[:, 0] # Affymetrix IDs
             data = eset.ix[:,1:].T
@@ -155,10 +155,10 @@ class CData(object):
                     if attr.type is 'nominal':
                         vals = list(self.data[column].unique())
                         form = [(attr.name, vals)]
-                    
+
                     if attr.type is 'numeric':
                         form = [(attr.name, 'NUMERIC')]
-                    
+
                     attrs   += form
                     data     = data.assign(**{ attr.name: self.data[column].values })
 
@@ -174,7 +174,7 @@ class CData(object):
             handle           = open(path, mode = 'w') if isinstance(path, str) else path
 
             arff.dump(meta, handle)
-            
+
             handle.close()
 
             os.remove(name)

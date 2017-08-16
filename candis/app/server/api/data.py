@@ -93,7 +93,7 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
-    
+
     path       = CONFIG.App.STARTDIR if not parameters.path else os.path.join(CONFIG.App.STARTDIR, parameters.path)
 
     tree       = discover_resource(
@@ -120,17 +120,14 @@ def read():
         path    = os.path.join(parameters.path, parameters.name)
 
         # TODO: Check if file exists, else respond error.
-        dict_   = { }
 
         if parameters.format == 'cdata':
-            cdat  = cdata.read(path)
-            dict_ = cdat.to_dict()
+            cdat = cdata.read(path)
+            data = cdat.to_dict()
 
-            response.set_data(dict_)
+            response.set_data(data)
         elif parameters.format == 'pipeline':
-            data        = addict.Dict()
-            data.output = parameters
-            data.data   = JSON.read(path)
+            data = JSON.read(path)
 
             response.set_data(data)
         else:

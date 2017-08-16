@@ -66,7 +66,7 @@ class Pipeline(object):
 
         objekt       = Pipeline()
         stages       = [addict.Dict(stage) for stage in pipeline.read(path)]
-        
+
         if len(stages) == 0:
             raise ValueError('Pipeline is empty.')
 
@@ -162,7 +162,7 @@ class Pipeline(object):
         else:
             stageprpsum    = stageprpsum[0]
         stageprpsum.status = Pipeline.READY
-        config.preprocess.normalization \
+        config.preprocess.summary \
         = stageprpsum.value
         objekt.add_stages(stageprpsum)
 
@@ -227,7 +227,7 @@ class Pipeline(object):
         opts = ['-S', str(seed), '-N', str(para.Preprocess.FOLDS)]
         wobj = Filter(classname = 'weka.filters.supervised.instance.StratifiedRemoveFolds', options = opts + ['-V'])
         wobj.inputformat(data)
-        
+
         tran = wobj.filter(data)
 
         wobj.options = opts

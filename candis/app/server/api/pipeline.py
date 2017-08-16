@@ -33,8 +33,8 @@ def run():
                 cdat, pipe = Pipeline.load(relpath)
                 pipe.run(cdat, verbose = CONFIG.DEBUG)
 
-                while pipe.status == Pipeline.RUNNING:
-                    JSON.write(relpath, pipe.stages)
+                # while pipe.status == Pipeline.RUNNING:
+                #     JSON.write(relpath, pipe.stages)
             except (IOError, ValueError) as e:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, str(e))
         else:
