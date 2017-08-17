@@ -226,7 +226,7 @@ class Pipeline(object):
         self.logs.append('Parsing to ARFF')
 
         path = os.path.join(head, '{name}.arff'.format(name = name))
-        # cdat.toARFF(path, express_config = para.Preprocess, verbose = verbose)
+        cdat.toARFF(path, express_config = para.Preprocess, verbose = verbose)
 
         self.logs.append('Saved ARFF at {path}'.format(path = path))
         self.logs.append('Splitting to Training and Testing Sets')
@@ -268,6 +268,14 @@ class Pipeline(object):
         feat = [ ]
         for comb in para.FEATURE_SELECTION:
             if comb.USE:
+                for i, stage in enumerate(self.stages):
+                    if stage.code == 'ats':
+                        search    = stage.value.search.name
+                        evaluator = stage.value.evaluator.name
+
+                        if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
+                            self.stages[i].status = Pipeline.RUNNING
+
                 srch = ASSearch(classname = 'weka.attributeSelection.{classname}'.format(
                     classname = comb.Search.NAME,
                     options   = assign_if_none(comb.Search.OPTIONS, [ ])
@@ -289,19 +297,27 @@ class Pipeline(object):
 
                 feat.append(meta)
 
+                for i, stage in enumerate(self.stages):
+                    if stage.code == 'ats':
+                        search    = stage.value.search.name
+                        evaluator = stage.value.evaluator.name
+
+                        if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
+                            self.stages[i].status = Pipeline.COMPLETE
+
         summ.feature_selection = feat
 
-        for model in para.MODEL:
-            if model.USE:
-                classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(
-                    classname = model.NAME,
-                    options   = assign_if_none(model.OPTIONS, [ ])
-                ))
-                classifier.build_classifier(tran)
-
-                serializer.write(os.path.join(head, '{classname}.model'.format(
-                    classname = model.NAME
-                )))
+        # for model in para.MODEL:
+        #     if model.USE:
+        #         classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(
+        #             classname = model.NAME,
+        #             options   = assign_if_none(model.OPTIONS, [ ])
+        #         ))
+        #         classifier.build_classifier(tran)
+        #
+        #         serializer.write(os.path.join(head, '{classname}.model'.format(
+        #             classname = model.NAME
+        #         )))
 
         JVM.stop()
 
