@@ -21,6 +21,7 @@ class Response(object):
         ERROR   = 'error'
 
     class Error(object):
+        NOT_FOUND            = addict.Dict({ 'code': 404, 'message': 'Not Found' })
         UNPROCESSABLE_ENTITY = addict.Dict({ 'code': 422, 'message': 'Unprocessable Entity' })
 
     def __init__(self, status = None, code = 200, data = { }):

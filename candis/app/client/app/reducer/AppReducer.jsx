@@ -17,6 +17,7 @@ const app           = (state = initial, action) => {
     case ActionType.App.SIGNOUT_SUCCESS:
     case ActionType.App.SIGNOUT_ERROR:
     case ActionType.Asynchronous.WRITE_SUCCESS:
+    case ActionType.Asynchronous.WRITE_ERROR:
     case ActionType.Asynchronous.GET_RESOURCE_SUCCESS:
     case ActionType.Asynchronous.GET_RESOURCE_ERROR:
       nprogress.set(1.0)

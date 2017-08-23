@@ -20,6 +20,11 @@ install:
 
 	bundler install
 
+upgrade:
+	python -c 'import pip; [pip.main(["install", "--upgrade", d.project_name]) for d in pip.get_installed_distributions()]'
+
+	npm-check --update
+
 build:
 	$(PYTHON) -B -m builder
 

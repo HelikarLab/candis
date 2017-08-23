@@ -113,31 +113,33 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
 
 @app.route(CONFIG.App.Routes.API.Data.READ, methods = ['GET', 'POST'])
 def read():
-    response    = Response()
+    response        = Response()
 
-    parameters  = addict.Dict(request.get_json())
+    parameters      = addict.Dict(request.get_json())
+    parameters.path = os.path.abspath(parameters.path) if parameters.path else ABSPATH_STARTDIR
 
-    if parameters.path and parameters.name and parameters.format:
-        path    = os.path.join(parameters.path, parameters.name)
+    if parameters.name and parameters.format:
+        path        = os.path.join(parameters.path, parameters.name)
 
-        # TODO: Check if file exists, else respond error.
+        if os.path.exists(path):
+            if parameters.format == 'cdata':
+                cdat = cdata.read(path)
+                data = cdat.to_dict()
 
-        if parameters.format == 'cdata':
-            cdat = cdata.read(path)
-            data = cdat.to_dict()
-
-            response.set_data(data)
-        elif parameters.format == 'pipeline':
-            try:
-                data = JSON.read(path)
-            except json.decoder.JSONDecodeError as e:
-                data = [ ]
-                
-            response.set_data(data)
+                response.set_data(data)
+            elif parameters.format == 'pipeline':
+                try:
+                    data = JSON.read(path)
+                except json.decoder.JSONDecodeError as e:
+                    data = [ ]
+                    
+                response.set_data(data)
+            else:
+                response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Here')
         else:
-            response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+            response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     else:
-        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+        response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'There')
 
     dict_       = response.to_dict()
     json_       = jsonify(dict_)

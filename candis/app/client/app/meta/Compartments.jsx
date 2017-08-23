@@ -34,7 +34,13 @@ const Compartments =
                     className: "btn-primary",
                       onClick: ( ) =>
                       {
-                        var action = modal.hide()
+                        var output = { name: `${name}.cdata`, format: FileFormat.CDATA }
+                        var buffer = data
+
+                        var action = write(output, buffer)
+                        dispatch(action)
+
+                        action     = modal.hide()
 
                         dispatch(action)
                       }

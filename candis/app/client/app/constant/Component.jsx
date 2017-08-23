@@ -1,10 +1,14 @@
+import FileEditor   from '../component/widget/FileEditor'
+
 import FileViewer   from '../component/widget/FileViewer'
 import SelectViewer from '../component/widget/SelectViewer'
 
-const ComponentType =
+const Component =
 {
+    FileEditor: FileEditor,
+    
     FileViewer: FileViewer,
   SelectViewer: SelectViewer
 }
 
-export default ComponentType
+export default Component

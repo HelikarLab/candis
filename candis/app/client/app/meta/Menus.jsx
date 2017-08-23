@@ -1,3 +1,5 @@
+import axios       from 'axios'
+
 import config      from '../config'
 
 import ActionType  from '../constant/ActionType'
@@ -26,10 +28,26 @@ const Menus = [
               animate: false,
              callback: (name) => {
                if ( name !== null ) {
-                const output = { name: `${name}.cpipe`, format: FileFormat.PIPELINE }
-                const action = write(output)
+                const output  = { name: `${name}.cpipe`, format: FileFormat.PIPELINE }
+                axios.post(config.routes.api.data.read, output).then((response) => {
+                  response    = response.data
 
-                dispatch(action)
+                  if ( response.status == 'success' ) {
+                    toastr.warning(`Looks like file with name "${name}" already exists.`, 'Whoops!')
+                  }
+                }).catch(({ response }) => {
+                  response    = response.data
+
+                  if ( response.status == 'error' ) {
+                    if ( response.error.code == 404 ) {
+                      const action = write(output)
+
+                      dispatch(action)
+                    } else {
+                      // TODO - Handle Error
+                    }
+                  }
+                })
                }
              }
           })
