@@ -3,9 +3,9 @@ import os, csv
 
 # imports - module imports
 from candis.resource import R
-from candis.util     import json_load
+from candis.ios      import json as JSON
 
-ATTRIBUTE_TYPES  = json_load(os.path.join(R.Path.DATA, 'attribute-types.json'))
+ATTRIBUTE_TYPES  = JSON.read(os.path.join(R.Path.DATA, 'attribute-types.json'))
 
 def get_attribute_tag(attr):
     tag          = None

@@ -52,17 +52,8 @@ def makedirs(path, exists_ok = False):
 	try:
 		os.makedirs(path)
 	except OSError as e:
-		if not exists_ok:
-			if not os.path.isdir(path):
-				raise e
-
-def json_load(path):
-		data = None
-
-		with open(path) as f:
-				data = json.load(f)
-
-		return data
+		if e.errno is not errno.EEXIST and not exists_ok:
+			raise
 
 def get_timestamp_str(format_):
 		string = time.strftime(format_)

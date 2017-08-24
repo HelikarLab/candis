@@ -1,11 +1,12 @@
-import axios       from 'axios'
+import axios        from 'axios'
 
-import config      from '../config'
+import config       from '../config'
 
-import ActionType  from '../constant/ActionType'
-import FileFormat  from '../constant/FileFormat'
-import { signout } from '../action/AppAction'
-import { write }   from '../action/AsynchronousAction'
+import ActionType   from '../constant/ActionType'
+import FileFormat   from '../constant/FileFormat'
+import { signout }  from '../action/AppAction'
+import { read, write, getResource } from '../action/AsynchronousAction'
+import { getFiles } from '../util'
 
 const Menus = [
   {
@@ -32,8 +33,8 @@ const Menus = [
                 axios.post(config.routes.api.data.read, output).then((response) => {
                   response    = response.data
 
-                  if ( response.status == 'success' ) {
-                    toastr.warning(`Looks like file with name "${name}" already exists.`, 'Whoops!')
+                  if ( response.status == 'success' ) { // I don't know why this check is even here.
+                    toastr.warning(`Looks like file with name <span class="font-bold">${name}</span> already exists.`, 'Whoops!')
                   }
                 }).catch(({ response }) => {
                   response    = response.data
@@ -44,7 +45,10 @@ const Menus = [
 
                       dispatch(action)
                     } else {
-                      // TODO - Handle Error
+                      const error = response.error
+                      error.errors.forEach((err) => {
+                        toastr.error(`An unexpected error occured: ${err.message}`, 'Error')
+                      })
                     }
                   }
                 })
@@ -58,7 +62,42 @@ const Menus = [
            icon: `${config.routes.icons}/envelope-open.png`,
         tooltip: 'Open an existing Pipeline',
         onClick: (dispatch) => {
-          // TODO: create "Open" dialog and display.
+          const action    = getResource()
+
+          dispatch(action).then((resource) => {
+            const files   = getFiles(resource, [FileFormat.PIPELINE])
+            const options = files.map((file) => {
+              const name  = file.name
+              const value = JSON.stringify(file)
+
+              return { text: name, value: value }
+            })
+
+            if ( options.length ) {
+              bootbox.prompt({
+                      title: '<span class="font-bold">Open Pipeline</span>',
+                  inputType: 'select',
+                inputOptions: options,
+                    buttons:
+                      {
+                        cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
+                        confirm: { label: "Open",   className: "btn-sm btn-success" }
+                      },
+                        size: "small",
+                    animate: false,
+                    callback: (result) => {
+                      if ( result  !== null ) {
+                        const output = JSON.parse(result)
+                        const action = read(output)
+
+                        dispatch(action)
+                      }
+                    }
+              })
+            } else {
+              toastr.warning('No files found. Create a new pipeline by clicking on the <span class="font-bold">New</div> option.', 'Sorry!')
+            }      
+          })
         }
       },
       {
@@ -101,7 +140,7 @@ const Menus = [
             icon: `${config.routes.icons}/settings.png`,
          tooltip: 'Open Settings View',
          onClick: (dispatch) => {
-           // TODO: create "Settings" dialog and display.
+           toastr.warning('To be implemented.')
          }
       }
     ]

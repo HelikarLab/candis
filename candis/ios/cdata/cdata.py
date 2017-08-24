@@ -87,19 +87,14 @@ class CData(object):
         # NOTE - Lets normalize paths.
         for column in columns:
             if any(tag in column for tag in ('!file', '!cel')):
-                paths = data[column]
-
-                for i, p in enumerate(paths):
-                    path     = paths[i]
-
+                for i, p in enumerate(data[column]):
                     if not os.path.isabs(p):
                         path = os.path.normpath(os.path.join(head, p))
 
                     if not os.path.exists(path) and not os.path.isfile(path):
                         raise ValueError('{path} is not a valid file.'.format(path = path))
-
-                    paths[i] = path
-
+                    
+                    data[column].loc[i] = path
 
         cdat         = CData()
         cdat.data    = data

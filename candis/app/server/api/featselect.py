@@ -7,7 +7,6 @@ from flask import request, jsonify
 
 # imports - module imports
 from candis.config              import CONFIG
-from candis.util                import json_load
 from candis.resource            import R
 from candis.app.server.app      import app
 from candis.app.server.response import Response

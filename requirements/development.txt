@@ -1,2 +1,3 @@
 gunicorn
 jupyter
+pylint

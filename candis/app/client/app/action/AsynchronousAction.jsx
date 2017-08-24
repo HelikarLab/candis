@@ -67,11 +67,13 @@ const getResource        = (path = null) => {
 
     dispatch(action)
 
-    axios.post(config.routes.api.data.resource, parameters).then(({ data }) => {
+    return axios.post(config.routes.api.data.resource, parameters).then(({ data }) => {
       data               = data.data
       const action       = getResourceSuccess(path, data)
 
       dispatch(action)
+
+      return data
     }).catch(({ response }) => {
       const error        = response.data.error
       const action       = getResourceError(path, error)

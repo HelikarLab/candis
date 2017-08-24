@@ -17,6 +17,79 @@ const initial             =
 
 const documentProcessor   = (state = initial, action) => {
   switch (action.type) {
+    case ActionType.Asynchronous.READ_SUCCESS: {
+      const meta          = action.payload
+      var   active        = null
+
+      if ( meta.output.format == FileFormat.PIPELINE )
+      {
+        const documents   = state.documents.slice().map((dokument) =>
+        {
+          const exists    = isEqual(dokument.output, meta.output)
+          if ( exists )
+          {
+            const pipe    = [ ]
+            meta.data.forEach((stage) =>
+            {
+              const node =
+              {
+                     ID: stage.ID,
+                   code: stage.code,
+                   name: stage.name,
+                  //  icon: state.nodes[stage.code].icon,
+                  label: stage.label,
+                // onClick: state.nodes[stage.code].onClick,
+                  value: stage.value,
+                 status: stage.status
+              }
+
+              pipe.push(node)
+            })
+
+            dokument.data = pipe
+            active        = dokument
+          }
+
+          return {...dokument, active: exists }
+        })
+
+        if ( !active ) {
+          const pipe   = [ ]
+          meta.data.forEach((stage) =>
+          {
+            const node =
+            {
+                   ID: stage.ID,
+                 code: stage.code,
+                 name: stage.name,
+                //  icon: state.nodes[stage.code].icon,
+                label: stage.label,
+              // onClick: state.nodes[stage.code].onClick,
+                value: stage.value,
+               status: stage.status
+            }
+
+            pipe.push(node)
+          })
+
+          active       =
+          {
+                ID: shortid.generate(),
+            output: meta.output,
+              data: pipe,
+            active: true
+          }
+
+          documents.push(active)
+        }
+
+        return {...state, documents: documents, active: active, errors: [ ] }
+      }
+
+      break
+    }
+
+
     case ActionType.Asynchronous.WRITE_SUCCESS: {
       const meta          = action.payload.data
       var   active        = null

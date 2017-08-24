@@ -1,7 +1,7 @@
 # imports - module imports
-from candis.util import json_load
+from candis.ios import json as JSON
 
 def read(path):
-    pipeline = json_load(path)
+    pipeline = JSON.read(path)
 
     return pipeline

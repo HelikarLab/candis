@@ -5,7 +5,6 @@ from candis.util.util import (
 	get_rand_uuid_str,
 	get_free_port,
 	makedirs,
-	json_load,
 	get_timestamp_str,
 	merge_dicts
 )

@@ -60,8 +60,13 @@ class Config(object):
 
         setattr(self, name, value)
 
-    def __getattr__(self, item):
-        return None
+    def __getattr__(self, attr):
+        try:
+            value = object.__getattr__(self, attr)
+        except AttributeError:
+            value = None
+
+        return value
 
     def __repr__(self, indent = 2):
         string = pprint.pformat(self.schema, indent = indent)

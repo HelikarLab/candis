@@ -6,8 +6,8 @@ from flask import request, jsonify
 
 # imports - module imports
 from candis.config              import CONFIG
-from candis.util                import json_load
 from candis.resource            import R
+from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 
@@ -16,7 +16,7 @@ def mmethods():
     response  = Response()
 
     path      = os.path.join(R.Path.DATA, 'learning-models.json')
-    methods   = json_load(path)
+    methods   = JSON.read(path)
 
     response.set_data(methods)
 

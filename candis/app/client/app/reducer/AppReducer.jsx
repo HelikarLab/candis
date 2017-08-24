@@ -26,6 +26,8 @@ const app           = (state = initial, action) => {
 
     case ActionType.App.SET_USER:
       return { ...state, user: action.payload }
+
+      
   }
 
   return state
