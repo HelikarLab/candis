@@ -1,6 +1,8 @@
 const AttributeType =
 {
-  FILE: 'file'
+   FILE: 'file',
+    CEL: 'cel',
+  CLASS: 'class'
 }
 
 export default AttributeType

@@ -1,12 +1,13 @@
-import axios     from 'axios'
-import shortid   from 'shortid'
+import axios      from 'axios'
+import shortid    from 'shortid'
 
-import config    from '../config'
+import config     from '../config'
 
-import Component from '../constant/Component'
-import Pipeline  from '../constant/Pipeline'
-import modal     from '../action/ModalAction'
-import { stage } from '../action/DocumentProcessorAction'
+import Component  from '../constant/Component'
+import Pipeline   from '../constant/Pipeline'
+import FileFormat from '../constant/FileFormat'
+import modal      from '../action/ModalAction'
+import { stage }  from '../action/DocumentProcessorAction'
 
 const Compartments =
 [

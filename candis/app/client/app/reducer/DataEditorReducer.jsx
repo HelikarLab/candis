@@ -1,5 +1,6 @@
 import React         from 'react'
 import { Editors }   from 'react-data-grid-addons'
+
 import shortid       from 'shortid'
 
 import ActionType    from '../constant/ActionType'
@@ -8,14 +9,11 @@ import FileFormat    from '../constant/FileFormat'
 
 import { getFiles } from '../util'
 
-const initialState = {
+const initial      = 
+{
      data: { },
      rows: [ ],
   columns: [
-    {
-          key: 'ID',
-         name: 'ID'
-    },
     {
           key: 'File',
          name: 'File',
@@ -25,35 +23,60 @@ const initialState = {
     {
            key: 'Label',
           name: 'Label',
+          type: AttributeType.CLASS,
       editable: true
     }
   ]
 }
 
-const dataEditor   = (state = initialState, action) => {
+const dataEditor   = (state = initial, action) => {
   switch (action.type) {
-    case ActionType.INSERT_ROW: {
-      let rows     = action.payload.slice()
-      let columns  = state.columns
-      let row      = { }
+    case ActionType.DataEditor.INSERT_ROW: {
+      const payload  = action.payload
+      var   rows     = state.rows.slice()
 
-      columns.forEach((column) => {
-        let key    = column.key
-        row[key]   = key == 'ID' ? rows.length + 1 : ''
-      })
-
-      rows.push(row)
+      // rows.slice(payload.position, 0, payload.row)
+      rows.push(payload.row)
 
       return {...state, rows: rows }
     }
 
-    case ActionType.INSERT_COLUMN: {
-      let columns  = action.payload.slice()
-      let column   = { key: shortid.generate(), name: '', editable: true }
+    case ActionType.DataEditor.INSERT_COLUMN: {
+      const payload  = action.payload
+      var   cols     =  state.columns.slice()
 
-      columns.push(column)
+      // cols.slice(payload.position, 0, payload.column)
+      cols.push(payload.column)
 
-      return {...state, columns: columns }
+      return {...state, columns: cols }
+    }
+
+    case ActionType.DataEditor.SELECT_ROW: {
+      const payload = action.payload
+      var   rows    =  state.rows.slice()
+
+      rows[payload.index].selected = true
+
+      return {...state, rows: rows }
+    }
+
+    case ActionType.DataEditor.DESELECT_ROW: {
+      const payload = action.payload
+      var   rows    =  state.rows.slice()
+
+      rows[payload.index].selected = false
+
+      return {...state, rows: rows }
+    }
+
+    case ActionType.DataEditor.DELETE_ROW: {
+      const payload =  action.payload
+      var   rows    =   state.rows.slice()
+      var   index   = payload.index
+
+      rows.splice(index, 1)
+
+      return {...state, rows: rows }
     }
 
     case ActionType.DELETE_ROW: {
@@ -67,26 +90,6 @@ const dataEditor   = (state = initialState, action) => {
         row.ID       = index + 1,
         row.selected = false
       })
-
-      return {...state, rows: rows }
-    }
-
-    case ActionType.SELECT_ROW: {
-      const selected = action.payload
-      let       rows = state.rows.slice()
-      const    index = selected.rowIdx
-
-      rows[index].selected = true
-
-      return {...state, rows: rows }
-    }
-
-    case ActionType.DESELECT_ROW: {
-      const deselected = action.payload
-      let         rows = state.rows.slice()
-      const      index = deselected.rowIdx
-
-      rows[index].selected = false
 
       return {...state, rows: rows }
     }
@@ -124,10 +127,6 @@ const dataEditor   = (state = initialState, action) => {
       })
 
       return {...state, columns: columns }
-    }
-
-    case ActionType.DataEditor.REFRESH: {
-      return initialState;
     }
   }
 
