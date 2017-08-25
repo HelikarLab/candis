@@ -8,7 +8,7 @@ import Pipeline   from '../constant/Pipeline'
 import FileFormat from '../constant/FileFormat'
 
 import modal      from '../action/ModalAction'
-import { write }  from '../action/AsynchronousAction'
+import { write, getResource }  from '../action/AsynchronousAction'
 import { stage }  from '../action/DocumentProcessorAction'
 
 const Compartments =
@@ -78,70 +78,74 @@ const Compartments =
              icon: `${config.routes.icons}/document.png`,
           tooltip: 'Load a CDATA/CSV file',
           onClick: (dispatch) => {
-            const ID      = shortid.generate()
-            const meta    =
-            {
-                   ID: ID,
-                 name: 'File',
-                 code: 'dat.fle',
-                 icon: `${config.routes.icons}/document.png`,
-              onClick: (dispatch) =>
+            const action  = getResource()
+
+            dispatch(action).then(() => {
+              const ID      = shortid.generate()
+              const meta    =
               {
-                var   output  = null
-                const dialog  =
+                     ID: ID,
+                   name: 'File',
+                   code: 'dat.fle',
+                   icon: `${config.routes.icons}/document.png`,
+                onClick: (dispatch) =>
                 {
-                  component: Component.FileViewer,
-                      title: 'File',
-                       size: 'lg',
-                    buttons:
-                    [
-                      {
-                            label: "Select",
-                        className: "btn-primary",
-                          onClick: ( ) =>
-                          {
-                            var action;
-                            var update =
+                  var   output  = null
+                  const dialog  =
+                  {
+                    component: Component.FileViewer,
+                        title: 'File',
+                         size: 'lg',
+                      buttons:
+                      [
+                        {
+                              label: "Select",
+                          className: "btn-primary",
+                            onClick: ( ) =>
                             {
-                               value: output,
-                               label: `${output.path}/${output.name}`,
-                              status: Pipeline.Status.READY
+                              var action;
+                              var update =
+                              {
+                                 value: output,
+                                 label: `${output.path}/${output.name}`,
+                                status: Pipeline.Status.READY
+                              }
+  
+                              action     = stage.update(ID, update)
+  
+                              dispatch(action)
+  
+                              action     = modal.hide()
+  
+                              dispatch(action)
                             }
-
-                            action     = stage.update(ID, update)
-
-                            dispatch(action)
-
-                            action     = modal.hide()
-
-                            dispatch(action)
-                          }
-                      },
-                      {
-                            label: "Cancel",
-                          onClick: ( ) =>
-                          {
-                            var action = modal.hide()
-
-                            dispatch(action)
-                          }
-                      }
-                    ], // end dialog.buttons
-                      props:
-                      {
-                        classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
-                          onSelect: (selected) => { output = selected }
-                      } // end dialog.props
-                } // end dialog
-                const action  = modal.show(dialog)
-
-                dispatch(action)
-              } // end meta.onClick
-            } // end meta
-
-            const action = stage.set(meta)
-
-            dispatch(action)
+                        },
+                        {
+                              label: "Cancel",
+                            onClick: ( ) =>
+                            {
+                              var action = modal.hide()
+  
+                              dispatch(action)
+                            }
+                        }
+                      ], // end dialog.buttons
+                        props:
+                        {
+                          classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                            onSelect: (selected) => { output = selected }
+                        } // end dialog.props
+                  } // end dialog
+                  const action  = modal.show(dialog)
+  
+                  dispatch(action)
+                } // end meta.onClick
+              } // end meta
+  
+              const action = stage.set(meta)
+  
+              dispatch(action)
+            })
           }
         },
         {

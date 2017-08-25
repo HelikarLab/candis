@@ -165,18 +165,17 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
 
     if output.format:
         if   output.format == 'cdata':
+             handler = cdata
+
              if output.name in ['', '.cdata', '.CDATA']:
                 name = get_timestamp_str('CDAT%Y%m%d%H%M%S.cdata')
              else:
                 name = output.name
 
-             if not buffer_:
-                 buffer_ = addict.Dict()
-                 buffer_.attributes = [ ]
-                 buffer_.data       = [ ]
-
              output.name = name
         elif output.format == 'pipeline':
+             handler = pipeline
+
              if output.name in ['', '.cpipe', '.CPIPE']:
                 name = get_timestamp_str('PIPE%Y%m%d%H%M%S.cpipe')
              else:
@@ -190,11 +189,17 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     opath        = os.path.join(output.path, output.name)
 
     try:
-        JSON.write(opath, buffer_)
+        handler.write(opath, buffer_)
 
-        data         = addict.Dict()
-        data.output  = output
-        data.data    = JSON.read(opath)
+        data          = addict.Dict()
+        data.output   = output
+        
+        # These anomalies are confusing moi. Kindly check the difference between readers, writers and loaders and make it uniform.
+        if output.format == 'cdata':
+            cdat      = handler.read(opath)
+            data.data = cdat.to_dict()
+        else:
+            data.data = handler.read(opath)
 
         response.set_data(data)
     except TypeError as e:

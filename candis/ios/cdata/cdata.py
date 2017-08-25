@@ -189,6 +189,10 @@ class CData(object):
 
         return meta
 
+    def from_dict(meta):
+        # Wrap CData.writer with this routine instead and have it implemented here.
+        raise NotImplementedError
+
     def __repr__(self):
         string = self.data.to_string()
 
