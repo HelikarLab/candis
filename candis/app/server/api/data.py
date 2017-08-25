@@ -170,6 +170,11 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
              else:
                 name = output.name
 
+             if not buffer_:
+                 buffer_ = addict.Dict()
+                 buffer_.attributes = [ ]
+                 buffer_.data       = [ ]
+
              output.name = name
         elif output.format == 'pipeline':
              if output.name in ['', '.cpipe', '.CPIPE']:

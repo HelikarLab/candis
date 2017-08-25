@@ -1,36 +1,6 @@
 import ActionType from '../constant/ActionType'
 
-const deleteColumn = (column) => {
-  const action     = {
-       type: ActionType.DELETE_COLUMN,
-    payload: column
-  }
-
-  return action
-}
-
-const updateRows   = (fromRow, toRow, update) => {
-  const action     = {
-       type: ActionType.UPDATE_ROWS,
-    payload: {
-      fromRow: fromRow,
-        toRow: toRow,
-       update: update
-    }
-  }
-
-  return action
-}
-
-const refresh = ( ) => {
-  const action = {
-    type: ActionType.DataEditor.REFRESH
-  }
-
-  return action
-}
-
-const row     = 
+const row        = 
 {
   insert: (position, row) =>
   {
@@ -71,9 +41,19 @@ const row     =
     }
 
     return action
+  },
+  update: (from, to, update) =>
+  {
+    const action =
+    {
+         type: ActionType.DataEditor.UPDATE_ROW,
+      payload: { from: from, to: to, update: update }
+    }
+
+    return action
   }
 }
-const column  = 
+const column    = 
 {
   insert: (position, column) =>
   {
@@ -83,8 +63,17 @@ const column  =
     }
 
     return action
+  },
+  delete: (key) =>
+  {
+    const action =
+    {
+         type: ActionType.DataEditor.DELETE_COLUMN,
+      payload: key
+    }
+
+    return action
   }
 }
 
-export { row, column,
-  deleteColumn, updateRows, refresh }
+export { row, column }

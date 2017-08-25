@@ -96,7 +96,7 @@ const Menus = [
               })
             } else {
               toastr.warning('No files found. Create a new pipeline by clicking on the <span class="font-bold">New</div> option.', 'Sorry!')
-            }      
+            }
           })
         }
       },

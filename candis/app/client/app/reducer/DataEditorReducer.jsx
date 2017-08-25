@@ -7,11 +7,10 @@ import ActionType    from '../constant/ActionType'
 import AttributeType from '../constant/AttributeType'
 import FileFormat    from '../constant/FileFormat'
 
-import { getFiles } from '../util'
+import { getFiles }  from '../util'
 
 const initial      = 
 {
-     data: { },
      rows: [ ],
   columns: [
     {
@@ -31,7 +30,8 @@ const initial      =
 
 const dataEditor   = (state = initial, action) => {
   switch (action.type) {
-    case ActionType.DataEditor.INSERT_ROW: {
+    case ActionType.DataEditor.INSERT_ROW: 
+    {
       const payload  = action.payload
       var   rows     = state.rows.slice()
 
@@ -41,7 +41,8 @@ const dataEditor   = (state = initial, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.DataEditor.INSERT_COLUMN: {
+    case ActionType.DataEditor.INSERT_COLUMN: 
+    {
       const payload  = action.payload
       var   cols     =  state.columns.slice()
 
@@ -51,7 +52,8 @@ const dataEditor   = (state = initial, action) => {
       return {...state, columns: cols }
     }
 
-    case ActionType.DataEditor.SELECT_ROW: {
+    case ActionType.DataEditor.SELECT_ROW: 
+    {
       const payload = action.payload
       var   rows    =  state.rows.slice()
 
@@ -60,7 +62,8 @@ const dataEditor   = (state = initial, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.DataEditor.DESELECT_ROW: {
+    case ActionType.DataEditor.DESELECT_ROW: 
+    {
       const payload = action.payload
       var   rows    =  state.rows.slice()
 
@@ -69,7 +72,8 @@ const dataEditor   = (state = initial, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.DataEditor.DELETE_ROW: {
+    case ActionType.DataEditor.DELETE_ROW: 
+    {
       const payload =  action.payload
       var   rows    =   state.rows.slice()
       var   index   = payload.index
@@ -79,51 +83,47 @@ const dataEditor   = (state = initial, action) => {
       return {...state, rows: rows }
     }
 
-    case ActionType.DELETE_ROW: {
-      const toDelete = action.payload
-      let       rows =  state.rows.slice()
-      const    index = toDelete.rowIdx
-
-      rows.splice(index, 1)
-
-      rows.forEach((row, index) => {
-        row.ID       = index + 1,
-        row.selected = false
+    case ActionType.DataEditor.DELETE_COLUMN:
+    {
+      const key      = action.payload
+      const columns  = state.columns.filter((column) => {
+        return column.key !== key
+      })
+      const rows     = state.columns.filter((row) => {
+        return    row.key !== key
       })
 
-      return {...state, rows: rows }
+      return {...state, rows: rows, columns: columns }
     }
 
-    case ActionType.UPDATE_ROWS: {
-      let { fromRow, toRow, update } = action.payload
-      let rows                       =  state.rows.slice()
+    case ActionType.DataEditor.UPDATE_ROW: {
+      var { from, to, update } = action.payload
+      var rows                 =  state.rows.slice()
 
-      for (let i = fromRow ; i <= toRow ; ++i) {
+      for (var i = from ; i <= to ; ++i)
         rows[i]  = {...rows[i], ...update }
-      }
 
       return {...state, rows: rows }
     }
 
     case ActionType.Asynchronous.GET_RESOURCE_SUCCESS: {
-      let resource = action.payload.data
-      let columns  = state.columns.slice()
+      const resource = action.payload.data
+      const columns  =  state.columns.filter((column) => {
+        if ( column.type == AttributeType.FILE ) 
+        {
+          const files    = getFiles(resource, column.allowed)
+          const options  = files.map((file, index) => 
+          {
+            const option = { id: shortid.generate(), value: file.name,
+              title: shortid.generate(), text: file.name }
 
-      columns.forEach((column) => {
-        if ( column.type == AttributeType.FILE ) {
-          let files     = getFiles(resource, column.allowed)
-
-          let options   = files.map((file, index) => {
-            return {
-                 id: shortid.generate(),
-              value: file.name,
-              title: shortid.generate(),
-              text: file.name,
-            }
+            return option
           })
 
-          column.editor = <Editors.DropDownEditor options={options}/>
+          column.editor  = <Editors.DropDownEditor options={options}/>
         }
+
+        return column
       })
 
       return {...state, columns: columns }

@@ -1,6 +1,5 @@
 import React         from 'react'
 import PropTypes     from 'prop-types'
-import { connect }   from 'react-redux'
 import classNames    from 'classnames'
 
 import DataEditor    from '../widget/DataEditor'
@@ -11,31 +10,6 @@ class FileEditor extends React.Component {
     super (props)
 
     this.state        = FileEditor.defaultStates
-  }
-
-  onChangeData (data) {
-    const props = this.props
-    let   attributes  = [ ]
-
-    data.columns.forEach((column) => {
-      if ( column.key != 'ID' ) {
-        attributes.push({ name: column.name, type: column.type })
-      }
-    })
-
-    const rows        = data.rows.map((row) => {
-      delete row.ID
-
-      return row
-    })
-
-    const buffer      = { attributes: attributes, data: rows }
-
-    this.setState({
-      data: data
-    })
-
-    props.onChange.data(buffer)
   }
 
   render ( ) {
@@ -58,7 +32,23 @@ class FileEditor extends React.Component {
             </div>
           </div>
           <DataEditor
-            onChangeData={this.onChangeData.bind(this)}/>
+            onChange={(data) => 
+            {
+              const attributes = data.columns.map((column) => {
+                return { name: column.name, type: column.type }
+              })
+              const rows       = data.rows.map((row) => {
+                var meta       = { }
+                
+                data.columns.forEach((column) => {
+                  meta[column.name] = row[column.name]
+                })
+
+                return meta
+              })
+
+              props.onChange.data({ attributes: attributes, data: rows })
+            }}/>
         </div>
       </div>
     )
@@ -76,8 +66,7 @@ FileEditor.defaultProps  =
 
 FileEditor.defaultStates =
 {
-  name: "",
-  data: { columns: [ ], rows: [ ] }
+  name: ""
 }
 
-export default connect()(FileEditor)
+export default FileEditor

@@ -6,7 +6,9 @@ import config     from '../config'
 import Component  from '../constant/Component'
 import Pipeline   from '../constant/Pipeline'
 import FileFormat from '../constant/FileFormat'
+
 import modal      from '../action/ModalAction'
+import { write }  from '../action/AsynchronousAction'
 import { stage }  from '../action/DocumentProcessorAction'
 
 const Compartments =
@@ -21,8 +23,8 @@ const Compartments =
              icon: `${config.routes.icons}/edit.png`,
           tooltip: 'Create a new DataSet',
           onClick: (dispatch) => {
-            var   name    = null
-            var   data    = null
+            var   name    = ""
+            var   data    = { }
             const dialog  =
             {
               component: Component.FileEditor,
@@ -147,12 +149,7 @@ const Compartments =
              icon: `${config.routes.icons}/cloud-computing.png`,
           tooltip: 'Download a DataSet from a remote host',
           onClick: (dispatch) => {
-            bootbox.alert({
-              message: '<div class="font-bold">To be implemented</div>',
-                 size: "small",
-              animate: false,
-              buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
-            })
+            toastr.warning('To be implemented.')
           }
         }
       ]

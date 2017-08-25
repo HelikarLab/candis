@@ -6,9 +6,9 @@ import config         from '../../config'
 
 import ToolBar        from './ToolBar'
 
-import { row, column, insertColumn, deleteRow, deleteColumn, selectRow, deselectRow,
-  updateRows } from '../../action/DataEditorAction'
+import { row, column } from '../../action/DataEditorAction'
 import { getResource } from '../../action/AsynchronousAction'
+import { getFiles }    from '../../util'
 
 class DataEditor extends React.Component {
   constructor (props) {
@@ -71,15 +71,46 @@ class DataEditor extends React.Component {
       {
            icon: `${config.routes.icons}/delete-column.png`,
         tooltip: 'Delete Column',
-        onClick: (props) => {
+        onClick: (props)  => {
+          const options   = props.columns.map(({ key, name }) => {
+            return { text: name, value: key }
+          })
 
+          bootbox.prompt({
+                   title: '<span class="font-bold">Column Name</span>',
+               inputType: 'select',
+            inputOptions: options,
+                 buttons:
+                  {
+                    cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
+                    confirm: { label: "Delete", className: "btn-sm btn-danger" }
+                  },
+                    size: "small",
+                animate: false,
+                callback: (key) => {
+                  if ( key  !== null ) {
+                    const action = column.delete(key)
+
+                    props.dispatch(action)
+                  }
+                }
+          })
         }
       },
       {
            icon: `${config.routes.icons}/reload.png`,
         tooltip: 'Refresh',
         onClick: (props) => {
+          const action = getResource()
 
+          props.dispatch(action)
+        }
+      },
+      {
+            icon: `${config.routes.icons}/load-rows.png`,
+        tooltip: 'Load All',
+        onClick: (props) => {
+          toastr.warning('To be implemented.')
         }
       }
     ]
@@ -125,16 +156,11 @@ class DataEditor extends React.Component {
                             selectBy: { isSelectedKey: 'selected' }
                  }}
             onGridRowsUpdated={({ fromRow, toRow, updated }) => {
-              props.dispatch((dispatch) => {
-                const action  = updateRows(fromRow, toRow, updated)
+              const action = row.update(fromRow, toRow, updated)
 
-                dispatch(action)
+              props.dispatch(action)
 
-                props.onChangeData({
-                  columns: props.columns,
-                     rows: props.rows
-                })
-              })
+              props.onChange({ columns: props.columns, rows: props.rows })
             }}/>
           </div>
       </div>
