@@ -2,21 +2,21 @@
 import os
 
 # imports - third-party imports
+import addict
 from flask import request, jsonify
 
 # imports - module imports
 from candis.config              import CONFIG
 from candis.resource            import R
-from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 
-@app.route(CONFIG.App.Routes.API.Model.METHODS, methods = ['GET'])
+@app.route(CONFIG.App.Routes.API.Model.METHODS, methods = ['GET', 'POST'])
 def mmethods():
     response  = Response()
 
-    path      = os.path.join(R.Path.DATA, 'learning-models.json')
-    methods   = JSON.read(path)
+    schema    = addict.Dict(CONFIG.Pipeline.schema)
+    methods   = schema.model
 
     response.set_data(methods)
 

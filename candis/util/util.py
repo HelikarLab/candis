@@ -1,7 +1,8 @@
 # imports - standard imports
-import os, json
+import os, json, io
 import time, uuid
 import socket, errno
+import base64
 
 def assign_if_none(object_, value):
 	if object_ is None:
@@ -67,3 +68,27 @@ def merge_dicts(*args):
 				merged.update(dict_)
 
 		return merged
+
+def get_b64_plot(axes, format_ = 'png'):
+	handler = io.BytesIO()
+	axes.figure.savefig(handler, format = format_)
+	handler.seek(0)
+
+	buffer = handler.read()
+	b64str = base64.b64encode(buffer).decode('ascii')
+
+	handler.close()
+
+	return b64str
+
+def buffer_to_b64(buffer):
+	buffer.seek(0)
+
+	data   = buffer.read()
+	b64str = base64.b64encode(data).decode('ascii')
+
+	buffer.close()
+
+	return b64str
+
+

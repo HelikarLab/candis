@@ -90,7 +90,7 @@ def discover_resource(path, level = None, filter_ = None):
     return tree
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
-def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline'], level = None):
+def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
@@ -127,7 +127,7 @@ def read():
                 data = cdat.to_dict()
 
                 response.set_data(data)
-            elif parameters.format == 'pipeline':
+            elif parameters.format in ['pipeline', 'gist']:
                 try:
                     data = JSON.read(path)
                 except json.decoder.JSONDecodeError as e:

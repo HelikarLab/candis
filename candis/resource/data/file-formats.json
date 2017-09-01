@@ -14,5 +14,9 @@
   {
     "name": "pipeline",
     "extensions": [".cpipe", ".CPIPE"]
+  },
+  {
+    "name": "gist",
+    "extensions": [".cgist", ".CGIST"]
   }
 ]

@@ -121,14 +121,19 @@ pipeline:
   model:
     - use: true
       name: bayes.NaiveBayes
+      label: Naive Bayes
     - use: false
       name: trees.J48
+      label: Decision Tree
     - use: false
       name: functions.SMO
+      label: Support Vector Machine
     - use: false
       name: lazy.IBk
+      label: k-Nearest Neighbor
     - use: false
       name: trees.RandomForest
+      label: Random Forest
 CLI:
   arguments:
     - name: ["-d", "--cdata"]

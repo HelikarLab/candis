@@ -67,10 +67,14 @@ class DocumentProcessor extends React.Component
       toastr.error(err.message, 'Error')
     })
 
-    status.logs.forEach((log) => {
+    if ( status.logs.length )
+    {
+      var log = status.logs.pop()
       toastr.clear()
-      toastr.success(log)
-    })
+      
+      toastr.options = { extendedTimeOut: 0 }
+      toastr.info(log, 'Status')
+    }
 
     return (
       <div>

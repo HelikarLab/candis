@@ -1,5 +1,5 @@
 # imports - standard imports
-import sys, os, warnings
+import sys, os, warnings, io
 import random
 import threading
 try:
@@ -9,20 +9,27 @@ except ImportError:
 
 # imports - third-party imports
 import addict
-import numpy as np
+import numpy   as np
+import matplotlib.pyplot as pplt
+import pandas  as pd
+import seaborn as sns
+
 from weka.core                import jvm as JVM
 from weka.core.converters     import Loader, Saver
 from weka.core                import serialization as serializer
 from weka.filters             import Filter
 from weka.attribute_selection import ASSearch, ASEvaluation, AttributeSelection
-from weka.classifiers         import Classifier
+from weka.classifiers         import Classifier, Evaluation
+from weka.plot.classifiers    import plot_classifier_errors, plot_learning_curve, plot_roc, plot_prc
 
 # imports - module imports
 from candis.config import CONFIG
 from candis.ios    import cdata
 from candis.ios    import pipeline
 from candis.ios    import json as JSON
-from candis.util   import assign_if_none, get_rand_uuid_str
+from candis.util   import assign_if_none, get_rand_uuid_str, get_b64_plot, buffer_to_b64
+
+pplt.style.use('seaborn')
 
 class Pipeline(object):
     CONFIG   = CONFIG.Pipeline
@@ -38,6 +45,7 @@ class Pipeline(object):
         self.thread  = None
         self.logs    = [ ]
         self.stages  = [ ]
+        self.gist    = addict.Dict()
 
         self.set_config(config)
 
@@ -192,12 +200,12 @@ class Pipeline(object):
         = [stage.value for stage in stageats]
         objekt.add_stages(*stageats)
 
-        objekt.set_config(config)
-
         stagelrn     = [stage for stage in stages if stage.code.startswith('lrn')]
         config.model \
         = [stage.value for stage in stagelrn]
         objekt.add_stages(*stagelrn)
+
+        objekt.set_config(config)
 
         return data, objekt
 
@@ -206,7 +214,6 @@ class Pipeline(object):
 
         self.logs.append('Initializing Pipeline')
 
-        summ = addict.Dict()
         para = self.config
 
         self.logs.append('Reading Pipeline Configuration')
@@ -226,25 +233,30 @@ class Pipeline(object):
         self.logs.append('Parsing to ARFF')
 
         path = os.path.join(head, '{name}.arff'.format(name = name))
-        cdat.toARFF(path, express_config = para.Preprocess, verbose = verbose)
-
-        self.logs.append('Saved ARFF at {path}'.format(path = path))
-        self.logs.append('Splitting to Training and Testing Sets')
+        # This bug, I don't know why, using Config.schema instead.
+        # cdat.toARFF(path, express_config = para.Preprocess.schema, verbose = verbose)
 
         for i, stage in enumerate(self.stages):
             if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
                 self.stages[i].status = Pipeline.COMPLETE
 
+        self.logs.append('Saved ARFF at {path}'.format(path = path))
+        self.logs.append('Splitting to Training and Testing Sets')
+
         JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
 
         load = Loader(classname = 'weka.core.converters.ArffLoader')
-        save =  Saver(classname = 'weka.core.converters.ArffSaver')
         data = load.load_file(path)
-        data.class_index = cdat.iclss
+        # save =  Saver(classname = 'weka.core.converters.ArffSaver')
+        data = load.load_file(os.path.join(head, 'iris.arff')) # For Debugging Purposes Only
+        data.class_is_last() # For Debugging Purposes Only
+        # data.class_index = cdat.iclss
 
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
                 self.stages[i].status = Pipeline.RUNNING
+
+        self.logs.append('Splitting Training Set')
 
         # TODO - Check if this seed is worth it.
         seed = assign_if_none(seed, random.randint(0, 1000))
@@ -253,11 +265,11 @@ class Pipeline(object):
         wobj.inputformat(data)
 
         tran = wobj.filter(data)
-        save.save_file(tran, os.path.join(head, '{name}_train.arff'.format(name = name)))
+
+        self.logs.append('Splitting Testing Set')
 
         wobj.options = opts
         test = wobj.filter(data)
-        save.save_file(test, os.path.join(head,  '{name}_test.arff'.format(name = name)))
 
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
@@ -305,23 +317,88 @@ class Pipeline(object):
                         if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
                             self.stages[i].status = Pipeline.COMPLETE
 
-        summ.feature_selection = feat
+        models = [ ]
+        for model in para.MODEL:
+            if model.USE:
+                summary         = addict.Dict()
 
-        # for model in para.MODEL:
-        #     if model.USE:
-        #         classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(
-        #             classname = model.NAME,
-        #             options   = assign_if_none(model.OPTIONS, [ ])
-        #         ))
-        #         classifier.build_classifier(tran)
-        #
-        #         serializer.write(os.path.join(head, '{classname}.model'.format(
-        #             classname = model.NAME
-        #         )))
+                self.logs.append('Modelling {model}'.format(model = model.LABEL))
+
+                summary.label   = model.LABEL
+                summary.name    = model.NAME
+                summary.options = assign_if_none(model.OPTIONS, [ ])
+
+                for i, stage in enumerate(self.stages):
+                    if stage.code == 'lrn' and stage.value.name == model.NAME:
+                        self.stages[i].status = Pipeline.RUNNING
+
+                for i, instance in enumerate(data):
+                    iclass = list(range(instance.num_classes))
+                
+                options    = assign_if_none(model.OPTIONS, [ ])
+                classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(classname = model.NAME), options = options)
+                classifier.build_classifier(tran)
+        
+                serializer.write(os.path.join(head, '{name}.{classname}.model'.format(
+                        name = name,
+                    classname = model.NAME
+                )), classifier)
+
+                self.logs.append('Testing model {model}'.format(model = model.LABEL))
+
+                evaluation       = Evaluation(tran)
+                evaluation.test_model(classifier, test)
+
+                summary.summary  = evaluation.summary()
+
+                frame  = pd.DataFrame(data = evaluation.confusion_matrix)
+                axes   = sns.heatmap(frame, cbar = False, annot = True)
+                b64str = get_b64_plot(axes)
+                
+                summary.confusion_matrix = addict.Dict({
+                    'value': evaluation.confusion_matrix.tolist(),
+                     'plot': b64str
+                })
+
+                self.logs.append('Plotting Learning Curve for {model}'.format(model = model.LABEL))
+
+                buffer = io.BytesIO()
+                plot_classifier_errors(evaluation.predictions, tran, test, outfile = buffer, wait = False)
+                b64str = buffer_to_b64(buffer)
+
+                summary.learning_curve   = b64str
+
+                buffer = io.BytesIO()
+                plot_roc(evaluation, class_index = iclass, outfile = buffer, wait = False)
+                b64str = buffer_to_b64(buffer)
+
+                summary.roc_curve        = b64str
+
+                buffer = io.BytesIO()
+                plot_prc(evaluation, class_index = iclass, outfile = buffer, wait = False)
+                b64str = buffer_to_b64(buffer)
+
+                summary.prc_curve        = b64str
+
+                if classifier.graph:
+                    summary.graph = classifier.graph
+
+                for i, instance in enumerate(test):
+                    prediction = classifier.classify_instance(instance)
+
+                for i, stage in enumerate(self.stages):
+                    if stage.code == 'lrn' and stage.value.name == model.NAME:
+                        self.stages[i].status = Pipeline.COMPLETE
+
+                models.append(summary)
+
+        self.gist.models = models
 
         JVM.stop()
 
-        JSON.write(os.path.join(head, '{name}.summary.json'.format(name = name)), summ)
+        JSON.write(os.path.join(head, '{name}.cgist'.format(name = name)), self.gist)
+
+        self.logs.append('Pipeline Complete')
 
         self.set_status(Pipeline.COMPLETE)
 

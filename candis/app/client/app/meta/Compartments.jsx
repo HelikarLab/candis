@@ -1,15 +1,16 @@
-import axios      from 'axios'
-import shortid    from 'shortid'
+import axios        from 'axios'
+import shortid      from 'shortid'
 
-import config     from '../config'
+import config       from '../config'
 
-import Component  from '../constant/Component'
-import Pipeline   from '../constant/Pipeline'
-import FileFormat from '../constant/FileFormat'
+import Component    from '../constant/Component'
+import Pipeline     from '../constant/Pipeline'
+import FileFormat   from '../constant/FileFormat'
 
-import modal      from '../action/ModalAction'
-import { write, getResource }  from '../action/AsynchronousAction'
-import { stage }  from '../action/DocumentProcessorAction'
+import modal        from '../action/ModalAction'
+import { read, write, getResource }  from '../action/AsynchronousAction'
+import { stage }    from '../action/DocumentProcessorAction'
+import { getFiles } from '../util'
 
 const Compartments =
 [
@@ -395,71 +396,67 @@ const Compartments =
         var   tools    = [ ]
 
         if ( response.status == "success" ) {
-          const data   = response.data
-          tools        = data.map((method) => {
-            const desc = method.desc
-            const tool =
+          const data      = response.data
+
+          const tools     = data.map((method) => {
+            const tool    =
             {
-                     name: method.name,
-                  tooltip: method.type,
-                     icon: method.icon,
-              description: desc.short || method.type,
-                  onClick: (dispatch) =>
-                  {
-                    // TODO: The following snippet requires a component - LaTeXReader
-                    const ID      = shortid.generate()
-                    const stage   =
+                 name: method.label,
+              onClick: (dispatch) => {
+                  const ID      = shortid.generate()
+                  const meta    = {
+                         ID: ID,
+                       code: 'lrn',
+                       name: method.label,
+                      value: { ...method, use: true },
+                     status: Pipeline.Status.READY,
+                    onClick: (dispatch) =>
                     {
-                           ID: ID,
-                         name: method.name,
-                         code: 'lrn',
-                        value: { ...method, use: true },
-                       status: "READY",
-                      onClick: (dispatch) =>
-                      {
-                        const title    =
-                        `
-                        <div class="font-bold">
-                          ${method.name}
-                        </div>
-                        `
-                        ,     detail   = desc.long || desc.short || method.type
-                        ,     message  =
-                        `
-                        <div class="text-justify">
-                          ${detail.replace(/\n/g, '<br/>')}
-                        </div>
-                        `
+                        // const title    =
+                        // `
+                        // <div class="font-bold">
+                        //   ${method.name}
+                        // </div>
+                        // `
+                        // ,     detail   = desc.long || desc.short
+                        // ,     message  =
+                        // `
+                        // <div class="text-justify">
+                        //   ${detail.replace(/\n/g, '<br/>')}
+                        // </div>
+                        // `
 
-                        const dialog   = bootbox.dialog({
-                            title: title,
-                          message: message,
-                          buttons: { ok: { label: "Ok"} },
-                             size: 'large',
-                          animate: false
-                        })
+                        // const dialog   = bootbox.dialog({
+                        //     title: title,
+                        //   message: message,
+                        //   buttons: { ok: { label: "Ok"} },
+                        //      size: 'large',
+                        //   animate: false
+                        // })
 
-                         dialog.init(() => {
-                          setTimeout(() => {
-                            var $element = dialog.find('.bootbox-body');
+                        //  dialog.init(() => {
+                        //   setTimeout(() => {
+                        //     var $element = dialog.find('.bootbox-body');
 
-                            MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
-                          }, 500)
-                        })
-                      } // end meta.onClick
-                    } // end stage
+                        //     MathJax.Hub.Queue(["Typeset", MathJax.Hub, $element[0]]);
+                        //   }, 500)
+                        // })
+                    } // end meta.onClick
+                  } // end meta
 
-                    const action = setNode(stage)
+                  const action = stage.set(meta)
 
-                    dispatch(action)
-                  }
-            }
+                  dispatch(action)
+              } // end tool.onClick
+            } // end tool
 
             return tool
           })
-        }
 
-        return tools
+          return tools
+        } else {
+          return [ ]
+        }
       })
     }
   },
@@ -472,11 +469,85 @@ const Compartments =
              name: 'Predict',
           tooltip: 'Perform a prediction',
           onClick: (dispatch) => {
-            bootbox.alert({
-              message: '<div class="font-bold">To be implemented</div>',
-                 size: "small",
-              animate: false,
-              buttons: { ok: { label: "Ok", className: "btn-sm btn-primary" } }
+            toastr.warning('To be implemented.')
+          }
+        },
+        {
+             name: 'Gist',
+          tooltip: 'Generate a Classification Report',
+          onClick: (dispatch) => {
+            const action    = getResource()
+            
+            dispatch(action).then((resource) => {
+              const files   = getFiles(resource, [FileFormat.GIST])
+              const options = files.map((file) => {
+                const name  = file.name
+                const value = JSON.stringify(file)
+  
+                return { text: name, value: value }
+              })
+  
+              if ( options.length ) {
+                bootbox.prompt({
+                        title: '<span class="font-bold">Open Gist</span>',
+                    inputType: 'select',
+                  inputOptions: options,
+                      buttons:
+                        {
+                          cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
+                          confirm: { label: "Open",   className: "btn-sm btn-success" }
+                        },
+                          size: "small",
+                      animate: false,
+                      callback: (result) => {
+                        if ( result  !== null ) {
+                          const output = JSON.parse(result)
+                          const action = read(output)
+  
+                          dispatch(action).then((gist) => {
+                            const dialog  =
+                            {
+                              component: Component.GistViewer,
+                                  title: 'Gist',
+                                   size: 'lg',
+                                buttons:
+                                [
+                                  {
+                                        label: "Ok",
+                                    className: "btn-primary",
+                                      onClick: ( ) =>
+                                      {
+                                        var action = modal.hide()
+                
+                                        dispatch(action)
+                                      }
+                                  },
+                                  {
+                                        label: "Cancel",
+                                      onClick: ( ) =>
+                                      {
+                                        var action = modal.hide()
+                
+                                        dispatch(action)
+                                      }
+                                  }
+                                ],
+                                  props:
+                                  {
+                                    classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                                          data: gist
+                                  }
+                            }
+                            const action  = modal.show(dialog)
+                
+                            dispatch(action)
+                          })
+                        }
+                      }
+                })
+              } else {
+                toastr.warning('No gist found. Create a new pipeline by clicking on the <span class="font-bold">New</div> option.', 'Sorry!')
+              }
             })
           }
         }

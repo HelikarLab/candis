@@ -6,5 +6,7 @@ from candis.util.util import (
 	get_free_port,
 	makedirs,
 	get_timestamp_str,
-	merge_dicts
+	merge_dicts,
+	get_b64_plot,
+	buffer_to_b64
 )

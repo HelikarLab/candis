@@ -27,7 +27,7 @@ class ToolBar extends React.Component {
 
               return (
                 <li key={index} {...ttattrs}>
-                  <a className="btn no-background no-border no-shadow no-padding-horizontal" href="javascript:void(0);" onClick={() => {
+                  <a style={{ padding: '5px' }} href="javascript:void(0);" onClick={() => {
                     props.onClick(tool)
                   }}>
                     {holder}
