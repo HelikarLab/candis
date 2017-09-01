@@ -36,7 +36,7 @@
 ### Installation
 Ensure you've gone ahead and installed the [dependencies](#dependencies).
 
-Download or clone the repository as follows:
+Clone the repository as follows:
 ```console
 $ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd candis
 ```
