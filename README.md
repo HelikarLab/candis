@@ -22,7 +22,9 @@
 
 ![](.github/ria.gif)
 
-**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/achillesrasquinha/CancerDiscover) written by the bioinformaticians at [HelikarLab](helikarlab.org).
+**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](helikarlab.org).
+
+***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across some bugs or errors, raise an issue over [here](https://github.com/achillesrasquinha/candis/issues).
 
 ### Table of Contents
 * [Installation](#installation)
@@ -32,6 +34,9 @@
 * [License](#license)
 
 ### Installation
+
+Ensure you've gone ahead and installed the [dependencies](#dependencies).
+
 Download or clone the repository as follows:
 ```console
 $ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd candis
@@ -107,7 +112,7 @@ Check out a live demo of the application [here](https://cancerdiscover.herokuapp
 * Production Dependencies
   * R
   * WEKA (***NOTE:*** Requires Java)
-  * Python 2.7+ or Python 3.5+
+  * Python 3.6+
 * Development Dependencies
   * [Node.js](https://nodejs.org)
   * [SASS](http://sass-lang.com)
