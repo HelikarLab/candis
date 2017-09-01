@@ -112,7 +112,7 @@ Check out a live demo of the application [here](https://cancerdiscover.herokuapp
 * Production Dependencies
   * R
   * WEKA (***NOTE:*** Requires Java)
-  * Python 2.7+ or Python 3.5+
+  * Python 3.5+
 * Development Dependencies
   * [Node.js](https://nodejs.org)
   * [SASS](http://sass-lang.com)
