@@ -40,6 +40,7 @@ $ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd can
 ```
 
 Install necessary dependencies:
+
 We suggest you to install **candis**'s dependencies within a [`virtualenv`](https://virtualenv.pypa.io/en/stable/). Here are a some quick commands to have a virtual environment setup:
 ```console
 $ pip install virtualenv
