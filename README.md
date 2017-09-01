@@ -34,16 +34,16 @@
 * [License](#license)
 
 ### Installation
-Ensure you've gone ahead and installed the [dependencies](#dependencies).
-
-Clone the repository as follows:
+Ensure you've gone ahead and installed the [dependencies](#dependencies). Then, clone the repository as follows:
 ```console
 $ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd candis
 ```
 
 Install necessary dependencies:
-
-We suggest you to install **candis**'s dependencies within a [`virtualenv`](https://virtualenv.pypa.io/en/stable/).
+We suggest you to install **candis**'s dependencies within a [`virtualenv`](https://virtualenv.pypa.io/en/stable/). Here are a some quick commands to have a virtual environment setup:
+```console
+$ pip install virtualenv
+$ 
 
 ***Python***
 ```console
@@ -113,7 +113,7 @@ Check out a live demo of the application [here](https://cancerdiscover.herokuapp
 * Production Dependencies
   * R
   * WEKA (***NOTE:*** Requires Java)
-  * Python 3.6+
+  * Python 3.6+ and [PIP](https://pip.pypa.io) (Python's Package Manager)
 * Development Dependencies
   * [Node.js](https://nodejs.org)
   * [SASS](http://sass-lang.com)
