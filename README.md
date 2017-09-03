@@ -33,35 +33,11 @@
 * [Dependencies](#dependencies)
 * [License](#license)
 
-### Installation
-Ensure you've gone ahead and installed the [dependencies](#dependencies). Then, clone the repository as follows:
-```console
-$ git clone --recursive http://github.com/achillesrasquinha/candis.git && cd candis
-```
-
-Install necessary dependencies:
-
-We suggest you to install **candis**'s dependencies within a [`virtualenv`](https://virtualenv.pypa.io/en/stable/). Here are a some quick commands to have a virtual environment setup:
-```console
-$ pip install virtualenv
-$ virtualenv .venv/py3 -p python3
-$ source .venv/py3/bin/activate
-```
-
-***Python***
-```console
-$ pip install -r requirements.txt
-```
-
-***R***
-```console
-$ cd R && Rscript setup.R
-```
-
-Then, go ahead and simply:
-```console
-$ python setup.py install
-```
+#### Installation
+To install candis right from scratch, check out our exhaustive guides:
+* [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
+* [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
+* [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
 
 ### Usage
 **Launching the RIA (Rich Internet Application)**
