@@ -246,7 +246,7 @@ class Pipeline(object):
         JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
 
         load = Loader(classname = 'weka.core.converters.ArffLoader')
-        data = load.load_file(path)
+        # data = load.load_file(path)
         # save =  Saver(classname = 'weka.core.converters.ArffSaver')
         data = load.load_file(os.path.join(head, 'iris.arff')) # For Debugging Purposes Only
         data.class_is_last() # For Debugging Purposes Only
