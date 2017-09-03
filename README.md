@@ -85,9 +85,6 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
   ...     # do something while pipeline is running
   ```
 
-### Demo
-Check out a live demo of the application [here](https://cancerdiscover.herokuapp.com).
-
 ### Dependencies
 * Production Dependencies
   * R
