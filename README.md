@@ -24,7 +24,7 @@
 
 **candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](helikarlab.org).
 
-***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across some bugs or errors, raise an issue over [here](https://github.com/achillesrasquinha/candis/issues).
+***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/achillesrasquinha/candis/issues).
 
 ### Table of Contents
 * [Installation](#installation)
@@ -33,7 +33,7 @@
 * [Dependencies](#dependencies)
 * [License](#license)
 
-#### Installation
+### Installation
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
 * [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
