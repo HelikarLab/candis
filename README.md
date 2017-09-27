@@ -1,8 +1,3 @@
-```js
-var chat = frappe.Chat();
-chat.show();
-```
-
 <div align="center">
   <img src=".github/logo-w-title.png" width="512">
 </div>
