@@ -1,3 +1,8 @@
+```js
+var chat = frappe.Chat();
+chat.show();
+```
+
 <div align="center">
   <img src=".github/logo-w-title.png" width="512">
 </div>
@@ -24,7 +29,7 @@
 
 **candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](helikarlab.org).
 
-***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/achillesrasquinha/candis/issues).
+***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/HelikarLab/candis/issues).
 
 ### Table of Contents
 * [Installation](#installation)
@@ -35,9 +40,9 @@
 
 ### Installation
 To install candis right from scratch, check out our exhaustive guides:
-* [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
-* [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
-* [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/achillesrasquinha/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
+* [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
+* [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
+* [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
 
 ### Usage
 **Launching the RIA (Rich Internet Application)**
