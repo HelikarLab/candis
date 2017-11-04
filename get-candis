@@ -28,7 +28,6 @@ def which(executable, raise_err = False):
 	return path
 
 def popen(*params, **kwargs):
-	print(params)
 	output     = kwargs.get('output', True)
 	raise_err  = kwargs.get('raise_err', False)
 	
@@ -64,7 +63,7 @@ def main(args = None):
 
 	git   = which('git',  raise_err = True)
 	popen(git, 'clone', '--recursive', const.URL_CANDIS)
-	
+
 
 	return code
 
