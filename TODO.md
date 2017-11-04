@@ -21,17 +21,7 @@
 </p>
 
 * #### High Priority
-  * [ ] Open Documents
-  * [ ] Graph Editor [WIP]
 
 * #### Medium Priority
-  * [ ] Context Menu for Documents (Rename, Close, etc. actions)
-  * [ ] Refresh Button for each ToolBox Compartment
-  * [ ] Display alerts during asynchronous actions (load and error)
-  * [ ] Documentation
 
 * #### Low Priority
-  * [ ] Settings Dialog and Manager
-  * [ ] Handling multiple tabs on Document Processor (Add Horizontal Scroll)
-  * [ ] Random Forest Icon
-  * [ ] Fixed-Width ToolBox (75% for Compartments, 25% for Help Widget)
