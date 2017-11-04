@@ -14,9 +14,10 @@ log = logging.getLogger('get-candis')
 log.setLevel(logging.DEBUG)
 
 class const(object):
-	URL_HOMEBREW_INSTALL  = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
-	HOMEBREW_DEPENDENCIES = ['git', 'python3']
-	URL_CANDIS            = 'https://github.com/HelikarLab/candis'
+	URL_HOMEBREW_INSTALL  	   = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
+	HOMEBREW_DEPENDENCIES 	   = ['git', 'python3', 'r']
+	HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
+	URL_CANDIS            	   = 'https://github.com/HelikarLab/candis'
 
 def which(executable, raise_err = False):
 	path = find_executable(executable)
@@ -27,6 +28,7 @@ def which(executable, raise_err = False):
 	return path
 
 def popen(*params, **kwargs):
+	print(params)
 	output     = kwargs.get('output', True)
 	raise_err  = kwargs.get('raise_err', False)
 	
@@ -54,7 +56,15 @@ def main(args = None):
 	popen(ruby, '-e', pout)
 
 	brew  = which('brew', raise_err = True)
-	popen(brew, 'install', *const.HOMEBREW_DEPENDENCIES)
+	popen(brew, 'tap',  'homebrew/science')
+	popen(brew, 'tap',  'caskroom/cask')
+
+	popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK)
+	popen(brew, 		'install', *const.HOMEBREW_DEPENDENCIES)
+
+	git   = which('git',  raise_err = True)
+	popen(git, 'clone', '--recursive', const.URL_CANDIS)
+	
 
 	return code
 
