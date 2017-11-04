@@ -14,65 +14,73 @@ log = logging.getLogger('get-candis')
 log.setLevel(logging.DEBUG)
 
 class const(object):
-	URL_HOMEBREW_INSTALL       = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
-	HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'r', 'graphviz']
-	HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
-	URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
+    URL_HOMEBREW_INSTALL       = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
+    HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'r', 'graphviz']
+    HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
+    URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
 def which(executable, raise_err = False):
-	path = find_executable(executable)
+    path = find_executable(executable)
 
-	if not path and raise_err:
-		raise ValueError('{executable} not found.'.format(executable = executable))
-	
-	return path
+    if not path and raise_err:
+        raise ValueError('{executable} not found.'.format(executable = executable))
+    
+    return path
 
 def popen(*params, **kwargs):
-	output     = kwargs.get('output', True)
-	directory  = kwargs.get('dir')
-	raise_err  = kwargs.get('raise_err', False)
-	
-	proc       = subprocess.Popen(params,
-		stdin  = subprocess.PIPE,
-		stdout = subprocess.PIPE,
-		stderr = subprocess.PIPE,
-		cwd    = directory
-	)
+    output      = kwargs.get('output', True)
+    directory   = kwargs.get('dir')
+    environment = kwargs.get('env')
+    raise_err   = kwargs.get('raise_err', False)
 
-	if output:
-		for line in iter(proc.stdout.readline, ""):
-			print(line, end = '')
-	
-	out, err   = proc.communicate()
+    environ     = os.environ.copy()
+    if environment:
+        environ.update(environment)
+    
+    proc        = subprocess.Popen(params,
+        stdin   = subprocess.PIPE,
+        stdout  = subprocess.PIPE,
+        stderr  = subprocess.PIPE,
+        env     = environ,
+        cwd     = directory
+    )
 
-	return out
+    if output:
+        for line in iter(proc.stdout.readline, ""):
+            print(line, end = '')
+    
+    out, err   = proc.communicate()
+
+    return out
 
 def main(args = None):
-	code    = os.EX_OK
+    code    = os.EX_OK
 
-	curl    = which('curl', raise_err = True)
-	ruby    = which('ruby', raise_err = True)
-	
-	pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
-	popen(ruby, '-e', pout)
+    brew    = which('brew')
+    if not brew:
+        curl    = which('curl', raise_err = True)
+        ruby    = which('ruby', raise_err = True)
+        
+        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
+        popen(ruby, '-e', pout)
 
-	brew    = which('brew', raise_err = True)
-	popen(brew, 'tap',  'homebrew/science')
-	popen(brew, 'tap',  'caskroom/cask')
+    brew    = which('brew', raise_err = True)
+    popen(brew, 'tap',  'homebrew/science')
+    popen(brew, 'tap',  'caskroom/cask')
 
-	popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK)
-	popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES)
-	
-	git     = which('git',  raise_err = True)
-	popen(git, 'clone', '--recursive', const.URL_CANDIS)
+    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK)
+    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES)
+    
+    git     = which('git',  raise_err = True)
+    popen(git, 'clone', '--recursive', const.URL_CANDIS)
 
-	rscript = which('rscript', raise_err = True)
-	popen(rscript, 'setup.R', cwd = os.path.abspath('candis/R'))
+    rscript = which('rscript', raise_err = True)
+    popen(rscript, 'setup.R', dir = os.path.abspath('candis/R'))
 
-	return code
+    return code
 
 if __name__ == '__main__':
-	args = sys.argv[1:]
-	code = main(args)
+    args = sys.argv[1:]
+    code = main(args)
 
-	sys.exit(code)
+    sys.exit(code)
