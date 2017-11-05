@@ -4,7 +4,7 @@
 from __future__ import print_function
 
 # imports - standard imports
-import sys, os
+import sys, os, os.path as osp
 import subprocess
 import logging
 from distutils.spawn import find_executable
@@ -28,27 +28,31 @@ def which(executable, raise_err = False):
     return path
 
 def popen(*params, **kwargs):
-    output      = kwargs.get('output', True)
+    # output      = kwargs.get('output', True)
     directory   = kwargs.get('dir')
     environment = kwargs.get('env')
-    raise_err   = kwargs.get('raise_err', False)
+    raise_err   = kwargs.get('raise_err', True)
 
     environ     = os.environ.copy()
     if environment:
         environ.update(environment)
     
     proc        = subprocess.Popen(params,
-        stdin   = subprocess.PIPE,
-        stdout  = subprocess.PIPE,
-        stderr  = subprocess.PIPE,
+        # stdin   = subprocess.PIPE,
+        # stdout  = subprocess.PIPE,
+        # stderr  = subprocess.PIPE,
         env     = environ,
         cwd     = directory
     )
 
-    if output:
-        for line in iter(proc.stdout.readline, ""):
-            print(line, end = '')
-    
+    # if output:
+    #     for line in iter(proc.stdout.readline, ""):
+    #         print(line, end = '')
+    code       = proc.wait()
+    if code:
+        if raise_err:
+            raise subprocess.CalledProcessError(code, params)
+
     out, err   = proc.communicate()
 
     return out
@@ -56,26 +60,38 @@ def popen(*params, **kwargs):
 def main(args = None):
     code    = os.EX_OK
 
-    brew    = which('brew')
-    if not brew:
-        curl    = which('curl', raise_err = True)
-        ruby    = which('ruby', raise_err = True)
+    # brew    = which('brew')
+    # if not brew:
+    #     curl    = which('curl', raise_err = True)
+    #     ruby    = which('ruby', raise_err = True)
         
-        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
-        popen(ruby, '-e', pout)
+    #     pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
+    #     popen(ruby, '-e', pout)
 
-    brew    = which('brew', raise_err = True)
-    popen(brew, 'tap',  'homebrew/science')
-    popen(brew, 'tap',  'caskroom/cask')
+    # brew    = which('brew', raise_err = True)
+    # popen(brew, 'tap',  'homebrew/science')
+    # popen(brew, 'tap',  'caskroom/cask')
 
-    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK)
-    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES)
+    # popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
+    # popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
     
-    git     = which('git',  raise_err = True)
-    popen(git, 'clone', '--recursive', const.URL_CANDIS)
+    appdir  = osp.join(osp.expanduser('~'), 'candis')
 
-    rscript = which('rscript', raise_err = True)
-    popen(rscript, 'setup.R', dir = os.path.abspath('candis/R'))
+    # git     = which('git',  raise_err = True)
+    # popen(git, 'clone', '--recursive', const.URL_CANDIS, appdir)
+
+    # Rscript = which('Rscript', raise_err = True)
+    # popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
+
+    # python3 = which('python3', raise_err = True)
+    # pip3    = which('pip3', raise_err = True)
+    # popen(pip3, 'install', 'virtualenv')
+
+    # venv    = which('virtualenv', raise_err = True)
+    # popen(venv, '--python', python3, osp.join(appdir, '.venv'))
+    venv    = osp.join(appdir, '.venv')
+    pip     = osp.join(venv, 'bin', 'pip')
+    popen(pip, 'install', '-r', osp.join(appdir, 'requirements.txt'))
 
     return code
 

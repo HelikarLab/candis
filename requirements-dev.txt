@@ -15,7 +15,7 @@ rpy2
 liac-arff
 
 cython
-https://github.com/LeeKamentsky/python-javabridge/archive/master.zip
+-e git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
 python-weka-wrapper3
 pygraphviz
 Pillow
