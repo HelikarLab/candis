@@ -15,7 +15,7 @@ log.setLevel(logging.DEBUG)
 
 class const(object):
     URL_HOMEBREW_INSTALL       = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
-    HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'r', 'graphviz']
+    HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'gcc', 'r', 'graphviz']
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
@@ -60,38 +60,45 @@ def popen(*params, **kwargs):
 def main(args = None):
     code    = os.EX_OK
 
-    # brew    = which('brew')
-    # if not brew:
-    #     curl    = which('curl', raise_err = True)
-    #     ruby    = which('ruby', raise_err = True)
+    brew    = which('brew')
+    if not brew:
+        curl    = which('curl', raise_err = True)
+        ruby    = which('ruby', raise_err = True)
         
-    #     pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
-    #     popen(ruby, '-e', pout)
+        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
+        popen(ruby, '-e', pout)
 
-    # brew    = which('brew', raise_err = True)
-    # popen(brew, 'tap',  'homebrew/science')
-    # popen(brew, 'tap',  'caskroom/cask')
+    brew    = which('brew', raise_err = True)
+    popen(brew, 'tap',  'homebrew/science')
+    popen(brew, 'tap',  'caskroom/cask')
 
-    # popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
-    # popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
+    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
+    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
     
     appdir  = osp.join(osp.expanduser('~'), 'candis')
 
-    # git     = which('git',  raise_err = True)
-    # popen(git, 'clone', '--recursive', const.URL_CANDIS, appdir)
+    git     = which('git',  raise_err = True)
+    popen(git, 'clone', '--recursive', const.URL_CANDIS, appdir)
 
-    # Rscript = which('Rscript', raise_err = True)
-    # popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
+    Rscript = which('Rscript', raise_err = True)
+    popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
 
-    # python3 = which('python3', raise_err = True)
-    # pip3    = which('pip3', raise_err = True)
-    # popen(pip3, 'install', 'virtualenv')
+    python3 = which('python3', raise_err = True)
+    pip3    = which('pip3', raise_err = True)
+    popen(pip3, 'install', 'virtualenv')
 
-    # venv    = which('virtualenv', raise_err = True)
-    # popen(venv, '--python', python3, osp.join(appdir, '.venv'))
+    venv    = which('virtualenv', raise_err = True)
+    popen(venv, '--python', python3, osp.join(appdir, '.venv'))
     venv    = osp.join(appdir, '.venv')
-    pip     = osp.join(venv, 'bin', 'pip')
-    popen(pip, 'install', '-r', osp.join(appdir, 'requirements.txt'))
+
+    python3 = osp.join(venv, 'bin', 'python')
+    pip3    = osp.join(venv, 'bin', 'pip')
+
+    popen(pip3, 'install', 'numpy')
+    popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
+
+    with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'w') as f:
+        f.write('backend: TkAgg')
 
     return code
 
