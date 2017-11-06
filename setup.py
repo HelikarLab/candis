@@ -76,7 +76,7 @@ def main(argv = None):
     try:
         from setuptools import setup
         args_setuptools = dict(
-            keywords      = ', '.join([keyword for keyword in package.keywords])
+            keywords    = ', '.join([keyword for keyword in package.keywords])
         )
     except ImportError:
         from distutils.core import setup

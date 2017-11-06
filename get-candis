@@ -28,7 +28,7 @@ def which(executable, raise_err = False):
     return path
 
 def popen(*params, **kwargs):
-    # output      = kwargs.get('output', True)
+    output      = kwargs.get('output', True)
     directory   = kwargs.get('dir')
     environment = kwargs.get('env')
     raise_err   = kwargs.get('raise_err', True)
@@ -55,32 +55,32 @@ def popen(*params, **kwargs):
 
     out, err   = proc.communicate()
 
-    return out
+    return code
 
-def main(args = None):
-    code    = os.EX_OK
-
-    brew    = which('brew')
-    if not brew:
-        curl    = which('curl', raise_err = True)
-        ruby    = which('ruby', raise_err = True)
+def check_git_dir(dirpath, raise_err = True):
+    git     = which('git', raise_err = True)
+    
+    if osp.isdir(dirpath) \
+        and osp.isdir(osp.join(dirpath, '.git')) \
+        and not popen(git, 'rev-parse', '--is-inside-work-tree', dir = dirpath, raise_err = False):
         
-        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
-        popen(ruby, '-e', pout)
+        return True
+    else:
+        if raise_err:
+            raise ValueError('{path} not a valid git repository.'.format(
+                path = dirpath
+            ))
+        else:
+            return False
 
-    brew    = which('brew', raise_err = True)
-    popen(brew, 'update')
-    
-    popen(brew, 'tap',  'homebrew/science')
-    popen(brew, 'tap',  'caskroom/cask')
-
-    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
-    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
-    
+def setup_candis():
     appdir  = osp.join(osp.expanduser('~'), 'candis')
-
-    git     = which('git',  raise_err = True)
-    popen(git, 'clone', '--recursive', const.URL_CANDIS, appdir)
+    
+    if not osp.exists(appdir):
+        git = which('git', raise_err = True)
+        popen(git, 'clone', '--recursive', const.URL_CANDIS, appdir)
+    else:
+        check_git_dir(appdir)
 
     Rscript = which('Rscript', raise_err = True)
     popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
@@ -99,8 +99,30 @@ def main(args = None):
     popen(pip3, 'install', 'numpy')
     popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
 
-    with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'w') as f:
-        f.write('backend: TkAgg')
+    with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'a') as f:
+        f.write('\nbackend: TkAgg')
+        
+def main(args = None):
+    code    = os.EX_OK
+
+    brew    = which('brew')
+    if not brew:
+        curl    = which('curl', raise_err = True)
+        ruby    = which('ruby', raise_err = True)
+        
+        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
+        popen(ruby, '-e', pout)
+
+    brew    = which('brew', raise_err = True)
+    popen(brew, 'update')
+
+    popen(brew, 'tap',  'homebrew/science')
+    popen(brew, 'tap',  'caskroom/cask')
+
+    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
+    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
+    
+    setup_candis()
 
     return code
 
