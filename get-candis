@@ -69,6 +69,8 @@ def main(args = None):
         popen(ruby, '-e', pout)
 
     brew    = which('brew', raise_err = True)
+    popen(brew, 'update')
+    
     popen(brew, 'tap',  'homebrew/science')
     popen(brew, 'tap',  'caskroom/cask')
 
