@@ -93,8 +93,8 @@ def setup_candis():
     popen(venv, '--python', python3, osp.join(appdir, '.venv'))
     venv    = osp.join(appdir, '.venv')
 
-    python3 = osp.join(venv, 'bin', 'python')
-    pip3    = osp.join(venv, 'bin', 'pip')
+    # python3 = osp.join(venv, 'bin', 'python')
+    # pip3    = osp.join(venv, 'bin', 'pip')
 
     popen(pip3, 'install', 'numpy')
     popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
