@@ -14,7 +14,7 @@ seaborn
 rpy2
 liac-arff
 
-cython
+Cython
 -e git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
 python-weka-wrapper3
 pygraphviz
