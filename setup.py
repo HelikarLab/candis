@@ -73,6 +73,8 @@ def get_long_description(filepaths):
     return content
 
 def main(argv = None):
+    code = os.EX_OK
+    
     try:
         from setuptools import setup
         args_setuptools = dict(
@@ -108,7 +110,7 @@ def main(argv = None):
 
     setup(**metadata)
 
-    return 0
+    return code
 
 if __name__ == '__main__':
     args = sys.argv[1:]
