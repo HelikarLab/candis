@@ -94,10 +94,9 @@ def main(argv = None):
         license          = package.license,
         packages         = package.modules,
         url              = package.homepage,
-        cmdclass         = {
-            'clean': CleanCommand,
-            'test': TestCommand
-        },
+        cmdclass         = dict(
+            clean = CleanCommand, test = TestCommand
+        ),
         include_package_data = True,
         **args_setuptools
     )
