@@ -17,7 +17,7 @@ NPM         ?= npm
 BUNDLER     ?= bundler
 
 venv:
-	pip3 install $(VIRTUALENV)
+	pip install $(VIRTUALENV)
 
 	$(VIRTUALENV) $(VENV) --python python3
 
