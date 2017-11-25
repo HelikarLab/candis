@@ -1,6 +1,6 @@
 from setuptools import find_packages
 
-name              = 'quilo'
+name              = 'candis'
 version           = '0.1.0'
 release           = '0.1.0'
 description       = 'A Flask + ReactJS boilerplate'
@@ -17,9 +17,9 @@ maintainers       = [
 license           = 'GNU GPL v3'
 modules           = find_packages(exclude = ['test'])
 test_modules      = find_packages(include = ['test'])
-homepage          = 'https://quilo.readthedocs.io'
+homepage          = 'https://candis.readthedocs.io'
 github_username   = 'achillesrasquinha'
-github_repository = 'quilo'
+github_repository = 'candis'
 github_url        = '{baseurl}/{username}/{repository}'.format(
     baseurl    = 'https://github.com',
     username   = github_username,

@@ -17,7 +17,7 @@ NPM         ?= npm
 BUNDLER     ?= bundler
 
 venv:
-	pip install $(VIRTUALENV)
+	pip3 install $(VIRTUALENV)
 
 	$(VIRTUALENV) $(VENV) --python python3
 
@@ -56,7 +56,9 @@ docs:
 	cd $(DOCSDIR) && make html
 
 sass:
-	sass $(SOURCEDIR)/app/client/styles/App.scss:$(SOURCEDIR)/app/assets/css/styles.min.css --sourcemap=none --style compressed
+	sass $(SOURCEDIR)/app/client/styles/App.scss:$(SOURCEDIR)/app/assets/css/styles.min.css \
+		--sourcemap=none 																	\
+		--style=compressed
 
 docker.build:
 	docker build -t $(PACKAGE) $(BASEDIR)
