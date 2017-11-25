@@ -14,7 +14,7 @@ seaborn
 rpy2
 liac-arff
 
-Cython
+cython
 -e git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
 python-weka-wrapper3
 pygraphviz
@@ -24,3 +24,4 @@ Flask
 django-htmlmin
 flask-socketio
 pytest
+coverage
