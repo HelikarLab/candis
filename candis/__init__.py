@@ -7,7 +7,6 @@ from candis.ios          import cdata, pipeline
 # candis.cli
 from candis.cli          import main
 
-__version__ = CONFIG.VERSION
 cache       = Cache()
 cache.create()
 

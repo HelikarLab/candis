@@ -72,6 +72,8 @@ else
 endif
 
 publish:
+	make clean
+	
 	$(PYTHON) setup.py sdist bdist_wheel
 
 	$(TWINE) upload -r $(repo) $(BASEDIR)/dist/*

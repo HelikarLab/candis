@@ -8,10 +8,10 @@ import codecs
 from distutils.core import Command
 from distutils.command.clean import clean as Clean
 
-import package
+from package import package
 
 ABSPATH_ROOTDIR              = os.path.dirname(os.path.abspath(__file__))
-RELPATH_FILES_CLEAN          = ['build', 'dist', '{name}.egg-info'.format(name = package.name), '.cache']
+RELPATH_FILES_CLEAN          = ['build', 'dist', '{name}.egg-info'.format(name = package['name']), '.cache']
 RELPATH_WALK_FILES_EXT_CLEAN = ['.pyc', '.DS_Store']
 RELPATH_WALK_DIRS_CLEAN      = ['__pycache__']
 
@@ -51,51 +51,31 @@ class TestCommand(Command):
 
         sys.exit(errno)
 
-def get_long_description(filepaths):
-    content   = ''
-    filepaths = filepaths if isinstance(filepaths, list) else [filepaths]
-
-    if filepaths:
-        for i, filepath in enumerate(filepaths):
-            if os.path.exists(filepath):
-                if os.path.isfile(filepath):
-                    if os.path.getsize(filepath) > 0:
-                        f        = codecs.open(filepath, mode = 'r', encoding = 'utf-8')
-                        raw      = f.read()
-                        content += '{prepend}{content}'.format(prepend = '' if i is 0 else '\n\n', content = raw)
-
-                        f.close()
-                else:
-                    raise ValueError('Not a file: {filepath}'.format(filepath = filepath))
-            else:
-                raise FileNotFoundError('No such file found: {filepath}'.format(filepath = filepath))
-
-    return content
-
 def main(argv = None):
     code = os.EX_OK
     
     try:
         from setuptools import setup
         args_setuptools = dict(
-            keywords    = ', '.join([keyword for keyword in package.keywords])
+            keywords    = ', '.join([keyword for keyword in package['keywords']])
         )
     except ImportError:
         from distutils.core import setup
         args_setuptools = dict()
 
     metadata = dict(
-        name             = package.name,
-        version          = package.version,
-        description      = package.description,
-        long_description = get_long_description(package.long_description),
-        author           = ','.join([author['name'] for author in package.authors]),
-        author_email     = ','.join([author['email'] for author in package.authors]),
-        maintainer       = ','.join([maintainer['name'] for maintainer in package.maintainers]),
-        maintainer_email = ','.join([maintainer['email'] for maintainer in package.maintainers]),
-        license          = package.license,
-        packages         = package.modules,
-        url              = package.homepage,
+        name             = package['name'],
+        version          = package['version'],
+        description      = package['description'],
+        long_description = package['long_description'],
+        author           = ','.join([author['name'] for author in package['authors']]),
+        author_email     = ','.join([author['email'] for author in package['authors']]),
+        maintainer       = ','.join([maintainer['name'] for maintainer in package['maintainers']]),
+        maintainer_email = ','.join([maintainer['email'] for maintainer in package['maintainers']]),
+        license          = package['license'],
+        packages         = package['modules'],
+        url              = package['homepage'],
+        install_requires = package['dependencies']['production'],
         cmdclass         = dict(
             clean = CleanCommand, test = TestCommand
         ),
