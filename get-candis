@@ -29,6 +29,7 @@ class const(object):
     LOGO_ASCII_COLOR           = '\x1b[1;35;40m'
 
     URL_HOMEBREW_INSTALL       = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
+    HOMEBREW_TAPS              = ['homebrew/science', 'caskroom/cask']
     HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'gcc', 'r', 'graphviz']
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
@@ -37,7 +38,9 @@ def which(executable, raise_err = False):
     path = find_executable(executable)
 
     if not path and raise_err:
-        raise ValueError('{executable} not found.'.format(executable = executable))
+        raise ValueError('{executable} not found.'.format(
+            executable = executable
+        ))
     
     return path
 
@@ -87,26 +90,28 @@ def check_git_dir(dirpath, raise_err = True):
         else:
             return False
 
-def setup_candis():
-    brew    = which('brew')
+def get_homebrew(doctor = False):
+    brew = which('brew')
     if not brew:
-        curl    = which('curl', raise_err = True)
-        ruby    = which('ruby', raise_err = True)
+        try:
+            curl = which('curl', raise_err = True)
+            ruby = which('ruby', raise_err = True)
+
+            pout = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
+            popen(ruby, '-e', pout)
+
+            brew = which('brew', raise_err = True)
+        except ValueError as e:
+            raise ValueError('{error} Please have it installed manually.'.format(error = str(e)))
+
+    if doctor:
+        popen(brew, 'doctor', raise_err = False)
+
+    return brew
+
+def get_candis():
+    appdir = osp.join(osp.expanduser('~'), 'candis')
         
-        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
-        popen(ruby, '-e', pout)
-
-    brew    = which('brew', raise_err = True)
-    popen(brew, 'update')
-
-    popen(brew, 'tap',  'homebrew/science')
-    popen(brew, 'tap',  'caskroom/cask')
-
-    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
-    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
-    
-    appdir  = osp.join(osp.expanduser('~'), 'candis')
-    
     if not osp.exists(appdir):
         git = which('git', raise_err = True)
         popen(git, 'clone', '--recursive', const.URL_CANDIS, appdir)
@@ -118,20 +123,32 @@ def setup_candis():
 
     python3 = which('python3', raise_err = True)
     pip3    = which('pip3', raise_err = True)
-    popen(pip3, 'install', 'virtualenv')
-
-    venv    = which('virtualenv', raise_err = True)
-    popen(venv, '--python', python3, osp.join(appdir, '.venv'))
-    venv    = osp.join(appdir, '.venv')
-
-    # python3 = osp.join(venv, 'bin', 'python')
-    # pip3    = osp.join(venv, 'bin', 'pip')
 
     popen(pip3, 'install', 'numpy')
     popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
 
     with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'a') as f:
         f.write('\nbackend: TkAgg')
+
+def setup_candis(args = None):
+    code = os.EX_OK
+
+    if   sys.platform == 'darwin':
+        brew = get_homebrew()
+        
+        popen(brew, 'tap',  *const.HOMEBREW_TAPS, raise_err = False)
+        popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
+        popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
+
+    elif sys.platform == 'linux':
+        pass
+    else:
+        log.warn('Sorry. This script is not supported for this platform.')
+        code = 1
+
+    candis = get_candis()
+
+    return code
 
 def get_argument_parser():
     descr     = '{color}{logo}\x1b[0m'.format(
@@ -146,6 +163,9 @@ def get_argument_parser():
     parser.add_argument('-t', '--tag', default = 'dev',
         help = 'gitHub tag/branch to checkout from'
     )
+    parser.add_argument('-d', '--data', default = False,
+        help = 'fetch sample data'
+    )
     parser.add_argument('--verbose', default = True,
         help = 'display log information'
     )
@@ -156,9 +176,9 @@ def main(args = None):
     parser = get_argument_parser()
     args   = parser.parse_args(args)
 
-    # code   = setup_candis(args)
+    code   = setup_candis(args)
 
-    # sys.exit(code)
+    sys.exit(code)
 
 if __name__ == '__main__':
     args    = sys.argv[1:]
