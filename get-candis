@@ -33,8 +33,8 @@ class const(object):
     HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'gcc', 'r', 'graphviz']
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
 
-    APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'r-base', 'graphviz',]
-        # 'default-jre', 'default-jdk', 'weka']
+    APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'r-base', 'graphviz',
+        'default-jre', 'default-jdk', 'oracle-java8-installer', 'weka']
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
@@ -165,8 +165,9 @@ def setup_candis(args = None):
         popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES,      raise_err = False)
 
     elif sys.platform == 'linux':
+        popen(which('add-apt-repository', raise_err = True), 'ppa:webupd8team/java')
+        
         aptget = get_aptget(doctor = True)
-
         popen(aptget, 'install', '-y', *const.APTGET_DEPENDENCIES)
     else:
         log.warn('Sorry. This script is not supported for this platform.')

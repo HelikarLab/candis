@@ -62,7 +62,7 @@ sass:
 		--style=compressed
 
 docker.build:
-	docker build -t $(PACKAGE) $(BASEDIR)
+	docker build -t $(MODULE) $(BASEDIR)
 
 start:
 ifeq ($(ENVIRONMENT), development)
