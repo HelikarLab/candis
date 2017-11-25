@@ -1,12 +1,12 @@
-# Python Runtime
+# python runtime
 FROM python:3-slim
 
+# container
 WORKDIR /candis
+ADD . 	/candis
 
-ADD . /candis
-
-RUN pip install -r requirements.txt
+RUN python get-candis
 
 EXPOSE 5000
 
-CMD ["python", "-m", "candis"]
+CMD ["candis"]

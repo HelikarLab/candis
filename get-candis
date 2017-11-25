@@ -5,6 +5,8 @@ from __future__ import print_function
 
 # imports - standard imports
 import sys, os, os.path as osp
+import shutil
+import argparse
 import subprocess
 import logging
 from distutils.spawn import find_executable
@@ -14,6 +16,18 @@ log = logging.getLogger('get-candis')
 log.setLevel(logging.DEBUG)
 
 class const(object):
+    LOGO_ASCII                 = \
+"""
+                                    d8b   d8,        
+                                    88P  `8P         
+                                    d88              
+     d888b d888b8b    88bd88b  d888888    88b .d888b,
+    d8P' `Pd8P' ?88    88P' ?8bd8P' ?88    88P ?8b,  
+    88b    88b  ,88b  d88   88P88b  ,88b  d88    `?8b
+    `?888P'`?88P'`88bd88'   88b`?88P'`88bd88' `?888P'
+"""
+    LOGO_ASCII_COLOR           = '\x1b[1;35;40m'
+
     URL_HOMEBREW_INSTALL       = 'https://raw.githubusercontent.com/Homebrew/install/master/install'
     HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'gcc', 'r', 'graphviz']
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
@@ -74,6 +88,23 @@ def check_git_dir(dirpath, raise_err = True):
             return False
 
 def setup_candis():
+    brew    = which('brew')
+    if not brew:
+        curl    = which('curl', raise_err = True)
+        ruby    = which('ruby', raise_err = True)
+        
+        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
+        popen(ruby, '-e', pout)
+
+    brew    = which('brew', raise_err = True)
+    popen(brew, 'update')
+
+    popen(brew, 'tap',  'homebrew/science')
+    popen(brew, 'tap',  'caskroom/cask')
+
+    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
+    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
+    
     appdir  = osp.join(osp.expanduser('~'), 'candis')
     
     if not osp.exists(appdir):
@@ -101,33 +132,34 @@ def setup_candis():
 
     with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'a') as f:
         f.write('\nbackend: TkAgg')
+
+def get_argument_parser():
+    descr     = '{color}{logo}\x1b[0m'.format(
+        color = const.LOGO_ASCII_COLOR,
+        logo  = const.LOGO_ASCII
+    )
+    parser    = argparse.ArgumentParser(
+        description     = descr,
+        formatter_class = argparse.RawDescriptionHelpFormatter
+    )
+
+    parser.add_argument('-t', '--tag', default = 'dev',
+        help = 'gitHub tag/branch to checkout from'
+    )
+    parser.add_argument('--verbose', default = True,
+        help = 'display log information'
+    )
+
+    return parser
         
 def main(args = None):
-    code    = os.EX_OK
+    parser = get_argument_parser()
+    args   = parser.parse_args(args)
 
-    brew    = which('brew')
-    if not brew:
-        curl    = which('curl', raise_err = True)
-        ruby    = which('ruby', raise_err = True)
-        
-        pout    = popen(curl, const.URL_HOMEBREW_INSTALL, output = False)
-        popen(ruby, '-e', pout)
+    # code   = setup_candis(args)
 
-    brew    = which('brew', raise_err = True)
-    popen(brew, 'update')
-
-    popen(brew, 'tap',  'homebrew/science')
-    popen(brew, 'tap',  'caskroom/cask')
-
-    popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
-    popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES, raise_err = False)
-    
-    setup_candis()
-
-    return code
+    # sys.exit(code)
 
 if __name__ == '__main__':
-    args = sys.argv[1:]
-    code = main(args)
-
-    sys.exit(code)
+    args    = sys.argv[1:]
+    main(args)
