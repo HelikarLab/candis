@@ -19,3 +19,4 @@ Pillow
 Flask
 django-htmlmin
 flask-socketio
+gunicorn

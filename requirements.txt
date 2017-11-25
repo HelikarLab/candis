@@ -11,7 +11,7 @@ rpy2
 liac-arff
 
 cython
--e git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
+git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
 python-weka-wrapper3
 pygraphviz
 Pillow
@@ -19,3 +19,4 @@ Pillow
 Flask
 django-htmlmin
 flask-socketio
+gunicorn

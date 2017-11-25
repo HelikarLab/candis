@@ -1,3 +1,5 @@
+include .env
+
 .PHONY: build
 .PHONY: docs
 
@@ -10,15 +12,51 @@ DOCSDIR      = $(realpath docs)
 SERVER_HOST  = 0.0.0.0
 SERVER_PORT ?= 5000
 
+VIRTUALENV   = virtualenv
+BASEDIR      = $(realpath .)
+
+PYTHON       = $(PYBINARIES)/python
+PIP          = $(PYBINARIES)/pip
+HONCHO       = $(PYBINARIES)/honcho
+
+NPM         ?= npm
+BUNDLER     ?= bundler
+
+MODULE       = candis
+SOURCEDIR    = $(realpath $(MODULE))
+DOCSDIR      = $(realpath docs)
+
+venv:
+	pip3 install $(VIRTUALENV)
+
+	$(VIRTUALENV) $(VENV) --python python3
+
+clean:
+	rm -rf .sass-cache
+
+	$(PYTHON) setup.py clean
+
+	clear
+	
+clean.force:
+	rm -rf node_modules bower_components
+	rm -rf $(DOCSDIR)/build
+
+	make clean
+	
 install:
-	cat requirements/*.txt          > requirements-dev.txt
-	cat requirements/production.txt > requirements.txt
+	cat $(BASEDIR)/requirements/*.txt          > $(BASEDIR)/requirements-dev.txt
+	cat $(BASEDIR)/requirements/production.txt > $(BASEDIR)/requirements.txt
 
-	pip install -r requirements-dev.txt
+	$(PIP) install -r $(BASEDIR)/requirements-dev.txt
 
-	npm install .
+	$(NPM) install $(BASEDIR)
 
-	bundler install
+	$(BUNDLER) install
+
+	$(PYTHON) setup.py install
+
+	make clean
 
 upgrade:
 	python -c 'import pip; [pip.main(["install", "--upgrade", d.project_name]) for d in pip.get_installed_distributions()]'
@@ -28,18 +66,6 @@ upgrade:
 build:
 	$(PYTHON) -B -m builder
 
-clean-force:
-	rm -rf node_modules bower_components
-	rm -rf $(DOCSDIR)/build
-
-	make clean
-
-clean:
-	rm -rf .sass-cache
-
-	$(PYTHON) setup.py clean
-
-	clear
 
 docs:
 	cd $(DOCSDIR) && make html
@@ -62,3 +88,13 @@ analyse:
 
 all:
 	make clean install docs run
+
+docker.build:
+	docker build -t $(PACKAGE) $(BASEDIR)
+
+start:
+ifeq ($(ENVIRONMENT), development)
+	$(HONCHO) start --procfile $(BASEDIR)/Procfile.dev
+else
+	$(HONCHO) start
+endif

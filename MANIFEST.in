@@ -1,2 +1,13 @@
 include README.md
 include LICENSE
+
+recursive-include candis *.yml
+recursive-include candis *.html
+
+recursive-include candis *.css
+recursive-include candis *.scss
+
+recursive-include candis *.png
+
+recursive-include candis *.js
+recursive-include candis *.jsx
