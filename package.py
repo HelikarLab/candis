@@ -1,8 +1,8 @@
 from setuptools import find_packages
 
 name              = 'candis'
-version           = '0.1.0'
-release           = '0.1.0'
+version           = '0.0.1'
+release           = '0.0.1'
 description       = 'A Flask + ReactJS boilerplate'
 long_description  = ['README.md']
 keywords          = [

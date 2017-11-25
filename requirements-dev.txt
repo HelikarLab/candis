@@ -1,6 +1,7 @@
 honcho
 jupyter
 pylint
+twine
 sphinx
 addict
 pyyaml

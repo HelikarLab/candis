@@ -98,6 +98,11 @@ def main(argv = None):
             clean = CleanCommand, test = TestCommand
         ),
         include_package_data = True,
+        entry_points     = dict(
+            console_scripts = [
+                'candis = candis:main'
+            ]
+        ),
         **args_setuptools
     )
 

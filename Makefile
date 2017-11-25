@@ -12,6 +12,7 @@ VIRTUALENV   = virtualenv
 PYTHON       = $(PYBINARIES)/python
 PIP          = $(PYBINARIES)/pip
 HONCHO       = $(PYBINARIES)/honcho
+TWINE        = $(PYBINARIES)/twine
 
 NPM         ?= npm
 BUNDLER     ?= bundler
@@ -69,3 +70,10 @@ ifeq ($(ENVIRONMENT), development)
 else
 	$(HONCHO) start
 endif
+
+publish:
+	$(PYTHON) setup.py sdist bdist_wheel
+
+	$(TWINE) upload -r $(repo) $(BASEDIR)/dist/*
+
+	make clean
