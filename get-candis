@@ -34,7 +34,7 @@ class const(object):
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
 
     APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'r-base', 'graphviz',
-        'default-jre', 'default-jdk']
+        'default-jre', 'default-jre-headless', 'default-jdk']
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
@@ -193,6 +193,9 @@ def get_argument_parser():
         formatter_class = argparse.RawDescriptionHelpFormatter
     )
 
+    parser.add_argument('--cancer-discover', default = False,
+        help = 'install CancerDiscover'
+    )
     parser.add_argument('-t', '--tag', default = 'dev',
         help = 'github tag/branch to checkout from'
     )

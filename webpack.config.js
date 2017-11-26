@@ -2,6 +2,8 @@ var path           = require('path')
 ,   webpack        = require('webpack')
 ,   UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
+require('dotenv').config()
+
 var paths          = { };
 paths.BASE         = path.join(__dirname, 'candis', 'app');
 paths.APP          = path.join(paths.BASE, 'client', 'app');
@@ -24,18 +26,25 @@ module.exports     = {
            test: /\.(js|jsx)$/,
          loader: 'babel-loader',
         exclude: /(node_modules)/
+      },
+      {
+          test: /\.json$/,
+        loader: 'json-loader'
       }
     ]
   },
-  plugins: config.debug ? 
+  plugins: process.env.ENV === 'development' ? 
     [
       // debug plugins go here.
     ]
-      : 
+    : 
     [
       // production plugins go here.
       new UglifyJSPlugin({
-        output: {
+        uglifyOptions: {
+          beautify: false,
+          ecma: 6,
+          compress: true,
           comments: false
         }
       })
@@ -43,6 +52,10 @@ module.exports     = {
   resolve: {
     modules: ['node_modules'],
     extensions: ['.js', '.jsx', '.json'],
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat',
+    }
   },
   node: {
     net: 'empty',

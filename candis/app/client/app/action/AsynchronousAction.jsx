@@ -10,7 +10,7 @@ const write              = (output, buffer = null) => {
 
     dispatch(action)
 
-    axios.post(config.routes.api.data.write, parameters).then(({ data }) => {
+    axios.post(config.routes.API.data.write, parameters).then(({ data }) => {
       data               = data.data
       const action       = successWrite(output, buffer, data)
 
@@ -67,7 +67,7 @@ const getResource        = (path = null) => {
 
     dispatch(action)
 
-    return axios.post(config.routes.api.data.resource, parameters).then(({ data }) => {
+    return axios.post(config.routes.API.data.resource, parameters).then(({ data }) => {
       data               = data.data
       const action       = getResourceSuccess(path, data)
 
@@ -121,7 +121,7 @@ const read               = (output) => {
 
     dispatch(action)
 
-    return axios.post(config.routes.api.data.read, output).then(({ data }) => {
+    return axios.post(config.routes.API.data.read, output).then(({ data }) => {
       data               = data.data
       const action       = successRead(output, data)
 

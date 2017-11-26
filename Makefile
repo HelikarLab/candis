@@ -9,10 +9,18 @@ SOURCEDIR    = $(realpath $(MODULE))
 DOCSDIR      = $(realpath docs)
 
 VIRTUALENV   = virtualenv
+
+VENV         = venv
+PYBINARIES   = $(VENV)/bin
+
 PYTHON       = $(PYBINARIES)/python
 PIP          = $(PYBINARIES)/pip
 HONCHO       = $(PYBINARIES)/honcho
+PYTEST       = $(PYBINARIES)/pytest
 TWINE        = $(PYBINARIES)/twine
+
+NODE_MODULES = $(BASEDIR)/node_modules
+NODEBINARIES = $(NODE_MODULES)/.bin
 
 NPM         ?= npm
 BUNDLER     ?= bundler
@@ -22,10 +30,13 @@ venv:
 
 	$(VIRTUALENV) $(VENV) --python python3
 
-clean:
-	rm -rf .sass-cache
-
+clean.py:
 	$(PYTHON) setup.py clean
+
+clean:
+	make clean.py
+	
+	rm -rf .sass-cache
 
 	clear
 	
@@ -50,28 +61,41 @@ install:
 
 	make clean
 
+test:
+	make install
+
+	$(PYTEST)
+
+	make clean.py
+
 build:
 	$(PYTHON) -B -m builder
+
+	$(NPM) run build
+
+	make clean
 
 docs:
 	cd $(DOCSDIR) && make html
 
 sass:
-	sass $(SOURCEDIR)/app/client/styles/App.scss:$(SOURCEDIR)/app/assets/css/styles.min.css \
-		--sourcemap=none 																	\
-		--style=compressed
+	$(NPM) run sass
+
+sass.watch:
+	$(NPM) run sass.watch
 
 docker.build:
 	docker build -t $(MODULE) $(BASEDIR)
 
 start:
-ifeq ($(ENVIRONMENT), development)
+ifeq ($(ENV), development)
 	$(HONCHO) start --procfile $(BASEDIR)/Procfile.dev
 else
 	$(HONCHO) start
 endif
 
 publish:
+ifeq ($(ENV), production)
 	make clean
 	
 	$(PYTHON) setup.py sdist bdist_wheel
@@ -79,3 +103,6 @@ publish:
 	$(TWINE) upload -r $(repo) $(BASEDIR)/dist/*
 
 	make clean
+else
+	@echo "Unable to publish. Make sure the environment is in production mode."
+endif

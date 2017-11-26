@@ -7,8 +7,8 @@ from candis.ios          import cdata, pipeline
 # candis.cli
 from candis.cli          import main
 
-cache       = Cache()
+cache  = Cache()
 cache.create()
 
-config      = cache.get_config()
+config = cache.get_config()
 CONFIG.update(config)

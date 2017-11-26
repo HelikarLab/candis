@@ -13,7 +13,7 @@ const pipeline     =
 			const action = pipeline.runRequest(output)
 			dispatch(action)
 
-			axios.post(config.routes.api.pipeline.run, output).then(({ data }) => {
+			axios.post(config.routes.API.pipeline.run, output).then(({ data }) => {
 				data         = data.data
 				const action = pipeline.runSuccess(output, data)
 

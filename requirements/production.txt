@@ -1,5 +1,5 @@
 addict
-pyyaml
+PyYAML
 requests
 
 numpy
@@ -10,7 +10,7 @@ seaborn
 rpy2
 liac-arff
 
-cython
+Cython
 git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
 python-weka-wrapper3
 pygraphviz
@@ -18,5 +18,5 @@ Pillow
 
 Flask
 django-htmlmin
-flask-socketio
+Flask-SocketIO
 gunicorn

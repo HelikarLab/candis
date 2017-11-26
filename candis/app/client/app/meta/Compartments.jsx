@@ -219,7 +219,7 @@ const Compartments =
       ],
     fetcher: ( ) =>
     {
-      return axios.get(config.routes.api.preprocess.methods).then(({ data }) => {
+      return axios.get(config.routes.API.preprocess.methods).then(({ data }) => {
         const response    = data
 
         if ( response.status == "success" ) {
@@ -315,7 +315,7 @@ const Compartments =
     tooltip: 'List of Feature Selection Methods',
     fetcher: ( ) =>
     {
-      return axios.get(config.routes.api.featselect.methods).then(({ data }) => {
+      return axios.get(config.routes.API.featselect.methods).then(({ data }) => {
         const response = data
         var   tools    = [ ]
 
@@ -391,7 +391,7 @@ const Compartments =
     tooltip: 'List of Models',
     fetcher: ( ) =>
     {
-      return axios.get(config.routes.api.model.methods).then(({ data }) => {
+      return axios.get(config.routes.API.model.methods).then(({ data }) => {
         const response = data
         var   tools    = [ ]
 

@@ -1,7 +1,7 @@
 name: &name "candis"
-version: &version "0.0.3"
-release: &release "0.0.3"
-debug: &debug true
+version: &version "0.0.4"
+release: &release "0.0.4"
+debug: &debug false
 pipeline:
   preprocess:
     normalization: "quantiles"

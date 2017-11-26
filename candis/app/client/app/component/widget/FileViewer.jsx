@@ -30,7 +30,7 @@ class FileViewer extends React.Component {
 
     const parameters  = JSON.parse(value.value)
 
-    axios.post(config.routes.api.data.read, parameters).then(({ data }) => {
+    axios.post(config.routes.API.data.read, parameters).then(({ data }) => {
       const response  = data
 
        if ( response.status == "success" ) {
