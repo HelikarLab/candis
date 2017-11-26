@@ -13,10 +13,10 @@
 		<img src="https://readthedocs.org/projects/candis/badge/?version=latest"/>
 	</a>
 	<a href="https://saythanks.io/to/achillesrasquinha">
-		<img src="https://img.shields.io/badge/Say%20Thanks-!-1EAEDB.svg?style=flat-square">
+		<img src="https://img.shields.io/badge/Say%20Thanks-🦉-1EAEDB.svg?style=flat-square">
 	</a>
 	<a href="https://paypal.me/achillesrasquinha">
-		<img src="https://img.shields.io/badge/Donate-%24-blue.svg?style=flat-square">
+		<img src="https://img.shields.io/badge/donate-💵-f44336.svg?style=flat-square">
 	</a>
 </p>
 
@@ -33,6 +33,7 @@
 * [Usage](#usage)
 * [Features](#features)
 * [Dependencies](#dependencies)
+* [Team](#team)
 * [License](#license)
 
 ### Installation
@@ -109,6 +110,41 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 * Development Dependencies
 	* [Node.js](https://nodejs.org)
 	* [SASS](http://sass-lang.com)
+
+### Team
+<table>
+  <tbody>
+    <tr>
+		<td align="center" valign="top">
+			<img height="150" src="http://newsroom.unl.edu/announce/files/file37859.jpg">
+			<br>
+			<a href="http://helikarlab.org/members.html">Dr. Tomas Helikar, Ph.D</a>
+			<br>
+			<a href="mailto:thelikar2@unl.edu">thelikar2@unl.edu</a>
+			<br>
+			<p>Principal Investigator</p>
+		</td>
+		<td align="center" valign="top">
+			<img height="150" src="https://github.com/akram-mohammed.png?s=150">
+			<br>
+			<a href="https://github.com/akram-mohammed">Dr. Akram Mohammed, Ph.D</a>
+			<br>
+			<a href="mailto:amohammed3@unl.edu">amohammed3@unl.edu</a>
+			<br>
+			<p>Author and Maintainer</p>
+		</td>
+	 	<td align="center" valign="top">
+			<img width="150" height="150" src="https://github.com/achillesrasquinha.png?s=150">
+			<br>
+			<a href="https://github.com/achillesrasquinha">Achilles Rasquinha</a>
+			<br>
+			<a href="mailto:achillesrasquinha@gmail.com">achillesrasquinha@gmail.com</a>
+			<br>
+			<p>Author and Maintainer</p>
+    	</td>
+     </tr>
+  </tbody>
+</table>
 
 ### License
 This software has been released under the [GNU General Public License v3](LICENSE).
