@@ -100,7 +100,7 @@ ifeq ($(ENV), production)
 	
 	$(PYTHON) setup.py sdist bdist_wheel
 
-	$(TWINE) upload -r $(repo) $(BASEDIR)/dist/*
+	$(TWINE) upload -r candis $(BASEDIR)/dist/*
 
 	make clean
 else
