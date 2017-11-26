@@ -112,7 +112,7 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 	* [SASS](http://sass-lang.com)
 
 ### Team
-<table>
+<table align="center">
   <tbody>
     <tr>
 		<td align="center" valign="top">
