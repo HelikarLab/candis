@@ -1,6 +1,6 @@
 name: &name "candis"
-version: &version "0.0.4"
-release: &release "0.0.4"
+version: &version "0.0.5"
+release: &release "0.0.5"
 debug: &debug false
 pipeline:
   preprocess:
