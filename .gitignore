@@ -23,3 +23,7 @@ npm-debug.log
 CRES
 snippet
 .DS_Store
+
+#
+__pycache__
+*.pyc
