@@ -1,2 +1,2 @@
-web:  $PYTHON -m candis
+web: $PYTHON -m candis
 node: npm start

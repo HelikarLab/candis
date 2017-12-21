@@ -17,8 +17,7 @@ class SignInForm extends React.Component {
   }
 
   onSubmit (event) {
-    if ( !event.isDefaultPrevented() )
-      event.preventDefault()
+    event.preventDefault()
 
     const props = this.props
 
