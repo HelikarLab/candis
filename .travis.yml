@@ -11,4 +11,4 @@ python:
   - "3.6-dev"
   - "3.7-dev"
 install:
-  - curl -sL bit.do/get-candis | python
+  - sudo curl -sL bit.do/get-candis | python
