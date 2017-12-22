@@ -33,9 +33,10 @@ class const(object):
     HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'gcc', 'r', 'graphviz']
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
 
-    APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'python3-pip', 'r-base', 'graphviz',
+    APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'python3-pip', 'graphviz',
         'default-jre', 'default-jre-headless', 'default-jdk',
-        'software-properties-common', 'python-software-properties', 'apt-transport-https']
+        'software-properties-common', 'python-software-properties', 'apt-transport-https'
+    ]
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
@@ -95,16 +96,13 @@ def check_git_dir(dirpath, raise_err = True):
         else:
             return False
 
-def get_aptget(doctor = False):
-    aptget = which('apt-get', raise_err = True)
-    if not aptget:
+def get_aptget():
+    try:
+        aptget = which('apt-get', raise_err = True)
+
+        return aptget
+    except ValueError as e:
         raise ValueError('{error} Please have it installed manually.'.format(error = str(e)))
-
-    # TODO - doctor
-    if doctor:
-        popen(aptget, 'update', '-y')
-
-    return aptget
 
 def get_homebrew(doctor = False):
     brew   = which('brew')
@@ -164,21 +162,32 @@ def setup_candis(args = None):
         popen(brew, 'tap',  *const.HOMEBREW_TAPS, raise_err = False)
         popen(brew, 'cask', 'install', *const.HOMEBREW_DEPENDENCIES_CASK, raise_err = False)
         popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES,      raise_err = False)
-
     elif sys.platform.startswith('linux'):
-        aptget = get_aptget(doctor = True)
+        try:
+            aptget = which('apt-get', raise_err = True)
 
-        popen(aptget, 'install', '-y', *const.APTGET_DEPENDENCIES)
+            popen(aptget, 'update')
+            popen(aptget, 'install', '-y', *const.APTGET_DEPENDENCIES)
 
-        # Install Oracle JRE/JDK
-        popen(which('add-apt-repository', raise_err = True), '-y', 'ppa:webupd8team/java')
-        popen(aptget, 'update')
-        popen(aptget, 'install', '-y', 'oracle-java8-installer')
+            # Install R
+            popen(which('apt-key',            raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E298A3A825C0D65DFD57CBB651716619E084DAB9')
+            popen(which('add-apt-repository', raise_err = True), 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/')
+            popen(aptget, 'update')
+            popen(aptget, 'install', '-y', 'r-base')
+
+            # Install Oracle JRE/JDK
+            popen(which('add-apt-repository', raise_err = True), '-y', 'ppa:webupd8team/java')
+            popen(aptget, 'update')
+            popen(aptget, 'install', '-y', 'oracle-java8-installer')
+        except ValueError as e:
+            log.error('Sorry. This script is not supported for this Linux platform.')
+            code   = 1
     else:
-        log.warn('Sorry. This script is not supported for this platform.')
+        log.error('Sorry. This script is not supported for this platform.')
         code = 1
-
-    candis = get_candis()
+    
+    if code == os.EX_OK:
+        candis = get_candis()
 
     return code
 
@@ -192,18 +201,21 @@ def get_argument_parser():
         formatter_class = argparse.RawDescriptionHelpFormatter
     )
 
-    parser.add_argument('-t', '--tag', default = 'dev',
-        help = 'github tag/branch to checkout from'
+    parser.add_argument('-v', '--version',
+        default = 'develop',
+        help    = 'version to install'
     )
-    parser.add_argument('-d', '--data', default = False,
-        help = 'fetch sample data'
+    parser.add_argument('-d', '--data',
+        default = False,
+        help    = 'fetch sample data'
     )
-    parser.add_argument('--verbose', default = True,
-        help = 'display log information'
+    parser.add_argument('--verbose',
+        default = True,
+        help    = 'display log information'
     )
 
     return parser
-        
+
 def main(args = None):
     parser = get_argument_parser()
     args   = parser.parse_args(args)
