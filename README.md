@@ -39,7 +39,8 @@
 * [Team](#team)
 * [License](#license)
 
-### Installation
+### Installation 
+#### For Linux OS (Tested on Ubuntu 16.04)
 
 Assuming you've installed [dependencies](#dependencies), simply
 
@@ -47,7 +48,7 @@ Assuming you've installed [dependencies](#dependencies), simply
 $ pip install candis
 ```
 
-#### TL;DR
+#### For Mac OS X (Tested on MacOS Sierra 10.12.6)
 
 ```console
 $ curl -sL bit.do/get-candis | python # with dependencies
