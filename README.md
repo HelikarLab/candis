@@ -9,9 +9,9 @@
 </h4>
 
 <p align="center">
-	<a href="https://travis-ci.org/HelikarLab/candis">
+	<!--<a href="https://travis-ci.org/HelikarLab/candis">
         <img src="https://img.shields.io/travis/HelikarLab/candis.svg?style=flat-square">
-    </a>
+    </a>-->
 	<a href="http://candis.readthedocs.io">
 		<img src="https://readthedocs.org/projects/candis/badge/?version=latest"/>
 	</a>
