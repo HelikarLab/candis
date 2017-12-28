@@ -34,9 +34,9 @@
 
 ### Table of Contents
 * [Installation](#installation)
+* [Dependencies](#dependencies)
 * [Usage](#usage)
 * [Features](#features)
-* [Dependencies](#dependencies)
 * [Team](#team)
 * [License](#license)
 
@@ -47,17 +47,40 @@ $ sudo pip3 install candis
 $ python3 -m candis
 ```
 * Open candis in web browser [localhost:5000](http://localhost:5000), please make sure that you are using an open port number as shown in the terminal when you execute the program in the above step.
-
 * Store your high-throughput input data (microarray CEL files) in CRES folder on your local machine that will be accessible from candis application on localhost.
+* Sample CEL files can be found [here](https://github.com/HelikarLab/CancerDiscover/tree/master/SampleData).
 
-* Sample CEL files can be found [here](https://github.com/HelikarLab/CancerDiscover/tree/master/SampleData)
-
-
+### Dependencies
+* Production Dependencies
+	* PIP3 [PIP3](https://pip.pypa.io) (Python's Package Manager)
+	```console
+	sudo apt-get update && sudo apt-get install python3-pip
+	```
+	* R 3.3+
+	```console
+	sudo apt-get install software-properties-common python-software-properties
+	sudo add-apt-repository ppa:marutter/rrutter
+	sudo apt update && sudo apt full-upgrade
+	```
+	* Java
+	```console
+	sudo apt-get install openjdk-8-jdk
+	```
+	* Python 3.6+
+	* Graphviz
+	```console
+	sudo apt-get install graphviz libgraphviz-dev graphviz-dev pkg-config
+	```
+* Development Dependencies
+	* [Node.js](https://nodejs.org)
+	* [SASS](http://sass-lang.com)
+	
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
 * [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
 * [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
 
+### Usage
 **Using the CLI (Command Line Interface)**
 
 ```
@@ -85,20 +108,6 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 	>>> while pipe.status == candis.Pipeline.RUNNING:
 	...     # do something while pipeline is running
 	```
-
-### Dependencies
-* Install PIP3
-```console
-sudo apt-get update && sudo apt-get install python3-pip
-```
-* Production Dependencies
-	* R 3.3+
-	* WEKA (***NOTE:*** Requires Java)
-	* Python 3.6+ and [PIP](https://pip.pypa.io) (Python's Package Manager)
-	* NumPy
-* Development Dependencies
-	* [Node.js](https://nodejs.org)
-	* [SASS](http://sass-lang.com)
 
 ### Team
 <table align="center">
