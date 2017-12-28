@@ -13,7 +13,7 @@ liac-arff
 Cython
 git+https://github.com/LeeKamentsky/python-javabridge.git#egg=javabridge
 python-weka-wrapper3
-pygraphviz
+#pygraphviz
 Pillow
 
 Flask
