@@ -39,20 +39,14 @@
 * [Team](#team)
 * [License](#license)
 
-### Installation 
-#### For Linux OS (Tested on Ubuntu 16.04)
-
-Assuming you've installed [dependencies](#dependencies), simply
-
-```console
-$ pip install candis
-```
-
+### Installation
 #### For Mac OS X (Tested on MacOS Sierra 10.12.6)
-
+#### For Linux OS (Tested on Ubuntu 16.04)
 ```console
-$ curl -sL bit.do/get-candis | python # with dependencies
+$ sudo pip3 install candis
+$ python3 -m candis
 ```
+* Open candis in web browser [localhost:5000](http://localhost:5000), please make sure that you are using the open port number as shown in the terminal.
 
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
