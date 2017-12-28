@@ -58,6 +58,7 @@ $ python3 -m candis
 	```
 	* R 3.3+
 	```console
+	sudo apt install r-base-core
 	sudo apt-get install software-properties-common python-software-properties
 	sudo add-apt-repository ppa:marutter/rrutter
 	sudo apt update && sudo apt full-upgrade
