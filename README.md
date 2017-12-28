@@ -40,8 +40,7 @@
 * [License](#license)
 
 ### Installation
-#### For Mac OS X (Tested on MacOS Sierra 10.12.6)
-#### For Linux OS (Tested on Ubuntu 16.04)
+#### For Mac OS X (Tested on MacOS Sierra 10.12.6) and Linux OS (Tested on Ubuntu 16.04)
 ```console
 $ sudo pip3 install candis
 $ python3 -m candis
@@ -52,24 +51,6 @@ To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
 * [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
 * [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
-
-### Usage
-**Launching the RIA (Rich Internet Application)**
-
-via CLI
-```
-$ candis
-```
-OR
-```
-$ python -m candis
-```
-
-via Python
-```python
->>> import candis
->>> candis.main()
-```
 
 **Using the CLI (Command Line Interface)**
 
