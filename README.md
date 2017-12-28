@@ -52,6 +52,7 @@ $ python3 -m candis
 
 * Sample CEL files can be found [here](https://github.com/HelikarLab/CancerDiscover/tree/master/SampleData)
 
+
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
 * [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
@@ -86,6 +87,10 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 	```
 
 ### Dependencies
+* Install PIP3
+```console
+sudo apt-get update && sudo apt-get install python3-pip
+```
 * Production Dependencies
 	* R 3.3+
 	* WEKA (***NOTE:*** Requires Java)
