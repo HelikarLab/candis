@@ -27,7 +27,8 @@
 	<img src=".github/sample.gif" height>
 </div>
 
-**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](helikarlab.org).
+**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. 
+**candis** is written by the bioinformaticians at [HelikarLab](helikarlab.org).
 
 ***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/HelikarLab/candis/issues).
 
@@ -45,7 +46,11 @@
 $ sudo pip3 install candis
 $ python3 -m candis
 ```
-* Open candis in web browser [localhost:5000](http://localhost:5000), please make sure that you are using the open port number as shown in the terminal.
+* Open candis in web browser [localhost:5000](http://localhost:5000), please make sure that you are using an open port number as shown in the terminal when you execute the program in the above step.
+
+* Store your high-throughput input data (microarray CEL files) in CRES folder on your local machine that will be accessible from candis application on localhost.
+
+* Sample CEL files can be found [here](https://github.com/HelikarLab/CancerDiscover/tree/master/SampleData)
 
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
@@ -82,7 +87,7 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 
 ### Dependencies
 * Production Dependencies
-	* R
+	* R 3.3+
 	* WEKA (***NOTE:*** Requires Java)
 	* Python 3.6+ and [PIP](https://pip.pypa.io) (Python's Package Manager)
 	* NumPy
