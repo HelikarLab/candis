@@ -56,6 +56,10 @@ $ python3 -m candis
 	```console
 	sudo apt-get update && sudo apt-get install python3-pip
 	```
+	* Numpy
+	```console
+	sudo apt-get install python3-numpy
+	```
 	* R 3.3+
 	```console
 	sudo apt install r-base-core
@@ -66,6 +70,7 @@ $ python3 -m candis
 	* Java
 	```console
 	sudo apt-get install openjdk-8-jdk
+	sudo add-apt-repository ppa:webupd8team/java
 	```
 	* Python 3.6+
 	* Graphviz
