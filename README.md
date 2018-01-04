@@ -34,6 +34,8 @@
 
 ### Table of Contents
 * [Installation](#installation)
+* [Run](#run)
+* [Launch](#launch)
 * [Dependencies](#dependencies)
 * [Usage](#usage)
 * [Features](#features)
@@ -41,12 +43,20 @@
 * [License](#license)
 
 ### Installation
-#### For Mac OS X (Tested on MacOS Sierra 10.12.6) and Linux OS (Tested on Ubuntu 16.04)
 ```console
 $ sudo pip3 install candis
+```
+#### For Mac OS X (Tested on MacOS Sierra 10.12.6) and Linux OS (Tested on Ubuntu 16.04)
+
+### Run
+```console
 $ python3 -m candis
 ```
-* Open candis in web browser [localhost:5000](http://localhost:5000), please make sure that you are using an open port number as shown in the terminal when you execute the program in the above step.
+
+### Launch
+#### [localhost:5000](http://localhost:5000)
+
+* Please make sure that you are using an open port number as shown in the terminal when you execute the program in the above step.
 * Store your high-throughput input data (microarray CEL files) in CRES folder on your local machine that will be accessible from candis application on localhost.
 * Sample CEL files can be found [here](https://github.com/HelikarLab/CancerDiscover/tree/master/SampleData).
 
