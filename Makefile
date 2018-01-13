@@ -15,6 +15,7 @@ PYBINARIES   = $(VENV)/bin
 
 PYTHON       = $(PYBINARIES)/python
 PIP          = $(PYBINARIES)/pip
+IPYTHON      = $(PYBINARIES)/ipython
 HONCHO       = $(PYBINARIES)/honcho
 PYTEST       = $(PYBINARIES)/pytest
 TWINE        = $(PYBINARIES)/twine
@@ -22,7 +23,7 @@ TWINE        = $(PYBINARIES)/twine
 NODE_MODULES = $(BASEDIR)/node_modules
 NODEBINARIES = $(NODE_MODULES)/.bin
 
-NPM         ?= npm
+YARN        ?= yarn
 BUNDLER     ?= bundler
 
 venv:
@@ -53,7 +54,7 @@ install:
 	$(PIP) install numpy
 	$(PIP) install -r $(BASEDIR)/requirements-dev.txt
 
-	$(NPM) install $(BASEDIR)
+	$(YARN) install
 
 	$(BUNDLER) install
 
@@ -71,7 +72,7 @@ test:
 build:
 	$(PYTHON) -B -m builder
 
-	$(NPM) run build
+	$(YARN) run build
 
 	make clean
 
@@ -79,13 +80,16 @@ docs:
 	cd $(DOCSDIR) && make html
 
 sass:
-	$(NPM) run sass
+	$(YARN) run sass
 
 sass.watch:
-	$(NPM) run sass.watch
+	$(YARN) run sass.watch
 
 docker.build:
 	docker build -t $(MODULE) $(BASEDIR)
+
+console:
+	$(IPYTHON) 
 
 start:
 ifeq ($(ENV), development)

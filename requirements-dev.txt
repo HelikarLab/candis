@@ -1,4 +1,5 @@
 honcho
+ipython
 jupyter
 pylint
 twine
@@ -24,6 +25,8 @@ Pillow
 Flask
 django-htmlmin
 Flask-SocketIO
+redis
+rq
 gunicorn
 pytest
 coverage

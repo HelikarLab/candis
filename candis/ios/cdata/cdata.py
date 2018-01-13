@@ -6,11 +6,18 @@ try:
     from io import StringIO # Python 3
 except ImportError:
     from StringIO import StringIO # Python 2
+import warnings
 
 # imports - third-party imports
 import addict
 import numpy  as np
 import pandas as pd, arff
+
+# Supress R warnings
+from rpy2.rinterface        import RRuntimeWarning
+
+warnings.filterwarnings('ignore', category = RRuntimeWarning)
+
 from rpy2.robjects.packages import importr
 from rpy2                   import robjects
 

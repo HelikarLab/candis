@@ -11,8 +11,8 @@
     "sass.watch": "sass --watch candis/app/client/styles/App.scss:candis/app/assets/css/styles.min.css --sourcemap=none --style compressed",
     "webpack": "webpack",
     "webpack.watch": "webpack --watch",
-    "build": "npm run webpack && npm run sass",
-    "start": "concurrently --kill-others \"npm run sass.watch\" \"npm run webpack.watch\""
+    "build": "yarn run webpack && yarn run sass",
+    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\""
   },
   "repository": {
     "type": "git",
