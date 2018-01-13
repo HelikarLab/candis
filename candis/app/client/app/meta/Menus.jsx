@@ -10,7 +10,7 @@ import { getFiles } from '../util'
 
 const Menus = [
   {
-      title: 'File',
+      title: 'Pipeline',
     actions: [
       {
            text: 'New',
