@@ -41,6 +41,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "classnames": "^2.2.5",
+    "create-react-class": "^15.6.2",
     "fuse.js": "^3.2.0",
     "jsonwebtoken": "^8.1.0",
     "lodash.clonedeep": "^4.5.0",
@@ -48,8 +49,8 @@
     "preact": "^8.2.7",
     "preact-compat": "^3.17.0",
     "prop-types": "^15.6.0",
-    "react-data-grid": "^2.0.78",
-    "react-data-grid-addons": "^2.0.78",
+    "react-data-grid": "^3.0.3",
+    "react-data-grid-addons": "^3.0.3",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

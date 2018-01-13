@@ -42,7 +42,7 @@ clean:
 	clear
 	
 clean.force:
-	rm -rf node_modules bower_components
+	rm -rf $(BASEDIR)/node_modules
 	rm -rf $(DOCSDIR)/build
 
 	make clean
@@ -61,6 +61,9 @@ install:
 	$(PYTHON) setup.py develop
 
 	make clean
+
+upgrade:
+	$(YARN) upgrade
 
 test:
 	make install
@@ -98,7 +101,7 @@ else
 	$(HONCHO) start
 endif
 
-publish:
+release:
 ifeq ($(ENV), production)
 	make clean
 	
@@ -108,5 +111,5 @@ ifeq ($(ENV), production)
 
 	make clean
 else
-	@echo "Unable to publish. Make sure the environment is in production mode."
+	@echo "Unable to release. Make sure the environment is in production mode."
 endif

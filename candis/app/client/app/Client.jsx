@@ -13,6 +13,10 @@ import routes       from './routes'
 
 import { signin, signout } from './action/AppAction'
 
+// Temporary Fix.
+// https://github.com/adazzle/react-data-grid/pull/1027 (To Deploy)
+import 'create-react-class'
+
 const token       = storage.get('JWT_TOKEN')
 const action      = token ? signin(token) : signout()
 
