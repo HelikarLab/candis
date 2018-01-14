@@ -1,6 +1,7 @@
 var path           = require('path')
 ,   webpack        = require('webpack')
-,   UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+,   UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+,   Jarvis         = require('webpack-jarvis');
 
 require('dotenv').config()
 
@@ -36,6 +37,7 @@ module.exports     = {
   plugins: process.env.ENV === 'development' ? 
     [
       // debug plugins go here.
+      new Jarvis()
     ]
     : 
     [
