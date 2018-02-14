@@ -28,7 +28,7 @@
 </div>
 
 **candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. 
-**candis** is written by the bioinformaticians at [HelikarLab](www.helikarlab.org).
+**candis** is written by the bioinformaticians at [HelikarLab](https://www.helikarlab.org).
 
 ***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/HelikarLab/candis/issues).
 
