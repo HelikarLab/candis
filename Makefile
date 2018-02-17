@@ -5,13 +5,14 @@ include .env
 
 BASEDIR      = $(realpath .)
 MODULE       = candis
+
 SOURCEDIR    = $(realpath $(MODULE))
 DOCSDIR      = $(realpath docs)
 
-VIRTUALENV   = virtualenv
+PIPENV      ?= pipenv
+PYBINARIES   = $(shell pipenv --venv)/bin
+PYTHON      ?= $(PYBINARIES)/python
 
-VENV         = venv
-PYBINARIES   = $(VENV)/bin
 
 PYTHON       = $(PYBINARIES)/python
 PIP          = $(PYBINARIES)/pip
@@ -24,12 +25,6 @@ NODE_MODULES = $(BASEDIR)/node_modules
 NODEBINARIES = $(NODE_MODULES)/.bin
 
 YARN        ?= yarn
-BUNDLER     ?= bundler
-
-venv:
-	pip3 install $(VIRTUALENV)
-
-	$(VIRTUALENV) $(VENV) --python python3
 
 clean.py:
 	$(PYTHON) setup.py clean
@@ -48,15 +43,8 @@ clean.force:
 	make clean
 	
 install:
-	cat $(BASEDIR)/requirements/*.txt          > $(BASEDIR)/requirements-dev.txt
-	cat $(BASEDIR)/requirements/production.txt > $(BASEDIR)/requirements.txt
-
-	$(PIP) install numpy
-	$(PIP) install -r $(BASEDIR)/requirements-dev.txt
-
-	$(YARN) install
-
-	$(BUNDLER) install
+	$(PIPENV)  install
+	$(YARN)    install
 
 	$(PYTHON) setup.py develop
 

@@ -85,5 +85,5 @@ package = dict(
 	[
 		'data', 'mining', 'suite', 'dna', 'microarray', 'bioinformatics'
 	],
-	dependencies     = get_dependencies()
+	# dependencies     = get_dependencies()
 )

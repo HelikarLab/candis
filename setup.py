@@ -75,7 +75,7 @@ def main(argv = None):
         license          = package['license'],
         packages         = package['modules'],
         url              = package['homepage'],
-        install_requires = package['dependencies']['production'],
+        # install_requires = package['dependencies']['production'],
         cmdclass         = dict(
             clean = CleanCommand, test = TestCommand
         ),

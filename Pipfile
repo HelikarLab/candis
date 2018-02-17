@@ -1,0 +1,45 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+addict = "*"
+pyyaml = "*"
+ipython = "*"
+requests = "*"
+numpy = "*"
+scipy = "*"
+matplotlib = "*"
+pandas = "*"
+seaborn = "*"
+"rpy2" = "*"
+liac-arff = "*"
+cython = "*"
+javabridge = "*"
+"python-weka-wrapper3" = "*"
+pygraphviz = "*"
+pillow = "*"
+flask = "*"
+django-htmlmin = "*"
+flask-socketio = "*"
+redis = "*"
+rq = "*"
+gunicorn = "*"
+
+
+[dev-packages]
+
+jupyter = "*"
+honcho = "*"
+pytest = "*"
+coverage = "*"
+pylint = "*"
+
+
+[requires]
+
+python_version = "3.6"

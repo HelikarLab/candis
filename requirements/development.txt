@@ -1,5 +1,0 @@
-honcho
-ipython
-jupyter
-pylint
-twine
