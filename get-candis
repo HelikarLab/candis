@@ -36,7 +36,8 @@ class const(object):
     APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'python3-pip', 'graphviz-dev',
         'default-jre', 'default-jre-headless', 'default-jdk',
         'software-properties-common', 'python-software-properties', 'apt-transport-https',
-        'dialog', 'apt-utils'
+        'dialog', 'apt-utils',
+        'python3-tk'
     ]
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
@@ -200,6 +201,7 @@ def setup_candis(args = None):
             # Install Oracle JRE/JDK
             popen(addapt, '-y', 'ppa:webupd8team/java')
             popen(aptget, 'update')
+            
             # Auto Agree License.
             popen('echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections')
             popen('echo debconf shared/accepted-oracle-license-v1-1 seen   true | sudo debconf-set-selections')
