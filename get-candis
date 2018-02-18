@@ -35,7 +35,8 @@ class const(object):
 
     APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'python3-pip', 'graphviz-dev',
         'default-jre', 'default-jre-headless', 'default-jdk',
-        'software-properties-common', 'python-software-properties', 'apt-transport-https'
+        'software-properties-common', 'python-software-properties', 'apt-transport-https',
+        'apt-utils'
     ]
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
@@ -51,7 +52,7 @@ def which(executable, raise_err = False):
     return path
 
 def popen(*params, **kwargs):
-    output      = kwargs.get('output', True)
+    output      = kwargs.get('output', False)
     directory   = kwargs.get('dir')
     environment = kwargs.get('env')
     shell       = kwargs.get('shell', True)
@@ -64,9 +65,9 @@ def popen(*params, **kwargs):
     command     = " ".join(params)
     
     proc        = subprocess.Popen(command,
-        stdin   = None if output else subprocess.PIPE,
-        stdout  = None if output else subprocess.PIPE,
-        stderr  = None if output else subprocess.PIPE,
+        stdin   = subprocess.PIPE if output else None,
+        stdout  = subprocess.PIPE if output else None,
+        stderr  = subprocess.PIPE if output else None,
         env     = environ,
         cwd     = directory,
         shell   = shell
@@ -74,11 +75,14 @@ def popen(*params, **kwargs):
 
     code       = proc.wait()
 
-    if code:
-        if raise_err:
-            raise subprocess.CalledProcessError(code, command)
+    if code and raise_err:
+        raise subprocess.CalledProcessError(code, command)
 
-    return code
+    if output:
+        output, error = proc.communicate()
+        return code, output, error
+    else:
+        return code
 
 def check_git_dir(dirpath, raise_err = True):
     git     = which('git', raise_err = True)
@@ -166,15 +170,17 @@ def setup_candis(args = None):
         popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES,      raise_err = False)
     elif sys.platform.startswith('linux'):
         try:
-            aptget = which('apt-get',            raise_err = True)
+            aptget    = which('apt-get', raise_err = True)
 
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', *const.APTGET_DEPENDENCIES)
 
             # Install R
-            addapt = which('add-apt-repository', raise_err = True)
+            addapt    = which('add-apt-repository', raise_err = True)
             popen(which('apt-key', raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E084DAB9')
-            popen(addapt, 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/')
+            
+            _, out, _ = popen('lsb_release -sc', output = True)
+            popen(addapt, 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu {version}/'.format(version = out))
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', 'r-base')
 
