@@ -54,6 +54,7 @@ def popen(*params, **kwargs):
     output      = kwargs.get('output', True)
     directory   = kwargs.get('dir')
     environment = kwargs.get('env')
+    shell       = kwargs.get('shell', True)
     raise_err   = kwargs.get('raise_err', True)
 
     environ     = os.environ.copy()
@@ -61,22 +62,19 @@ def popen(*params, **kwargs):
         environ.update(environment)
     
     proc        = subprocess.Popen(params,
-        # stdin   = subprocess.PIPE,
-        # stdout  = subprocess.PIPE,
-        # stderr  = subprocess.PIPE,
+        stdin   = None if output else subprocess.PIPE,
+        stdout  = None if output else subprocess.PIPE,
+        stderr  = None if output else subprocess.PIPE,
         env     = environ,
-        cwd     = directory
+        cwd     = directory,
+        shell   = shell
     )
 
-    # if output:
-    #     for line in iter(proc.stdout.readline, ""):
-    #         print(line, end = '')
     code       = proc.wait()
+
     if code:
         if raise_err:
             raise subprocess.CalledProcessError(code, params)
-
-    out, err   = proc.communicate()
 
     return code
 
@@ -173,12 +171,12 @@ def setup_candis(args = None):
             popen(which('apt-key',            raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E084DAB9')
             popen(which('add-apt-repository', raise_err = True), 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/')
             popen(aptget, 'update')
-            popen(aptget, 'install', '-y', '--no-install-recommends', 'r-base')
+            popen(aptget, 'install', '-y', 'r-base')
 
             # Install Oracle JRE/JDK
             popen(which('add-apt-repository', raise_err = True), '-y', 'ppa:webupd8team/java')
             popen(aptget, 'update')
-            popen(aptget, 'install', '-y', '--force-yes', 'oracle-java8-installer')
+            popen(aptget, 'install', '-y', 'oracle-java8-installer')
         except ValueError:
             log.error('Sorry. This script is not supported for this Linux platform.')
             code   = 1
