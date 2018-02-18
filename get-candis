@@ -155,7 +155,8 @@ def get_candis():
     pip3    = which('pip3',    raise_err = True)
 
     popen(pip3, 'install', 'numpy') # Thanks, javabridge.
-    popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
+    popen(pip3, 'install', '-r', 'requirements.txt',     dir = appdir)
+    popen(pip3, 'install', '-r', 'requirements-dev.txt', dir = appdir)
 
     # Force matplotlib backend for macOS
     if system.platform == 'darwin':
