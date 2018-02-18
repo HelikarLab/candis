@@ -65,7 +65,7 @@ To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
 
 #### Docker Image
-You can also attempt to install candis via Docker as follows:
+You can also attempt to install candis via [Docker](https://www.docker.com) as follows:
 
 ```
 $ docker pull helikarlab/candis
