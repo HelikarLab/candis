@@ -154,6 +154,8 @@ def get_candis():
 
     python3 = which('python3', raise_err = True)
     pip3    = which('pip3',    raise_err = True)
+    
+    popen(pip3, 'install', '--upgrade', 'pip')
 
     popen(pip3, 'install', 'numpy') # Thanks, javabridge.
     popen(pip3, 'install', '-r', 'requirements.txt',     dir = appdir)
