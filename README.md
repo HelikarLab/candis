@@ -59,6 +59,17 @@ $ curl -sL git.io/install-candis | python # with dependencies
 $ candis
 ```
 
+#### Docker Image
+You can also attempt to install candis via Docker as follows:
+
+```
+$ docker pull helikarlab/candis
+```
+
+```
+$ docker run -p 8888:5000 candis
+```
+
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
 * [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
