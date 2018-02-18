@@ -9,9 +9,9 @@
 </h4>
 
 <p align="center">
-	<!--<a href="https://travis-ci.org/HelikarLab/candis">
+	<a href="https://travis-ci.org/HelikarLab/candis">
         <img src="https://img.shields.io/travis/HelikarLab/candis.svg?style=flat-square">
-    </a>-->
+    </a>
 	<a href="http://candis.readthedocs.io">
 		<img src="https://readthedocs.org/projects/candis/badge/?version=latest"/>
 	</a>
@@ -27,76 +27,61 @@
 	<img src=".github/sample.gif" height>
 </div>
 
-**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. 
-**candis** is written by the bioinformaticians at [HelikarLab](http://www.helikarlab.org).
+**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](http://helikarlab.org).
 
 ***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/HelikarLab/candis/issues).
 
 ### Table of Contents
 * [Installation](#installation)
-* [Run](#run)
-* [Launch](#launch)
-* [Dependencies](#dependencies)
 * [Usage](#usage)
 * [Features](#features)
+* [Dependencies](#dependencies)
 * [Team](#team)
 * [License](#license)
 
 ### Installation
-```console
-$ sudo pip3 install candis
-```
-#### For Mac OS X (Tested on MacOS Sierra 10.12.6) and Linux OS (Tested on Ubuntu 16.04)
 
-### Run
+Assuming you've installed [dependencies](#dependencies), simply
+
 ```console
-$ python3 -m candis
+$ pip install candis
 ```
 
-### Launch
-#### [localhost:5000](http://localhost:5000)
+#### TL;DR
 
-* Please make sure that you are using an open port number as shown in the terminal when you execute the program in the above step.
-* Store your high-throughput input data (microarray CEL files) in CRES folder on your local machine that will be accessible from candis application on localhost.
-* Sample CEL files can be found [here](https://github.com/HelikarLab/CancerDiscover/tree/master/SampleData).
+```console
+$ curl -sL bit.do/get-candis | python # with dependencies
+```
 
-### Dependencies
-* Production Dependencies
-	* PIP3 [PIP3](https://pip.pypa.io) (Python's Package Manager)
-	```console
-	sudo apt-get update && sudo apt-get install python3-pip
-	```
-	* Numpy
-	```console
-	sudo apt-get install python3-numpy
-	```
-	* R 3.3+
-	```console
-	sudo apt install r-base-core
-	sudo apt-get install software-properties-common python-software-properties
-	sudo add-apt-repository ppa:marutter/rrutter
-	sudo apt update && sudo apt full-upgrade
-	```
-	* Java
-	```console
-	sudo apt-get install openjdk-8-jdk
-	sudo add-apt-repository ppa:webupd8team/java
-	```
-	* Python 3.6+
-	* Graphviz
-	```console
-	sudo apt-get install graphviz libgraphviz-dev graphviz-dev pkg-config
-	```
-* Development Dependencies
-	* [Node.js](https://nodejs.org)
-	* [SASS](http://sass-lang.com)
-	
+...and lauch `candis`'s development server:
+
+```
+$ candis
+```
+
 To install candis right from scratch, check out our exhaustive guides:
 * [A Hitchhiker's Guide to Installing candis on Mac OS X](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Mac-OS-X)
 * [A Hitchhiker's Guide to Installing candis on Linux OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Linux-OS) (In Progress)
 * [A Hitchhiker's Guide to Installing candis on Windows OS](https://github.com/HelikarLab/candis/wiki/A-Hitchhiker's-Guide-to-Installing-candis-on-Windows-OS) (Contributors Wanted)
 
 ### Usage
+**Launching the RIA (Rich Internet Application)**
+
+via CLI
+```
+$ candis
+```
+OR
+```
+$ python -m candis
+```
+
+via Python
+```python
+>>> import candis
+>>> candis.main()
+```
+
 **Using the CLI (Command Line Interface)**
 
 ```
@@ -124,6 +109,16 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 	>>> while pipe.status == candis.Pipeline.RUNNING:
 	...     # do something while pipeline is running
 	```
+
+### Dependencies
+* Production Dependencies
+	* R
+	* WEKA (***NOTE:*** Requires Java)
+	* Python 3.6+ and [PIP](https://pip.pypa.io) (Python's Package Manager)
+	* NumPy
+* Development Dependencies
+	* [Node.js](https://nodejs.org)
+	* [SASS](http://sass-lang.com)
 
 ### Team
 <table align="center">
