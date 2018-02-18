@@ -134,16 +134,18 @@ def get_candis():
     popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
 
     python3 = which('python3', raise_err = True)
-    pip3    = which('pip3', raise_err = True)
+    pipenv  = which('pipenv',  raise_err = True)
 
     popen(pip3, 'install', 'numpy')
     popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
 
-    with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'a') as f:
-        config = 'backend: TkAgg'
+    # Force matplotlib backend for macOS
+    if system.platform == 'darwin':
+        with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'a') as f:
+            config = 'backend: TkAgg'
 
-        if config not in f.readlines():
-            f.write('\nbackend: TkAgg')
+            if config not in f.readlines():
+                f.write('\nbackend: TkAgg')
 
     popen(python3, 'setup.py', 'install', directory = appdir)
 
