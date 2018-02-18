@@ -60,8 +60,10 @@ def popen(*params, **kwargs):
     environ     = os.environ.copy()
     if environment:
         environ.update(environment)
+
+    command     = " ".join(params)
     
-    proc        = subprocess.Popen(params,
+    proc        = subprocess.Popen(command,
         stdin   = None if output else subprocess.PIPE,
         stdout  = None if output else subprocess.PIPE,
         stderr  = None if output else subprocess.PIPE,
@@ -74,7 +76,7 @@ def popen(*params, **kwargs):
 
     if code:
         if raise_err:
-            raise subprocess.CalledProcessError(code, params)
+            raise subprocess.CalledProcessError(code, command)
 
     return code
 
