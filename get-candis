@@ -152,9 +152,9 @@ def get_candis():
     popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
 
     python3 = which('python3', raise_err = True)
-    pipenv  = which('pipenv',  raise_err = True)
+    pip3    = which('pip3',    raise_err = True)
 
-    popen(pip3, 'install', 'numpy')
+    popen(pip3, 'install', 'numpy') # Thanks, javabridge.
     popen(pip3, 'install', '-r', osp.join(appdir, 'requirements.txt'))
 
     # Force matplotlib backend for macOS
@@ -199,9 +199,10 @@ def setup_candis(args = None):
             # Install Oracle JRE/JDK
             popen(addapt, '-y', 'ppa:webupd8team/java')
             popen(aptget, 'update')
-            # Auto agree license.
+            # Auto Agree License.
             popen('echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections')
             popen('echo debconf shared/accepted-oracle-license-v1-1 seen   true | sudo debconf-set-selections')
+
             popen(aptget, 'install', '-y', 'oracle-java8-installer')
         except ValueError:
             log.error('Sorry. This script is not supported for this Linux platform.')
