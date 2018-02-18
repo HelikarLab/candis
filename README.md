@@ -71,7 +71,7 @@ You can also attempt to install candis via Docker as follows:
 $ docker pull helikarlab/candis
 ```
 
-...and simply run the image optionally exposing the port 5000.
+... and simply run the image optionally exposing the port 5000.
 
 ```
 $ docker run -p 8888:5000 candis
