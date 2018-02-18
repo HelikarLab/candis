@@ -147,7 +147,7 @@ def get_candis():
             if config not in f.readlines():
                 f.write('\nbackend: TkAgg')
 
-    popen(python3, 'setup.py', 'install', directory = appdir)
+    popen(python3, 'setup.py', 'install', dir = appdir)
 
     candis = which('candis', raise_err = True)
 
