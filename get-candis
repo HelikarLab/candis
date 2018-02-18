@@ -80,7 +80,7 @@ def popen(*params, **kwargs):
 
     if output:
         output, error = proc.communicate()
-        
+
         if output:
             output = output.decode('utf-8')
             if output.count('\n') == 1:
@@ -191,7 +191,7 @@ def setup_candis(args = None):
             popen(which('apt-key', raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E084DAB9')
             
             _, out, _ = popen('lsb_release -sc', output = True)
-            popen(addapt, 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu {version}/'.format(version = out))
+            popen(addapt, '"deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu {version}/"'.format(version = out))
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', 'r-base')
 
