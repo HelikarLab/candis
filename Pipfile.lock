@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "ce9e5c9ab4f6b2d951395ea026905730591391b019f86919a585e3477f6eb351"
+            "sha256": "5d462d8146edc37d063f19c3df42a3b63e2f19a19067c6aec681722fa7166b04"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -185,9 +185,9 @@
         },
         "javabridge": {
             "hashes": [
-                "sha256:ad364c34c7a1a77930f08d2c801efb78e80ab8a29abe8db5bfc3819438659421"
+                "sha256:7b0ce6882deb8b0a9bf99edb758a59ef6897d25789b23da684bafd401b7053f2"
             ],
-            "version": "==1.0.15"
+            "version": "==1.0.14"
         },
         "jedi": {
             "hashes": [
@@ -418,9 +418,9 @@
         },
         "python-weka-wrapper3": {
             "hashes": [
-                "sha256:ef2af7b1e9f9909b0bf7693e7967db20ecbbdfc0d6d8b08abad5c150b43be702"
+                "sha256:9d1c917b5bd392ae800c782712f91ebbb8b82108975b31d480a102f3ffe72063"
             ],
-            "version": "==0.1.3"
+            "version": "==0.1.4"
         },
         "pytz": {
             "hashes": [

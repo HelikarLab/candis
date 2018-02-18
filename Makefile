@@ -1,4 +1,4 @@
-include .env
+-include .env
 
 .PHONY: build
 .PHONY: docs
@@ -49,6 +49,11 @@ install:
 	$(PYTHON) setup.py develop
 
 	make clean
+
+lock:
+	# Lock Dependencies
+	$(PIPENV) lock --requirements 		> $(BASEDIR)/requirements.txt
+	$(PIPENV) lock --requirements --dev > $(BASEDIR)/requirements-dev.txt
 
 upgrade:
 	$(YARN) upgrade
