@@ -80,6 +80,17 @@ def popen(*params, **kwargs):
 
     if output:
         output, error = proc.communicate()
+        
+        if output:
+            output = output.decode('utf-8')
+            if output.count('\n') == 1:
+                output = output.strip('\n')
+
+        if error:
+            error  =  error.decode('utf-8')
+            if  error.count('\n') == 1:
+                error  =  error.strip('\n')
+
         return code, output, error
     else:
         return code
