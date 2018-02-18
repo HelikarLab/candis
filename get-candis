@@ -159,7 +159,7 @@ def get_candis():
     popen(pip3, 'install', '-r', 'requirements-dev.txt', dir = appdir)
 
     # Force matplotlib backend for macOS
-    if system.platform == 'darwin':
+    if sys.platform == 'darwin':
         with open(osp.join(osp.expanduser('~'), '.matplotlib', 'matplotlibrc'), mode = 'a') as f:
             config = 'backend: TkAgg'
 
