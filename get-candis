@@ -33,7 +33,7 @@ class const(object):
     HOMEBREW_DEPENDENCIES      = ['git', 'python3', 'gcc', 'r', 'graphviz']
     HOMEBREW_DEPENDENCIES_CASK = ['xquartz', 'weka']
 
-    APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'python3-pip', 'graphviz',
+    APTGET_DEPENDENCIES        = ['build-essential', 'git', 'python3-dev', 'python3-pip', 'graphviz-dev',
         'default-jre', 'default-jre-headless', 'default-jdk',
         'software-properties-common', 'python-software-properties', 'apt-transport-https'
     ]
@@ -54,6 +54,7 @@ def popen(*params, **kwargs):
     output      = kwargs.get('output', True)
     directory   = kwargs.get('dir')
     environment = kwargs.get('env')
+    shell       = kwargs.get('shell', True)
     raise_err   = kwargs.get('raise_err', True)
 
     environ     = os.environ.copy()
@@ -61,22 +62,19 @@ def popen(*params, **kwargs):
         environ.update(environment)
     
     proc        = subprocess.Popen(params,
-        # stdin   = subprocess.PIPE,
-        # stdout  = subprocess.PIPE,
-        # stderr  = subprocess.PIPE,
+        stdin   = None if output else subprocess.PIPE,
+        stdout  = None if output else subprocess.PIPE,
+        stderr  = None if output else subprocess.PIPE,
         env     = environ,
-        cwd     = directory
+        cwd     = directory,
+        shell   = shell
     )
 
-    # if output:
-    #     for line in iter(proc.stdout.readline, ""):
-    #         print(line, end = '')
     code       = proc.wait()
+
     if code:
         if raise_err:
             raise subprocess.CalledProcessError(code, params)
-
-    out, err   = proc.communicate()
 
     return code
 
@@ -147,7 +145,7 @@ def get_candis():
         if config not in f.readlines():
             f.write('\nbackend: TkAgg')
 
-    popen(python3, 'setup.py', 'install', cwd = appdir)
+    popen(python3, 'setup.py', 'install', directory = appdir)
 
     candis = which('candis', raise_err = True)
 
@@ -164,22 +162,23 @@ def setup_candis(args = None):
         popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES,      raise_err = False)
     elif sys.platform.startswith('linux'):
         try:
-            aptget = which('apt-get', raise_err = True)
+            aptget = which('apt-get',            raise_err = True)
+            addapt = which('add-apt-repository', raise_err = True)
 
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', *const.APTGET_DEPENDENCIES)
 
             # Install R
-            popen(which('apt-key',            raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E298A3A825C0D65DFD57CBB651716619E084DAB9')
-            popen(which('add-apt-repository', raise_err = True), 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/')
+            popen(which('apt-key', raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E084DAB9')
+            popen(addapt, 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/')
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', 'r-base')
 
             # Install Oracle JRE/JDK
-            popen(which('add-apt-repository', raise_err = True), '-y', 'ppa:webupd8team/java')
+            popen(addapt, '-y', 'ppa:webupd8team/java')
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', 'oracle-java8-installer')
-        except ValueError as e:
+        except ValueError:
             log.error('Sorry. This script is not supported for this Linux platform.')
             code   = 1
     else:

@@ -1,4 +1,0 @@
-{
-	"editor.fontFamily": "Consolas",
-	"python.pythonPath": "${workspaceFolder}/venv/bin/python"
-}
