@@ -12,7 +12,7 @@ DOCSDIR      = $(realpath docs)
 PIPENV      ?= pipenv
 PYBINARIES   = $(shell pipenv --venv)/bin
 PYTHON      ?= $(PYBINARIES)/python
-
+PIP         ?= $(PYBINARIES)/pip
 
 PYTHON       = $(PYBINARIES)/python
 PIP          = $(PYBINARIES)/pip
@@ -52,8 +52,17 @@ install:
 
 lock:
 	# Lock Dependencies
-	$(PIPENV) lock --requirements 		> $(BASEDIR)/requirements.txt
-	$(PIPENV) lock --requirements --dev > $(BASEDIR)/requirements-dev.txt
+
+	rm -rf $(BASEDIR)/Pipfile.lock
+	rm -rf $(BASEDIR)/requirements.txt
+	rm -rf $(BASEDIR)/requirements-dev.txt
+	
+	# Temporary not doing this for now.
+	# see - https://github.com/pypa/pipenv/issues/357
+	# $(PIPENV) lock --requirements       > $(BASEDIR)/requirements.txt
+	# $(PIPENV) lock --requirements --dev > $(BASEDIR)/requirements-dev.txt
+
+	$(PIP) freeze > $(BASEDIR)/requirements.txt
 
 upgrade:
 	$(YARN) upgrade
