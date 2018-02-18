@@ -50,10 +50,10 @@ $ pip install candis
 #### TL;DR
 
 ```console
-$ curl -sL bit.do/get-candis | python # with dependencies
+$ curl -sL git.io/install-candis | python # with dependencies
 ```
 
-...and lauch `candis`'s development server:
+... and lauch `candis`'s development server:
 
 ```
 $ candis
