@@ -145,7 +145,7 @@ def get_candis():
         if config not in f.readlines():
             f.write('\nbackend: TkAgg')
 
-    popen(python3, 'setup.py', 'install', cwd = appdir)
+    popen(python3, 'setup.py', 'install', directory = appdir)
 
     candis = which('candis', raise_err = True)
 
@@ -162,20 +162,21 @@ def setup_candis(args = None):
         popen(brew,         'install', *const.HOMEBREW_DEPENDENCIES,      raise_err = False)
     elif sys.platform.startswith('linux'):
         try:
-            aptget = which('apt-get', raise_err = True)
+            aptget = which('apt-get',            raise_err = True)
+            addapt = which('add-apt-repository', raise_err = True)
 
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', *const.APTGET_DEPENDENCIES)
 
             # Install R
-            popen(which('apt-key',            raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E084DAB9')
-            popen(which('add-apt-repository', raise_err = True), 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/')
+            popen(which('apt-key', raise_err = True), 'adv', '--keyserver', 'keyserver.ubuntu.com', '--recv-keys', 'E084DAB9')
+            popen(addapt, 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu $(lsb_release -sc)/')
             popen(aptget, 'update')
-            popen(aptget, 'upgrade')
-            popen(aptget, 'install', '-y', 'r-base')
+            popen(aptget, 'install', '-y', 'r-base-core', 'r-recommended')
+            popen(aptget, 'install', '-y', '--no-install-recommends', 'r-base')
 
             # Install Oracle JRE/JDK
-            popen(which('add-apt-repository', raise_err = True), '-y', 'ppa:webupd8team/java')
+            popen(addapt, '-y', 'ppa:webupd8team/java')
             popen(aptget, 'update')
             popen(aptget, 'install', '-y', 'oracle-java8-installer')
         except ValueError:
