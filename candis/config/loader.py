@@ -42,8 +42,7 @@ class Loader(object):
 
         config   = Config(data)
 
-        if filename:
-            # TODO: Check if path exists?
+        if filename and os.path.isfile(filename):
             with open(filename) as f:
                 data = yaml.load(f)
 
