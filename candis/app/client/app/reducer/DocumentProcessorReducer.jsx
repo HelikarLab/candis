@@ -191,6 +191,15 @@ const documentProcessor   = (state = initial, action) => {
       return {...state, nodes: nodes, errors: [ ] }
     }
 
+    case 'REMOVE_NODE':
+    {
+      const nodes = action.payload
+      let updatedNodes = nodes.data.filter((node) => {
+        node.ID !== nodes.removeID
+      })
+      return {...state, active: updatedNodes}
+    }
+
     case ActionType.Pipeline.RUN_REQUEST:
       nprogress.set(0.0)
       return {...state, running: action.payload }
