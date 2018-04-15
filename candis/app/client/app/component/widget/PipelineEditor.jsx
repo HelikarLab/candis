@@ -16,18 +16,16 @@ class PipelineEditor extends React.Component
 		this.onClick = this.onClick.bind(this)
 	}
 
-	onClick (stages) {
-		console.log("stages", stages)
+	onClick (e) {
 		const action = {
 			payload: {
-				data: stages,
+				code: e.target.value,
+				data: this.props.stages,
 				removeID: 'SkyMQc13M'
 			},
 			type: 'REMOVE_NODE'
 		}
 		store.dispatch(action)
-		console.log('Close this button!')
-		console.log(store.getState())
 	}
 	
 	render ( )
@@ -47,7 +45,7 @@ class PipelineEditor extends React.Component
 									<div className="row">
 										<div className="col-xs-9">
 											<a style={{ color: '#FFF' }} href="javascript:void(0);" onClick={() => {
-												console.log({...node})
+												// console.log({...node})
 												if ( node.onClick ) {
 													props.dispatch(node.onClick)
 												}
@@ -59,7 +57,7 @@ class PipelineEditor extends React.Component
 											</a>
 										</div>
 										<div className="col-xs-3" >
-											<button onClick={this.onClick(props.stages)}>&times;</button>
+											<button value={node.code} onClick={this.onClick}>&times;</button>
 										</div>
 									</div>
 								</div>

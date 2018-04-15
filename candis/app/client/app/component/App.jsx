@@ -28,7 +28,6 @@ class App extends React.Component {
 
     return (
       <div>
-      	<h1>Rupav Jain!!!</h1>
         <AppBar
                image={`${config.routes.images}/logo.png`}
           classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
@@ -37,7 +36,6 @@ class App extends React.Component {
           onClick={(action) => {
             props.dispatch(action.onClick)
           }}/>
-        <h1>Rupav Jain!!!</h1>
         <div className="container-fluid">
           <div className="row">
             <div className="col-sm-3">
@@ -48,7 +46,6 @@ class App extends React.Component {
             </div>
           </div>
         </div>
-        <h1>Rupav Jain!!!</h1>
         <Modal/>
       </div>
     )

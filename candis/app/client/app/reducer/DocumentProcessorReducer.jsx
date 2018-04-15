@@ -189,15 +189,26 @@ const documentProcessor   = (state = initial, action) => {
       }
 
       return {...state, nodes: nodes, errors: [ ] }
-    }
+    } 
 
     case 'REMOVE_NODE':
     {
-      const nodes = action.payload
-      let updatedNodes = nodes.data.filter((node) => {
-        node.ID !== nodes.removeID
+      const payload = action.payload
+      
+      const updatedNodes = [ ]
+      payload.data.forEach((node) => {
+        if(node.code !== payload.code){
+          updatedNodes.push(node)
+        }
       })
-      return {...state, active: updatedNodes}
+      let documents = state.documents.slice()
+      documents = documents.map((dokument) => {
+        if(dokument.active){
+          dokument.data = updatedNodes
+        }
+        return dokument
+      })
+      return {...state, documents: documents}
     }
 
     case ActionType.Pipeline.RUN_REQUEST:
