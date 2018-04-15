@@ -21,7 +21,6 @@ class PipelineEditor extends React.Component
 			payload: {
 				code: e.target.value,
 				data: this.props.stages,
-				removeID: 'SkyMQc13M'
 			},
 			type: 'REMOVE_NODE'
 		}
