@@ -56,7 +56,7 @@ class PipelineEditor extends React.Component
 											</a>
 										</div>
 										<div className="col-xs-3" >
-											<button value={node.code} onClick={this.onClick}>&times;</button>
+											<button className="close" value={node.code} onClick={this.onClick}>&times;</button>
 										</div>
 									</div>
 								</div>
