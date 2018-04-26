@@ -8,6 +8,10 @@ import Media      from './Media'
 import Pipeline   from '../../constant/Pipeline'
 import { stage }  from '../../action/DocumentProcessorAction'
 
+/**
+ * Renders active pipeline stages in the form of an unordered list.
+ */
+
 class PipelineEditor extends React.Component
 {
 	render ( )
