@@ -17,13 +17,15 @@ class PipelineEditor extends React.Component
 	}
 
 	onClick (e) {
-		const action = {
+		var action = {
 			payload: {
 				code: e.target.value,
 				data: this.props.stages,
 			},
 			type: 'REMOVE_NODE'
 		}
+		store.dispatch(action)
+		action = stage.delete(e.target.value)
 		store.dispatch(action)
 	}
 	

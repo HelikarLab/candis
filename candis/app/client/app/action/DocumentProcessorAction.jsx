@@ -109,7 +109,22 @@ const stage =
     }
 
     return dispatch
+  },
+  delete: (code) => {
+    const dispatch = (dispatch) => {
+      const dokument = store.getState().documentProcessor.active
+      if( dokument !== null ){
+        var buffer = dokument.data.filter((node) => {
+          if( node.code == code ){
+            return false
+          }
+          return true
+        })
+        const action = write(dokument.output, buffer)
+        dispatch(action)
+      }
+    }
+    return dispatch
   }
 }
-
 export { setActiveDocument, stage }
