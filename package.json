@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "sass": "node-sass candis/app/client/styles/App.scss candis/app/assets/css/styles.min.css --sourcemap=none --style compressed",
-    "sass.watch": "node-sass --watch candis/app/client/styles/App.scss:candis/app/assets/css/styles.min.css --sourcemap=none --style compressed",
+    "sass": "node-sass candis/app/client/styles/App.scss candis/app/assets/css/styles.min.css --sourcemap=none --output-style compressed",
+    "sass.watch": "node-sass --watch candis/app/client/styles/App.scss candis/app/assets/css/styles.min.css --sourcemap=none --output-style compressed",
     "webpack": "webpack",
     "webpack.watch": "webpack --watch",
     "build": "yarn run webpack && yarn run sass",
