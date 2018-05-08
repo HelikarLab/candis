@@ -22,8 +22,5 @@ const middlewares = [
 
 const middleware  = applyMiddleware(...middlewares)
 const store       = createStore(reducer, middleware)
-store.subscribe(() => {
-	console.log(store.getState())
-})
 
 export default store
