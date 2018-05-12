@@ -42,7 +42,7 @@ class const(object):
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
-def which(executable, raise_err = False):
+def which(executable, raise_err = True):
     path = find_executable(executable)
 
     if not path and raise_err:
@@ -77,6 +77,8 @@ def popen(*params, **kwargs):
     code       = proc.wait()
 
     if code and raise_err:
+        log.debug('code is {}:'.format(code))
+        log.debug('command is {}:'.format(command))
         raise subprocess.CalledProcessError(code, command)
 
     if output:
