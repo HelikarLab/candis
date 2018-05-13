@@ -49,8 +49,8 @@ nbformat==4.4.0
 notebook==5.4.0
 numpy==1.14.0
 packaging==16.8
-#pandas==0.22.0
-#pandocfilters==1.4.2
+# pandas==0.22.0
+pandocfilters==1.4.2
 parso==0.1.1
 pexpect==4.4.0
 pickleshare==0.7.4
