@@ -151,7 +151,7 @@ def get_candis():
 
     Rscript = which('Rscript', raise_err = True)
     popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
-s
+    
     python3 = which('python3', raise_err = True)
     pip3    = which('pip3',    raise_err = True)
     
