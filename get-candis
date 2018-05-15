@@ -151,15 +151,15 @@ def get_candis():
 
     Rscript = which('Rscript', raise_err = True)
     popen(Rscript, 'setup.R', dir = osp.join(appdir, 'R'))
-
+s
     python3 = which('python3', raise_err = True)
     pip3    = which('pip3',    raise_err = True)
     
     popen(pip3, 'install', '--upgrade', 'pip')
 
     popen(pip3, 'install', 'numpy') # Thanks, javabridge.
-    popen(pip3, 'install', '-r', 'requirements.txt',     dir = appdir)
-    popen(pip3, 'install', '-r', 'requirements-dev.txt', dir = appdir, raise_err = False)
+    popen(pip3, 'install', '--ignore-installed', '-r', 'requirements.txt',     dir = appdir)
+    # popen(pip3, 'install', '-r', 'requirements-dev.txt', dir = appdir, raise_err = False)
 
     # Force matplotlib backend for macOS
     if sys.platform == 'darwin':
