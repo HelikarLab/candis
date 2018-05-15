@@ -1,0 +1,744 @@
+{
+  "candis\\app\\client\\app\\component\\App.jsx": {
+    "description": "",
+    "displayName": "App",
+    "methods": []
+  },
+  "candis\\app\\client\\app\\component\\AppBar.jsx": {
+    "description": "",
+    "displayName": "AppBar",
+    "methods": [],
+    "props": {
+      "ID": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "shortid.generate()",
+          "computed": true
+        }
+      },
+      "classNames": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      },
+      "fluid": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "image": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      },
+      "title": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\PrivateRoute.jsx": {
+    "description": "",
+    "displayName": "PrivateRoute",
+    "methods": [],
+    "props": {
+      "user": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\form\\SignInForm.jsx": {
+    "description": "",
+    "displayName": "SignInForm",
+    "methods": [
+      {
+        "name": "onChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "event",
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "onSubmit",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "event",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "onChange": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "(data) => { }",
+          "computed": false
+        }
+      },
+      "onSubmit": {
+        "type": {
+          "name": "func"
+        },
+        "required": true,
+        "description": ""
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\DataEditor.jsx": {
+    "description": "",
+    "displayName": "DataEditor",
+    "methods": []
+  },
+  "candis\\app\\client\\app\\component\\widget\\FileEditor.jsx": {
+    "description": "",
+    "displayName": "FileEditor",
+    "methods": [],
+    "props": {
+      "classNames": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\FileViewer.jsx": {
+    "description": "",
+    "displayName": "FileViewer",
+    "methods": [
+      {
+        "name": "onChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "classNames": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\GistViewer.jsx": {
+    "description": "",
+    "displayName": "GistViewer",
+    "methods": []
+  },
+  "candis\\app\\client\\app\\component\\widget\\Media.jsx": {
+    "description": "",
+    "displayName": "Media",
+    "methods": [],
+    "props": {
+      "icon": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      },
+      "title": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      },
+      "body": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\MenuBar.jsx": {
+    "description": "",
+    "displayName": "MenuBar",
+    "methods": [],
+    "props": {
+      "ID": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "shortid.generate()",
+          "computed": true
+        }
+      },
+      "classNames": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      },
+      "menus": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      },
+      "fluid": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "onClick": {
+        "type": {
+          "name": "func"
+        },
+        "required": true,
+        "description": ""
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\Modal.jsx": {
+    "description": "",
+    "displayName": "Modal",
+    "methods": [],
+    "props": {
+      "ID": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "shortid.generate()",
+          "computed": true
+        }
+      },
+      "display": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "modal": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\PipelineEditor.jsx": {
+    "description": "Renders active pipeline stages in the form of an unordered list.",
+    "displayName": "PipelineEditor",
+    "methods": []
+  },
+  "candis\\app\\client\\app\\component\\widget\\SelectViewer.jsx": {
+    "description": "",
+    "displayName": "SelectViewer",
+    "methods": [
+      {
+        "name": "onChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "classNames": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\TabBar.jsx": {
+    "description": "",
+    "displayName": "TabBar",
+    "methods": [],
+    "props": {
+      "tabs": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      },
+      "menu": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      },
+      "onClick": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "() => { }",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\ToolBar.jsx": {
+    "description": "",
+    "displayName": "ToolBar",
+    "methods": [],
+    "props": {
+      "tools": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      },
+      "classNames": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ }",
+          "computed": false
+        }
+      },
+      "size": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "20",
+          "computed": false
+        }
+      },
+      "onClick": {
+        "type": {
+          "name": "func"
+        },
+        "required": true,
+        "description": ""
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\TypeAhead.jsx": {
+    "description": "",
+    "displayName": "TypeAhead",
+    "methods": [
+      {
+        "name": "onChange",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "event",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "placeholder": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "\"\"",
+          "computed": false
+        }
+      },
+      "data": {
+        "type": {
+          "name": "array"
+        },
+        "required": true,
+        "description": ""
+      },
+      "onSelect": {
+        "type": {
+          "name": "func"
+        },
+        "required": true,
+        "description": ""
+      },
+      "maximum": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      },
+      "keys": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": ""
+      },
+      "onMouseOver": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "() => { }",
+          "computed": false
+        }
+      },
+      "onMouseOut": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "() => { }",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\XEditable.jsx": {
+    "description": "",
+    "displayName": "XEditable",
+    "methods": [],
+    "props": {
+      "ID": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "shortid.generate()",
+          "computed": true
+        }
+      },
+      "title": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "\"\"",
+          "computed": false
+        }
+      },
+      "value": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "\"\"",
+          "computed": false
+        }
+      },
+      "empty": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "\"\"",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\document\\DocumentPanel.jsx": {
+    "description": "",
+    "displayName": "DocumentPanel",
+    "methods": [],
+    "props": {
+      "documents": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      },
+      "onActive": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "(dokument) => { }",
+          "computed": false
+        }
+      },
+      "active": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\document\\DocumentProcessor.jsx": {
+    "description": "",
+    "displayName": "DocumentProcessor",
+    "methods": [],
+    "props": {
+      "documents": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\toolbox\\Compartment.jsx": {
+    "description": "",
+    "displayName": "Compartment",
+    "methods": []
+  },
+  "candis\\app\\client\\app\\component\\widget\\toolbox\\TipView.jsx": {
+    "description": "",
+    "displayName": "TipView",
+    "methods": [],
+    "props": {
+      "title": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      },
+      "content": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      }
+    }
+  },
+  "candis\\app\\client\\app\\component\\widget\\toolbox\\ToolBox.jsx": {
+    "description": "",
+    "displayName": "ToolBox",
+    "methods": [],
+    "props": {
+      "ID": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "shortid.generate()",
+          "computed": true
+        }
+      },
+      "title": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "\"\"",
+          "computed": false
+        }
+      },
+      "compartments": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "[ ]",
+          "computed": false
+        }
+      }
+    }
+  },
+  "candis\\app\\client\\app\\page\\SignIn.jsx": {
+    "description": "",
+    "displayName": "SignIn",
+    "methods": [
+      {
+        "name": "onSubmit",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "data",
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "user": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      }
+    }
+  }
+}

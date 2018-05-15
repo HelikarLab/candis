@@ -12,7 +12,8 @@
     "webpack": "webpack",
     "webpack.watch": "webpack --watch",
     "build": "yarn run webpack && yarn run sass",
-    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\""
+    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
+    "react-docgen": "react-docgen candis/app/client/app --out docs/Client/componentsDocs.json --pretty"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
     "prop-types": "^15.6.0",
     "react-data-grid": "^3.0.3",
     "react-data-grid-addons": "^3.0.3",
+    "react-docgen": "^2.20.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
