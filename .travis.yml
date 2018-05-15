@@ -11,4 +11,15 @@ python:
   # - "3.6-dev"
   # - "3.7-dev"
 install:
+  - sudo -H pip install -U pipenv
+  - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+  - sudo apt-get update && sudo apt-get install yarn 
   - curl -sL git.io/install-candis | sudo python
+  - pip3 install pytest-cov
+  
+script:
+  #- export PIPENV_IGNORE_VIRTUALENVS=1
+  - make test
+  - pytest --cov=candis.app.server.api candis/app/server/api/tests
+  
