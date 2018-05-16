@@ -12,7 +12,8 @@
     "webpack": "webpack",
     "webpack.watch": "webpack --watch",
     "build": "yarn run webpack && yarn run sass",
-    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\""
+    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -26,12 +27,14 @@
   "homepage": "https://github.com/achillesrasquinha/candis#readme",
   "devDependencies": {
     "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "concurrently": "^3.5.1",
     "dotenv": "^4.0.0",
+    "jest": "^22.4.3",
     "json-loader": "^0.5.7",
     "npm-check-updates": "^2.13.0",
     "react-hot-loader": "^3.1.3",
