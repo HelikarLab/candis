@@ -43,7 +43,7 @@ clean.force:
 	make clean
 	
 install:
-	$(PIPENV)  install
+	$(PIPENV)  install --skip-lock # skip-lock flag need to be removed after pipenv update.
 	$(YARN)    install
 
 	$(PYTHON) setup.py develop
@@ -70,7 +70,8 @@ upgrade:
 test:
 	make install
 
-	$(PYTEST)
+	$(PYTEST) --cov=candis.app.server.api candis/app/server/api/tests
+	$(YARN) test
 
 	make clean.py
 
