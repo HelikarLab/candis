@@ -1,12 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 addict = "*"
 pyyaml = "*"
 ipython = "*"
@@ -29,17 +26,14 @@ flask-socketio = "*"
 redis = "*"
 rq = "*"
 gunicorn = "*"
-
+pytest-cov = "*"
 
 [dev-packages]
-
 jupyter = "*"
 honcho = "*"
 pytest = "*"
 coverage = "*"
 pylint = "*"
 
-
 [requires]
-
 python_version = "3.6"
