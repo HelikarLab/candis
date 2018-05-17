@@ -69,7 +69,7 @@ upgrade:
 
 test:
 	make install
-
+	$(PIPENV) shell # to activate the virtualenv of pipenv.
 	$(PYTEST) --cov=candis.app.server.api candis/app/server/api/tests
 	$(YARN) test
 
