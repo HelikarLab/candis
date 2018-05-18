@@ -3,9 +3,9 @@ python:
   # - "2.6" # no longer supported.
   # - "2.7" # not supported.
   # - "3.2" # coverage seems to fail.
-  - "3.3"
-  - "3.4"
-  - "3.5"
+  # - "3.3" # seaborn is incompatible.
+  # - "3.4" # hangs on pipenv install
+  # - "3.5" # Works fine
   # - "3.5-dev"
   - "3.6"
   # - "3.6-dev"
