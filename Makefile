@@ -43,7 +43,8 @@ clean.force:
 	make clean
 	
 install:
-	$(PIPENV)  install --skip-lock # skip-lock flag need to be removed after pipenv update.
+	# temporary not using pipenv for now.
+	# $(PIPENV)  install --skip-lock # skip-lock flag need to be removed after pipenv update.
 	$(YARN)    install
 
 	$(PYTHON) setup.py develop
