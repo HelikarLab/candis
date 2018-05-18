@@ -5,11 +5,22 @@ import classNames from 'classnames'
 
 import Media      from './Media'
 
+import store from '../../Store'
 import Pipeline   from '../../constant/Pipeline'
 import { stage }  from '../../action/DocumentProcessorAction'
 
 class PipelineEditor extends React.Component
 {
+	constructor(props){
+		super(props)
+		this.onClick = this.onClick.bind(this)
+	}
+
+	onClick (e) {
+		var action = stage.delete(e.target.value)
+		store.dispatch(action)
+	}
+	
 	render ( )
 	{
 		const props = this.props
@@ -27,6 +38,7 @@ class PipelineEditor extends React.Component
 									<div className="row">
 										<div className="col-xs-9">
 											<a style={{ color: '#FFF' }} href="javascript:void(0);" onClick={() => {
+												// console.log({...node})
 												if ( node.onClick ) {
 													props.dispatch(node.onClick)
 												}
@@ -38,7 +50,7 @@ class PipelineEditor extends React.Component
 											</a>
 										</div>
 										<div className="col-xs-3" >
-
+											<button className="close" value={node.code} onClick={this.onClick}>&times;</button>
 										</div>
 									</div>
 								</div>

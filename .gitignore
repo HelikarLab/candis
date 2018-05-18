@@ -3,6 +3,7 @@ docs/build
 
 # Dependencies
 node_modules
+yarn-error.log
 
 # Logs
 npm-debug.log
