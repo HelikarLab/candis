@@ -6,6 +6,7 @@ node_modules
 
 # Logs
 npm-debug.log
+yarn-error.log
 
 # Cache
 .sass-cache
@@ -19,3 +20,4 @@ snippet
 __pycache__
 *.pyc
 *.egg-info
+

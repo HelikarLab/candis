@@ -10,8 +10,8 @@ import ToolBox           from './widget/toolbox/ToolBox'
 import DocumentProcessor from './widget/document/DocumentProcessor'
 import Modal             from './widget/Modal'
 
-import menus             from '../meta/menus'
-import compartments      from '../meta/compartments'
+import menus             from '../meta/Menus'
+import compartments      from '../meta/Compartments'
 
 import { getResource }   from '../action/AsynchronousAction'
 
