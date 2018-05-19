@@ -160,11 +160,6 @@ const Compartments =
       ]
   },
   {
-       name: 'Visualize',
-       icon: `${config.routes.icons}/pie-chart.png`,
-    tooltip: 'Tools for Data Visualization'
-  },
-  {
        name: 'Preprocess',
        icon: `${config.routes.icons}/gears.png`,
     tooltip: 'Tools for Data Preprocessing',
@@ -473,7 +468,7 @@ const Compartments =
           }
         },
         {
-             name: 'Gist',
+             name: 'Output',
           tooltip: 'Generate a Classification Report',
           onClick: (dispatch) => {
             const action    = getResource()
@@ -552,6 +547,11 @@ const Compartments =
           }
         }
       ]
+  },
+  {
+       name: 'Visualize',
+       icon: `${config.routes.icons}/pie-chart.png`,
+    tooltip: 'Tools for Data Visualization'
   }
 ]
 
