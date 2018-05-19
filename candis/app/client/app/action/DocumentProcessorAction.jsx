@@ -3,7 +3,7 @@ import shortid    from 'shortid'
 
 import ActionType from '../constant/ActionType'
 import Pipeline   from '../constant/Pipeline'
-import store      from '../store'
+import store      from '../Store'
 
 import { write }  from './AsynchronousAction'
 

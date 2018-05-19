@@ -8,8 +8,8 @@ import storage      from 'store'
 import jsonwebtoken from 'jsonwebtoken'
 
 import config       from './config'
-import store        from './store'
-import routes       from './routes'
+import store        from './Store'
+import routes       from './Routes'
 
 import { signin, signout } from './action/AppAction'
 
