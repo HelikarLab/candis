@@ -169,6 +169,7 @@ app:
         resource: !relurljoin [*base, "api", "data", "resource"]
         read: !relurljoin [*base, "api", "data", "read"]
         write: !relurljoin [*base, "api", "data", "write"]
+        delete: !relurljoin [*base, "api", "data", "delete"]
       preprocess:
         methods: !relurljoin [*base, "api", "preprocess", "methods"]
       featselect:
