@@ -222,6 +222,15 @@ const documentProcessor   = (state = initial, action) => {
     case ActionType.Pipeline.RUN_ERROR:
       nprogress.set(1.0)
       return {...state, running: null, errors: action.payload.error.errors }
+
+    case ActionType.Pipeline.DELETE_PIPELINE:
+    {
+      let documents = state.documents.slice()
+      documents = documents.filter((document) => {
+        return document.active ? false :true
+      })
+      return {...state, documents: documents}
+    }
   }
 
   return state

@@ -59,8 +59,39 @@ class DocumentProcessor extends React.Component
             toastr.error('No active Pipeline', 'Error')
           }
         }
+      },
+      {
+        name: 'Delete',
+        icon: `${config.routes.icons}/delete.png`,
+      tooltip: 'delete the currently active pipeline',
+      onClick: ( ) => {
+        if ( props.active )
+        {
+          const activePipe = props.active.output.name
+          bootbox.confirm({
+            title: "Delete Pipeline?",
+            message: `Do you want to delete ${activePipe}? This pipeline will no longer be accessible.`,
+            buttons:
+              {
+                cancel: { label: "Cancel", className: "btn-sm btn-primary" },
+               confirm: { label: "Confirm", className: "btn-sm btn-success" }
+             },
+            callback: (result) => {
+              if (result) {
+                const action = pipeline.delete(activePipe)
+                props.dispatch(action)
+              }
+            }
+        })
+
+        } else
+        {
+          toastr.error('No active Pipeline', 'Error')
+        }
       }
-    ]
+    }
+
+  ]
 
     props.errors.forEach((err) => {
       toastr.clear()
