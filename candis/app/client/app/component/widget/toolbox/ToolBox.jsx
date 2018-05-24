@@ -10,6 +10,10 @@ import TipView     from './TipView'
 import { insertTool, onHoverTool } from '../../../action/ToolBoxAction'
 
 class ToolBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = ToolBox.defaultStates
+  }
   componentWillMount ( ) {
     this.props.compartments.forEach((_, index) => {
       let compartment  = this.props.compartments[index]
@@ -56,8 +60,18 @@ class ToolBox extends React.Component {
             </div>
             <div className="col-xs-4">
               <div className="text-right">
-                <a href={`#toolbox-${props.ID}-collapse`} data-toggle="collapse">
-                  <span className="fa fa-fw fa-minus" data-toggle="tooltip" title="Minimize"/>
+                <a href={`#toolbox-${props.ID}-collapse`} 
+                  data-toggle="collapse" onClick={() => {
+                    this.setState({
+                      active: this.state.active ? false: true
+                    })
+                  }}>
+                  {
+                    this.state.active ?
+                      <span className="fa fa-fw fa-minus" data-toggle="tooltip" title="Minimize"/>
+                      :
+                      <span className="fa fa-fw fa-chevron-down" data-toggle="tooltip" title="Maximize"/>
+                  }
                 </a>
               </div>
             </div>
@@ -145,6 +159,7 @@ ToolBox.defaultProps      =
          title: "",
   compartments: [ ]
 }
+ToolBox.defaultStates = { active: true }
 
 const mapStateToProps     = (state) => {
   const toolBox           = state.toolBox
