@@ -74,7 +74,7 @@ $ docker pull helikarlab/candis
 ... and simply run the image optionally mapping the port 5000.
 
 ```
-$ docker run -p 8888:5000 candis
+$ docker run -p 8888:5000 helikarlab/candis
 ```
 
 ### Usage
