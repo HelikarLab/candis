@@ -16,6 +16,12 @@ log = logging.getLogger('get-candis')
 log.setLevel(logging.DEBUG)
 
 class const(object):
+    """Hold meta information for outside functions.
+    Attributes
+    ----------
+    URL_CANDIS : str
+        github link of the project Candis.
+    """
     LOGO_ASCII                 = \
 """
                                     d8b   d8,        
@@ -43,6 +49,25 @@ class const(object):
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
 
 def which(executable, raise_err = False):
+    """Path to an executable
+    Paramters
+    ---------
+    executable : str
+        `executable` should be a command
+    raise_error : bool, optional
+        Flag to show error if any(default is False, which implies Error will not be raised if any)
+
+    Returns
+    -------
+    path : str
+        absolute path of the `executable`
+
+
+    Raises
+    ------
+    ValueError
+        If the `executable` was not found by distutils.spawn.find_executatble
+    """
     path = find_executable(executable)
 
     if not path and raise_err:
@@ -53,6 +78,23 @@ def which(executable, raise_err = False):
     return path
 
 def popen(*params, **kwargs):
+    """Runs the command on shell or terminal
+    Parameters
+    ----------
+    params: list
+        list of command and arguments to be executed
+    kwargs: dictionary
+        Arguments for *subprocess.Popen*
+
+    
+    Returns
+    -------
+    code : int
+        0 indicates process executed successfully
+    output, error
+        If `kwargs` receives *output: true*,
+        then output of the process is returned
+    """
     output      = kwargs.get('output', False)
     directory   = kwargs.get('dir')
     environment = kwargs.get('env')
@@ -98,6 +140,27 @@ def popen(*params, **kwargs):
         return code
 
 def check_git_dir(dirpath, raise_err = True):
+    """Checks if a given directory has **git** enabled
+    Parameters
+    ----------
+    dirpath : str
+        Absolute path to a directory
+    raise_err : bool, optional
+        Flag to show error if any(default is False, which implies Error will not be raised if any)
+
+    
+    Returns
+    -------
+    bool
+        returns True if
+        directory has *.git* folder and `dirpath` is included in *git working-tree*
+
+
+    Raises
+    ------
+    ValueError
+        if `dirpath` is not a valid git repository.
+    """
     git     = which('git', raise_err = True)
     
     if osp.isdir(dirpath) \
@@ -114,6 +177,8 @@ def check_git_dir(dirpath, raise_err = True):
             return False
 
 def get_aptget():
+    """Checks **apt-get** command and suggest to install it manually if not working.
+    """
     try:
         aptget = which('apt-get', raise_err = True)
 
@@ -141,6 +206,8 @@ def get_homebrew(doctor = False):
     return brew
 
 def get_candis():
+    """Installs Candis on *HOME/candis* directory.
+    """
     appdir = osp.join(osp.expanduser('~'), 'candis')
         
     if not osp.exists(appdir):
@@ -176,6 +243,11 @@ def get_candis():
     return candis
 
 def setup_candis(args = None):
+    """Setup R and Javabridge and other dependencies.
+    See Also
+    --------
+    const : Class having all apt-get dependencies being installed here.
+    """
     code = os.EX_OK
 
     if   sys.platform == 'darwin':
