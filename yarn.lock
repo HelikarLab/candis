@@ -5706,15 +5706,19 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-data-grid-addons@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-3.0.3.tgz#0cde4f34cff63eb05604c5ceb502caa46bedc825"
+react-data-grid-addons@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-4.0.8.tgz#a2b2b8803942fab78edac5f65f4964f24024d11b"
   dependencies:
-    react-data-grid "^3.0.3"
+    react-data-grid "^4.0.8"
 
-react-data-grid@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-3.0.3.tgz#32f5c65e0c07cd5e804656b368e1f7b66cafafb7"
+react-data-grid@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-4.0.7.tgz#ef44f4c8d22773ee3fc1278ae2cb9e69c75c62b0"
+
+react-data-grid@^4.0.8:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-4.0.8.tgz#e67f73dde0d3c61bb38e41425603698ede442d18"
 
 react-deep-force-update@^2.1.1:
   version "2.1.1"
