@@ -10,16 +10,8 @@ python:
   - "3.6"
   # - "3.6-dev"
   # - "3.7-dev"
-before_install:
-  - # sudo -H pip install -U pipenv
-  - # curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-  - # echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - # sudo apt-get update && sudo apt-get install yarn 
 install:
-  - # curl -sL git.io/install-candis | sudo python
-  - sudo python get-candis
-  - pip3 install pytest-cov # without reinstalling, its not working, latest version is 2.5.1  
+  - curl -sL git.io/install-candis | sudo python
+  - # pip3 install pytest-cov # without reinstalling, its not working, latest version is 2.5.1  
 script:
-  # - export PIPENV_IGNORE_VIRTUALENVS=1 # To be used when pipenv is tested successfully.
   - make test
-  
