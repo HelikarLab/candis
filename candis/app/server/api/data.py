@@ -16,6 +16,7 @@ from candis.ios                 import cdata, pipeline
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
+from candis.data.entrez import API
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -230,4 +231,14 @@ def delete():
     code = response.code
 
     return json_, code
+
+@app.route(CONFIG.App.Routes.API.Data.DOWNLOAD, methods = ['POST'])
+def download():
+    response = Response()
+    parameters = addict.Dict(request.get_json())
+    entrez = API(parameters.email, parameters.name)
+    data = entrez.search(parameters.db, parameters.term, **parameters.optional)
+    print(data)
+    return '200'
+
 

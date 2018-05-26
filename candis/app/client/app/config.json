@@ -22,7 +22,8 @@
                 "resource": "/api/data/resource",
                 "read": "/api/data/read",
                 "write": "/api/data/write",
-		"delete": "/api/data/delete"
+		"delete": "/api/data/delete",
+		"download": "/api/data/download"
             },
             "preprocess": {
                 "methods": "/api/preprocess/methods"
