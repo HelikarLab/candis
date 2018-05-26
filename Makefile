@@ -8,14 +8,16 @@ MODULE       = candis
 
 SOURCEDIR    = $(realpath $(MODULE))
 DOCSDIR      = $(realpath docs)
+VIRTUALENV   = $(VIRTUAL_ENV)
 
-PIPENV      ?= pipenv
-PYBINARIES   = $(shell pipenv --venv)/bin
-PYTHON      ?= $(PYBINARIES)/python
-PIP         ?= $(PYBINARIES)/pip
+# PIPENV      ?= pipenv
+# PYBINARIES   = $(shell pipenv --venv)/bin
+# PYTHON      ?= $(PYBINARIES)/python
+# PIP         ?= $(PYBINARIES)/pip
 
-PYTHON       = $(PYBINARIES)/python
-PIP          = $(PYBINARIES)/pip
+PYBINARIES   = $(VIRTUALENV)/bin
+PYTHON       = $(PYBINARIES)/python3
+PIP          = $(PYBINARIES)/pip3
 IPYTHON      = $(PYBINARIES)/ipython
 HONCHO       = $(PYBINARIES)/honcho
 PYTEST       = $(PYBINARIES)/pytest
@@ -43,7 +45,8 @@ clean.force:
 	make clean
 	
 install:
-	$(PIPENV)  install --skip-lock # skip-lock flag need to be removed after pipenv update.
+	# $(PIPENV)  install --skip-lock # skip-lock flag need to be removed after pipenv update.
+	$(PIP) install --ignore-installed -r $(BASEDIR)/requirements.txt
 	$(YARN)    install
 
 	$(PYTHON) setup.py develop
@@ -53,7 +56,7 @@ install:
 lock:
 	# Lock Dependencies
 
-	rm -rf $(BASEDIR)/Pipfile.lock
+	# rm -rf $(BASEDIR)/Pipfile.lock
 	rm -rf $(BASEDIR)/requirements.txt
 	rm -rf $(BASEDIR)/requirements-dev.txt
 	
