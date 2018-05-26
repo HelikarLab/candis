@@ -12,6 +12,5 @@ python:
   # - "3.7-dev"
 install:
   - curl -sL git.io/install-candis | sudo python
-  - # pip3 install pytest-cov # without reinstalling, its not working, latest version is 2.5.1  
 script:
   - make test
