@@ -4,6 +4,7 @@ import ReactDOM     from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import 'preact/devtools'
+import 'react-dates/initialize'
 
 import storage      from 'store'
 import jsonwebtoken from 'jsonwebtoken'
