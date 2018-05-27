@@ -77,7 +77,7 @@ package = dict(
 	[
 		{ 'name': 'Achilles Rasquinha', 'email': 'achillesrasquinha@gmail.com' }
 	],
-	license          = 'MIT',
+	license          = 'GNU General Public License v3.0',
 	modules          = find_packages(exclude = ['test']),
 	test_modules     = find_packages(include = ['test']),
 	classifiers      = \
