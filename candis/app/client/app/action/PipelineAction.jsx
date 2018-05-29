@@ -64,14 +64,21 @@ const pipeline     =
 	delete: (activePipe) => {
 		const dispatch = (dispatch) => {
 			axios.post(config.routes.API.data.delete, { name: activePipe }).then(({data}) => {
-				console.log(data)
+				data         = data.data
+				dispatch({
+					type: ActionType.Asynchronous.DELETE_SUCCESS,
+					payload: { name: activePipe, data }
+				})
+				const action = {
+					type: ActionType.Pipeline.DELETE_PIPELINE,
+				}
+				dispatch(action)
 			}).catch((error) => {
-				console.log('error', error)
+				dispatch({
+					type: ActionType.Asynchronous.DELETE_ERROR,
+					payload: { name: activePipe, error }
+				})
 			})
-			const action = {
-				type: ActionType.Pipeline.DELETE_PIPELINE,
-			}
-			dispatch(action)
 		}
 		return dispatch
 	}
