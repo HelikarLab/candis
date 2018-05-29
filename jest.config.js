@@ -6,5 +6,8 @@ module.exports = {
 		"**/*.{js,jsx}",
 		"!**/node_modules/**",
 		"!**/vendor/**"
-	]
+	],
+	"setupFiles" : [
+		"<rootDir>/candis/app/client/app/tests/setupTests.js"
+	] 
 }
