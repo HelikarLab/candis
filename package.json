@@ -46,6 +46,8 @@
     "axios": "^0.17.1",
     "classnames": "^2.2.5",
     "create-react-class": "^15.6.2",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-preact": "^0.2.0",
     "fuse.js": "^3.2.0",
     "jsonwebtoken": "^8.1.0",
     "lodash.clonedeep": "^4.5.0",
