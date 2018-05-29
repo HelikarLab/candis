@@ -37,7 +37,12 @@ module.exports     = {
   plugins: process.env.ENV === 'development' ? 
     [
       // debug plugins go here.
-      new Jarvis()
+      new Jarvis(),
+      new webpack.DefinePlugin({
+      	'process.env': {
+		'NODE_ENV': JSON.stringify('development')
+      	}
+      })
     ]
     : 
     [
