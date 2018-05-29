@@ -1,11 +1,12 @@
 import ActionType from '../../constant/ActionType'
 import modal from '../../action/ModalAction'
+import dialog from '../fixtures/modal'
 
 test('should setup show action object', () => {
-    const action = modal.show('')
+    const action = modal.show(dialog)
     expect(action).toEqual({
         type: ActionType.Modal.SHOW,
-        payload: ''
+        payload: dialog
     })
 })
 
