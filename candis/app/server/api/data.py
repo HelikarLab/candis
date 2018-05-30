@@ -1,6 +1,7 @@
 # imports - standard imports
 import os
 import json
+import time
 
 # imports - third-party imports
 from flask import request, jsonify
@@ -237,8 +238,29 @@ def download():
     response = Response()
     parameters = addict.Dict(request.get_json())
     entrez = API(parameters.email, parameters.name)
+    time.sleep(1)
+    # step 1
     data = entrez.search(parameters.db, parameters.term, **parameters.optional)
-    print(data)
+    time.sleep(1)
+    IdList = data['idlist']
+    id_ = IdList[0]
+    # step 2
+    esummary = entrez.summary(parameters.db, id_)
+    time.sleep(1)
+    # print("esummary is ------------: {}".format(esummary))
+    accession = esummary[id_]['accession']
+    # step 3
+    search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
+    time.sleep(1)
+    q_key  = search_result['querykey']
+    webenv = search_result['webenv']
+    time.sleep(1)
+    # step 4
+    results  = entrez.summary(parameters.db,None, webEnv=webenv, query_key=q_key, retmax = 500)
+    print(results)
+    
+    #uids = entrez.esummary()
+    print("data is ----------------: {}".format(data))
     return '200'
 
 

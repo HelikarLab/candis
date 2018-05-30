@@ -9,9 +9,12 @@ from candis.data import entrez
 def sanitize_response(response, type_ = 'json'):
     if type_ == 'json':
         data  = response.json()
-        kres  = data['header']['type'] + 'result'
-
-        data  = data[kres]
+        try:
+            kres  = data['header']['type'] + 'result'
+            data = data[kres]
+        except KeyError:
+            kres = 'result'  # for esummary
+            data = data[kres]
     else:
         # TODO: What other types can be handled? XML, HTML, etc.
         pass
@@ -107,4 +110,17 @@ class API(object):
         params.update(optional)
         data = self.request('get', entrez.const.URL.SEARCH, params)
         return data
+
+    def summary(self, db = 'pubmed', id = [], **optional):
+        
+        if(optional.get('query_key') and optional.get('WebEnv')):
+            optional.update({'db': db})
+            data = self.request('get', entrez.const.URL.SUMMARY, optional)
+            return data
+
+        params = dict({ 'db': db, 'id': id})
+        params.update(optional)
+        data = self.request('get', entrez.const.URL.SUMMARY, params)
+        return data
+
 
