@@ -13,11 +13,16 @@ class API():
         self.path = path
 
     def get_path(self):
-        return self.path
+        try:
+            return self.path
+        except:
+            return ''
 
     def raw_data(self, ftp_link, series_accession):
-        url = '/'.join(ftp_link, 'suppl', series_accession + '_RAW.tar')
-        wget.download(url, self.path)
+        url = ''.join([ftp_link, 'suppl/', series_accession + '_RAW.tar'])
+        print("URL: ----------------------------- {}".format(url))
+        wget.download(url, self.get_path())
+        #print("Downloading to {}".format())
         print("Downloaded!")
         return 'success'
 

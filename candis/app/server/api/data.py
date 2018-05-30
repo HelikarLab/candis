@@ -18,6 +18,7 @@ from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
 from candis.data.entrez import API
+from candis.data.GEO import API as geo_API
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -257,10 +258,21 @@ def download():
     time.sleep(1)
     # step 4
     results  = entrez.summary(parameters.db,None, webEnv=webenv, query_key=q_key, retmax = 500)
-    print(results)
-    
+    #print(results)
+    links = []
+    series_accession_list = []
+    for key, value in results.items():
+        if key == 'uids':
+            continue
+        links.append(value.get('ftplink'))
+        series_accession_list.append(value.get('accession'))
+        #break
+    print(links[0], series_accession_list[0])
+    geo = geo_API()
+    geo.raw_data(links[0], series_accession_list[0])
+
     #uids = entrez.esummary()
-    print("data is ----------------: {}".format(data))
+    #print("data is ----------------: {}".format(data))
     return '200'
 
 
