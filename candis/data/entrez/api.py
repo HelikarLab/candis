@@ -1,5 +1,6 @@
 # imports - third-party imports
 import requests
+import re
 
 # imports - module imports
 from candis.util import assign_if_none
@@ -17,18 +18,36 @@ def sanitize_response(response, type_ = 'json'):
 
     return data
 
+class EmailNotValidError(ValueError):
+	"""Parent class of all exceptions raised by this module."""
+	pass
+
+class InvalidDatabaseError(ValueError):
+	"""Parent class of all exceptions raised by this module."""
+	pass
+
 # TODO: Should we cache each response?
 class API(object):
     # TODO: Assign CONFIG.NAME to NAME
     NAME = 'candis'
 
     def __init__(self, email, name = None):
-        # TODO: type check and validate - email (str), valid email
-        # TODO: type check - name (str)
-        # TODO: Maybe try saving base parameters as environment variables?
-
-        self.email      = email
-        self.name       = assign_if_none(name, Client.NAME)
+        
+        if isinstance(email, (str, unicode)):
+            if re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', email):
+                self.email=email
+            else:
+                raise EmailNotValidError("email syntax is not valid")
+        else:
+            raise EmailNotValidError("email is not of type str")
+        
+        if name != None:
+            if isinstance(name, (str, unicode)):
+                self.name = name
+            else:
+                raise ValueError("name is not str")
+        else:
+            self.name = Client.NAME
 
         # TODO: Should we cache databases?
         self.databases  = self.info(refresh_cache = True)
@@ -54,8 +73,12 @@ class API(object):
         return data
 
     def info(self, db = None, refresh_cache = False):
-        # TODO: type check - db (str), or None
-        # TODO: type check - refresh_cache (bool)
+        if db != None:
+            if not isinstance(db, (str, unicode)):
+                raise ValueError("db is not str")
+        
+        if not isinstance(refresh_cache, bool):
+            raise ValueError("refresh_cache is not bool")
 
         # Check if we haven't cached database list
         if not hasattr(self, 'databases') or refresh_cache:
@@ -73,7 +96,6 @@ class API(object):
                 data      = self.request('get', entrez.api.URL.INFO, { 'db': db })
                 returns   = data['dbinfo']
             else:
-                # TODO: Raise ValueError, invalid database
-                pass
+                raise InvalidDatabaseError("Invalid entrez database")
 
         return returns
