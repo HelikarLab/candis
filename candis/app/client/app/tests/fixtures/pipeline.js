@@ -1,5 +1,5 @@
 export default {
-    name: 'pipe.cpipe',
+    name: 'testPipe.cpipe',
     code: '1',
     stages: []
 }

@@ -23,6 +23,10 @@ const action      = token ? signin(token) : signout()
 
 store.dispatch(action)
 
+store.subscribe(() => {
+	console.log(store.getState())
+})
+
 const container   = document.getElementById(config.container)
 const provider    = (
 	<Provider store={store}>
