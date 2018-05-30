@@ -11,4 +11,4 @@ class URL(object):
     INFO   = urljoin(BASE, _format.format(name = 'info'))
     SEARCH = urljoin(BASE, _format.format(name = 'search'))
     SUMMARY= urljoin(BASE, _format.format(name = 'summary'))
-    
+

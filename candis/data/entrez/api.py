@@ -40,13 +40,18 @@ class API(object):
     # TODO: Assign CONFIG.NAME to NAME
     NAME = 'candis'
 
-    def __init__(self, email, name = None):
+    def __init__(self, email, name = None, api_key = None):
         # TODO: type check and validate - email (str), valid email
-        # TODO: type check - name (str)
+        if not isinstance(name, str):
+            raise TypeError('name should be a string')
+        
+        if api_key and not isinstance(api_key, str):
+            raise TypeError('api_key should be a string')
         # TODO: Maybe try saving base parameters as environment variables?
 
         self.email      = email
         self.name       = assign_if_none(name, 'candis')#Client.NAME)
+        self.api_key    = api_key
 
         # TODO: Should we cache databases?
         self.databases  = self.info(refresh_cache = True)
@@ -54,13 +59,15 @@ class API(object):
     @property
     def baseparams(self):
         params = dict({ 'tool': self.name, 'email': self.email,
-                        'retmode': 'json' })
+                        'api_key': self.api_key, 'retmode': 'json' })
 
         return params
 
     def request(self, method, url, parameters = None, *args, **kwargs):
         parameters = assign_if_none(parameters, dict())
         params     = self.baseparams
+        if not params['api_key']:
+            del params['api_key']
         params.update(parameters)
         parameter_string = params_dict2string(params)
 
@@ -93,7 +100,7 @@ class API(object):
                 returns   = data['dbinfo']
             else:
                 # TODO: Raise ValueError, invalid database
-                pass
+                raise ValueError('db should be from : {}'.format(self.databases))
 
         return returns
         
@@ -109,6 +116,7 @@ class API(object):
         params = dict({ 'db': db, 'term': term })
         params.update(optional)
         data = self.request('get', entrez.const.URL.SEARCH, params)
+        
         return data
 
     def summary(self, db = 'pubmed', id = [], **optional):
@@ -121,6 +129,7 @@ class API(object):
         params = dict({ 'db': db, 'id': id})
         params.update(optional)
         data = self.request('get', entrez.const.URL.SUMMARY, params)
+        
         return data
 
 

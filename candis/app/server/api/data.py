@@ -238,41 +238,48 @@ def delete():
 def download():
     response = Response()
     parameters = addict.Dict(request.get_json())
+    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'term', 'path'
+    # TODO: Add api_key functionality as per new Entrez guidelines.
+    
     entrez = API(parameters.email, parameters.name)
     time.sleep(1)
+    
     # step 1
-    data = entrez.search(parameters.db, parameters.term, **parameters.optional)
+    data = entrez.search(parameters.db, parameters.term)
     time.sleep(1)
     IdList = data['idlist']
     id_ = IdList[0]
+    
     # step 2
     esummary = entrez.summary(parameters.db, id_)
     time.sleep(1)
     # print("esummary is ------------: {}".format(esummary))
     accession = esummary[id_]['accession']
+    
     # step 3
     search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
     time.sleep(1)
     q_key  = search_result['querykey']
     webenv = search_result['webenv']
     time.sleep(1)
+    
     # step 4
     results  = entrez.summary(parameters.db,None, webEnv=webenv, query_key=q_key, retmax = 500)
-    #print(results)
+    
     links = []
     series_accession_list = []
+    
     for key, value in results.items():
         if key == 'uids':
             continue
         links.append(value.get('ftplink'))
         series_accession_list.append(value.get('accession'))
-        #break
-    print(links[0], series_accession_list[0])
-    geo = geo_API()
-    geo.raw_data(links[0], series_accession_list[0])
 
-    #uids = entrez.esummary()
-    #print("data is ----------------: {}".format(data))
+    # step 5
+    print(links[0], series_accession_list[0])
+    geo = geo_API(path = parameters.path)
+    download_path = geo.raw_data(links[0], series_accession_list[0])
+    print(download_path)
     return '200'
 
 
