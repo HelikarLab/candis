@@ -73,7 +73,6 @@ const pipeline     =
 					type: ActionType.Pipeline.DELETE_PIPELINE,
 				}
 				dispatch(action)
-				console.log('Bye!')
 			}).catch((error) => {
 				dispatch({
 					type: ActionType.Asynchronous.DELETE_ERROR,
