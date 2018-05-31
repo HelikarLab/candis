@@ -63,7 +63,7 @@ const pipeline     =
 	},
 	delete: (activePipe) => {
 		const dispatch = (dispatch) => {
-			axios.post(config.routes.API.data.delete, { name: activePipe }).then(({data}) => {
+			return axios.post(config.routes.API.data.delete, { name: activePipe }).then(({data}) => {
 				data         = data.data
 				dispatch({
 					type: ActionType.Asynchronous.DELETE_SUCCESS,

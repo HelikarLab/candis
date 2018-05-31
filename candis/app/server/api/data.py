@@ -158,7 +158,7 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     if parameters.output:
         output   = addict.Dict(merge_dicts(output, parameters.output))
 
-    output.path  = ABSPATH_STARTDIR
+    output.path  = ABSPATH_STARTDIR # TODO: make it work with os.path.join(ABSPATH_DIR, output.path)
     output.name  = output.name.strip() # remove padding spaces
 
     buffer_      = parameters.buffer
