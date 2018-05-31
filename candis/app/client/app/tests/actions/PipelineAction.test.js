@@ -6,14 +6,14 @@ import activePipe from '../fixtures/pipeline'
 
 const createMockStore = configureMockStore([thunk])
 
-test('should setup pipeline.delete action object ', () => {
+test('should setup pipeline.delete action object ', (done) => {
     const store = createMockStore({})
-    store.dispatch(pipeline.delete('PIPE20180525092754.cpipe')).then(() => {
+    store.dispatch(pipeline.delete("pipe13.cpipe")).then(() => {
         const actions = store.getActions()
         expect(actions[0]).toEqual({
-            type: ''
+            type: 'DELETE'
         })
-        done()    
+        done()   
     })
     
 })
