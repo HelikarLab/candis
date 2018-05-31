@@ -1,3 +1,5 @@
+import re
+
 # imports - third-party imports
 import requests
 from urllib.parse import urlencode 
@@ -42,6 +44,14 @@ class API(object):
 
     def __init__(self, email, name = None, api_key = None):
         # TODO: type check and validate - email (str), valid email
+        if isinstance(email, str):
+            if re.match(r"^[0-9a-z-]+(\.[0-9a-z-])*@[0-9a-z-]+(\.[0-9a-z-]+)*(\.[a-z]{2,4})$", email):
+                self.email = email
+            else:
+                raise ValueError("Email is incorrect")
+        else:
+            raise TypeError('name should be a string')
+
         if not isinstance(name, str):
             raise TypeError('name should be a string')
         
@@ -53,7 +63,7 @@ class API(object):
         self.name       = assign_if_none(name, 'candis')#Client.NAME)
         self.api_key    = api_key
 
-        # TODO: Should we cache databases?
+        # TODO: Should we cache databases? - using Redis ?
         self.databases  = self.info(refresh_cache = True)
 
     @property
@@ -80,9 +90,13 @@ class API(object):
         return data
 
     def info(self, db = None, refresh_cache = False):
-        # TODO: type check - db (str), or None
-        # TODO: type check - refresh_cache (bool)
+        
+        if db and not isinstance(db, str):
+            raise TypeError("db should be a string")
 
+        if not isinstance(refresh_cache, bool):
+            raise TypeError("refresh_cache should be a boolean value")
+     
         # Check if we haven't cached database list
         if not hasattr(self, 'databases') or refresh_cache:
             # GET is do-able
