@@ -9,6 +9,7 @@ import redis  # must have a redis-server running to use this module.
 from candis.util import assign_if_none
 from candis.data import entrez
 
+# initialize redis client instance.
 r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 def sanitize_response(response, type_ = 'json'):
@@ -68,13 +69,13 @@ class API(object):
 
         # TODO: Should we cache databases? - using Redis, yes!
         # checks if redis has cached 'databases'
-        if r.exists('databases'):
+        if self._check_redis_server() and r.exists('databases'):
             # fetch complete databases from cached memory using redis server
             try:
                 self.databases = r.lrange('databases', 0, -1)
             except redis.ResponseError:
                 # exception caught is custom ResponseError of redis.
-                # TODO: instead of raising exception, give a warning or use logging.captureWarning
+                # TODO: instead of raising exception, give a warning or use logging.captureWarning or log INFO
                 print('redis key "databases" must be a list, refreshing cache.')
             else:
                 print("Cache database is {}".format(self.databases))
@@ -88,6 +89,13 @@ class API(object):
                         'api_key': self.api_key, 'retmode': 'json' })
 
         return params
+
+    def _check_redis_server(self):
+        try:
+            r.ping()
+            return True
+        except redis.ConnectionError:
+            return False
 
     def request(self, method, url, parameters = None, *args, **kwargs):
         parameters = assign_if_none(parameters, dict())
@@ -119,8 +127,9 @@ class API(object):
             data           = self.request('get', entrez.const.URL.INFO)
             # Clean response
             self.databases = data['dblist']
-            r.delete('databases')
-            r.lpush('databases', *self.databases)  # cached list of databases is refreshed now
+            if self._check_redis_server():
+                r.delete('databases')
+                r.lpush('databases', *self.databases)  # cached list of databases is refreshed now
 
         returns = self.databases
 
