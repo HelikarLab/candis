@@ -2,11 +2,14 @@ import re
 
 # imports - third-party imports
 import requests
-from urllib.parse import urlencode 
+from urllib.parse import urlencode
+import redis  # must have a redis-server running to use this module.
 
 # imports - module imports
 from candis.util import assign_if_none
 from candis.data import entrez
+
+r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
 
 def sanitize_response(response, type_ = 'json'):
     if type_ == 'json':
@@ -63,7 +66,20 @@ class API(object):
         self.name       = assign_if_none(name, 'candis')#Client.NAME)
         self.api_key    = api_key
 
-        # TODO: Should we cache databases? - using Redis ?
+        # TODO: Should we cache databases? - using Redis, yes!
+        # checks if redis has cached 'databases'
+        if r.exists('databases'):
+            # fetch complete databases from cached memory using redis server
+            try:
+                self.databases = r.lrange('databases', 0, -1)
+            except redis.ResponseError:
+                # exception caught is custom ResponseError of redis.
+                # TODO: instead of raising exception, give a warning or use logging.captureWarning
+                print('redis key "databases" must be a list, refreshing cache.')
+            else:
+                print("Cache database is {}".format(self.databases))
+                return None
+        
         self.databases  = self.info(refresh_cache = True)
 
     @property
@@ -98,11 +114,13 @@ class API(object):
             raise TypeError("refresh_cache should be a boolean value")
      
         # Check if we haven't cached database list
-        if not hasattr(self, 'databases') or refresh_cache:
+        if refresh_cache:
             # GET is do-able
             data           = self.request('get', entrez.const.URL.INFO)
             # Clean response
             self.databases = data['dblist']
+            r.delete('databases')
+            r.lpush('databases', *self.databases)  # cached list of databases is refreshed now
 
         returns = self.databases
 

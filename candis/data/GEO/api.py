@@ -21,8 +21,8 @@ class API():
         else:
             self.path = os.path.abspath(self.path)
         try:
+            print("\n Downloading at {} \n".format(os.path.abspath(self.path)))
             wget.download(url, self.path)
-            print("Downloading at {}".format(os.path.abspath(self.path)))
             print("Succefully Downloaded!")
         except:
             # TODO: raise server error
