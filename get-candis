@@ -37,7 +37,7 @@ class const(object):
         'default-jre', 'default-jre-headless', 'default-jdk',
         'software-properties-common', 'python-software-properties', 'apt-transport-https',
         'dialog', 'apt-utils',
-        'python3-tk', 'curl'
+        'python3-tk', 'curl', 'redis-server'
     ]
 
     URL_CANDIS                 = 'https://github.com/HelikarLab/candis'
