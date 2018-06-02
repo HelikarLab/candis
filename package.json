@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/achillesrasquinha/candis#readme",
   "devDependencies": {
+    "axios-mock-adapter": "^1.15.0",
     "babel-core": "^6.26.0",
     "babel-jest": "^22.4.3",
     "babel-loader": "^7.1.2",
