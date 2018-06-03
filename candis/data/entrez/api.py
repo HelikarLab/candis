@@ -9,9 +9,6 @@ import redis  # must have a redis-server running to use this module.
 from candis.util import assign_if_none
 from candis.data import entrez
 
-# initialize redis client instance.
-r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
-
 def sanitize_response(response, type_ = 'json'):
     if type_ == 'json':
         data  = response.json()
@@ -47,7 +44,7 @@ class API(object):
     NAME = 'candis'
 
     def __init__(self, email, name = None, api_key = None):
-        # TODO: type check and validate - email (str), valid email
+        self.redis = self._create_redis_instance()
         if isinstance(email, str):
             if re.match(r"^[0-9a-z-]+(\.[0-9a-z-])*@[0-9a-z-]+(\.[0-9a-z-]+)*(\.[a-z]{2,4})$", email):
                 self.email = email
@@ -69,16 +66,16 @@ class API(object):
 
         # TODO: Should we cache databases? - using Redis, yes!
         # checks if redis has cached 'databases'
-        if self._check_redis_server() and r.exists('databases'):
+        if self._check_redis_server() and self.redis.exists('databases'):
             # fetch complete databases from cached memory using redis server
             try:
-                self.databases = r.lrange('databases', 0, -1)
+                self.databases = self.redis.lrange('databases', 0, -1)
             except redis.ResponseError:
                 # exception caught is custom ResponseError of redis.
                 # TODO: instead of raising exception, give a warning or use logging.captureWarning or log INFO
                 print('redis key "databases" must be a list, refreshing cache.')
             else:
-                print("Cache database is {}".format(self.databases))
+                print("Cached database is {}".format(self.databases))
                 return None
         
         self.databases  = self.info(refresh_cache = True)
@@ -90,9 +87,14 @@ class API(object):
 
         return params
 
+    def _create_redis_instance(self):
+        # initialize redis client instance.
+        r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+        return r
+
     def _check_redis_server(self):
         try:
-            r.ping()
+            self.redis.ping()
             return True
         except redis.ConnectionError:
             return False
@@ -128,8 +130,8 @@ class API(object):
             # Clean response
             self.databases = data['dblist']
             if self._check_redis_server():
-                r.delete('databases')
-                r.lpush('databases', *self.databases)  # cached list of databases is refreshed now
+                self.redis.delete('databases')
+                self.redis.lpush('databases', *self.databases)  # cached list of databases is refreshed now
 
         returns = self.databases
 
