@@ -13,4 +13,5 @@ python:
 install:
   - curl -sL git.io/install-candis | sudo python
 script:
+  - redis-cli ping
   - make test
