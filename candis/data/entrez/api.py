@@ -1,5 +1,6 @@
 import re
 import time
+import os
 
 # imports - third-party imports
 import requests
@@ -90,8 +91,9 @@ class API(object):
         return params
 
     def _create_redis_instance(self):
+        # TODO: to parse .env files, use python-dotenv or envparse? and for defaults use config file?
         # initialize redis client instance.
-        r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
+        r = redis.StrictRedis(host = os.getenv('REDIS_HOST', 'localhost'), port = os.getenv('REDIS_PORT', 6379), db = os.getenv('REDIS_DB_INDEX', 0), decode_responses=True)
         return r
 
     def _throttle(self):
@@ -132,8 +134,7 @@ class API(object):
 
         return data
 
-    def info(self, db = None, refresh_cache = False):
-        
+    def info(self, db = None, refresh_cache = False): 
         if db and not isinstance(db, str):
             raise TypeError("db should be a string")
 
@@ -159,13 +160,11 @@ class API(object):
                 data      = self.request('get', entrez.const.URL.INFO, { 'db': db })
                 returns   = data['dbinfo']
             else:
-                # TODO: Raise ValueError, invalid database
-                raise ValueError('db should be from : {}'.format(self.databases))
+                raise ValueError('database should be from : {}'.format(self.databases))
 
         return returns
         
-    def search(self, db = 'pubmed', term = [], **optional):
-        
+    def search(self, db = 'pubmed', term = [], **optional): 
         # neglect term parameter if query_key present
         if(optional.get('query_key') and optional.get('WebEnv')):
             optional.update({'db': db})
@@ -179,8 +178,7 @@ class API(object):
         
         return data
 
-    def summary(self, db = 'pubmed', id = [], **optional):
-        
+    def summary(self, db = 'pubmed', id = [], **optional):    
         if(optional.get('query_key') and optional.get('WebEnv')):
             print("Using WebEnv and query_key")
             optional.update({'db': db})
