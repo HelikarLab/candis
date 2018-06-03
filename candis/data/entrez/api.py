@@ -1,4 +1,5 @@
 import re
+import time
 
 # imports - third-party imports
 import requests
@@ -45,6 +46,7 @@ class API(object):
 
     def __init__(self, email, name = None, api_key = None):
         self.redis = self._create_redis_instance()
+        self.time  = 0
         if isinstance(email, str):
             if re.match(r"^[0-9a-z-]+(\.[0-9a-z-])*@[0-9a-z-]+(\.[0-9a-z-]+)*(\.[a-z]{2,4})$", email):
                 self.email = email
@@ -92,6 +94,17 @@ class API(object):
         r = redis.StrictRedis(host='localhost', port=6379, db=0, decode_responses=True)
         return r
 
+    def _throttle(self):
+        # checks limit for calling entrez API.
+        diff = time.time() - self.time
+        if self.api_key:
+            print("We have api key!!!")
+            if diff <= 0.1:
+                time.sleep(diff)
+        else:
+            if diff < 0.33:
+                time.sleep(diff)
+
     def _check_redis_server(self):
         try:
             self.redis.ping()
@@ -106,8 +119,12 @@ class API(object):
             del params['api_key']
         params.update(parameters)
         parameter_string = params_dict2string(params)
-
+        
+        self._throttle()
         response = requests.request(method, url, params = parameter_string, *args, **kwargs)
+        print("self.time {}".format(self.time))
+        self.time = time.time()
+        
         if response.ok:
             data = sanitize_response(response, params['retmode'])
         else:

@@ -242,7 +242,6 @@ def search():
     # TODO: error handling. response.set_error
     
     entrez = API(parameters.email, parameters.name)
-    time.sleep(1)  # TODO: remove time sleep
     search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
     data = search_results
     q_key  = search_results['querykey']
@@ -274,14 +273,11 @@ def download():
     # TODO: error handling. response.set_error
     
     entrez = API(parameters.email, parameters.name, parameters.api_key)
-    time.sleep(1)
     accession = parameters.accession
     
     search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
-    time.sleep(1)
     q_key  = search_result['querykey']
     webenv = search_result['webenv']
-    time.sleep(1)
     
     
     results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
