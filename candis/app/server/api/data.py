@@ -234,37 +234,57 @@ def delete():
 
     return json_, code
 
+@app.route(CONFIG.App.Routes.API.Data.SEARCH, methods = ['GET', 'POST'])
+def search():
+    response = Response()
+    parameters = addict.Dict(request.get_json())
+    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name'
+    # TODO: error handling. response.set_error
+    
+    entrez = API(parameters.email, parameters.name)
+    time.sleep(1)  # TODO: remove time sleep
+    search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
+    data = search_results
+    q_key  = search_results['querykey']
+    webenv = search_results['webenv']
+    summary_results = entrez.summary(parameters.db, None, WebEnv=webenv, query_key=q_key, retmax=20)
+    
+    fields = ['title', 'accession', 'summary']
+    for key in list(summary_results.keys()):
+        if key == 'uids':
+            del summary_results[key]
+            continue
+        x = [summary_results[key][i] for i in fields]
+        x = dict(zip(fields, x))
+        summary_results[key].clear()
+        summary_results[key].update(x)
+
+    response.set_data(summary_results)
+    dict_ = response.to_dict()
+    json_ = jsonify(dict_)
+    code = response.code
+
+    return json_, code
+
 @app.route(CONFIG.App.Routes.API.Data.DOWNLOAD, methods = ['POST'])
 def download():
     response = Response()
     parameters = addict.Dict(request.get_json())
-    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'term', 'path'
-    # TODO: Add api_key functionality as per new Entrez guidelines.
+    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'accession', 'path'
+    # TODO: error handling. response.set_error
     
-    entrez = API(parameters.email, parameters.name)
+    entrez = API(parameters.email, parameters.name, parameters.api_key)
     time.sleep(1)
+    accession = parameters.accession
     
-    # step 1
-    data = entrez.search(parameters.db, parameters.term)
-    time.sleep(1)
-    IdList = data['idlist']
-    id_ = IdList[0]
-    
-    # step 2
-    esummary = entrez.summary(parameters.db, id_)
-    time.sleep(1)
-    # print("esummary is ------------: {}".format(esummary))
-    accession = esummary[id_]['accession']
-    
-    # step 3
     search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
     time.sleep(1)
     q_key  = search_result['querykey']
     webenv = search_result['webenv']
     time.sleep(1)
     
-    # step 4
-    results  = entrez.summary(parameters.db,None, webEnv=webenv, query_key=q_key, retmax = 500)
+    
+    results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
     
     links = []
     series_accession_list = []
@@ -275,11 +295,14 @@ def download():
         links.append(value.get('ftplink'))
         series_accession_list.append(value.get('accession'))
 
-    # step 5
-    print(links[0], series_accession_list[0])
     geo = geo_API(path = parameters.path)
     download_path = geo.raw_data(links[0], series_accession_list[0])
-    print(download_path)
-    return '200'
+    
+    response.set_data(download_path)
+    dict_ = response.to_dict()
+    json_ = jsonify(dict_)
+    code = response.code
+    
+    return  json_, code
 
 

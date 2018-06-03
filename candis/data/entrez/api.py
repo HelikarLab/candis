@@ -165,6 +165,7 @@ class API(object):
     def summary(self, db = 'pubmed', id = [], **optional):
         
         if(optional.get('query_key') and optional.get('WebEnv')):
+            print("Using WebEnv and query_key")
             optional.update({'db': db})
             data = self.request('get', entrez.const.URL.SUMMARY, optional)
             return data
@@ -172,7 +173,6 @@ class API(object):
         params = dict({ 'db': db, 'id': id})
         params.update(optional)
         data = self.request('get', entrez.const.URL.SUMMARY, params)
-        
         return data
 
 

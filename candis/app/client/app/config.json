@@ -23,6 +23,7 @@
                 "read": "/api/data/read",
                 "write": "/api/data/write",
 		"delete": "/api/data/delete",
+		"search": "/api/data/search",
 		"download": "/api/data/download"
             },
             "preprocess": {
