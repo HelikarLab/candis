@@ -239,15 +239,16 @@ def search():
     response = Response()
     parameters = addict.Dict(request.get_json())
     # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name'
-    # TODO: error handling. response.set_error
     
-    entrez = API(parameters.email, parameters.name)
+    entrez = API(parameters.email, parameters.name, parameters.api_key)
     search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
-    data = search_results
     q_key  = search_results['querykey']
     webenv = search_results['webenv']
     summary_results = entrez.summary(parameters.db, None, WebEnv=webenv, query_key=q_key, retmax=20)
-    
+    if isinstance(summary_results, list):
+        # use 200 status code for 'No Content' instead of 204.
+        # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ
+        return jsonify(response.to_dict()), response.code
     fields = ['title', 'accession', 'summary']
     for key in list(summary_results.keys()):
         if key == 'uids':
@@ -270,7 +271,6 @@ def download():
     response = Response()
     parameters = addict.Dict(request.get_json())
     # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'accession', 'path'
-    # TODO: error handling. response.set_error
     
     entrez = API(parameters.email, parameters.name, parameters.api_key)
     accession = parameters.accession
@@ -281,11 +281,13 @@ def download():
     
     
     results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
-    
+    if isinstance(results, list):
+        # use 200 status code for 'No Content' instead of 204.
+        # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ
+        return jsonify(response.to_dict()), response.code
+
     links = []
     series_accession_list = []
-    print("results are -------------------------------------------------{}".format(results))
-    
     for key, value in results.items():
         if key == 'uids':
             continue

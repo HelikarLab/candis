@@ -54,7 +54,7 @@ class API(object):
             else:
                 raise ValueError("Email is incorrect")
         else:
-            raise TypeError('name should be a string')
+            raise TypeError('Email should be a string')
 
         if not isinstance(name, str):
             raise TypeError('name should be a string')
@@ -78,7 +78,6 @@ class API(object):
                 # TODO: instead of raising exception, give a warning or use logging.captureWarning or log INFO
                 print('redis key "databases" must be a list, refreshing cache.')
             else:
-                print("Cached database is {}".format(self.databases))
                 return None
         
         self.databases  = self.info(refresh_cache = True)
@@ -100,11 +99,10 @@ class API(object):
         # checks limit for calling entrez API.
         diff = time.time() - self.time
         if self.api_key:
-            print("We have api key!!!")
             if diff <= 0.1:
                 time.sleep(diff)
         else:
-            if diff < 0.33:
+            if diff <= 0.33:
                 time.sleep(diff)
 
     def _check_redis_server(self):
@@ -164,7 +162,9 @@ class API(object):
 
         return returns
         
-    def search(self, db = 'pubmed', term = [], **optional): 
+    def search(self, db = 'pubmed', term = [], **optional):
+        if db not in self.databases:
+            raise ValueError('database should be from : {}'.format(self.databases))
         # neglect term parameter if query_key present
         if(optional.get('query_key') and optional.get('WebEnv')):
             optional.update({'db': db})
@@ -178,9 +178,12 @@ class API(object):
         
         return data
 
-    def summary(self, db = 'pubmed', id = [], **optional):    
+    def summary(self, db = 'pubmed', id = [], **optional):   
+         
         if(optional.get('query_key') and optional.get('WebEnv')):
-            print("Using WebEnv and query_key")
+            if db not in self.databases:
+                raise ValueError('database should be from : {}'.format(self.databases))            
+            # print("Using WebEnv and query_key") - TODO: Use logging instead
             optional.update({'db': db})
             data = self.request('get', entrez.const.URL.SUMMARY, optional)
             return data
