@@ -27,7 +27,7 @@ from weka.plot.classifiers    import plot_classifier_errors, plot_learning_curve
 from candis.config import CONFIG
 from candis.ios    import cdata
 from candis.ios    import json as JSON
-from candis.ios    import pipeline
+from candis.ios.pipeline.reader    import read
 from candis.util   import assign_if_none, get_rand_uuid_str, get_b64_plot, buffer_to_b64
 
 pplt.style.use('seaborn')
@@ -75,7 +75,7 @@ class Pipeline(object):
             raise IOError('{path} is not a valid file.'.format(path = path))
 
         objekt       = Pipeline()
-        stages       = [addict.Dict(stage) for stage in pipeline.read(path)]
+        stages       = [addict.Dict(stage) for stage in read(path)]
 
         if len(stages) == 0:
             raise ValueError('Pipeline is empty.')
