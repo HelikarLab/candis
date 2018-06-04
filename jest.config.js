@@ -5,7 +5,8 @@ module.exports = {
 	"collectCoverageFrom" : [
 		"**/*.{js,jsx}",
 		"!**/node_modules/**",
-		"!**/vendor/**"
+		"!**/vendor/**",
+		"!**/app/tests/**",
 	],
 	"setupFiles" : [
 		"<rootDir>/candis/app/client/app/tests/setupTests.js"
