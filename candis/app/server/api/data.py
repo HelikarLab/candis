@@ -284,6 +284,7 @@ def download():
     
     links = []
     series_accession_list = []
+    print("results are -------------------------------------------------{}".format(results))
     
     for key, value in results.items():
         if key == 'uids':
