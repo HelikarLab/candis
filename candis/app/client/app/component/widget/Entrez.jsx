@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { withFormik, Form, Field } from 'formik'
 
-import Yup from 'yup'
+import * as Yup from 'yup'
 
 class EntrezBasic extends React.Component {
     constructor (props) {
@@ -20,11 +20,14 @@ class EntrezBasic extends React.Component {
                 
                     <Form>
                         <div className="row">
-                            <div className="col-xs-6">
+                            <div className="col-xs-3">
                                 <label>Email</label>
                             </div>
                             <div className="col-xs-6">
                                 <Field type="email" name="email"/>
+                            </div>
+                            <div className="col-xs-3">
+                                {props.touched.email && props.errors.email && <small>{props.errors.email}</small>}
                             </div>
                         </div>
 
@@ -53,16 +56,8 @@ class EntrezBasic extends React.Component {
                             <div className="col-xs-6">
                                 <Field component="select" name="database">
                                     <ul>
-                                    {
-                                        props.dbs.map((db) => {
-                                            return (
-                                                <li>
-                                                    {console.log(db)}
-                                                    <option value={`${db}`}>{`${db}`}</option>
-                                                </li>
-                                            )
-                                        })    
-                                    }
+                                    <li><option value="1">1</option></li>
+                                    <option value="2">2</option>
                                     </ul>
                                 </Field>
 
@@ -76,6 +71,9 @@ class EntrezBasic extends React.Component {
                             <div className="col-xs-6">
                                 <Field type="text" name="term" placeholder="Term"/>
                             </div>
+                        </div>
+                        <div className="col-xs-3">
+                            {props.touched.term && props.errors.term && <small>{props.errors.term}</small>}
                         </div>
                         <button>Search</button>
                     
@@ -94,13 +92,20 @@ const Entrez = withFormik({
             email: email || '',
             toolName: toolName || '',
             api_key: api_key || '',
-            database: database || '',
+            database: database || '2',
             term: term || ''
         }
     },
+    validationSchema: Yup.object().shape({
+        email: Yup.string().email('Email is not valid').required('Email is required!'),
+        api_key: Yup.string(),
+        name: Yup.string(),
+        term: Yup.string().required()
+    }),
     handleSubmit(values) {
         console.log(values)
-    }
+    },
+    displayName: 'Entrez Form'
 })(EntrezBasic)
 
 export default Entrez
