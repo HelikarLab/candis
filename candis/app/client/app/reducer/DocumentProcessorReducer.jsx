@@ -208,7 +208,11 @@ const documentProcessor   = (state = initial, action) => {
         }
         return dokument
       })
-      return {...state, documents: documents}
+      const active = {
+        ...state.active,
+        data: updatedNodes
+      }
+      return {...state, documents, active }
     }
 
     case ActionType.Pipeline.RUN_REQUEST:
@@ -229,7 +233,14 @@ const documentProcessor   = (state = initial, action) => {
       documents = documents.filter((document) => {
         return document.active ? false :true
       })
-      return {...state, documents: documents}
+      let active = null
+      if(documents !== undefined && documents.length > 0){
+        // i.e. after deletion, there are still atleast one doc left which need to be set to active
+        documents[0].active = true
+        active = documents[0]
+      }
+      
+      return {...state, documents, active}
     }
   }
 
