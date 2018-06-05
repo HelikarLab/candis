@@ -234,11 +234,12 @@ const documentProcessor   = (state = initial, action) => {
         return document.active ? false :true
       })
       let active = null
-      if(documents){
+      if(documents !== undefined && documents.length > 0){
         // i.e. after deletion, there are still atleast one doc left which need to be set to active
         documents[0].active = true
         active = documents[0]
       }
+      
       return {...state, documents, active}
     }
   }

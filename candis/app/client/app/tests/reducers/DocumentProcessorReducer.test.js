@@ -206,3 +206,4 @@ test('should delete the pipeline and change state.active to some other pipeline 
     })
 })
 
+
