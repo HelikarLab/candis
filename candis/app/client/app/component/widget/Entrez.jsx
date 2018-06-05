@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import { dateRangePicker } from 'react-dates'
 import { withFormik, Form, Field } from 'formik'
 
 import Yup from 'yup'
@@ -20,30 +19,66 @@ class EntrezBasic extends React.Component {
                 <div className="panel-body">
                 
                     <Form>
-                        <label>Email</label>
-                        <Field type="email" name="email" placeholder="Email"/>
-                        <hr/>
-                        <label>Tool Name</label>
-                        <Field type="text" name="toolName" placeholder="Tool Name"/>
-                        <hr/>
-                        <label>Database</label>
-                        <Field type="text" name="database" placeholder="Database Name"/>
-                        <hr/>
-                        <label>Term</label>
-                        <Field type="text" name="term" placeholder="Term"/>
-                        <hr/>
-                        <label>Use history?</label>
-                        <Field type="checkbox" name="useHistory" checked={props.values.useHistory}/>
-                        <hr/>
-                        <label>Choose Dates of publication</label>
-                        <dateRangePicker
-                            startDate={undefined}
-                            endDate={undefined}
-                            startDateId='1'
-                            endDateId='2'
-                        />
-                        <hr/>
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <label>Email</label>
+                            </div>
+                            <div className="col-xs-6">
+                                <Field type="email" name="email"/>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <label>Tool Name</label>
+                            </div>
+                            <div className="col-xs-6">
+                                <Field type="text" name="toolName"/>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <label>API KEY</label>
+                            </div>
+                            <div className="col-xs-6">
+                                <Field type="text" name="api_key"/>
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <label>Database</label>
+                            </div>
+                            <div className="col-xs-6">
+                                <Field component="select" name="database">
+                                    <ul>
+                                    {
+                                        props.dbs.map((db) => {
+                                            return (
+                                                <li>
+                                                    {console.log(db)}
+                                                    <option value={`${db}`}>{`${db}`}</option>
+                                                </li>
+                                            )
+                                        })    
+                                    }
+                                    </ul>
+                                </Field>
+
+                            </div>
+                        </div>
+
+                        <div className="row">
+                            <div className="col-xs-6">
+                                <label>Term</label>
+                            </div>
+                            <div className="col-xs-6">
+                                <Field type="text" name="term" placeholder="Term"/>
+                            </div>
+                        </div>
                         <button>Search</button>
+                    
                     </Form>
                 
                 </div>
@@ -54,13 +89,13 @@ class EntrezBasic extends React.Component {
 }
 
 const Entrez = withFormik({
-    mapPropsToValues({ email, toolName, database, term, useHistory }){
+    mapPropsToValues({ email, toolName, database, term, useHistory, api_key }){
         return {
             email: email || '',
             toolName: toolName || '',
-            database: database || 'pubmed',
-            term: term || 'asthma',
-            useHistory: useHistory || false
+            api_key: api_key || '',
+            database: database || '',
+            term: term || ''
         }
     },
     handleSubmit(values) {

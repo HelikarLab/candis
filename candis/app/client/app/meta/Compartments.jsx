@@ -177,7 +177,8 @@ const Compartments =
               ],
               props:
                   {
-                    classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] }
+                    classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                    dbs: ['pubmed', 'GEO', 'Gene']
                   }
             }
             const action = modal.show(dialog)
