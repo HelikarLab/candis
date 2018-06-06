@@ -23,7 +23,7 @@ class API():
         try:
             print("\n Downloading at {} \n".format(os.path.abspath(self.path)))
             wget.download(url, self.path)
-            print("Succefully Downloaded!")
+            print("Successfully Downloaded!")
         except:
             # TODO: raise server error
             print("Unable to download the file")
