@@ -88,7 +88,7 @@ const Entrez = withFormik({
         email: Yup.string().email('Email is not valid').required('Email is required!'),
         api_key: Yup.string(),
         name: Yup.string(),
-        term: Yup.string().required()
+        term: Yup.string().required('Term is required')
     }),
     handleSubmit(values) {
         console.log(values)
