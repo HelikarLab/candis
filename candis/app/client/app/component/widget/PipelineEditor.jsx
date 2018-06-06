@@ -5,7 +5,6 @@ import classNames from 'classnames'
 
 import Media      from './Media'
 
-import store from '../../Store'
 import Pipeline   from '../../constant/Pipeline'
 import { stage }  from '../../action/DocumentProcessorAction'
 
@@ -17,8 +16,8 @@ class PipelineEditor extends React.Component
 	}
 
 	onClick (e) {
-		var action = stage.delete(e.target.value)
-		store.dispatch(action)
+		const action = stage.delete(e.target.value)
+		this.props.dispatch(action)
 	}
 	
 	render ( )
