@@ -1,4 +1,4 @@
-import Entrez from '../component/widget/Entrez'
+import Entrez from '../component/form/Entrez'
 import FileEditor   from '../component/widget/FileEditor'
 import FileViewer   from '../component/widget/FileViewer'
 import GistViewer   from '../component/widget/GistViewer'

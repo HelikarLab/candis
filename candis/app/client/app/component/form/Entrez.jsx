@@ -6,40 +6,32 @@ import { withFormik, Form, Field } from "formik"
 import * as Yup from "yup"
 
 import config from '../../config'
-import SelectTags from "./SelectTags"
+import SelectTags from "../widget/SelectTags"
 
 const EntrezBasic = props => {
   return (
     <div className={classNames("panel panel-default", props.classNames.root)}>
       <div className="panel-body">
         <Form>
-          <div className="row">
-            <div className="col-xs-3">
-              <label>Email</label>
-            </div>
-            <div className="col-xs-6">
+            <label>Email</label>
+	  <div className="row">
+            <div className="col-xs-8">
               <Field type="email" name="email" />
             </div>
-            <div className="col-xs-3">
+            <div className="col-xs-4">
               {props.touched.email &&
                 props.errors.email && <small>{props.errors.email}</small>}
             </div>
-          </div>
-
-          <div className="row">
-            <div className="col-xs-6">
+	  </div>
               <label>Tool Name</label>
-            </div>
-            <div className="col-xs-6">
+          <div className="row">
+            <div className="col-xs-8">
               <Field type="text" name="toolName" />
             </div>
           </div>
-
-          <div className="row">
-            <div className="col-xs-6">
               <label>API KEY</label>
-            </div>
-            <div className="col-xs-6">
+          <div className="row">
+            <div className="col-xs-8">
               <Field type="text" name="api_key" />
             </div>
           </div>
@@ -64,11 +56,11 @@ const EntrezBasic = props => {
             error={props.errors.terms}
             touched={props.touched.terms}
           />
-          <div className="col-xs-3">
-            {props.touched.terms &&
-              props.errors.terms && <small>{props.errors.terms}</small>}
-          </div>
-          <button disabled={props.isSubmitting}>Search</button>
+	  <div className="row">
+	  <div className="col-xs-3">
+	    <button disabled={props.isSubmitting}>Search</button>
+	  </div>
+	  </div>
         </Form>
       </div>
     </div>
@@ -89,7 +81,7 @@ const Entrez = withFormik({
       .required("Email is required!"),
     api_key: Yup.string(),
     name: Yup.string(),
-    database: Yup.string().required("This field is required!"),
+    database: Yup.string().nullable().required("This field is required!"),
     terms: Yup.string().required("This field is required!")
   }),
   handleSubmit(values, actions) {
@@ -103,8 +95,8 @@ const Entrez = withFormik({
       console.log(searchResults)
       actions.setSubmitting(false)
     }).catch((error) => {
-      	console.log(error)
-	actions.setSubmitting(false)
+      console.log(error)
+      actions.setSubmitting(false)
     })
   },
   displayName: "Entrez Form"
