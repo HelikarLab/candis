@@ -1,30 +1,30 @@
-import React from "react";
-import Select from "react-select";
-import "react-select/dist/react-select.css";
+import React from "react"
+import Select from "react-select"
+// import "react-select/dist/react-select.css"
 
 class SelectTags extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       multiValue: []
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
+    }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleBlur = this.handleBlur.bind(this)
   }
 
   handleChange(value) {
     // this will be used by Entrez Form to call setFieldValue and manually set
     // this.props.name to value.
-    this.props.onChange(this.props.name, value);
+    this.props.onChange(this.props.name, value)
   }
 
   handleBlur() {
     // this is going to call setFieldTouched and manually update touched.terms
-    this.props.onBlur(this.props.name, true);
+    this.props.onBlur(this.props.name, true)
   }
 
   render() {
-    const props = this.props;
+    const props = this.props
     return (
       <div>
         <div>
@@ -44,8 +44,8 @@ class SelectTags extends React.Component {
             </div>
           )}
       </div>
-    );
+    )
   }
 }
 
-export default SelectTags;
+export default SelectTags
