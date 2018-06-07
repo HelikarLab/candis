@@ -48,19 +48,19 @@ const EntrezBasic = props => {
           />
           <label>Terms (Enter Atleast 1)</label>
           <SelectTags
-            name={"terms"}
+            name={"term"}
             multi={true}
             onChange={props.setFieldValue}
             onBlur={props.setFieldTouched}
-            value={props.values.terms}
-            error={props.errors.terms}
-            touched={props.touched.terms}
+            value={props.values.term}
+            error={props.errors.term}
+            touched={props.touched.term}
           />
-	  <div className="row">
-	  <div className="col-xs-3">
-	    <button disabled={props.isSubmitting}>Search</button>
-	  </div>
-	  </div>
+          <div className="row">
+          <div className="col-xs-3">
+            <button disabled={props.isSubmitting}>Search</button>
+          </div>
+          </div>
         </Form>
       </div>
     </div>
@@ -68,7 +68,7 @@ const EntrezBasic = props => {
 }
 
 const Entrez = withFormik({
-  mapPropsToValues({ email, toolName, database, terms, useHistory, api_key }) {
+  mapPropsToValues({ email, toolName, database, term, useHistory, api_key }) {
     return {
       email: email || "",
       toolName: toolName || "",
@@ -82,22 +82,23 @@ const Entrez = withFormik({
     api_key: Yup.string(),
     name: Yup.string(),
     database: Yup.string().nullable().required("This field is required!"),
-    terms: Yup.string().required("This field is required!")
+    term: Yup.string().required("This field is required!")
   }),
   handleSubmit(values, actions) {
     const payload = {
       ...values,
       database: values.database.value,
-      terms: values.terms.map(t => t.value)
+      term: values.term.map(t => t.value)
     }
-    axios.post(config.routes.API.data.search, output).then(({data}) => {
-      searchResults = data.data
-      console.log(searchResults)
-      actions.setSubmitting(false)
-    }).catch((error) => {
-      console.log(error)
-      actions.setSubmitting(false)
-    })
+    // axios.post(config.routes.API.data.search, payload).then(({data}) => {
+    //   const searchResults = data.data
+    //   console.log(searchResults)
+    //   const rows = Object.values(searchResults)  // list of objects, with each object having keys, 'title', 'accession', and 'summary'
+    // }).catch((error) => {
+    //   console.log(error)
+    //   
+    // })
+    actions.setSubmitting(false)
   },
   displayName: "Entrez Form"
 })(EntrezBasic)
