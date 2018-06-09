@@ -1,0 +1,752 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should render MenuBar correctly 1`] = `
+ShallowWrapper {
+  "length": 1,
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <MenuBar
+    ID="axyu"
+    classNames={
+      Object {
+        "root": "menu-class",
+      }
+    }
+    fluid={false}
+    menus={
+      Array [
+        "wvhwhe",
+        "dfvsv",
+      ]
+    }
+    onClick={[MockFunction]}
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": <div
+        className="container"
+      >
+        <span>
+          <div
+            className="navbar-header"
+          >
+            <button
+              className="collpased navbar-toggle"
+              data-target="#menubar-axyu-collapse"
+              data-toggle="collapse"
+            >
+              <span
+                className="icon-bar"
+              />
+              <span
+                className="icon-bar"
+              />
+              <span
+                className="icon-bar"
+              />
+            </button>
+          </div>
+          <div
+            className="collapse navbar-collapse"
+            id="menubar-axyu-collapse"
+          >
+            <ul
+              className="nav navbar-nav"
+            >
+              <_class
+                0="w"
+                1="v"
+                2="h"
+                3="w"
+                4="h"
+                5="e"
+                onClick={[Function]}
+              />
+              <_class
+                0="d"
+                1="f"
+                2="v"
+                3="s"
+                4="v"
+                onClick={[Function]}
+              />
+            </ul>
+          </div>
+        </span>
+      </div>,
+      "className": "navbar navbar-default menu-class",
+      "id": "menubar-axyu",
+    },
+    "ref": null,
+    "rendered": Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <span>
+          <div
+            className="navbar-header"
+          >
+            <button
+              className="collpased navbar-toggle"
+              data-target="#menubar-axyu-collapse"
+              data-toggle="collapse"
+            >
+              <span
+                className="icon-bar"
+              />
+              <span
+                className="icon-bar"
+              />
+              <span
+                className="icon-bar"
+              />
+            </button>
+          </div>
+          <div
+            className="collapse navbar-collapse"
+            id="menubar-axyu-collapse"
+          >
+            <ul
+              className="nav navbar-nav"
+            >
+              <_class
+                0="w"
+                1="v"
+                2="h"
+                3="w"
+                4="h"
+                5="e"
+                onClick={[Function]}
+              />
+              <_class
+                0="d"
+                1="f"
+                2="v"
+                3="s"
+                4="v"
+                onClick={[Function]}
+              />
+            </ul>
+          </div>
+        </span>,
+        "className": "container",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": Array [
+            <div
+              className="navbar-header"
+            >
+              <button
+                className="collpased navbar-toggle"
+                data-target="#menubar-axyu-collapse"
+                data-toggle="collapse"
+              >
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+              </button>
+            </div>,
+            <div
+              className="collapse navbar-collapse"
+              id="menubar-axyu-collapse"
+            >
+              <ul
+                className="nav navbar-nav"
+              >
+                <_class
+                  0="w"
+                  1="v"
+                  2="h"
+                  3="w"
+                  4="h"
+                  5="e"
+                  onClick={[Function]}
+                />
+                <_class
+                  0="d"
+                  1="f"
+                  2="v"
+                  3="s"
+                  4="v"
+                  onClick={[Function]}
+                />
+              </ul>
+            </div>,
+          ],
+        },
+        "ref": null,
+        "rendered": Array [
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <button
+                className="collpased navbar-toggle"
+                data-target="#menubar-axyu-collapse"
+                data-toggle="collapse"
+              >
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+              </button>,
+              "className": "navbar-header",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <span
+                    className="icon-bar"
+                  />,
+                  <span
+                    className="icon-bar"
+                  />,
+                  <span
+                    className="icon-bar"
+                  />,
+                ],
+                "className": "collpased navbar-toggle",
+                "data-target": "#menubar-axyu-collapse",
+                "data-toggle": "collapse",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "className": "icon-bar",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "className": "icon-bar",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "className": "icon-bar",
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": "span",
+                },
+              ],
+              "type": "button",
+            },
+            "type": "div",
+          },
+          Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "host",
+            "props": Object {
+              "children": <ul
+                className="nav navbar-nav"
+              >
+                <_class
+                  0="w"
+                  1="v"
+                  2="h"
+                  3="w"
+                  4="h"
+                  5="e"
+                  onClick={[Function]}
+                />
+                <_class
+                  0="d"
+                  1="f"
+                  2="v"
+                  3="s"
+                  4="v"
+                  onClick={[Function]}
+                />
+              </ul>,
+              "className": "collapse navbar-collapse",
+              "id": "menubar-axyu-collapse",
+            },
+            "ref": null,
+            "rendered": Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": Array [
+                  <_class
+                    0="w"
+                    1="v"
+                    2="h"
+                    3="w"
+                    4="h"
+                    5="e"
+                    onClick={[Function]}
+                  />,
+                  <_class
+                    0="d"
+                    1="f"
+                    2="v"
+                    3="s"
+                    4="v"
+                    onClick={[Function]}
+                  />,
+                ],
+                "className": "nav navbar-nav",
+              },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": "0",
+                  "nodeType": "class",
+                  "props": Object {
+                    "0": "w",
+                    "1": "v",
+                    "2": "h",
+                    "3": "w",
+                    "4": "h",
+                    "5": "e",
+                    "onClick": [Function],
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+                Object {
+                  "instance": null,
+                  "key": "1",
+                  "nodeType": "class",
+                  "props": Object {
+                    "0": "d",
+                    "1": "f",
+                    "2": "v",
+                    "3": "s",
+                    "4": "v",
+                    "onClick": [Function],
+                  },
+                  "ref": null,
+                  "rendered": null,
+                  "type": [Function],
+                },
+              ],
+              "type": "ul",
+            },
+            "type": "div",
+          },
+        ],
+        "type": "span",
+      },
+      "type": "div",
+    },
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": <div
+          className="container"
+        >
+          <span>
+            <div
+              className="navbar-header"
+            >
+              <button
+                className="collpased navbar-toggle"
+                data-target="#menubar-axyu-collapse"
+                data-toggle="collapse"
+              >
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+              </button>
+            </div>
+            <div
+              className="collapse navbar-collapse"
+              id="menubar-axyu-collapse"
+            >
+              <ul
+                className="nav navbar-nav"
+              >
+                <_class
+                  0="w"
+                  1="v"
+                  2="h"
+                  3="w"
+                  4="h"
+                  5="e"
+                  onClick={[Function]}
+                />
+                <_class
+                  0="d"
+                  1="f"
+                  2="v"
+                  3="s"
+                  4="v"
+                  onClick={[Function]}
+                />
+              </ul>
+            </div>
+          </span>
+        </div>,
+        "className": "navbar navbar-default menu-class",
+        "id": "menubar-axyu",
+      },
+      "ref": null,
+      "rendered": Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <span>
+            <div
+              className="navbar-header"
+            >
+              <button
+                className="collpased navbar-toggle"
+                data-target="#menubar-axyu-collapse"
+                data-toggle="collapse"
+              >
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+                <span
+                  className="icon-bar"
+                />
+              </button>
+            </div>
+            <div
+              className="collapse navbar-collapse"
+              id="menubar-axyu-collapse"
+            >
+              <ul
+                className="nav navbar-nav"
+              >
+                <_class
+                  0="w"
+                  1="v"
+                  2="h"
+                  3="w"
+                  4="h"
+                  5="e"
+                  onClick={[Function]}
+                />
+                <_class
+                  0="d"
+                  1="f"
+                  2="v"
+                  3="s"
+                  4="v"
+                  onClick={[Function]}
+                />
+              </ul>
+            </div>
+          </span>,
+          "className": "container",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": Array [
+              <div
+                className="navbar-header"
+              >
+                <button
+                  className="collpased navbar-toggle"
+                  data-target="#menubar-axyu-collapse"
+                  data-toggle="collapse"
+                >
+                  <span
+                    className="icon-bar"
+                  />
+                  <span
+                    className="icon-bar"
+                  />
+                  <span
+                    className="icon-bar"
+                  />
+                </button>
+              </div>,
+              <div
+                className="collapse navbar-collapse"
+                id="menubar-axyu-collapse"
+              >
+                <ul
+                  className="nav navbar-nav"
+                >
+                  <_class
+                    0="w"
+                    1="v"
+                    2="h"
+                    3="w"
+                    4="h"
+                    5="e"
+                    onClick={[Function]}
+                  />
+                  <_class
+                    0="d"
+                    1="f"
+                    2="v"
+                    3="s"
+                    4="v"
+                    onClick={[Function]}
+                  />
+                </ul>
+              </div>,
+            ],
+          },
+          "ref": null,
+          "rendered": Array [
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <button
+                  className="collpased navbar-toggle"
+                  data-target="#menubar-axyu-collapse"
+                  data-toggle="collapse"
+                >
+                  <span
+                    className="icon-bar"
+                  />
+                  <span
+                    className="icon-bar"
+                  />
+                  <span
+                    className="icon-bar"
+                  />
+                </button>,
+                "className": "navbar-header",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <span
+                      className="icon-bar"
+                    />,
+                    <span
+                      className="icon-bar"
+                    />,
+                    <span
+                      className="icon-bar"
+                    />,
+                  ],
+                  "className": "collpased navbar-toggle",
+                  "data-target": "#menubar-axyu-collapse",
+                  "data-toggle": "collapse",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "className": "icon-bar",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "span",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "className": "icon-bar",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "span",
+                  },
+                  Object {
+                    "instance": null,
+                    "key": undefined,
+                    "nodeType": "host",
+                    "props": Object {
+                      "className": "icon-bar",
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": "span",
+                  },
+                ],
+                "type": "button",
+              },
+              "type": "div",
+            },
+            Object {
+              "instance": null,
+              "key": undefined,
+              "nodeType": "host",
+              "props": Object {
+                "children": <ul
+                  className="nav navbar-nav"
+                >
+                  <_class
+                    0="w"
+                    1="v"
+                    2="h"
+                    3="w"
+                    4="h"
+                    5="e"
+                    onClick={[Function]}
+                  />
+                  <_class
+                    0="d"
+                    1="f"
+                    2="v"
+                    3="s"
+                    4="v"
+                    onClick={[Function]}
+                  />
+                </ul>,
+                "className": "collapse navbar-collapse",
+                "id": "menubar-axyu-collapse",
+              },
+              "ref": null,
+              "rendered": Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <_class
+                      0="w"
+                      1="v"
+                      2="h"
+                      3="w"
+                      4="h"
+                      5="e"
+                      onClick={[Function]}
+                    />,
+                    <_class
+                      0="d"
+                      1="f"
+                      2="v"
+                      3="s"
+                      4="v"
+                      onClick={[Function]}
+                    />,
+                  ],
+                  "className": "nav navbar-nav",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": "0",
+                    "nodeType": "class",
+                    "props": Object {
+                      "0": "w",
+                      "1": "v",
+                      "2": "h",
+                      "3": "w",
+                      "4": "h",
+                      "5": "e",
+                      "onClick": [Function],
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": "1",
+                    "nodeType": "class",
+                    "props": Object {
+                      "0": "d",
+                      "1": "f",
+                      "2": "v",
+                      "3": "s",
+                      "4": "v",
+                      "onClick": [Function],
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "ul",
+              },
+              "type": "div",
+            },
+          ],
+          "type": "span",
+        },
+        "type": "div",
+      },
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+      },
+    },
+  },
+}
+`;

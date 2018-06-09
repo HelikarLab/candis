@@ -2256,17 +2256,17 @@ entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-enzyme-adapter-preact@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-preact/-/enzyme-adapter-preact-0.2.0.tgz#5d982d07d62db1d1ebe462a86776c4ba3955b0b3"
+enzyme-adapter-react-16@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.1.1.tgz#a8f4278b47e082fbca14f5bfb1ee50ee650717b4"
   dependencies:
     enzyme-adapter-utils "^1.3.0"
+    lodash "^4.17.4"
+    object.assign "^4.0.4"
     object.values "^1.0.4"
-    preact-compat "^3.18.0"
-    preact-render-to-string "^3.7.0"
-    proptypes "^1.1.0"
-    react "^16.2.0"
-    react-test-renderer "^16.2.0"
+    prop-types "^15.6.0"
+    react-reconciler "^0.7.0"
+    react-test-renderer "^16.0.0-0"
 
 enzyme-adapter-utils@^1.3.0:
   version "1.3.0"
@@ -2276,7 +2276,7 @@ enzyme-adapter-utils@^1.3.0:
     object.assign "^4.0.4"
     prop-types "^15.6.0"
 
-enzyme@^3.3.0:
+enzyme@3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.3.0.tgz#0971abd167f2d4bf3f5bd508229e1c4b6dc50479"
   dependencies:
@@ -5694,19 +5694,9 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
 
-preact-compat@^3.16.0, preact-compat@^3.17.0:
+preact-compat@^3.16.0:
   version "3.17.0"
   resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.17.0.tgz#528cfdfc301190c1a0f47567336be1f4be0266b3"
-  dependencies:
-    immutability-helper "^2.1.2"
-    preact-render-to-string "^3.6.0"
-    preact-transition-group "^1.1.0"
-    prop-types "^15.5.8"
-    standalone-react-addons-pure-render-mixin "^0.1.1"
-
-preact-compat@^3.18.0:
-  version "3.18.0"
-  resolved "https://registry.yarnpkg.com/preact-compat/-/preact-compat-3.18.0.tgz#ca430cc1f67193fb9feaf7c510832957b2ebe701"
   dependencies:
     immutability-helper "^2.1.2"
     preact-render-to-string "^3.6.0"
@@ -5726,7 +5716,7 @@ preact-markup@^1.6.0:
   optionalDependencies:
     preact "^5.6.0"
 
-preact-render-to-string@^3.6.0, preact-render-to-string@^3.7.0:
+preact-render-to-string@^3.6.0:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/preact-render-to-string/-/preact-render-to-string-3.7.0.tgz#7db4177454bc01395e0d01d6ac07bc5e838e31ee"
   dependencies:
@@ -5806,10 +5796,6 @@ prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8,
     fbjs "^0.8.16"
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
-
-proptypes@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/proptypes/-/proptypes-1.1.0.tgz#78b3828a5aa6bb1308939e0de3c6044dfd4bd239"
 
 proto-list@~1.2.1:
   version "1.2.4"
@@ -5973,7 +5959,7 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-data-grid-addons@^4.0.8:
+react-data-grid-addons@^4.0.7:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-4.0.8.tgz#a2b2b8803942fab78edac5f65f4964f24024d11b"
   dependencies:
@@ -6016,15 +6002,24 @@ react-input-autosize@^2.1.2:
   dependencies:
     prop-types "^15.5.8"
 
-react-is@^16.4.0:
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.0.tgz#cc9fdc855ac34d2e7d9d2eb7059bbc240d35ffcf"
+react-is@^16.4.1:
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.4.1.tgz#d624c4650d2c65dbd52c72622bbf389435d9776e"
 
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-3.0.0-alpha.1.tgz#4400426bcfa80caa6724c7755695315209fa4b07"
   dependencies:
     lodash "^4.6.1"
+
+react-reconciler@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.7.0.tgz#9614894103e5f138deeeb5eabaf3ee80eb1d026d"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
 
 react-redux@^5.0.6:
   version "5.0.6"
@@ -6077,23 +6072,14 @@ react-sortable-hoc@^0.6.8:
     lodash "^4.12.0"
     prop-types "^15.5.7"
 
-react-test-renderer@^16.2.0:
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.4.0.tgz#0dbe0e24263e94e1830c7afb1f403707fad313a3"
+react-test-renderer@^16.0.0-0:
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.4.1.tgz#f2fb30c2c7b517db6e5b10ed20bb6b0a7ccd8d70"
   dependencies:
     fbjs "^0.8.16"
     object-assign "^4.1.1"
     prop-types "^15.6.0"
-    react-is "^16.4.0"
-
-react@^16.2.0:
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.4.0.tgz#402c2db83335336fba1962c08b98c6272617d585"
-  dependencies:
-    fbjs "^0.8.16"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
+    react-is "^16.4.1"
 
 react@^16.4.1:
   version "16.4.1"

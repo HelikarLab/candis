@@ -8,7 +8,7 @@ import pipeline from '../../action/PipelineAction'
 import ActionType from '../../constant/ActionType'
 import dokuments, {newDoc} from '../fixtures/documents'
 
-const {name} = newDoc.output  // take out name of the pipelien to be deleted from an active dokument.
+const {name} = newDoc.output  // take out name of the pipeline to be deleted from an active dokument.
 const createMockStore = configureMockStore([thunk])
 const mock = new MockAdapter(axios)
 
