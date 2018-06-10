@@ -27,7 +27,7 @@ class SelectTags extends React.Component {
     const props = this.props
     return (
       <div>
-        <div>
+        <div className="row">
           <Select.Creatable
             multi={props.multi}
             options={props.options}
@@ -37,9 +37,9 @@ class SelectTags extends React.Component {
             error={props.error}
           />
         </div>
-        {!!props.error &&
-          props.touched && (
-            <div style={{ color: "red", marginTop: ".5rem" }}>
+        {props.touched  &&
+          !!props.error && (
+            <div style={{ color: "red", marginTop: ".5rem", marginBottom: ".5rem" }}>
               {props.error}
             </div>
           )}

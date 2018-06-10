@@ -10,32 +10,39 @@ import SelectTags from "../widget/SelectTags"
 
 const EntrezBasic = props => {
   return (
-    <div className={classNames("panel panel-default", props.classNames.root)}>
-      <div className="panel-body">
+      <div className={classNames("container", props.classNames.root)}>
         <Form>
-            <label>Email</label>
-	  <div className="row">
-            <div className="col-xs-8">
-              <Field type="email" name="email" />
-            </div>
-            <div className="col-xs-4">
+            
+          <label>Email</label>
+          <div className="row">
+              <div className="col-xs-12">
+                <Field type="email" name="email" />
+              </div>
+
               {props.touched.email &&
-                props.errors.email && <small>{props.errors.email}</small>}
-            </div>
-	  </div>
-              <label>Tool Name</label>
+                props.errors.email && (
+                  <div style={{ color: "red", marginTop: ".5rem", marginBottom: ".5rem" }}>
+                    {props.errors.email}
+                  </div>
+                )}
+          </div>
+          
+
+          <label>Tool Name</label>
           <div className="row">
             <div className="col-xs-8">
               <Field type="text" name="toolName" />
             </div>
           </div>
-              <label>API KEY</label>
+            
+          <label>API KEY</label>
           <div className="row">
             <div className="col-xs-8">
               <Field type="text" name="api_key" />
             </div>
           </div>
-          <label>Database (Select 1)</label>
+
+          <label>Database (Select 1)</label> 
           <SelectTags
             name={"database"}
             multi={false}
@@ -46,6 +53,7 @@ const EntrezBasic = props => {
             error={props.errors.database}
             touched={props.touched.database}
           />
+
           <label>Terms (Enter Atleast 1)</label>
           <SelectTags
             name={"term"}
@@ -56,14 +64,17 @@ const EntrezBasic = props => {
             error={props.errors.term}
             touched={props.touched.term}
           />
+          
           <div className="row">
-          <div className="col-xs-3">
-            <button disabled={props.isSubmitting}>Search</button>
+            <div className="col-xs-3">
+              <button disabled={props.isSubmitting} class="btn btn-primary">
+                Search
+              </button>
+            </div>
           </div>
-          </div>
+
         </Form>
       </div>
-    </div>
   )
 }
 
