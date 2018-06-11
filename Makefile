@@ -16,8 +16,8 @@ VIRTUALENV   = $(VIRTUAL_ENV)
 # PIP         ?= $(PYBINARIES)/pip
 
 PYBINARIES   = $(VIRTUALENV)/bin
-PYTHON       = $(PYBINARIES)/python3
-PIP          = $(PYBINARIES)/pip3
+PYTHON       = $(PYBINARIES)/python
+PIP          = $(PYBINARIES)/pip
 IPYTHON      = $(PYBINARIES)/ipython
 HONCHO       = $(PYBINARIES)/honcho
 PYTEST       = $(PYBINARIES)/pytest
