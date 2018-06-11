@@ -1,5 +1,5 @@
 <!-- Thank you so much for contributing! We're glad to have you onboard :) -->
-<!-- Please help us understand you contribution better with these details -->
+<!-- Please help us understand your contribution better with these details -->
 
 ###### Explanation About What Code Achieves:
 <!-- Please explain why this code is necessary / what it does -->
