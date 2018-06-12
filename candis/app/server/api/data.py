@@ -253,11 +253,11 @@ def search():
     for key in list(summary_results.keys()):
         if key == 'uids':
             del summary_results[key]
-            continue
-        x = [summary_results[key][i] for i in fields]
-        x = dict(zip(fields, x))
-        summary_results[key].clear()
-        summary_results[key].update(x)
+        else:
+            x = [summary_results[key][i] for i in fields]
+            x = dict(zip(fields, x))
+            summary_results[key].clear()
+            summary_results[key].update(x)
 
     response.set_data(summary_results)
     dict_ = response.to_dict()
@@ -289,10 +289,9 @@ def download():
     links = []
     series_accession_list = []
     for key, value in results.items():
-        if key == 'uids':
-            continue
-        links.append(value.get('ftplink'))
-        series_accession_list.append(value.get('accession'))
+        if key != 'uids':
+            links.append(value.get('ftplink'))
+            series_accession_list.append(value.get('accession'))
 
     geo = geo_API(path = parameters.path)
     download_path = geo.raw_data(links[0], series_accession_list[0])

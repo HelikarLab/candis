@@ -5,6 +5,7 @@ import os
 # imports - third-party imports
 import requests
 from urllib.parse import urlencode
+from redis import ResponseError
 
 # imports - module imports
 from candis.util import assign_if_none
@@ -68,7 +69,7 @@ class API(object):
             # fetch complete databases from cached memory using redis server
             try:
                 self.databases = self.redis.redis.lrange('databases', 0, -1)
-            except redis.ResponseError:
+            except ResponseError:
                 # exception caught is custom ResponseError of redis.
                 # TODO: instead of raising exception, give a warning or use logging.captureWarning or log INFO
                 print('redis key "databases" must be a list, refreshing cache.')
