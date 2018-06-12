@@ -5,12 +5,13 @@ import os
 # imports - third-party imports
 import requests
 from urllib.parse import urlencode
-import redis  # must have a redis-server running to use this module.
 
 # imports - module imports
 from candis.util import assign_if_none
 from candis.data import entrez
 from candis.util import validate_email
+from candis.config import CONFIG
+from candis.manager import Redis
 
 def sanitize_response(response, type_ = 'json'):
     if type_ == 'json':
@@ -43,11 +44,9 @@ def params_dict2string(params):
 
 # TODO: Should we cache each response?
 class API(object):
-    # TODO: Assign CONFIG.NAME to NAME
-    NAME = 'candis'
-
+    
     def __init__(self, email, name = None, api_key = None):
-        self.redis = self._create_redis_instance()
+        self.redis = Redis()
         self.time  = 0
         if validate_email(email):
             self.email = email
@@ -60,15 +59,15 @@ class API(object):
         # TODO: Maybe try saving base parameters as environment variables?
 
         self.email      = email
-        self.name       = assign_if_none(name, 'candis')#Client.NAME)
+        self.name       = assign_if_none(name, CONFIG.NAME)
         self.api_key    = api_key
 
         # TODO: Should we cache databases? - using Redis, yes!
         # checks if redis has cached 'databases'
-        if self._check_redis_server() and self.redis.exists('databases'):
+        if self.redis.check_redis_server() and self.redis.if_exists('databases'):
             # fetch complete databases from cached memory using redis server
             try:
-                self.databases = self.redis.lrange('databases', 0, -1)
+                self.databases = self.redis.redis.lrange('databases', 0, -1)
             except redis.ResponseError:
                 # exception caught is custom ResponseError of redis.
                 # TODO: instead of raising exception, give a warning or use logging.captureWarning or log INFO
@@ -85,28 +84,17 @@ class API(object):
 
         return params
 
-    def _create_redis_instance(self):
-        # TODO: to parse .env files, use python-dotenv or envparse? and for defaults use config file?
-        # initialize redis client instance.
-        r = redis.StrictRedis(host = os.getenv('REDIS_HOST', 'localhost'), port = os.getenv('REDIS_PORT', 6379), db = os.getenv('REDIS_DB_INDEX', 0), decode_responses=True)
-        return r
-
     def _throttle(self):
         # checks limit for calling entrez API.
         diff = time.time() - self.time
         if self.api_key:
             if diff <= 0.1:
-                time.sleep(diff)
+                print("Limit exceeded! to call NCBI")
+                # time.sleep(diff) - alternative can be threading.Timer() which create a seperate thread.
         else:
             if diff <= 0.33:
-                time.sleep(diff)
-
-    def _check_redis_server(self):
-        try:
-            self.redis.ping()
-            return True
-        except redis.ConnectionError:
-            return False
+                # time.sleep(diff)
+                print("Limit exceeded! to call NCBI")
 
     def request(self, method, url, parameters = None, *args, **kwargs):
         parameters = assign_if_none(parameters, dict())
@@ -141,9 +129,9 @@ class API(object):
             data           = self.request('get', entrez.const.URL.INFO)
             # Clean response
             self.databases = data['dblist']
-            if self._check_redis_server():
-                self.redis.delete('databases')
-                self.redis.lpush('databases', *self.databases)  # cached list of databases is refreshed now
+            if self.redis.check_redis_server():
+                self.redis.redis.delete('databases')
+                self.redis.redis.lpush('databases', *self.databases)  # cached list of databases is refreshed now
 
         returns = self.databases
 
