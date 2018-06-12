@@ -1,6 +1,7 @@
 # imports - standard imports
 import os
 import json
+import time
 
 # imports - third-party imports
 from flask import request, jsonify
@@ -16,6 +17,8 @@ from candis.ios                 import cdata, pipeline
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
+from candis.data.entrez import API
+from candis.data.GEO import API as geo_API
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -230,4 +233,74 @@ def delete():
     code = response.code
 
     return json_, code
+
+@app.route(CONFIG.App.Routes.API.Data.SEARCH, methods = ['GET', 'POST'])
+def search():
+    response = Response()
+    parameters = addict.Dict(request.get_json())
+    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name'
+    
+    entrez = API(parameters.email, parameters.name, parameters.api_key)
+    search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
+    q_key  = search_results['querykey']
+    webenv = search_results['webenv']
+    summary_results = entrez.summary(parameters.db, None, WebEnv=webenv, query_key=q_key, retmax=20)
+    if isinstance(summary_results, list):
+        # use 200 status code for 'No Content' instead of 204.
+        # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ
+        return jsonify(response.to_dict()), response.code
+    fields = ['title', 'accession', 'summary']
+    for key in list(summary_results.keys()):
+        if key == 'uids':
+            del summary_results[key]
+        else:
+            x = [summary_results[key][i] for i in fields]
+            x = dict(zip(fields, x))
+            summary_results[key].clear()
+            summary_results[key].update(x)
+
+    response.set_data(summary_results)
+    dict_ = response.to_dict()
+    json_ = jsonify(dict_)
+    code = response.code
+
+    return json_, code
+
+@app.route(CONFIG.App.Routes.API.Data.DOWNLOAD, methods = ['POST'])
+def download():
+    response = Response()
+    parameters = addict.Dict(request.get_json())
+    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'accession', 'path'
+    
+    entrez = API(parameters.email, parameters.name, parameters.api_key)
+    accession = parameters.accession
+    
+    search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
+    q_key  = search_result['querykey']
+    webenv = search_result['webenv']
+    
+    
+    results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
+    if isinstance(results, list):
+        # use 200 status code for 'No Content' instead of 204.
+        # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ
+        return jsonify(response.to_dict()), response.code
+
+    links = []
+    series_accession_list = []
+    for key, value in results.items():
+        if key != 'uids':
+            links.append(value.get('ftplink'))
+            series_accession_list.append(value.get('accession'))
+
+    geo = geo_API(path = parameters.path)
+    download_path = geo.raw_data(links[0], series_accession_list[0])
+    
+    response.set_data(download_path)
+    dict_ = response.to_dict()
+    json_ = jsonify(dict_)
+    code = response.code
+    
+    return  json_, code
+
 
