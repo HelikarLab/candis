@@ -10,3 +10,6 @@ from candis.util.util import (
 	get_b64_plot,
 	buffer_to_b64
 )
+
+from candis.util.validate import validate_email
+

@@ -10,6 +10,7 @@ import redis  # must have a redis-server running to use this module.
 # imports - module imports
 from candis.util import assign_if_none
 from candis.data import entrez
+from candis.util import validate_email
 
 def sanitize_response(response, type_ = 'json'):
     if type_ == 'json':
@@ -48,13 +49,8 @@ class API(object):
     def __init__(self, email, name = None, api_key = None):
         self.redis = self._create_redis_instance()
         self.time  = 0
-        if isinstance(email, str):
-            if re.match(r"^[0-9a-z-]+(\.[0-9a-z-])*@[0-9a-z-]+(\.[0-9a-z-]+)*(\.[a-z]{2,4})$", email):
-                self.email = email
-            else:
-                raise ValueError("Email is incorrect")
-        else:
-            raise TypeError('Email should be a string')
+        if validate_email(email):
+            self.email = email
 
         if not isinstance(name, str):
             raise TypeError('name should be a string')
