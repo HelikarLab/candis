@@ -9,7 +9,7 @@ from redis import ResponseError
 
 # imports - module imports
 from candis.util import assign_if_none
-from candis.data import entrez
+from candis.data.entrez.const import URL
 from candis.util import validate_email
 from candis.config import CONFIG
 from candis.manager import Redis
@@ -126,7 +126,7 @@ class API(object):
         # Check if we haven't cached database list
         if refresh_cache:
             # GET is do-able
-            data           = self.request('get', entrez.const.URL.INFO)
+            data           = self.request('get', URL.INFO)
             # Clean response
             self.databases = data['dblist']
             if self.redis.check_redis_server():
@@ -139,7 +139,7 @@ class API(object):
         if db:
             if db in self.databases:
                 # Passed conditions, get info
-                data      = self.request('get', entrez.const.URL.INFO, { 'db': db })
+                data      = self.request('get', URL.INFO, { 'db': db })
                 returns   = data['dbinfo']
             else:
                 raise ValueError('database should be from : {}'.format(self.databases))
@@ -152,13 +152,13 @@ class API(object):
         # neglect term parameter if query_key present
         if(optional.get('query_key') and optional.get('WebEnv')):
             optional.update({'db': db})
-            data = self.request('get', entrez.const.URL.SEARCH, optional)
+            data = self.request('get', URL.SEARCH, optional)
             return data
 
         term = sanitize_term(term)
         params = dict({ 'db': db, 'term': term })
         params.update(optional)
-        data = self.request('get', entrez.const.URL.SEARCH, params)
+        data = self.request('get', URL.SEARCH, params)
         
         return data
 
@@ -169,10 +169,10 @@ class API(object):
                 raise ValueError('database should be from : {}'.format(self.databases))            
             # print("Using WebEnv and query_key") - TODO: Use logging instead
             optional.update({'db': db})
-            data = self.request('get', entrez.const.URL.SUMMARY, optional)
+            data = self.request('get', URL.SUMMARY, optional)
             return data
 
         params = dict({ 'db': db, 'id': id})
         params.update(optional)
-        data = self.request('get', entrez.const.URL.SUMMARY, params)
+        data = self.request('get', URL.SUMMARY, params)
         return data
