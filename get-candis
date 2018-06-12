@@ -11,9 +11,12 @@ import subprocess
 import logging
 from distutils.spawn import find_executable
 
-logging.basicConfig()
-log = logging.getLogger('get-candis')
-log.setLevel(logging.DEBUG)
+logging.basicConfig(
+        level=logging.DEBUG,
+        format= '[%(asctime)s] {%(pathname)s:%(lineno)d - %(funcName)s} %(levelname)s - %(message)s',
+        datefmt='%H:%M:%S',
+        handlers=[logging.FileHandler("candis.log")])
+log = logging.getLogger(__name__)
 
 class const(object):
     LOGO_ASCII                 = \
@@ -46,6 +49,7 @@ def which(executable, raise_err = False):
     path = find_executable(executable)
 
     if not path and raise_err:
+        log.error('% not found {}'.format(executable))
         raise ValueError('{executable} not found.'.format(
             executable = executable
         ))
@@ -58,6 +62,7 @@ def popen(*params, **kwargs):
     environment = kwargs.get('env')
     shell       = kwargs.get('shell', True)
     raise_err   = kwargs.get('raise_err', True)
+    log.debug('raise_err parameter is set to {}'.format(raise_err))
 
     environ     = os.environ.copy()
     if environment:
@@ -77,6 +82,7 @@ def popen(*params, **kwargs):
     code       = proc.wait()
 
     if code and raise_err:
+        log.error("failed command: {}".format(command))
         raise subprocess.CalledProcessError(code, command)
 
     if output:
@@ -107,7 +113,8 @@ def check_git_dir(dirpath, raise_err = True):
         return True
     else:
         if raise_err:
-            raise ValueError('{path} not a valid git repository.'.format(
+            log.error("{} is not a valid git repository".format(dirpath))
+            raise ValueError('{path} is not a valid git repository.'.format(
                 path = dirpath
             ))
         else:
@@ -119,6 +126,7 @@ def get_aptget():
 
         return aptget
     except ValueError as e:
+        log.error("Installation error: {}. Please have it installed manually".format(str(e))
         raise ValueError('{error} Please have it installed manually.'.format(error = str(e)))
 
 def get_homebrew(doctor = False):
@@ -133,6 +141,7 @@ def get_homebrew(doctor = False):
 
             brew = which('brew', raise_err = True)
         except ValueError as e:
+            log.error("Installation error: {}. Please have it installed manually".format(str(e))
             raise ValueError('{error} Please have it installed manually.'.format(error = str(e)))
 
     if doctor:
@@ -254,9 +263,11 @@ def get_argument_parser():
 def main(args = None):
     parser = get_argument_parser()
     args   = parser.parse_args(args)
+    log.info("Started Executing")
 
     code   = setup_candis(args)
 
+    log.info("Terminated")
     sys.exit(code)
 
 if __name__ == '__main__':
