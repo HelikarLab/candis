@@ -86,16 +86,15 @@ class API(object):
         return params
 
     def _throttle(self):
+        # to be implemented.
         # checks limit for calling entrez API.
         diff = time.time() - self.time
         if self.api_key:
             if diff <= 0.1:
-                print("Limit exceeded! to call NCBI")
-                # time.sleep(diff) - alternative can be threading.Timer() which create a seperate thread.
+                time.sleep(diff) # - to be removed.
         else:
             if diff <= 0.33:
-                # time.sleep(diff)
-                print("Limit exceeded! to call NCBI")
+                time.sleep(diff)  # - to be removed.
 
     def request(self, method, url, parameters = None, *args, **kwargs):
         parameters = assign_if_none(parameters, dict())
@@ -107,7 +106,7 @@ class API(object):
         
         self._throttle()
         response = requests.request(method, url, params = parameter_string, *args, **kwargs)
-        print("self.time {}".format(self.time))
+        # print("self.time {}".format(self.time)) - log instead.
         self.time = time.time()
         
         if response.ok:
@@ -177,5 +176,3 @@ class API(object):
         params.update(optional)
         data = self.request('get', entrez.const.URL.SUMMARY, params)
         return data
-
-
