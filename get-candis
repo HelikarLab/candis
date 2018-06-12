@@ -126,7 +126,7 @@ def get_aptget():
 
         return aptget
     except ValueError as e:
-        log.error("Installation error: {}. Please have it installed manually".format(str(e))
+        log.error("Installation error: {}. Please have it installed manually".format(str(e)))
         raise ValueError('{error} Please have it installed manually.'.format(error = str(e)))
 
 def get_homebrew(doctor = False):
@@ -141,7 +141,7 @@ def get_homebrew(doctor = False):
 
             brew = which('brew', raise_err = True)
         except ValueError as e:
-            log.error("Installation error: {}. Please have it installed manually".format(str(e))
+            log.error("Installation error: {}. Please have it installed manually".format(str(e)))
             raise ValueError('{error} Please have it installed manually.'.format(error = str(e)))
 
     if doctor:
