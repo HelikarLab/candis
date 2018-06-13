@@ -119,7 +119,7 @@ const stage =
           code: code,
           data: dokument.data
         },
-        type: 'REMOVE_NODE'
+        type: ActionType.Pipeline.REMOVE_STAGE
       }
       dispatch(action)
 

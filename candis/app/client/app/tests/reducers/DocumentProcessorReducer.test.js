@@ -112,7 +112,7 @@ test('should remove node from state.documents and stata.active', () => {
     const state = documentProcessor(
         dokuments,    
         {
-            type: 'REMOVE_NODE',
+            type: ActionType.Pipeline.REMOVE_STAGE,
             payload: {
                 data,
                 code

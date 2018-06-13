@@ -191,7 +191,7 @@ const documentProcessor   = (state = initial, action) => {
       return {...state, nodes: nodes, errors: [ ] }
     } 
 
-    case 'REMOVE_NODE':
+    case ActionType.Pipeline.REMOVE_STAGE:
     {
       const payload = action.payload
       
