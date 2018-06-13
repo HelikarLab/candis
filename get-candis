@@ -217,6 +217,9 @@ def setup_candis(args = None):
             popen('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -')
             popen('echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
             popen('sudo apt-get update && sudo apt-get install yarn')
+
+            # Set environment variable.
+            popen('export', 'REDIS_PORT=6380')
             
             # Auto Agree License.
             popen('echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections')
