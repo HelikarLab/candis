@@ -181,6 +181,27 @@ class CData(object):
 
             os.remove(name)
 
+    def toPandas(self, path):
+        '''Converts a ARFF file into Pandas dataframe.
+        '''
+        try:
+            # load an ARFF file
+            arff_file = arff.load(open(path, 'r'))
+        except Exception as e:
+            raise ValueError('Not an ARFF file.')
+        attrs = arff_file['attributes']
+        attrs_t = []
+        for attr in attrs:
+            if isinstance(attr[1], list):
+                # list for the possible values of the column
+                attrs_t.append("{}@[{}]".format(attr[0], ', '.join(attr[1])))
+            else:
+                # this indicates type of values/data-points in a column.
+                attrs_t.append("{}@{}".format(attr[0], attr[1]))
+        # TODO: To make the dataframe memory efficient.
+        df = pd.DataFrame(data=arff_file['data'], columns=attrs_t)
+        return df
+
     def to_dict(self):
         data       = self.data.copy()
 
