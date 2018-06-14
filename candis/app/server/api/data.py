@@ -242,11 +242,11 @@ def delete():
 def search():
     response = Response()
     parameters = addict.Dict(request.get_json())
-    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name'
+    # TODO: type check of parameters, currently, parameters must have 'database', 'email', 'toolName'
     i = 0
     while True:
         try:
-            entrez = API(parameters.email, parameters.name, parameters.api_key)
+            entrez = API(parameters.email, parameters.toolName, parameters.api_key)
             break
         except Timeout:
             i += 1
@@ -254,7 +254,7 @@ def search():
 
     while True:
         try:
-            search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
+            search_results = entrez.search(parameters.database, parameters.term, usehistory='y')
             break
         except Timeout:
             i += 1
@@ -265,7 +265,7 @@ def search():
     i = 0
     while True:
         try:
-            summary_results = entrez.summary(parameters.db, None, WebEnv=webenv, query_key=q_key, retmax=20)
+            summary_results = entrez.summary(parameters.database, None, WebEnv=webenv, query_key=q_key, retmax=20)
             break
         except Timeout:
             i += 1
@@ -296,12 +296,12 @@ def search():
 def download():
     response = Response()
     parameters = addict.Dict(request.get_json())
-    # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'accession', 'path'
+    # TODO: type check of parameters, currently, parameters must have 'database', 'email', 'toolName', 'accession', 'path'
     
     i = 0
     while True:
         try:
-            entrez = API(parameters.email, parameters.name, parameters.api_key)
+            entrez = API(parameters.email, parameters.toolName, parameters.api_key)
             break
         except Timeout:
             i += 1
@@ -312,7 +312,7 @@ def download():
     i = 0
     while True:
         try:
-            search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
+            search_result = entrez.search(parameters.database, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
             break
         except Timeout:
             i += 1
@@ -324,7 +324,7 @@ def download():
     i = 0
     while True:
         try:
-            results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
+            results  = entrez.summary(parameters.database,None, WebEnv=webenv, query_key=q_key, retmax = 500)
             break
         except Timeout:
             i += 1

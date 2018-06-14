@@ -101,14 +101,13 @@ const Entrez = withFormik({
       database: values.database.value,
       term: values.term.map(t => t.value)
     }
-    // axios.post(config.routes.API.data.search, payload).then(({data}) => {
-    //   const searchResults = data.data
-    //   console.log(searchResults)
-    //   const rows = Object.values(searchResults)  // list of objects, with each object having keys, 'title', 'accession', and 'summary'
-    // }).catch((error) => {
-    //   console.log(error)
-    //   
-    // })
+    axios.post(config.routes.API.data.search, payload).then(({data}) => {
+      const searchResults = data.data
+      console.log(searchResults)
+      const rows = Object.values(searchResults)  // list of objects, with each object having keys, 'title', 'accession', and 'summary'
+    }).catch((error) => {
+      console.log(error)
+    })
     actions.setSubmitting(false)
   },
   displayName: "Entrez Form"

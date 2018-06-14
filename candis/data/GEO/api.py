@@ -49,8 +49,11 @@ class API():
         
         with open(file_path, 'wb') as f:
             print("\n Downloading {} at {} \n".format(tar_file, os.path.abspath(self.path)))
-            self.ftp.retrbinary('RETR '+ file_name, f.write)
-            print("Downloaded!")
+            try:
+                self.ftp.retrbinary('RETR '+ file_name, f.write)
+                print("Downloaded!")
+            except EOFError:
+                print("Connection closed, couldn't download")
+            except Exception as e:
+                print("Error {}".format(e))
             self._ftp_close()
-
-
