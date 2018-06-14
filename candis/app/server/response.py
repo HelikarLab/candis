@@ -21,6 +21,7 @@ class Response(object):
         ERROR   = 'error'
 
     class Error(object):
+        ACCESS_DENIED        = addict.Dict({ 'code': 401, 'message': 'Access Denied'})
         NOT_FOUND            = addict.Dict({ 'code': 404, 'message': 'Not Found' })
         UNPROCESSABLE_ENTITY = addict.Dict({ 'code': 422, 'message': 'Unprocessable Entity' })
 
