@@ -16,8 +16,8 @@ app      = Flask(__name__,
     static_folder   = R.Path.ASSETS
 )
 
-# TODO: add envparse suuport?
-app.config['SECRET_KEY'] = os.urandom(24)
+# TODO: add envparse support?
+app.config['SECRET_KEY'] = 'super_secret_key' # os.urandom(24)
 socketio = SocketIO(app)
 os.environ['DATABASE_URL'] = 'postgresql://postgres:postgres@127.0.0.1:5432/postgres'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
