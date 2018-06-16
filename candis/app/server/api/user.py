@@ -11,6 +11,7 @@ from candis.config import CONFIG
 from candis.app.server.response import Response
 from candis.app.server.helpers.verify import verify_password
 from candis.app.server.schemas.user import UserSchema
+from candis.app.server.utils.tokens import login_required
 
 def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPIRY_TIME')):
     user_schema = UserSchema(exclude=['password'])
@@ -100,3 +101,9 @@ def login():
     code       = response.code
 
     return json_, code
+
+@app.route('/private', methods=['GET'])
+@login_required
+def private():
+    return jsonify({'Secret': 'Messi is better than CR7'})
+

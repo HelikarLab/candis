@@ -20,7 +20,7 @@ app      = Flask(__name__,
 app.config['SECRET_KEY'] = 'super_secret_key' # os.urandom(24)
 socketio = SocketIO(app)
 os.environ['DATABASE_URL'] = 'postgresql://postgres:postgres@127.0.0.1:5432/postgres'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['INTEGRATE_SOCKETIO']=True
 
