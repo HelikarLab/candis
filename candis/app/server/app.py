@@ -10,6 +10,7 @@ from candis.config   import CONFIG
 from candis.resource import R
 from candis.app.server.db import db
 from candis.app.server.marshmallow import ma
+from candis.manager.redis.redis import Redis
 
 app      = Flask(__name__,
     template_folder = R.Path.TEMPLATES,
@@ -26,6 +27,8 @@ app.config['INTEGRATE_SOCKETIO']=True
 
 db.init_app(app)
 ma.init_app(app)
+# create redis instance to store tokens which are invalid until user logins again.
+redis = Redis()
 
 @app.before_first_request
 def create_tables():
