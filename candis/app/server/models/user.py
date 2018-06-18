@@ -2,10 +2,6 @@ from werkzeug.security import generate_password_hash
 
 from candis.app.server.app import db
 
-def encrypt(pswd):
-    # temporary function.
-    return pswd
-
 class User(db.Model):
     __tablename__ = 'user'
 
