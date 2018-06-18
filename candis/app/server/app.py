@@ -2,6 +2,7 @@ import os
 
 # imports - third-party imports
 from flask          import Flask
+from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from htmlmin.minify import html_minify
 
@@ -24,9 +25,9 @@ os.environ['DATABASE_URL'] = 'postgresql://postgres:postgres@127.0.0.1:5432/post
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['INTEGRATE_SOCKETIO']=True
-
 db.init_app(app)
 ma.init_app(app)
+migrate = Migrate(app, db)
 # create redis instance to store tokens which are invalid until user logins again.
 redis = Redis()
 

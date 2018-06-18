@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash
 
-from candis.app.server.db import db
+from candis.app.server.app import db
 
 def encrypt(pswd):
     # temporary function.
