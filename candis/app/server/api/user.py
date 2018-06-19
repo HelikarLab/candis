@@ -21,7 +21,7 @@ def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPI
     encoded_token = jwt.encode(payload=payload, key=key).decode('utf-8')
     return encoded_token
 
-@app.route('/sign_up', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.SIGN_UP, methods=['POST'])
 @logout_required
 def sign_up():
     response = Response()
@@ -58,7 +58,7 @@ def sign_up():
 
     return json_, code
 
-@app.route('/login', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.LOGIN, methods=['POST'])
 @logout_required
 def login():
     response = Response()
@@ -89,7 +89,7 @@ def login():
 
     return json_, code
 
-@app.route('/logout', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.SIGN_OUT, methods=['POST'])
 @login_required
 def logout():
     response = Response()
@@ -107,4 +107,3 @@ def logout():
 @login_required
 def private():
     return jsonify({'Secret': 'Messi is better than CR7'})
-

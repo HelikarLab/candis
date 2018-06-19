@@ -19,13 +19,18 @@
         "signin": "/SignIn",
         "signup": "/SignUp",
         "API": {
+            "user": {
+                "sign_up": "/api/user/sign_up",
+                "login": "/api/user/login",
+                "sign_out": "/api/user/sign_out"
+            },
             "data": {
                 "resource": "/api/data/resource",
                 "read": "/api/data/read",
                 "write": "/api/data/write",
-		"delete": "/api/data/delete",
-		"search": "/api/data/search",
-		"download": "/api/data/download"
+                "delete": "/api/data/delete",
+                "search": "/api/data/search",
+                "download": "/api/data/download"
             },
             "preprocess": {
                 "methods": "/api/preprocess/methods"
