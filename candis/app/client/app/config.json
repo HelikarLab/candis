@@ -17,6 +17,7 @@
         "images": "/assets/img",
         "icons": "/assets/img/icons",
         "signin": "/SignIn",
+        "signup": "/SignUp",
         "API": {
             "data": {
                 "resource": "/api/data/resource",

@@ -1,6 +1,6 @@
 import React        from 'react'
 import PropTypes    from 'prop-types'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import { connect }  from 'react-redux'
 
 import jsonwebtoken from 'jsonwebtoken'
@@ -60,6 +60,7 @@ class SignIn extends React.Component {
             <div className="panel panel-default no-margin no-background no-border no-shadow">
               <div className="panel-body">
                 <SignInForm onSubmit={this.onSubmit}/>
+                <Link to={config.routes.signup}>New User?</Link>
               </div>
             </div>
           </div>

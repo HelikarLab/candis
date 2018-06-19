@@ -17,53 +17,62 @@ const SignUpBasic = ({
   isSubmitting,
 }) => (
   <form onSubmit={handleSubmit}>
-    <label>Username</label>
-    <input
-      type="name"
-      name="name"
-      onChange={handleChange}
-      onBlur={handleBlur}
-      value={values.name}
-    />
-    <label>Email</label>
-    <input
-      type="email"
-      name="email"
-      onChange={handleChange}
-      onBlur={handleBlur}
-      value={values.email}
-    />
-    {touched.email && errors.email && <div>{errors.email}</div>}
-    <label>Password</label>
-    <input
-      type="password"
-      name="password"
-      onChange={handleChange}
-      onBlur={handleBlur}
-      value={values.password}
-    />
-    {touched.password && errors.password && <div>{errors.password}</div>}
-    <button type="submit" disabled={isSubmitting}>
-      Submit
+    <div className="form-group">
+      <label>Username</label>
+      <input
+        className="form-control"
+        type="text"
+        name="name"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.name}
+      />
+      <small className="help-block">{touched.name && errors.name}</small>
+    </div>
+    <div className="form-group">
+      <label>Email</label>
+      <input
+        className="form-control"
+        type="email"
+        name="email"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.email}
+      />
+      <small className="help-block">{touched.email && errors.email}</small>
+    </div>
+    <div className="form-group">
+      <label>Password</label>
+      <input
+        className="form-control"
+        type="password"
+        name="password"
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.password}
+      />
+      <small className="help-block">{touched.password && errors.password}</small>
+    </div>
+    <button className="btn btn-block btn-brand-primary" type="submit" disabled={isSubmitting}>
+    <div className="text-center">
+      <div className="text-uppercase font-bold">
+        Submit
+      </div>
+    </div>
     </button>
   </form>
 )
 
-const SignUp = withFormik({
+const SignUpEnhanced = withFormik({
   // Transform outer props into form values
   mapPropsToValues: props => ({ email: '', password: '', name: '' }),
-  // Add a custom validation function (this can be async too!)
+  
   validationSchema: Yup.object().shape({
-    email: Yup.string()
-      .email("Email is not valid")
-      .required("Email is required!"),
-    name: Yup.string(),
-    password: Yup.string().required("This field is required!")
+    email: Yup.string().email("Email is not valid").required("Email is required!"),
+    name: Yup.string().min(4).required("This field is required"),
+    password: Yup.string().min(8).required("This field is required!")
   }),
-  handleChange: (e) => {
-    values[e.target.name] = e.target.value
-  },
-  // Submission handler
+
   handleSubmit: (
     values,
     {
@@ -85,14 +94,13 @@ const SignUp = withFormik({
     //     setErrors(transformMyApiErrors(errors))
     //   }
     // )
-    setSubmitting(false)
+    setSubmitting(true)
   },
 })(SignUpBasic)
 
 const SignUpForm = props => (
-  // <div className={classNames("container", props.classNames.root)}>
   <div>
-    <SignUp />
+    <SignUpEnhanced />
   </div>
 )
 
