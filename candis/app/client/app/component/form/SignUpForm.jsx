@@ -18,23 +18,25 @@ const SignUpBasic = ({
 }) => (
   <form onSubmit={handleSubmit}>
     <div className="form-group">
-      <label>Username</label>
+      {/*<label>Username</label>*/}
       <input
         className="form-control"
         type="text"
         name="username"
+        placeholder="username"
         onChange={handleChange}
         onBlur={handleBlur}
         value={values.username}
       />
-      <small className="help-block">{touched.name && errors.name}</small>
+      <small className="help-block">{touched.username && errors.username}</small>
     </div>
     <div className="form-group">
-      <label>Email</label>
+      {/*<label>Email</label>*/}
       <input
         className="form-control"
         type="email"
         name="email"
+        placeholder="email"
         onChange={handleChange}
         onBlur={handleBlur}
         value={values.email}
@@ -42,11 +44,12 @@ const SignUpBasic = ({
       <small className="help-block">{touched.email && errors.email}</small>
     </div>
     <div className="form-group">
-      <label>Password</label>
+      {/*<label>Password</label>*/}
       <input
         className="form-control"
         type="password"
         name="password"
+        placeholder="password"
         onChange={handleChange}
         onBlur={handleBlur}
         value={values.password}
