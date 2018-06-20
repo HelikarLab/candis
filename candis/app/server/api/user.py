@@ -3,6 +3,7 @@ import gc
 
 from flask import request, jsonify
 import jwt
+import addict
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
 from candis.app.server.app import app, redis
@@ -25,8 +26,7 @@ def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPI
 @logout_required
 def sign_up():
     response = Response()
-    
-    form = request.form
+    form = addict.Dict(request.get_json())
     username, email, password = form['username'], form['email'], form['password']
 
     if User.get_user(username=username):
@@ -46,7 +46,7 @@ def sign_up():
         encoded_token = generate_token(new_user)
         response.set_data({
             'token': encoded_token,
-            'message': 'Registered successfully. Please log in.'
+            'message': 'Registered successfully.'
         })
         new_user.close()
     
@@ -62,7 +62,7 @@ def sign_up():
 @logout_required
 def login():
     response = Response()
-    form = request.form
+    form = addict.Dict(request.get_json())
     username, password = form['username'], form['password']
     
     user = User.get_user(username=username)

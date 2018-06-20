@@ -22,10 +22,10 @@ const SignUpBasic = ({
       <input
         className="form-control"
         type="text"
-        name="name"
+        name="username"
         onChange={handleChange}
         onBlur={handleBlur}
-        value={values.name}
+        value={values.username}
       />
       <small className="help-block">{touched.name && errors.name}</small>
     </div>
@@ -65,11 +65,11 @@ const SignUpBasic = ({
 
 const SignUpEnhanced = withFormik({
   // Transform outer props into form values
-  mapPropsToValues: props => ({ email: '', password: '', name: '' }),
+  mapPropsToValues: props => ({ email: '', password: '', username: '' }),
   
   validationSchema: Yup.object().shape({
     email: Yup.string().email("Email is not valid").required("Email is required!"),
-    name: Yup.string().min(4).required("This field is required"),
+    username: Yup.string().min(4).required("This field is required"),
     password: Yup.string().min(8).required("This field is required!")
   }),
 
@@ -77,24 +77,22 @@ const SignUpEnhanced = withFormik({
     values,
     {
       props,
+      resetForm,
       setSubmitting,
+      setStatus,
       setErrors /* setValues, setStatus, and other goodies */,
     }
   ) => {
     console.log(values)
-    // LoginToMyApp(values).then(
-    //   user => {
-    //     setSubmitting(false)
-    //     // do whatevs...
-    //     // props.updateUser(user)
-    //   },
-    //   errors => {
-    //     setSubmitting(false)
-    //     // Maybe even transform your API's errors into the same shape as Formik's!
-    //     setErrors(transformMyApiErrors(errors))
-    //   }
-    // )
-    setSubmitting(true)
+    axios.post(config.routes.API.user.sign_up, values).then(({data}) => {
+      console.log(data)
+      toastr.success("Registered Successfully")
+      resetForm()
+    }).catch(({response}) => {
+      console.log(response.data.error)
+      toastr.error(response.data.error.errors[0].message)
+    })
+    setSubmitting(false)
   },
 })(SignUpBasic)
 
