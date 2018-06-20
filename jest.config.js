@@ -1,7 +1,7 @@
 module.exports = {
 	"verbose" : true,
 	"collectCoverage" : true,
-	"roots" : ["candis/app/client/app"], 
+	"roots" : ["candis/app/client/app"],
 	"collectCoverageFrom" : [
 		"**/*.{js,jsx}",
 		"!**/node_modules/**",
@@ -10,5 +10,5 @@ module.exports = {
 	],
 	"setupFiles" : [
 		"<rootDir>/candis/app/client/app/tests/setupTests.js"
-	] 
+	]
 }

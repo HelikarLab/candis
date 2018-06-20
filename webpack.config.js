@@ -34,7 +34,7 @@ module.exports     = {
       }
     ]
   },
-  plugins: process.env.ENV === 'development' ? 
+  plugins: process.env.ENV === 'development' ?
     [
       // debug plugins go here.
       new Jarvis(),
@@ -44,7 +44,7 @@ module.exports     = {
       	}
       })
     ]
-    : 
+    :
     [
       // production plugins go here.
       new UglifyJSPlugin({
@@ -58,11 +58,7 @@ module.exports     = {
     ],
   resolve: {
     modules: ['node_modules'],
-    extensions: ['.js', '.jsx', '.json'],
-    alias: {
-      'react': 'preact-compat',
-      'react-dom': 'preact-compat',
-    }
+    extensions: ['.js', '.jsx', '.json']
   },
   node: {
     net: 'empty',
