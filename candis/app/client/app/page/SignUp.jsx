@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import config from '../config'
 import SignUpForm from '../component/form/SignUpForm'
 import { signin } from '../action/AppAction'
+import ActionType   from '../constant/ActionType'
 
 class SignUp extends React.Component {
   constructor(props){
@@ -14,11 +15,23 @@ class SignUp extends React.Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  onSubmit(data){
-    const response = data
+  onSubmit (data) {
+    const props    = this.props
+    const dispatch = props.dispatch
+    console.log("TOKEN IS: ", data.token)
+    
+    dispatch({
+      type: ActionType.App.SIGNIN_REQUEST
+    })
+
+    const action   = signin(data)
+    props.dispatch(action)
+    
+    props.dispatch({
+      type: ActionType.App.SIGNIN_SUCCESS
+    })
   }
-  
-  
+
   render(){
     const props = this.props
     const { from } = { from: { pathname: config.routes.base } }
@@ -39,14 +52,22 @@ class SignUp extends React.Component {
             </div>
             <div className="panel panel-default no-margin no-background no-border no-shadow">
               <div className="panel-body">
-                <SignUpForm/>
+                <SignUpForm onSubmit={this.onSubmit} />
               </div>
             </div>
           </div>
         </div>
       )
   }
+}
 
+SignUp.propTypes      = 
+{
+  user: PropTypes.object
+}
+SignUp.defaultProps   = 
+{
+  user: null
 }
 
 const mapStateToProps = (state, props) => {
@@ -55,6 +76,6 @@ const mapStateToProps = (state, props) => {
   return {
     user: app.user
   }
-}
+}  
 
 export default connect(mapStateToProps)(SignUp)

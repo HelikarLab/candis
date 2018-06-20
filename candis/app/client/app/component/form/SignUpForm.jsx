@@ -2,10 +2,12 @@ import React from "react"
 import axios from 'axios'
 import PropTypes from "prop-types"
 import classNames from "classnames"
+import { connect } from 'react-redux'
 import { withFormik, Form, Field } from "formik"
 import * as Yup from "yup"
 
 import config from '../../config'
+import { signin }   from '../../action/AppAction'
 
 const SignUpBasic = ({
   values,
@@ -90,8 +92,16 @@ const SignUpEnhanced = withFormik({
     axios.post(config.routes.API.user.sign_up, values).then(({data}) => {
       console.log(data)
       toastr.success("Registered Successfully")
+      const payload = {
+        token: data.data.token,
+        user: {
+          username: values.username,
+          email: values.email
+        }
+      }
+      props.onSubmit(payload)
       resetForm()
-    }).catch(({response}) => {
+    }, ({response}) => {
       console.log(response.data.error)
       toastr.error(response.data.error.errors[0].message)
     })
@@ -99,12 +109,4 @@ const SignUpEnhanced = withFormik({
   },
 })(SignUpBasic)
 
-const SignUpForm = props => (
-  <div>
-    <SignUpEnhanced />
-  </div>
-)
-
-export default SignUpForm
-
-
+export default SignUpEnhanced

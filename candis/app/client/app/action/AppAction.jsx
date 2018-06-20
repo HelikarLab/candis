@@ -14,21 +14,32 @@ const setUser      = (user) =>
 	return action
 }
 
-const signin       = (token) => 
-{
-	const dispatcher = (dispatch) =>
-	{
-		storage.set('JWT_TOKEN', token)
+// const signin       = (token) => 
+// {
+// 	const dispatcher = (dispatch) =>
+// 	{
+// 		storage.set('JWT_TOKEN', token)
  
-		const decoded  = jsonwebtoken.decode(token)
-		const user     = decoded.data
+// 		const decoded  = jsonwebtoken.decode(token)
+// 		const user     = decoded.data
 
-		const action   = setUser(user)
+// 		const action   = setUser(user)
 
-		dispatch(action)
-	}
+// 		dispatch(action)
+// 	}
 
-	return dispatcher
+// 	return dispatcher
+// }
+
+const signin = (payload) => {
+  const dispatcher = (dispatch) => {
+    storage.set('JWT_TOKEN', payload.token)
+    
+    const action = setUser(payload.user)
+    dispatch(action)
+
+  }
+  return dispatcher
 }
 
 const signout      = ( ) =>
