@@ -6,6 +6,7 @@ import time
 # imports - third-party imports
 from flask import request, jsonify
 import addict
+from requests import Timeout
 
 # imports - module imports
 from candis.config              import CONFIG
@@ -91,6 +92,9 @@ def discover_resource(path, level = None, filter_ = None):
             tree.dirs.append(wrap)
 
     return tree
+
+def log_times(i):
+    print("No. of times tried to connect to NCBI: {}".format(i))
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None):
@@ -239,12 +243,34 @@ def search():
     response = Response()
     parameters = addict.Dict(request.get_json())
     # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name'
-    
-    entrez = API(parameters.email, parameters.name, parameters.api_key)
-    search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
+    i = 0
+    while True:
+        try:
+            entrez = API(parameters.email, parameters.name, parameters.api_key)
+            break
+        except Timeout:
+            i += 1
+    log_times(i)
+
+    while True:
+        try:
+            search_results = entrez.search(parameters.db, parameters.term, usehistory='y')
+            break
+        except Timeout:
+            i += 1
+    log_times(i)
     q_key  = search_results['querykey']
     webenv = search_results['webenv']
-    summary_results = entrez.summary(parameters.db, None, WebEnv=webenv, query_key=q_key, retmax=20)
+    
+    i = 0
+    while True:
+        try:
+            summary_results = entrez.summary(parameters.db, None, WebEnv=webenv, query_key=q_key, retmax=20)
+            break
+        except Timeout:
+            i += 1
+    log_times(i)
+    
     if isinstance(summary_results, list):
         # use 200 status code for 'No Content' instead of 204.
         # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ
@@ -272,15 +298,38 @@ def download():
     parameters = addict.Dict(request.get_json())
     # TODO: type check of parameters, currently, parameters must have 'db', 'email', 'name', 'accession', 'path'
     
-    entrez = API(parameters.email, parameters.name, parameters.api_key)
+    i = 0
+    while True:
+        try:
+            entrez = API(parameters.email, parameters.name, parameters.api_key)
+            break
+        except Timeout:
+            i += 1
+    log_times(i)
+
     accession = parameters.accession
     
-    search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
+    i = 0
+    while True:
+        try:
+            search_result = entrez.search(parameters.db, [accession, 'gse', 'cel'], usehistory='y', retmax=500)
+            break
+        except Timeout:
+            i += 1
+    log_times(i)
+
     q_key  = search_result['querykey']
     webenv = search_result['webenv']
     
-    
-    results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
+    i = 0
+    while True:
+        try:
+            results  = entrez.summary(parameters.db,None, WebEnv=webenv, query_key=q_key, retmax = 500)
+            break
+        except Timeout:
+            i += 1
+    log_times(i)
+
     if isinstance(results, list):
         # use 200 status code for 'No Content' instead of 204.
         # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ

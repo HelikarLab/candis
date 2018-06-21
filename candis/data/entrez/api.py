@@ -48,7 +48,6 @@ class API(object):
     
     def __init__(self, email, name = None, api_key = None):
         self.redis = Redis()
-        self.time  = 0
         if validate_email(email):
             self.email = email
 
@@ -85,17 +84,23 @@ class API(object):
 
         return params
 
+
+
     def _throttle(self):
         # to be implemented.
         # checks limit for calling entrez API.
-        diff = time.time() - self.time
-        if self.api_key:
-            if diff <= 0.1:
-                time.sleep(diff) # - to be removed.
+        if self.redis.if_exists('last_api_request_timestamp'):
+            previous = self.redis.redis.get('last_api_request_timestamp')
+            diff = time.time() - float(previous)
+            if self.api_key:
+                if diff <= 0.10:
+                    raise requests.Timeout("Server is busy")
+            else:
+                if diff <= 0.33:
+                    raise requests.Timeout("Server is busy")
         else:
-            if diff <= 0.33:
-                time.sleep(diff)  # - to be removed.
-
+            self.redis.redis.set('last_api_request_timestamp', time.time())
+  
     def request(self, method, url, parameters = None, *args, **kwargs):
         parameters = assign_if_none(parameters, dict())
         params     = self.baseparams
@@ -106,8 +111,7 @@ class API(object):
         
         self._throttle()
         response = requests.request(method, url, params = parameter_string, *args, **kwargs)
-        # print("self.time {}".format(self.time)) - log instead.
-        self.time = time.time()
+        self.redis.redis.set('last_api_request_timestamp', time.time())
         
         if response.ok:
             data = sanitize_response(response, params['retmode'])
