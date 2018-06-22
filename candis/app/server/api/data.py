@@ -19,6 +19,7 @@ from candis.app.server.app      import app
 from candis.app.server.response import Response
 from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
+from candis.app.server.utils.tokens import login_required
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -115,6 +116,7 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.READ, methods = ['GET', 'POST'])
+@login_required
 def read():
     response        = Response()
 
@@ -153,6 +155,7 @@ def read():
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
+@login_required
 def write(output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
@@ -215,6 +218,7 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.DELETE, methods = ['POST'])
+@login_required
 def delete():
     # delete handle to delete a pipeline
     response = Response()
@@ -235,6 +239,7 @@ def delete():
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.SEARCH, methods = ['GET', 'POST'])
+@login_required
 def search():
     response = Response()
     parameters = addict.Dict(request.get_json())
@@ -302,5 +307,3 @@ def download():
     code = response.code
     
     return  json_, code
-
-

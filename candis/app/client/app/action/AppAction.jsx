@@ -33,7 +33,7 @@ const setUser      = (user) =>
 const signin = (payload) => {
   const dispatcher = (dispatch) => {
     storage.set('JWT_TOKEN', payload.token)
-    
+    storage.set('ACTIVE_USER', payload.user)
     const action = setUser(payload.user)
     dispatch(action)
 

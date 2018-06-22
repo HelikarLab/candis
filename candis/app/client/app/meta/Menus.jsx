@@ -4,9 +4,13 @@ import config       from '../config'
 
 import ActionType   from '../constant/ActionType'
 import FileFormat   from '../constant/FileFormat'
+import Header from '../constant/LoginDetails'
 import { signout }  from '../action/AppAction'
 import { read, write, getResource } from '../action/AsynchronousAction'
 import { getFiles } from '../util'
+
+axios.defaults.headers.common['token'] = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF8iOjIsImVtYWlsIjoicnVwYXZ3aW5jaGVzdGVyQGdtYWlsLmNvbSIsInVzZXJuYW1lIjoicnVwYXYifQ.ilay_JYAMuSBjq7LccmyS87qviPNXlHXvchazBOaUCo"
+console.log("Token from js:", Header.token)
 
 const Menus = [
   {
@@ -32,12 +36,14 @@ const Menus = [
                 const output  = { name: `${name}.cpipe`, format: FileFormat.PIPELINE }
                 axios.post(config.routes.API.data.read, output).then((response) => {
                   response    = response.data
+                  console.log("Token from js axios then:", Header.token)
 
                   if ( response.status == 'success' ) { // I don't know why this check is even here.
                     toastr.warning(`Looks like file with name <span class="font-bold">${name}</span> already exists.`, 'Whoops!')
                   }
                 }).catch(({ response }) => {
                   response    = response.data
+                  console.log("Token from js axios catch:", Header.token)
 
                   if ( response.status == 'error' ) {
                     if ( response.error.code == 404 ) {
