@@ -26,15 +26,9 @@ class SignIn extends React.Component {
       type: ActionType.App.SIGNIN_REQUEST
     })
 
-    // STUB
-    // This stub fakes a request and creates a tokenized `response` object.
-    const response = { data: { } }
-    const token    = jsonwebtoken.sign(response, 'JWT_SECRET')
-    // end STUB
-
-    const action   = signin(token)
-
+    const action   = signin(data)
     props.dispatch(action)
+    
     props.dispatch({
       type: ActionType.App.SIGNIN_SUCCESS
     })

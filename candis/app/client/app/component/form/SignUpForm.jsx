@@ -73,7 +73,7 @@ const SignUpEnhanced = withFormik({
   mapPropsToValues: props => ({ email: '', password: '', username: '' }),
   
   validationSchema: Yup.object().shape({
-    email: Yup.string().email("Email is not valid").required("Email is required!"),
+    email: Yup.string().email("Email is not valid").required("This field is required"),
     username: Yup.string().min(4).required("This field is required"),
     password: Yup.string().min(8).required("This field is required!")
   }),

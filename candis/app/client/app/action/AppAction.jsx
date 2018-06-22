@@ -1,5 +1,4 @@
 import storage      from 'store'
-import jsonwebtoken from 'jsonwebtoken'
 
 import ActionType   from '../constant/ActionType'
 
