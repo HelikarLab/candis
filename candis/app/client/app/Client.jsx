@@ -6,13 +6,14 @@ import { Provider } from 'react-redux'
 import 'preact/devtools'
 
 import storage      from 'store'
-import jsonwebtoken from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 
 import config       from './config'
 import store        from './Store'
 import routes       from './Routes'
+import setAuthorizationToken from './util/auth'
 
-import { signin, signout } from './action/AppAction'
+import { signin, signout, setUser } from './action/AppAction'
 
 // Temporary Fix.
 // https://github.com/adazzle/react-data-grid/pull/1027 (To Deploy)
@@ -22,6 +23,11 @@ const token       = storage.get('JWT_TOKEN')
 const action      = token ? signin(token) : signout()
 
 store.dispatch(action)
+
+if (storage.get('JWT_TOKEN')){
+	setAuthorizationToken(storage.get('JWT_TOKEN'))
+	store.dispatch(setUser(jwt.decode(storage.get('JWT_TOKEN'))))
+}
 
 const container   = document.getElementById(config.container)
 const provider    = (

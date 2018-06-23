@@ -18,7 +18,6 @@ class SignUp extends React.Component {
   onSubmit (data) {
     const props    = this.props
     const dispatch = props.dispatch
-    console.log("TOKEN IS: ", data.token)
     
     dispatch({
       type: ActionType.App.SIGNIN_REQUEST

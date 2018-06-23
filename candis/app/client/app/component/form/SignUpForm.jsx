@@ -88,9 +88,8 @@ const SignUpEnhanced = withFormik({
       setErrors /* setValues, setStatus, and other goodies */,
     }
   ) => {
-    console.log(values)
     axios.post(config.routes.API.user.sign_up, values).then(({data}) => {
-      console.log(data)
+      
       toastr.success("Registered Successfully")
       const payload = {
         token: data.data.token,
@@ -102,7 +101,6 @@ const SignUpEnhanced = withFormik({
       props.onSubmit(payload)
       resetForm()
     }, ({response}) => {
-      console.log(response.data.error)
       toastr.error(response.data.error.errors[0].message)
     })
     setSubmitting(false)
