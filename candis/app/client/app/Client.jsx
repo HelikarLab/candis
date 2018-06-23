@@ -12,6 +12,7 @@ import config       from './config'
 import store        from './Store'
 import routes       from './Routes'
 import setAuthorizationToken from './util/auth'
+import { setDefalutErrorHandler } from './util/auth'
 
 import { signin, signout, setUser } from './action/AppAction'
 
@@ -24,6 +25,7 @@ const action      = token ? signin(token) : signout()
 
 store.dispatch(action)
 
+setDefalutErrorHandler(true)
 if (storage.get('JWT_TOKEN')){
 	setAuthorizationToken(storage.get('JWT_TOKEN'))
 	store.dispatch(setUser(jwt.decode(storage.get('JWT_TOKEN'))))

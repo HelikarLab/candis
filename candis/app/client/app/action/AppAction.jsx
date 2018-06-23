@@ -40,6 +40,7 @@ const signout      = ( ) =>
 			toastr.success("Logged out Successfully")
 		
 			storage.remove('JWT_TOKEN')
+			storage.remove('ACTIVE_USER')
 
 			const action   = setUser(null)
 
