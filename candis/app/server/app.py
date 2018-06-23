@@ -1,10 +1,15 @@
 import os
+import sys
+import logging
 
 # imports - third-party imports
 from flask          import Flask
+from sqlalchemy.engine import url
 from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from htmlmin.minify import html_minify
+from envparse import env, ConfigurationError
+import addict
 
 # imports - module imports
 from candis.config   import CONFIG
@@ -13,20 +18,37 @@ from candis.app.server.db import db
 from candis.app.server.marshmallow import ma
 from candis.manager.redis.redis import Redis
 
+log = logging.getLogger(__name__)
+
 app      = Flask(__name__,
     template_folder = R.Path.TEMPLATES,
     static_folder   = R.Path.ASSETS
 )
 
-# TODO: add envparse support?
-app.config['SECRET_KEY'] = 'super_secret_key' # os.urandom(24) - will be stored as env variable.
+env.read_envfile()
+# will read first from Environment variables, then .env file if any, then will fallback to default values.
+try:
+    database_config = addict.Dict(
+        drivername = env.str('CANDIS_DRIVER_NAME', default='postgresql'),
+        host = env.str('CANDIS_DATBASE_HOST', default='localhost'),
+        port = env.str('CANDIS_DATBASE_PORT', default='5432'),
+        username = env.str('CANDIS_DATBASE_USERNAME', default='postgres'),
+        password = env.str('CANDIS_DATBASE_PASSWORD', default='postgres'),
+        database = env.str('CANDIS_DATBASE_NAME', default='postgres')
+    )
+    app_config = addict.Dict(
+        SECRET_KEY = env.str('CANDIS_SECRET_KEY', default='super_secret_key'),
+        SQLALCHEMY_DATABASE_URI = url.URL(**database_config),
+        SQLALCHEMY_TRACK_MODIFICATIONS = env.bool('CANDIS_SQLALCHEMY_TRACK_MODIFICATIONS', default=False),
+        INTEGRATE_SOCKETIO = env.bool('CANDIS_INTEGRATE_SOCKETIO', default=True)
+    )
+except ConfigurationError as e:
+    log.error("SET env variables first: {}".format(e))
+    sys.exit(1)
+
+app.config.update(app_config)
+
 socketio = SocketIO(app)
-
-os.environ['DATABASE_URL'] = 'postgresql://postgres:postgres@127.0.0.1:5432/postgres'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['INTEGRATE_SOCKETIO'] = True
 db.init_app(app)
 ma.init_app(app)
 migrate = Migrate(app, db)
