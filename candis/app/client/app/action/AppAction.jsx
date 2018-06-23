@@ -1,7 +1,11 @@
+import axios from 'axios'
 import storage      from 'store'
-import jsonwebtoken from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
+
 
 import ActionType   from '../constant/ActionType'
+import setAuthorizationToken from '../util/auth'
+import config     from '../config'
 
 const setUser      = (user) =>
 {
@@ -14,32 +18,36 @@ const setUser      = (user) =>
 	return action
 }
 
-const signin       = (token) => 
-{
-	const dispatcher = (dispatch) =>
-	{
-		storage.set('JWT_TOKEN', token)
- 
-		const decoded  = jsonwebtoken.decode(token)
-		const user     = decoded.data
-
-		const action   = setUser(user)
-
-		dispatch(action)
-	}
-
-	return dispatcher
+const signin = (payload) => {
+  const dispatcher = (dispatch) => {
+	
+	storage.set('JWT_TOKEN', payload.token)	
+    storage.set('ACTIVE_USER', payload.user)
+	
+	const action = setUser(jwt.decode(payload.token))
+	dispatch(action)
+	
+	setAuthorizationToken(payload.token)
+  }
+  return dispatcher
 }
 
 const signout      = ( ) =>
 {
 	const dispatcher = (dispatch) =>
 	{	
-		storage.remove('JWT_TOKEN')
+		axios.post(config.routes.API.user.sign_out).then(({data}) => {
+			toastr.success("Logged out Successfully")
+		
+			storage.remove('JWT_TOKEN')
+			storage.remove('ACTIVE_USER')
 
-		const action   = setUser(null)
+			const action   = setUser(null)
 
 		dispatch(action)
+		}).catch(({response}) => {
+			toastr.error(response.data.error.errors[0].message)
+		})
 	}
 
 	return dispatcher

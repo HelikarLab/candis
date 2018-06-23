@@ -2,7 +2,9 @@ import os
 import gc
 
 from flask import request, jsonify
+from flask_cors import cross_origin
 import jwt
+import addict
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
 from candis.app.server.app import app, redis
@@ -21,12 +23,11 @@ def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPI
     encoded_token = jwt.encode(payload=payload, key=key).decode('utf-8')
     return encoded_token
 
-@app.route('/sign_up', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.SIGN_UP, methods=['POST'])
 @logout_required
 def sign_up():
     response = Response()
-    
-    form = request.form
+    form = addict.Dict(request.get_json())
     username, email, password = form['username'], form['email'], form['password']
 
     if User.get_user(username=username):
@@ -46,7 +47,7 @@ def sign_up():
         encoded_token = generate_token(new_user)
         response.set_data({
             'token': encoded_token,
-            'message': 'Registered successfully. Please log in.'
+            'message': 'Registered successfully.'
         })
         new_user.close()
     
@@ -58,11 +59,11 @@ def sign_up():
 
     return json_, code
 
-@app.route('/login', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.LOGIN, methods=['POST'])
 @logout_required
 def login():
     response = Response()
-    form = request.form
+    form = addict.Dict(request.get_json())
     username, password = form['username'], form['password']
     
     user = User.get_user(username=username)
@@ -89,7 +90,7 @@ def login():
 
     return json_, code
 
-@app.route('/logout', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.SIGN_OUT, methods=['POST'])
 @login_required
 def logout():
     response = Response()
@@ -104,7 +105,7 @@ def logout():
     return json_, code
 
 @app.route('/private', methods=['GET'])
+@cross_origin()
 @login_required
 def private():
     return jsonify({'Secret': 'Messi is better than CR7'})
-
