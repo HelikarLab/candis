@@ -213,6 +213,10 @@ def setup_candis(args = None):
             popen(addapt, '-y', 'ppa:webupd8team/java')
             popen(aptget, 'update')
 
+            # Install PostgreSQL
+            popen('sudo apt-get update')
+            popen('sudo apt-get install postgresql postgresql-contrib')
+
             # Install yarn
             popen('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -')
             popen('echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
