@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk   from 'redux-thunk'
 import logger  from 'redux-logger'
-
+import { composeWithDevTools  } from 'redux-devtools-extension/developmentOnly'
 import config  from './config'
 
 import reducer from './reducer'
@@ -15,7 +15,7 @@ import reducer from './reducer'
 //
 // SOURCE: github.com/evgenyrodionov/redux-logger/issues/6#issuecomment-132731227
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers = composeWithDevTools({})
 
 const middlewares = [
 	thunk,
