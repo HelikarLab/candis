@@ -9,6 +9,7 @@ from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
 from candis.app.server.app import app, redis
 from candis.app.server.models.user import User
+from candis.app.server.models.response import Response as ResponseModel
 from candis.config import CONFIG
 from candis.app.server.response import Response
 from candis.app.server.helpers.verify import verify_password
@@ -54,6 +55,8 @@ def sign_up():
     gc.collect()
 
     dict_      = response.to_dict()
+    addResponse(dict_)
+    seeResponse()
     json_      = jsonify(dict_)
     code       = response.code
 
@@ -109,3 +112,18 @@ def logout():
 @login_required
 def private():
     return jsonify({'Secret': 'Messi is better than CR7'})
+
+def addResponse(dict_):
+    print("dict ===== {}".format(dict_))
+    resp = ResponseModel(response_id=dict_['id'], version=dict_['version'], status=dict_['status'], data=dict_['data'])
+    resp.add_response()
+
+def seeResponse():
+    responses = ResponseModel.get_responses(version='0.0.5')
+    for resp in responses:
+        print("data is {}".format(resp.data))
+        try:
+            print("data message is {}".format(resp.data['message']))
+            print("data message is {}".format(resp.data['token']))
+        except Exception as e:
+            print(e)

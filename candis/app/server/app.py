@@ -38,9 +38,9 @@ try:
     )
     app_config = addict.Dict(
         SECRET_KEY = env.str('CANDIS_SECRET_KEY', default='super_secret_key'),
-        SQLALCHEMY_DATABASE_URI = url.URL(**database_config),
-        SQLALCHEMY_TRACK_MODIFICATIONS = env.bool('CANDIS_SQLALCHEMY_TRACK_MODIFICATIONS', default=False),
-        INTEGRATE_SOCKETIO = env.bool('CANDIS_INTEGRATE_SOCKETIO', default=True)
+        SQLALCHEMY_DATABASE_URI = str(url.URL(**database_config)),
+        SQLALCHEMY_TRACK_MODIFICATIONS = env.str('CANDIS_SQLALCHEMY_TRACK_MODIFICATIONS', default='False'),
+        INTEGRATE_SOCKETIO = env.str('CANDIS_INTEGRATE_SOCKETIO', default='True')
     )
 except ConfigurationError as e:
     log.error("SET env variables first: {}".format(e))
