@@ -2,7 +2,6 @@ import os
 import gc
 
 from flask import request, jsonify
-from flask_cors import cross_origin
 import jwt
 import addict
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
@@ -108,7 +107,6 @@ def logout():
     return json_, code
 
 @app.route('/private', methods=['GET'])
-@cross_origin()
 @login_required
 def private():
     return jsonify({'Secret': 'Messi is better than CR7'})
