@@ -17,6 +17,7 @@ from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.app      import socketio
 from candis.app.server.response import Response
+from candis.app.server.utils.response import save_response_to_db
 
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
@@ -54,6 +55,7 @@ def run(delay = 5):
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
     dict_       = response.to_dict()
+    save_response_to_db(dict_)
     json_       = jsonify(dict_)
     code        = response.code
 

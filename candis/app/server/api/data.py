@@ -20,6 +20,7 @@ from candis.app.server.response import Response
 from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
 from candis.app.server.utils.tokens import login_required
+from candis.app.server.utils.response import save_response_to_db
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -110,6 +111,7 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None
     response.set_data(tree)
 
     dict_      = response.to_dict()
+    save_response_to_db(dict_)
     json_      = jsonify(dict_)
     code       = response.code
 
@@ -147,6 +149,7 @@ def read():
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'There')
 
     dict_       = response.to_dict()
+    save_response_to_db(dict_)
     json_       = jsonify(dict_)
     code        = response.code
 
@@ -212,6 +215,7 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
     dict_      = response.to_dict()
+    save_response_to_db(dict_)
     json_      = jsonify(dict_)
     code       = response.code
 
@@ -233,6 +237,7 @@ def delete():
         response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     
     dict_ = response.to_dict()
+    save_response_to_db(dict_)
     json_ = jsonify(dict_)
     code = response.code
 
@@ -266,6 +271,7 @@ def search():
 
     response.set_data(summary_results)
     dict_ = response.to_dict()
+    save_response_to_db(dict_)
     json_ = jsonify(dict_)
     code = response.code
 
@@ -302,7 +308,9 @@ def download():
     download_path = geo.raw_data(links[0], series_accession_list[0])
     
     response.set_data(download_path)
+    
     dict_ = response.to_dict()
+    save_response_to_db(dict_)
     json_ = jsonify(dict_)
     code = response.code
     
