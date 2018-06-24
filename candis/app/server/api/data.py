@@ -21,6 +21,7 @@ from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
 from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
+from candis.app.server.models.pipeline import Pipeline, Stage
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -158,7 +159,7 @@ def read():
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
-@login_required
+# @login_required
 def write(output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
@@ -171,6 +172,12 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     output.name  = output.name.strip() # remove padding spaces
 
     buffer_      = parameters.buffer
+
+    if output.format == 'pipeline':
+        print("Type of buffer is: {}".format(type(buffer_)))
+        for stage in buffer_:
+            print("type of stage is {}".format(stage))
+            new_stage = Stage(**stage)
 
     if output.format:
         if   output.format == 'cdata':
