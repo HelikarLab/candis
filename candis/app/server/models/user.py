@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash
 from candis.app.server.app import db
 
 class User(db.Model):
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id_ = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False)

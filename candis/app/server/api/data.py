@@ -2,6 +2,7 @@
 import os
 import json
 import time
+from datetime import datetime
 
 # imports - third-party imports
 from flask import request, jsonify
@@ -15,12 +16,13 @@ from candis.util                import (
 from candis.resource            import R
 from candis.ios                 import cdata, pipeline
 from candis.ios                 import json as JSON
-from candis.app.server.app      import app
+from candis.app.server.app      import app, db
 from candis.app.server.response import Response
 from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
 from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
+from candis.app.server.utils.pipeline import convert_to_stage_schema
 from candis.app.server.models.pipeline import Pipeline, Stage
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
@@ -159,7 +161,7 @@ def read():
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
-# @login_required
+@login_required
 def write(output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
@@ -172,12 +174,35 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     output.name  = output.name.strip() # remove padding spaces
 
     buffer_      = parameters.buffer
+    
+    pipe = Pipeline.get_pipeline(name=output.name)
+    
+    if output.format and output.format == 'pipeline':
+        
+        if not buffer_ and not pipe:
+            # list is empty i.e. pipeline is just created.
+            new_pipe = Pipeline(name=output.name)
+            new_pipe.add_pipeline()
+            pipe = new_pipe
+        else:
+            pipe.update_pipeline(last_modified=datetime.utcnow())
 
-    if output.format == 'pipeline':
-        print("Type of buffer is: {}".format(type(buffer_)))
-        for stage in buffer_:
-            print("type of stage is {}".format(stage))
-            new_stage = Stage(**stage)
+        try:
+            for i, stage in enumerate(buffer_):
+                
+                old_stage = Stage.get_stage(ID=stage.ID)
+                modified_schema = convert_to_stage_schema(stage)
+                
+                if old_stage:
+                    # update exisiting stage
+                    old_stage.update_stage(**modified_schema)
+                else:
+                    # create a new stage, and append in the list of stages for the given pipe.
+                    new_stage = Stage(pipeline=pipe, stage_number=i ,**modified_schema)
+                    new_stage.add_stage()        
+        # response should be read from database, then construct it to send ?
+        except Exception as e:
+            pass
 
     if output.format:
         if   output.format == 'cdata':

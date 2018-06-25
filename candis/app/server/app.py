@@ -9,13 +9,13 @@ from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from htmlmin.minify import html_minify
 from envparse import env, ConfigurationError
+from flask_sqlalchemy import SQLAlchemy
 import addict
 
 # imports - module imports
 from candis.config   import CONFIG
 from candis.resource import R
-from candis.app.server.db import db
-from candis.app.server.marshmallow import ma
+# from candis.app.server.db import db
 from candis.manager.redis.redis import Redis
 
 log = logging.getLogger(__name__)
@@ -49,8 +49,8 @@ except ConfigurationError as e:
 app.config.update(app_config)
 
 socketio = SocketIO(app)
-db.init_app(app)
-ma.init_app(app)
+# db.init_app(app)
+db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # create redis instance to store tokens which are invalid until user logins again.
