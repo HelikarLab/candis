@@ -23,7 +23,7 @@ from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
 from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
-from candis.app.server.utils.pipeline import convert_to_stage_schema
+# from candis.app.server.utils.pipeline import convert_to_stage_schema
 from candis.app.server.models.pipeline import Pipeline, Stage
 from candis.app.server.models.user import User
 
@@ -134,15 +134,10 @@ def read():
     username = decoded_token['username']
     user = User.get_user(username=username)
 
-    print("Name of pipeline: {}".format(parameters.name))
-    # TODO: can be done better? - sqlalchemy feature?
     for pipeline in user.pipelines:
         if parameters.name == pipeline.name:
-            print("We got a match!!!")
-            for stage in pipeline.stages:
-                print("stage.name")
-        else:
-            "Didn't match!!!"
+            stages = json.loads(pipeline.stages)
+            response.set_data(stages)
 
     if parameters.name and parameters.format:
         path        = os.path.join(parameters.path, parameters.name)
@@ -205,16 +200,13 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
             pipe = new_pipe
         else:
             pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
-
-        last_added = Pipeline.get_pipeline(name=output.name)
-        print("JSON stages: {}".format(json.loads(last_added.stages)))
-
+        
         """ # If Stage table is also needed.
         try:
             for i, stage in enumerate(buffer_):
                 
                 old_stage = Stage.get_stage(ID=stage.ID)
-                modified_schema = convert_to_stage_schema(stage)
+                # modified_schema = convert_to_stage_schema(stage)
                 
                 if old_stage:
                     # update exisiting stage
