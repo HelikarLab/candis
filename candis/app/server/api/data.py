@@ -129,6 +129,20 @@ def read():
 
     parameters      = addict.Dict(request.get_json())
     parameters.path = os.path.abspath(parameters.path) if parameters.path else ABSPATH_STARTDIR
+    
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+
+    print("Name of pipeline: {}".format(parameters.name))
+    # TODO: can be done better? - sqlalchemy feature?
+    for pipeline in user.pipelines:
+        if parameters.name == pipeline.name:
+            print("We got a match!!!")
+            for stage in pipeline.stages:
+                print("stage.name")
+        else:
+            "Didn't match!!!"
 
     if parameters.name and parameters.format:
         path        = os.path.join(parameters.path, parameters.name)

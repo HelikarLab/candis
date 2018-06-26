@@ -29,7 +29,7 @@ env.read_envfile()
 # will read first from Environment variables, then .env file if any, then will fallback to default values.
 try:
     database_config = addict.Dict(
-        drivername = env.str('CANDIS_DRIVER_NAME', default='postgresql'),
+        drivername = env.str('CANDIS_DATABASE_DRIVERNAME', default='postgresql'),
         host = env.str('CANDIS_DATBASE_HOST', default='localhost'),
         port = env.str('CANDIS_DATBASE_PORT', default='5432'),
         username = env.str('CANDIS_DATBASE_USERNAME', default='postgres'),
@@ -43,13 +43,12 @@ try:
         INTEGRATE_SOCKETIO = env.str('CANDIS_INTEGRATE_SOCKETIO', default='True')
     )
 except ConfigurationError as e:
-    log.error("SET env variables first: {}".format(e))
+    log.error("SET environment variables first: {}".format(e))
     sys.exit(1)
 
 app.config.update(app_config)
 
 socketio = SocketIO(app)
-# db.init_app(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 

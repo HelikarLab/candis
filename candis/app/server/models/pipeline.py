@@ -11,7 +11,7 @@ class Pipeline(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     last_modified = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     status = db.Column(db.String(30))
-    stages = db.relationship('Stage', backref='pipeline')
+    # stages = db.relationship('Stage', backref='pipeline')
     user_id = db.Column(db.Integer, db.ForeignKey('users.id_'))
 
     def add_pipeline(self):
@@ -49,7 +49,7 @@ class Stage(db.Model):
     status = db.Column(db.String(50))
     value = db.Column(db.JSON)
     stage_number = db.Column(db.Integer)
-    pipeline_id = db.Column(db.Integer, db.ForeignKey('pipeline.id_'))
+    # pipeline_id = db.Column(db.Integer, db.ForeignKey('pipeline.id_'))
 
     def add_stage(self):
         try:
