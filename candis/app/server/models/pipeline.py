@@ -12,6 +12,7 @@ class Pipeline(db.Model):
     last_modified = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     status = db.Column(db.String(30))
     # stages = db.relationship('Stage', backref='pipeline')
+    stages = db.Column(db.JSON)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id_'))
 
     def add_pipeline(self):

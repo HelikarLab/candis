@@ -15,3 +15,7 @@ def convert_to_stage_schema(dict_):
         ))
     
     return dict_
+
+def convert_to_pipeline_schema(**kwargs):
+    pass
+

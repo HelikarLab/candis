@@ -200,12 +200,16 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
         
         if not buffer_ and not pipe:
             # list is empty i.e. pipeline is just created.
-            new_pipe = Pipeline(name=output.name, user=user)
+            new_pipe = Pipeline(name=output.name, user=user, stages=json.dumps({}))
             new_pipe.add_pipeline()
             pipe = new_pipe
         else:
-            pipe.update_pipeline(last_modified=datetime.utcnow())
+            pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
 
+        last_added = Pipeline.get_pipeline(name=output.name)
+        print("JSON stages: {}".format(json.loads(last_added.stages)))
+
+        """ # If Stage table is also needed.
         try:
             for i, stage in enumerate(buffer_):
                 
@@ -222,6 +226,7 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
         # response should be read from database, then construct it to send ?
         except Exception as e:
             pass
+        """
 
     if output.format:
         if   output.format == 'cdata':
