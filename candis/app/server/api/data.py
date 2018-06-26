@@ -7,6 +7,7 @@ from datetime import datetime
 # imports - third-party imports
 from flask import request, jsonify
 import addict
+import jwt
 
 # imports - module imports
 from candis.config              import CONFIG
@@ -24,6 +25,7 @@ from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
 from candis.app.server.utils.pipeline import convert_to_stage_schema
 from candis.app.server.models.pipeline import Pipeline, Stage
+from candis.app.server.models.user import User
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -166,7 +168,10 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
     parameters   = addict.Dict(request.get_json())
-
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+    
     if parameters.output:
         output   = addict.Dict(merge_dicts(output, parameters.output))
 
@@ -181,7 +186,7 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
         
         if not buffer_ and not pipe:
             # list is empty i.e. pipeline is just created.
-            new_pipe = Pipeline(name=output.name)
+            new_pipe = Pipeline(name=output.name, user=user)
             new_pipe.add_pipeline()
             pipe = new_pipe
         else:

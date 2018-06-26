@@ -12,8 +12,6 @@ def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         try:
-            print("Headers are: {}".format(request.headers))
-            print("Token from flask is: {}".format(request.headers.get('token')))
             payload = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
             if redis.redis.hget('blacklist', payload['username']) == "True":
                 response = Response()

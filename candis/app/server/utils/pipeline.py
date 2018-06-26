@@ -15,4 +15,3 @@ def convert_to_stage_schema(dict_):
         ))
     
     return dict_
-
