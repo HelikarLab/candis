@@ -76,8 +76,7 @@ const SignInEnhanced = withFormik({
       const payload = {
         token: data.data.token,
         user: {
-          username: values.username,
-          email: values.email
+          username: values.username
         }
       }
       props.onSubmit(payload)
