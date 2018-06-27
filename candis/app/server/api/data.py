@@ -130,14 +130,23 @@ def read():
     parameters      = addict.Dict(request.get_json())
     parameters.path = os.path.abspath(parameters.path) if parameters.path else ABSPATH_STARTDIR
     
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
+    if parameters.format == 'pipeline':
 
-    for pipeline in user.pipelines:
-        if parameters.name == pipeline.name:
-            stages = json.loads(pipeline.stages)
-            response.set_data(stages)
+        decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+        username = decoded_token['username']
+        user = User.get_user(username=username)
+
+        flag = False
+        for pipeline in user.pipelines:
+            if parameters.name == pipeline.name:
+                stages = json.loads(pipeline.stages)
+                response.set_data(stages)
+                flag = True
+                break
+
+        if not flag:
+            response.set_error(Response.Error.NOT_FOUND, 
+            'Pipeline does not exist in the database')
 
     if parameters.name and parameters.format:
         path        = os.path.join(parameters.path, parameters.name)
@@ -276,6 +285,22 @@ def delete():
     response = Response()
     parameters   = addict.Dict(request.get_json())
     opath        = os.path.join(ABSPATH_STARTDIR, parameters.name)  # parameter.name is expected to be name of the pipeline.
+
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+    
+    flag = False
+    for pipeline in user.pipelines:
+        if parameters.name == pipeline.name:
+            pipeline.delete_pipeline()
+            response.set_data("successfully deleted pipeline {}".format(parameters.name))
+            flag = True
+            break
+
+    if not flag:
+        response.set_error(Response.Error.NOT_FOUND, 'Pipeline does not exist in the database')
+
     if os.path.isfile(opath):
         try:
             os.remove(opath)

@@ -26,6 +26,16 @@ class Pipeline(db.Model):
             db.session.flush()
             print(e)  # use logging
 
+    def delete_pipeline(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            db.session.flush()
+            print(e)  # use logging
+        
+
     def update_pipeline(self, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
