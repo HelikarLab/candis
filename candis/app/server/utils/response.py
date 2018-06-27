@@ -1,5 +1,7 @@
+# imports - standard imports
 import json
 
+# imports - module imports
 from candis.app.server.models.response import Response as ResponseModel
 
 def save_response_to_db(dict_):

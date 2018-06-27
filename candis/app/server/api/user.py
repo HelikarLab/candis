@@ -1,12 +1,15 @@
+# imports - standard imports
 import os
 import gc
 import json
 
+# imports - third-party imports
 from flask import request, jsonify
 import jwt
 import addict
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
+# imports - module imports
 from candis.app.server.app import app, redis
 from candis.app.server.models.user import User
 from candis.config import CONFIG

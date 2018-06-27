@@ -1,5 +1,7 @@
+# imports - third-party imports
 from werkzeug.security import generate_password_hash
 
+# imports - module imports
 from candis.app.server.app import db
 
 class User(db.Model):

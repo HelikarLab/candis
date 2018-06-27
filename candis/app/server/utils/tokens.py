@@ -1,9 +1,14 @@
-from flask import request
-import jwt
+# imports - standard imports
 from functools import wraps
+
+# imports - third-party imports
+from flask import request
+from flask import jsonify
+import jwt
+
+# imports - module imports
 from candis.app.server.app import app, redis
 from candis.app.server.response import Response
-from flask import jsonify
 
 def generate_token(payload, secret_key):
     pass

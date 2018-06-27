@@ -1,5 +1,7 @@
+# imports - standard imports
 import json
 
+# imports - module imports
 from candis.app.server.models.pipeline import Pipeline, Stage
 
 def convert_to_stage_schema(dict_):

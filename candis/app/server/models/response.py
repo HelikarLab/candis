@@ -1,9 +1,11 @@
+# imports - standard imports
 from pprint import pformat
-
-import addict
-
 import json
 
+# imports - third-party imports
+import addict
+
+# imports - module imports
 from candis.app.server.app import db
 
 class Response(db.Model):
