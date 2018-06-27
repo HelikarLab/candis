@@ -15,7 +15,6 @@ import addict
 # imports - module imports
 from candis.config   import CONFIG
 from candis.resource import R
-# from candis.app.server.db import db
 from candis.manager.redis.redis import Redis
 
 log = logging.getLogger(__name__)
