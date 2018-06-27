@@ -15,13 +15,11 @@ from candis.app.server.models.user import User
 from candis.config import CONFIG
 from candis.app.server.response import Response
 from candis.app.server.helpers.verify import verify_password
-from candis.app.server.schemas.user import UserSchema
 from candis.app.server.utils.tokens import login_required, logout_required
 from candis.app.server.utils.response import save_response_to_db
 
 def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPIRY_TIME')):
-    user_schema = UserSchema(exclude=['password'])
-    payload = user_schema.dump(user_).data
+    payload = addict.Dict(username=user_.username)
     if exp:
         payload.update({'exp': exp})
     encoded_token = jwt.encode(payload=payload, key=key).decode('utf-8')
