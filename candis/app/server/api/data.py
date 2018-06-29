@@ -275,7 +275,7 @@ def search():
         # use 200 status code for 'No Content' instead of 204.
         # https://groups.google.com/d/msg/api-craft/wngl_ZKONyk/hI1n88FeUWsJ
         return jsonify(response.to_dict()), response.code
-    fields = ['title', 'accession', 'summary']
+    fields = ['title', 'accession', 'taxon']
     for key in list(summary_results.keys()):
         if key == 'uids':
             del summary_results[key]

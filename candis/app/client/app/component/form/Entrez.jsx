@@ -10,40 +10,34 @@ import SelectTags from "../widget/SelectTags"
 
 const EntrezBasic = props => {
   return (
-      <div className={classNames("container", props.classNames.root)}>
-        <Form>
-            
-          <label>Email</label>
-          <div className="row">
-              <div className="col-xs-12">
-                <Field type="email" name="email" />
-              </div>
-
-              {props.touched.email &&
-                props.errors.email && (
-                  <div style={{ color: "red", marginTop: ".5rem", marginBottom: ".5rem" }}>
-                    {props.errors.email}
-                  </div>
-                )}
-          </div>
+    <div className="container-fluid">
+      <Form>
           
-
+        <div className="form-group">
+          <label>Email</label>
+          <Field type="email" name="email" className="form-control" />
+          <small className="help-block">
+            {props.touched.email && props.errors.email}
+          </small>
+        </div>
+        
+        <div className="form-group">
           <label>Tool Name</label>
-          <div className="row">
-            <div className="col-xs-8">
-              <Field type="text" name="toolName" />
-            </div>
-          </div>
-            
+          <Field type="text" name="toolName" className="form-control"/>
+          <small className="help-block">
+            {props.touched.toolName && props.errors.toolName}
+          </small>          
+        </div>
+          
+        <div className="form-group">
           <label>API KEY</label>
-          <div className="row">
-            <div className="col-xs-8">
-              <Field type="text" name="api_key" />
-            </div>
-          </div>
+          <Field type="text" name="api_key" className="form-control" />
+        </div>
 
+        <div className="form-group">
           <label>Database (Select 1)</label> 
           <SelectTags
+            className="form-control"
             name={"database"}
             multi={false}
             onChange={props.setFieldValue}
@@ -53,9 +47,12 @@ const EntrezBasic = props => {
             error={props.errors.database}
             touched={props.touched.database}
           />
+        </div>
 
+        <div className="form-group">
           <label>Terms (Enter Atleast 1)</label>
           <SelectTags
+            className="form-control"
             name={"term"}
             multi={true}
             onChange={props.setFieldValue}
@@ -64,17 +61,23 @@ const EntrezBasic = props => {
             error={props.errors.term}
             touched={props.touched.term}
           />
-          
-          <div className="row">
-            <div className="col-xs-3">
-              <button disabled={props.isSubmitting} class="btn btn-primary">
-                Search
-              </button>
-            </div>
+        </div>
+        
+        <div className="row">
+          <div className="col-xs-8">
           </div>
+          <div className="col-xs-4">
+            <button type="submit" disabled={props.isSubmitting} className="btn btn-block btn-primary">
+              <div className="text-uppercase font-bold">
+              {props.isSubmitting ? <i className="fa fa-spinner fa-pulse"></i> : <i className="fa fa-search"></i>}
+                {" "}Search
+              </div>
+            </button>
+          </div>
+        </div>
 
-        </Form>
-      </div>
+      </Form>
+    </div>
   )
 }
 
@@ -89,10 +92,10 @@ const Entrez = withFormik({
   validationSchema: Yup.object().shape({
     email: Yup.string()
       .email("Email is not valid")
-      .required("Email is required!"),
+      .required("This field is required!"),
     api_key: Yup.string(),
-    name: Yup.string(),
-    database: Yup.string().nullable().required("This field is required!"),
+    toolName: Yup.string().required("This field is required!"),
+    database: Yup.string().required("This field is required!"),
     term: Yup.string().required("This field is required!")
   }),
   handleSubmit(values, actions) {
@@ -102,13 +105,15 @@ const Entrez = withFormik({
       term: values.term.map(t => t.value)
     }
     axios.post(config.routes.API.data.search, payload).then(({data}) => {
+      // to be implemented - to feed results into the data-grid table.
       const searchResults = data.data
       console.log(searchResults)
       const rows = Object.values(searchResults)  // list of objects, with each object having keys, 'title', 'accession', and 'summary'
+      actions.setSubmitting(false)
     }).catch((error) => {
+      // to be implemented
       console.log(error)
     })
-    actions.setSubmitting(false)
   },
   displayName: "Entrez Form"
 })(EntrezBasic)
