@@ -154,7 +154,35 @@ const Compartments =
              icon: `${config.routes.icons}/cloud-computing.png`,
           tooltip: 'Download a DataSet from a remote host',
           onClick: (dispatch) => {
-            toastr.warning('To be implemented.')
+            const dialog = {
+              component: Component.Entrez,
+              title: 'Download from NCBI',
+              size: 'lg',
+              buttons:
+              [
+                {
+                  label: "Submit",
+                  className: "btn-primary",
+                  onClick: () => {
+                    alert("Submit is clicked!")
+                  }
+                },
+                {
+                  label: "Cancel",
+                  onClick: () => {
+                    let action = modal.hide()
+                    dispatch(action)
+                  }
+                }
+              ],
+              props:
+                  {
+                    classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                    dbs: ['pubmed', 'GEO', 'Gene']
+                  }
+            }
+            const action = modal.show(dialog)
+            dispatch(action)
           }
         }
       ]
