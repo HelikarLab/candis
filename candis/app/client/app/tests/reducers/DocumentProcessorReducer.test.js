@@ -88,16 +88,20 @@ test('should set active document provided as payload', () => {
     })
 })
 
-test('should set stage', () => {
-    const node = newDoc.data[0]
+test('should set stage for an active document', () => {
+    // taking a stage out of a document, changing its code and then putting in dokuments.active pipeline
+    const node = {
+        ...newDoc.data[0],
+        code: 'dummy'
+    }
     const state = documentProcessor(
-        undefined,
+        dokuments,
         {
             type: ActionType.DocumentProcessor.SET_STAGE,
             payload: node
     })
     expect(state).toEqual({
-        ...initial,
+        ...dokuments,
         nodes: expect.any(Object)
     })
     expect(state.nodes[node.code]).toEqual({

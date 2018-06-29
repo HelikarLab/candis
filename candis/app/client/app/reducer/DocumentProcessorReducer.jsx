@@ -178,7 +178,8 @@ const documentProcessor   = (state = initial, action) => {
       const node         = action.payload
       var   nodes        = state.nodes
 
-      if ( !state.nodes[node.code] )
+      // check if active pipeline already has the node same as action.payload.
+      if (!state.active.data.map(localNode => localNode.code).includes(node.code))
       {
         nodes            = cloneDeep(state.nodes)
         nodes[node.code] =
