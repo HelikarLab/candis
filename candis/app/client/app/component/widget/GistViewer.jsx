@@ -9,7 +9,7 @@ class GistViewer extends React.Component
 
         return (
             <div className="panel-group" id="gist">
-                <div classsName="panel panel-default">
+                <div className="panel panel-default">
                     <div className="panel-heading">
                         <a href="javascript:void(0);" 
                             data-toggle="collapse" 
