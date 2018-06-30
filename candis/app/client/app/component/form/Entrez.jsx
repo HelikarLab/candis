@@ -1,12 +1,15 @@
 import React from "react"
+import { connect } from 'react-redux'
 import axios from 'axios'
 import PropTypes from "prop-types"
+import ReactDataGrid  from 'react-data-grid'
 import classNames from "classnames"
 import { withFormik, Form, Field } from "formik"
 import * as Yup from "yup"
 
 import config from '../../config'
 import SelectTags from "../widget/SelectTags"
+import entrez from '../../action/EntrezAction'
 
 const EntrezBasic = props => {
   return (
@@ -81,7 +84,7 @@ const EntrezBasic = props => {
   )
 }
 
-const Entrez = withFormik({
+const EntrezEnhanced = withFormik({
   mapPropsToValues({ email, toolName, database, term, useHistory, api_key }) {
     return {
       email: email || "",
@@ -98,24 +101,101 @@ const Entrez = withFormik({
     database: Yup.string().required("This field is required!"),
     term: Yup.string().required("This field is required!")
   }),
-  handleSubmit(values, actions) {
+  handleSubmit(values, { props, setSubmitting }) {
     const payload = {
       ...values,
       database: values.database.value,
       term: values.term.map(t => t.value)
     }
-    axios.post(config.routes.API.data.search, payload).then(({data}) => {
-      // to be implemented - to feed results into the data-grid table.
-      const searchResults = data.data
-      console.log(searchResults)
-      const rows = Object.values(searchResults)  // list of objects, with each object having keys, 'title', 'accession', and 'summary'
-      actions.setSubmitting(false)
-    }).catch((error) => {
-      // to be implemented
-      console.log(error)
-    })
+
+    const action = entrez.search(payload)
+    props.dispatch(action)
+    setSubmitting(false)  // this happens synchronously, use promise callback. 
   },
   displayName: "Entrez Form"
 })(EntrezBasic)
 
-export default Entrez
+const EntrezDataGrid = props => {
+  // cols 'key' are dependent on api/data/search API endpoint
+  const cols = [
+    {
+      key: 'accession',
+      name: 'accession number',
+      resizable: true,
+      width: 200
+    },
+    {
+      key: 'title',
+      name: 'title',
+      resizable: true,
+      width: 1000
+
+    },
+    {
+      key: 'taxon',
+      name: 'taxon',
+      resizable: true,
+      width: 200
+    }
+  ]
+
+  const rowGetter = i => {
+    return props.search_results[i]
+  }
+
+  const onSelect = (row) => {
+    const payload = {
+      accession: row[0].accession,
+      toolName: props.toolName,
+      database: props.database,
+      email: props.email
+    }
+    const action = entrez.download(payload)
+    props.dispatch(action)
+  }
+
+  return (
+    <div>
+      <ReactDataGrid
+        rowKey="accession"
+        columns={cols}
+        rowGetter={rowGetter}
+        rowsCount={props.search_results.length}
+        enableCellSelect={true}
+        enableRowSelect="single"
+        onRowSelect={onSelect}
+        minHeight={500}
+      />
+    </div>
+  )
+}
+
+const mapStateToProps = (state, props) => {
+  const entrez = state.entrez
+  return {
+    search_results: entrez.search_results,
+    toolName: entrez.toolName,
+    database: entrez.database,
+    api_key: entrez.api_key,
+    email: entrez.email
+  }
+}
+
+const ConnectedEntrezEnhanced = connect(mapStateToProps)(EntrezEnhanced)
+const ConnectedEntrezDataGrid = connect(mapStateToProps)(EntrezDataGrid)
+
+const Entrez = (props) => {
+  return (
+    <div>
+      { !props.search_results.length
+        ?
+        <ConnectedEntrezEnhanced />
+        :
+        <ConnectedEntrezDataGrid />
+      }
+    </div>
+  )
+}
+
+export default connect(mapStateToProps)(Entrez)
+

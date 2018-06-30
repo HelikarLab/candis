@@ -43,6 +43,8 @@ class API():
             else:
                 raise OSError("given path doesn't exists")
         else:
+            if(isinstance(self.path, dict)):
+                self.path = ''
             self.path = os.path.abspath(self.path)
         
         file_path = os.path.join(self.path, tar_file)

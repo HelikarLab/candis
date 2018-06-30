@@ -156,17 +156,10 @@ const Compartments =
           onClick: (dispatch) => {
             const dialog = {
               component: Component.Entrez,
-              title: 'Download from NCBI',
+              title: 'Search NCBI',
               size: 'lg',
               buttons:
-              [
-                {
-                  label: "Submit",
-                  className: "btn-primary",
-                  onClick: () => {
-                    alert("Submit is clicked!")
-                  }
-                },
+              [                
                 {
                   label: "Cancel",
                   onClick: () => {
