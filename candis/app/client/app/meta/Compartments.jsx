@@ -159,14 +159,7 @@ const Compartments =
               title: 'Search NCBI',
               size: 'lg',
               buttons:
-              [
-                {
-                  label: "Submit",
-                  className: "btn-primary",
-                  onClick: () => {
-                    alert("Submit is clicked!")
-                  }
-                },
+              [                
                 {
                   label: "Cancel",
                   onClick: () => {
