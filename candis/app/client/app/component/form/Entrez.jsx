@@ -1,4 +1,5 @@
 import React from "react"
+import { connect } from 'react-redux'
 import axios from 'axios'
 import PropTypes from "prop-types"
 import ReactDataGrid  from 'react-data-grid'
@@ -8,6 +9,7 @@ import * as Yup from "yup"
 
 import config from '../../config'
 import SelectTags from "../widget/SelectTags"
+import entrez from '../../action/EntrezAction'
 
 const EntrezBasic = props => {
   return (
@@ -99,22 +101,16 @@ const EntrezEnhanced = withFormik({
     database: Yup.string().required("This field is required!"),
     term: Yup.string().required("This field is required!")
   }),
-  handleSubmit(values, actions) {
+  handleSubmit(values, { props, setSubmitting }) {
     const payload = {
       ...values,
       database: values.database.value,
       term: values.term.map(t => t.value)
     }
-    axios.post(config.routes.API.data.search, payload).then(({data}) => {
-      // to be implemented - to feed results into the data-grid table.
-      const searchResults = data.data
-      console.log(searchResults)
-      const rows = Object.values(searchResults)  // list of objects, with each object having keys, 'title', 'accession', and 'summary'
-      actions.setSubmitting(false)
-    }).catch((error) => {
-      // to be implemented
-      console.log(error)
-    })
+
+    const action = entrez.search(payload)
+    props.dispatch(action)
+    setSubmitting(false)  // this happens synchronously, use promise callback.  
   },
   displayName: "Entrez Form"
 })(EntrezBasic)
@@ -264,11 +260,18 @@ const EntrezDataGrid = props => {
   const rows_data = Object.values(rows)
 
   const rowGetter = i => {
-    return rows_data[i]
+    return props.search_results[i]
   }
 
-  const doSomething = row => {
-    console.log(row[0].accession)
+  const onSubmit = (row) => {
+    const payload = {
+      accession: row[0].accession,
+      toolName: props.toolName,
+      database: props.database,
+      email: props.email
+    }
+    const action = entrez.download(payload)
+    props.dispatch(action)
   }
 
   return (
@@ -280,21 +283,39 @@ const EntrezDataGrid = props => {
         rowsCount={rows_data.length}
         enableCellSelect={true}
         enableRowSelect="single"
-        onRowSelect={doSomething}
+        onRowSelect={onSubmit}
         minHeight={500}
       />
     </div>
   )
 }
 
+const mapStateToProps = (state, props) => {
+  const entrez = state.entrez
+  return {
+    search_results: entrez.search_results,
+    toolName: entrez.toolName,
+    database: entrez.database,
+    api_key: entrez.api_key,
+    email: entrez.email
+  }
+}
+
+const ConnectedEntrezEnhanced = connect(mapStateToProps)(EntrezEnhanced)
+const ConnectedEntrezDataGrid = connect(mapStateToProps)(EntrezDataGrid)
+
 const Entrez = (props) => {
   return (
     <div>
-      <EntrezEnhanced props={props} />
-      <EntrezDataGrid props={props} />
+      { !props.search_results.length
+        ?
+        <ConnectedEntrezEnhanced />
+        :
+        <ConnectedEntrezDataGrid />
+      }
     </div>
   )
 }
 
-export default Entrez
+export default connect(mapStateToProps)(Entrez)
 

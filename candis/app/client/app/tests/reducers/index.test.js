@@ -6,7 +6,7 @@ import Reducer from '../../reducer/index'
 test('smoke test: expect store created using combineReducers should contain given reducers', () => {
     const store = createStore(Reducer)
     expect(Object.keys(store.getState()).sort()).toEqual(
-        ['app', 'toolBox', 'documentProcessor', 'modal', 'dataEditor', 'data'].sort()
+        ['app', 'toolBox', 'documentProcessor', 'modal', 'dataEditor', 'data', 'entrez'].sort()
     )
 })
 
