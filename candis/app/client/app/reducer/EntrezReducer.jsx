@@ -17,7 +17,6 @@ const entrezReducer = (state = initial, action) => {
         }
         
         case ActionType.DOWNLOAD: {
-            // to be implemented
             return {...state, search_results: []}
         }
 

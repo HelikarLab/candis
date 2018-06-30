@@ -42,7 +42,7 @@ const entrez = {
                 
                 action = entrez.successDownload(data)
                 dispatch(action)
-            }).catch(({resposne}) => {
+            }).catch(({response}) => {
                 const error = response.data.error
                 const action = entrez.errorDownload(error)
                 dispatch(action)
