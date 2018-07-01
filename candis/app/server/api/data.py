@@ -99,10 +99,15 @@ def discover_resource(path, level = None, filter_ = None):
     return tree
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
-def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None):
+@login_required
+def resource(filter_ = ['cdata', 'csv', 'cel', 'gist'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
+
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
 
     path       = CONFIG.App.STARTDIR if not parameters.path else os.path.join(CONFIG.App.STARTDIR, parameters.path)
 
@@ -111,6 +116,12 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None
       level    = level,
       filter_  = filter_
     )
+
+    files = tree.files
+    for pipe in user.pipelines:
+        temp = addict.Dict(name=pipe.name, format='pipeline')
+        files.append(temp)
+    tree.files = files
 
     response.set_data(tree)
 
@@ -156,13 +167,15 @@ def read():
                 data = cdat.to_dict()
 
                 response.set_data(data)
-            elif parameters.format in ['pipeline', 'gist']:
+            elif parameters.format == 'gist':
                 try:
                     data = JSON.read(path)
                 except json.decoder.JSONDecodeError as e:
                     data = [ ]
                     
                 response.set_data(data)
+            elif parameters.format == 'pipeline':
+                pass
             else:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Here')
         else:
@@ -195,59 +208,55 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     output.path  = ABSPATH_STARTDIR # TODO: make it work with os.path.join(ABSPATH_DIR, output.path)
     output.name  = output.name.strip() # remove padding spaces
 
-    buffer_      = parameters.buffer
-    
-    pipe = Pipeline.get_pipeline(name=output.name)
-    
-    if output.format and output.format == 'pipeline':
-        
-        if not buffer_ and not pipe:
-            # list is empty i.e. pipeline is just created.
-            new_pipe = Pipeline(name=output.name, user=user, stages=json.dumps({}))
-            new_pipe.add_pipeline()
-            pipe = new_pipe
-        else:
-            pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
+    buffer_      = assign_if_none(parameters.buffer, []) 
         
     if output.format:
         if   output.format == 'cdata':
-             handler = cdata
+            handler = cdata
 
-             if output.name in ['', '.cdata', '.CDATA']:
+            if output.name in ['', '.cdata', '.CDATA']:
                 name = get_timestamp_str('CDAT%Y%m%d%H%M%S.cdata')
-             else:
+            else:
                 name = output.name
 
-             output.name = name
+            output.name = name
         elif output.format == 'pipeline':
-             handler = pipeline
+            handler = pipeline
 
-             if output.name in ['', '.cpipe', '.CPIPE']:
+            if output.name in ['', '.cpipe', '.CPIPE']:
                 name = get_timestamp_str('PIPE%Y%m%d%H%M%S.cpipe')
-             else:
+            else:
                 name = output.name
 
-             output.name = name
+            output.name = name
 
-             if not buffer_:
-                buffer_  = [ ]
+            pipe = Pipeline.get_pipeline(name=output.name)
+
+            if not pipe:
+                # list is empty i.e. pipeline is just created.
+                new_pipe = Pipeline(name=output.name, user=user, stages=json.dumps({}))
+                new_pipe.add_pipeline()
+                pipe = new_pipe
+            else:
+                pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
+
+            data = addict.Dict(output=output, data=(buffer_))
+            response.set_data(data) 
 
     opath        = os.path.join(output.path, output.name)
 
     try:
-        handler.write(opath, buffer_)
+        if  output.format and output.format == 'cdata':
+            handler.write(opath, buffer_)
 
-        data          = addict.Dict()
-        data.output   = output
-        
-        # These anomalies are confusing moi. Kindly check the difference between readers, writers and loaders and make it uniform.
-        if output.format == 'cdata':
+            data          = addict.Dict()
+            data.output   = output
+
+            # These anomalies are confusing moi. Kindly check the difference between readers, writers and loaders and make it uniform.
             cdat      = handler.read(opath)
             data.data = cdat.to_dict()
-        else:
-            data.data = handler.read(opath)
 
-        response.set_data(data)
+            response.set_data(data)
     except TypeError as e:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
@@ -264,7 +273,7 @@ def delete():
     # delete handle to delete a pipeline
     response = Response()
     parameters   = addict.Dict(request.get_json())
-    opath        = os.path.join(ABSPATH_STARTDIR, parameters.name)  # parameter.name is expected to be name of the pipeline.
+    opath        = os.path.join(ABSPATH_STARTDIR, parameters.name)
 
     decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
     username = decoded_token['username']
@@ -274,20 +283,21 @@ def delete():
     for pipeline in user.pipelines:
         if parameters.name == pipeline.name:
             pipeline.delete_pipeline()
-            response.set_data("successfully deleted pipeline {}".format(parameters.name))
+            data = addict.Dict(message="successfully deleted pipeline {}".format(parameters.name))
+            response.set_data(data)
             flag = True
             break
 
     if not flag:
         response.set_error(Response.Error.NOT_FOUND, 'Pipeline does not exist in the database')
 
-    if os.path.isfile(opath):
-        try:
-            os.remove(opath)
-        except:
-            response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Write access denied!')
-    else:
-        response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
+    # if os.path.isfile(opath):
+    #     try:
+    #         os.remove(opath)
+    #     except:
+    #         response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Write access denied!')
+    # else:
+    #     response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     
     dict_ = response.to_dict()
     save_response_to_db(dict_)
