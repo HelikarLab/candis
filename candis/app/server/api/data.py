@@ -23,8 +23,7 @@ from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
 from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
-# from candis.app.server.utils.pipeline import convert_to_stage_schema
-from candis.app.server.models.pipeline import Pipeline, Stage
+from candis.app.server.models.pipeline import Pipeline
 from candis.app.server.models.user import User
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
@@ -210,25 +209,6 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
         else:
             pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
         
-        """ # If Stage table is also needed.
-        try:
-            for i, stage in enumerate(buffer_):
-                
-                old_stage = Stage.get_stage(ID=stage.ID)
-                # modified_schema = convert_to_stage_schema(stage)
-                
-                if old_stage:
-                    # update exisiting stage
-                    old_stage.update_stage(**modified_schema)
-                else:
-                    # create a new stage, and append in the list of stages for the given pipe.
-                    new_stage = Stage(pipeline=pipe, stage_number=i ,**modified_schema)
-                    new_stage.add_stage()        
-        # response should be read from database, then construct it to send ?
-        except Exception as e:
-            pass
-        """
-
     if output.format:
         if   output.format == 'cdata':
              handler = cdata

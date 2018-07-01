@@ -1,10 +1,12 @@
 # imports - standard imports
 import os
 import time
+import json
 
 # imports - third-party imports
 from flask import request, jsonify
 import addict
+import jwt
 
 # imports - module imports
 from candis.config              import CONFIG
@@ -16,16 +18,24 @@ from candis.ios                 import Pipeline
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.app      import socketio
+from candis.app.server.utils.tokens import login_required
 from candis.app.server.response import Response
 from candis.app.server.utils.response import save_response_to_db
+from candis.app.server.models.pipeline import PipelineRun, Pipeline as PipelineModel
+from candis.app.server.models.user import User
 
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Pipeline.RUN, methods = ['POST'])
+@login_required
 def run(delay = 5):
     response         = Response()
 
     parameters       = addict.Dict(request.get_json())
+
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
 
     if parameters.path and parameters.name and parameters.format:
         relpath      = os.path.join(parameters.path, parameters.name)
@@ -44,6 +54,12 @@ def run(delay = 5):
                     socketio.emit('status', status)
 
                     time.sleep(delay)
+                
+                print("Type of gist is {}".format(type(pipe.gist)))
+                for p in user.pipelines:
+                    if p.name == parameters.name:
+                        new_pipe_run = PipelineRun(gist=json.dumps(pipe.gist), pipeline=p)
+                        new_pipe_run.add_pipeline_run()
 
                 JSON.write(relpath, pipe.stages)
 
