@@ -179,7 +179,8 @@ def read():
             else:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Here')
         else:
-            response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
+            if parameters.format != 'pipeline':
+                response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     else:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'There')
 
