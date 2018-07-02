@@ -1,3 +1,2 @@
 web: python -m candis
 node: npm start
-redis: redis-server --port $REDIS_PORT

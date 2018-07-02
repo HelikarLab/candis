@@ -5,6 +5,7 @@
 
 BASEDIR      = $(realpath .)
 MODULE       = candis
+HONCHO_MANAGER = honcho_manager.py 
 
 SOURCEDIR    = $(realpath $(MODULE))
 DOCSDIR      = $(realpath docs)
@@ -102,9 +103,11 @@ console:
 
 start:
 ifeq ($(ENV), development)
-	$(HONCHO) start --procfile $(BASEDIR)/Procfile.dev
+	# $(HONCHO) start --procfile $(BASEDIR)/Procfile.dev
+	$(PYTHON) $(BASEDIR)/$(HONCHO_MANAGER) --env 'dev'
 else
-	$(HONCHO) start
+	# $(HONCHO) start
+	$(PYTHON) $(BASEDIR)/$(HONCHO_MANAGER) --env 'prod'
 endif
 
 release:
