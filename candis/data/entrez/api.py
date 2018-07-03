@@ -84,10 +84,7 @@ class API(object):
 
         return params
 
-
-
     def _throttle(self):
-        # to be implemented.
         # checks limit for calling entrez API.
         if self.redis.if_exists('last_api_request_timestamp'):
             previous = self.redis.redis.get('last_api_request_timestamp')

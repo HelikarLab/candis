@@ -317,4 +317,72 @@ const newDoc = {
     "active": true
 }
 
-export { newDoc }
+const dummyState = {
+  "documents": [
+    {
+      "ID": "ryUSqvdfQ",
+      "output": {
+        "format": "pipeline",
+        "name": "dummyPipe4.cpipe",
+        "path": "/home/rupav/opensource/candis/CRES"
+      },
+      "data": [
+        {
+          "ID": "HJmvLcPuM7",
+          "code": "dat.fle",
+          "name": "File",
+          "icon": "/assets/img/icons/document.png",
+          "status": "PENDING"
+        },
+        {
+          "ID": "ryhIqvuG7",
+          "code": "prp.kcv",
+          "name": "k-Fold Cross-Validation",
+          "icon": "/assets/img/icons/cross-validation.png",
+          "label": "3 folds",
+          "value": "3",
+          "status": "READY"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "active": {
+    "ID": "ryUSqvdfQ",
+    "output": {
+      "format": "pipeline",
+      "name": "dummyPipe4.cpipe",
+      "path": "/home/rupav/opensource/candis/CRES"
+    },
+    "data": [
+      {
+        "ID": "HJmvLcPuM7",
+        "code": "dat.fle",
+        "name": "File",
+        "icon": "/assets/img/icons/document.png",
+        "status": "PENDING"
+      },
+      {
+        "ID": "ryhIqvuG7",
+        "code": "prp.kcv",
+        "name": "k-Fold Cross-Validation",
+        "icon": "/assets/img/icons/cross-validation.png",
+        "status": "PENDING"
+      }
+    ],
+    "active": true
+  },
+  "nodes": {
+    "dat.fle": {
+      "icon": "/assets/img/icons/document.png"
+    },
+    "prp.kcv": {
+      "icon": "/assets/img/icons/cross-validation.png"
+    }
+  },
+  "running": null,
+  "status": [],
+  "errors": []
+}
+
+export { newDoc, dummyState }

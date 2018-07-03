@@ -2,7 +2,7 @@ import isEqual    from 'lodash.isequal'
 
 import documentProcessor from '../../reducer/DocumentProcessorReducer'
 import ActionType from '../../constant/ActionType'
-import dokuments, { newDoc } from '../fixtures/documents'  
+import dokuments, { newDoc, dummyState } from '../fixtures/documents'  
 // to be implemented: replace dokuments name with a more apt name, as dokuments have
 // structure of following "initial" state.
 
@@ -53,7 +53,11 @@ test('should return state with provided doc being active given NO state.document
             type: ActionType.Asynchronous.READ_SUCCESS,
             payload: newDoc
     })
-    expect((dokuments.documents).length + 1).toBe(state.documents.length)  // with new doc, size should increase by 1
+    // with new doc, size should increase by 1
+    expect(state.documents.length).toBe(
+        (dokuments.documents).length + 1
+    )  
+    
     // check if active doc is changed
     expect(state.active).toEqual({
         ...newDoc,
@@ -68,6 +72,78 @@ test('should return state with provided doc being active given NO state.document
 })
 
 // TO be implemented; test for ActionType.Asynchronous.WRITE_SUCCESS for this reducer
+test('should modify active document if any', () => {
+    
+    const payload = {
+        data: {
+            output: dummyState.documents[0].output,
+            data: dummyState.active.data  // a list of stages/nodes
+        }
+    }
+    const state = documentProcessor(
+        dummyState,
+        {
+            type: ActionType.Asynchronous.WRITE_SUCCESS,
+            payload
+        }
+    )
+    state.active.data.forEach(node => {
+        expect(Object.keys(node).sort()).toEqual(
+            ['ID', 'code', 'name', 'label', 'value', 'status', 'onClick', 'icon'].sort()
+        )
+    })
+    expect(state.active).toEqual(state.documents[0])
+    expect(state).toEqual({
+        ...dummyState,
+        active: {
+            ...dummyState.active,
+            data: expect.any(Array)
+        },
+        documents: expect.any(Array),
+        errors: []
+    })
+})
+
+test('should make a document active if not exists in the list of existing documents', () => {
+    const payload = {
+        data: {
+            output: dummyState.documents[0].output,
+            data: dummyState.active.data  // a list of stages/nodes
+        }
+    }
+
+    const initState = {
+        ...dokuments,
+        active: null,
+        nodes: dummyState.nodes
+    }
+
+    const state = documentProcessor(
+        initState,
+        {
+            type: ActionType.Asynchronous.WRITE_SUCCESS,
+            payload
+        }
+    )
+
+    expect(state.documents.length).toBe(
+        (dokuments.documents).length + 1
+    )
+
+    state.active.data.forEach(node => {
+        expect(Object.keys(node).sort()).toEqual(
+            ['ID', 'code', 'name', 'label', 'value', 'status', 'onClick', 'icon'].sort()
+        )
+    })
+
+    expect(state).toEqual({
+        ...initState,
+        errors: [],
+        active: expect.any(Object),
+        documents: expect.any(Object)
+    })
+
+})
 
 test('should set active document provided as payload', () => {
     const newActive = dokuments.documents[0]  // currently documents[1] is set to active
