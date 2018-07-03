@@ -65,18 +65,19 @@ class Pipeline(object):
             self.set_status(Pipeline.READY)
 
     # raise IOError, ValueError.
-    def load(path):
-        if not os.path.isabs(path):
-            path     = os.path.abspath(path)
+    def load(stages):
+        print("Stages are {}".format(stages))
+        # if not os.path.isabs(path):
+        #     path     = os.path.abspath(path)
 
-        if not os.path.exists(path):
-            raise IOError('{path} does not exist.'.format(path = path))
-        if not os.path.isfile(path):
-            raise IOError('{path} is not a valid file.'.format(path = path))
+        # if not os.path.exists(path):
+        #     raise IOError('{path} does not exist.'.format(path = path))
+        # if not os.path.isfile(path):
+        #     raise IOError('{path} is not a valid file.'.format(path = path))
 
         objekt       = Pipeline()
-        stages       = [addict.Dict(stage) for stage in read(path)]
-
+        # stages       = [addict.Dict(stage) for stage in read(path)]
+        stages = [addict.Dict(stage) for stage in stages]
         if len(stages) == 0:
             raise ValueError('Pipeline is empty.')
 

@@ -37,13 +37,21 @@ def run(delay = 5):
     username = decoded_token['username']
     user = User.get_user(username=username)
 
+    stages = []
+    for p in user.pipelines:
+        if p.name == parameters.name:
+            print("Found a match!!")
+            stages = json.loads(p.stages)
+
+
     if parameters.path and parameters.name and parameters.format:
         relpath      = os.path.join(parameters.path, parameters.name)
 
         # TODO: Check if file exists, else respond error.
         if parameters.format == 'pipeline':
             try:
-                cdat, pipe  = Pipeline.load(relpath)
+                cdat, pipe  = Pipeline.load(stages)
+                print("Loaded correctly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 pipe.run(cdat, verbose = CONFIG.DEBUG)
 
                 while pipe.status == Pipeline.RUNNING:
@@ -58,6 +66,7 @@ def run(delay = 5):
                 print("Type of gist is {}".format(type(pipe.gist)))
                 for p in user.pipelines:
                     if p.name == parameters.name:
+                        print("Found a match!!")
                         new_pipe_run = PipelineRun(gist=json.dumps(pipe.gist), pipeline=p)
                         new_pipe_run.add_pipeline_run()
 
