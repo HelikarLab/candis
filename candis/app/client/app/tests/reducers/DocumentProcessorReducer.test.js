@@ -23,7 +23,38 @@ test('should setup initial state of DocumentProcessorReducer', () => {
     })
 })
 
-test('should return state with one object being active given ONE ducument matches the provided state', () => {
+test('should return state as it is for a payload that is not meant to be used as a pipeline', () => {
+    // basically test if 'break' is working given action.payload.output.format is not 'pipeline'
+    
+    const payload = {
+        data: newDoc.data,
+        output: {
+            format: 'cpipe'  // other than 'pipeline'
+        }
+    }
+    let state = documentProcessor(
+        initial,
+        {
+            type: ActionType.Asynchronous.READ_SUCCESS,
+            payload
+        }
+    )
+    expect(state).toEqual(initial)
+
+    state = documentProcessor(
+        initial,
+        {
+            type: ActionType.Asynchronous.WRITE_SUCCESS,
+            payload: {
+                data: payload
+            }
+        }
+    )
+    expect(state).toEqual(initial)
+
+})
+
+test('should return state with one object being active given ONE document matches the provided state', () => {
     const state = documentProcessor(
         dokuments,
         {
