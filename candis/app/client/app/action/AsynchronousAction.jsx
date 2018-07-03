@@ -5,17 +5,22 @@ import ActionType from '../constant/ActionType'
 
 const write              = (output, buffer = null) => {
   const dispatch         = (dispatch) => {
+    console.log("output is ", output)
+    console.log("buffer is ", buffer)
     const action         = requestWrite(output, buffer)
     const parameters     = { output: output, buffer: buffer }
 
     dispatch(action)
 
     axios.post(config.routes.API.data.write, parameters).then(({ data }) => {
+      console.log("data received from write endpoint ",data)
       data               = data.data
       const action       = successWrite(output, buffer, data)
 
+      console.log("Just need to be dispatched!!!")
       dispatch(action)
     }).catch((error) => {
+      console.log("error is ",error)
       // const error        = response.data.error
       const action       = errorWrite(output, buffer, error)
 
@@ -128,8 +133,9 @@ const read               = (output) => {
       dispatch(action)
 
       return data
-    }).catch(({ response }) => {
-      const error        = response.data.error
+    }).catch((error) => {
+      // const error        = response.data.error
+      console.log("read error is", error)
       const action       = errorRead(output, error)
 
       dispatch(action)

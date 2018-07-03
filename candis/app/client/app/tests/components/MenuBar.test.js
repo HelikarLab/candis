@@ -16,6 +16,3 @@ beforeEach(() => {
 test('should render MenuBar correctly', () => {
     expect(wrapper).toMatchSnapshot()
 })
-
-
-

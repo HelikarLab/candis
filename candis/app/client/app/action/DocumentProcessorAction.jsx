@@ -75,6 +75,7 @@ const stage =
       {
         var copy          = null
         var buffer        = dokument.data.map((node) => {
+          console.log("node is in update", node)
           var   step      = 
           {
                 ID: node.ID,
@@ -87,6 +88,7 @@ const stage =
 
           if ( node.ID == ID )
           {
+            console.log("We got a same node ID!!!")
             step = {...step, ...update}
             copy = {...node, ...update}
           }
