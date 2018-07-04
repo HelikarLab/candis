@@ -30,14 +30,14 @@ env.read_envfile()
 try:
     database_config = addict.Dict(
         drivername = env.str('CANDIS_DATABASE_DRIVERNAME', default='postgresql'),
-        host = env.str('CANDIS_DATBASE_HOST', default='localhost'),
-        port = env.str('CANDIS_DATBASE_PORT', default='5432'),
-        username = env.str('CANDIS_DATBASE_USERNAME', default='postgres'),
-        password = env.str('CANDIS_DATBASE_PASSWORD', default='postgres'),
-        database = env.str('CANDIS_DATBASE_NAME', default='postgres')
+        host = env.str('CANDIS_DATABASE_HOST'),
+        port = env.str('CANDIS_DATABASE_PORT'),
+        username = env.str('CANDIS_DATABASE_USERNAME'),
+        password = env.str('CANDIS_DATABASE_PASSWORD'),
+        database = env.str('CANDIS_DATABASE_NAME')
     )
     app_config = addict.Dict(
-        SECRET_KEY = env.str('CANDIS_SECRET_KEY', default='super_secret_key'),
+        SECRET_KEY = env.str('CANDIS_SECRET_KEY'),
         SQLALCHEMY_DATABASE_URI = str(url.URL(**database_config)),
         SQLALCHEMY_TRACK_MODIFICATIONS = env.str('CANDIS_SQLALCHEMY_TRACK_MODIFICATIONS', default='False'),
         INTEGRATE_SOCKETIO = env.str('CANDIS_INTEGRATE_SOCKETIO', default='True')
