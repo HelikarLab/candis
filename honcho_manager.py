@@ -1,10 +1,12 @@
 import sys
 import os
 
-import click
 from honcho.manager import Manager
+from envparse import env
+import click
 
-REDIS_PORT = os.environ.get('CANDIS_REDIS_PORT') or 6379
+env.read_envfile()
+REDIS_PORT = env.int('CANDIS_REDIS_PORT', default=6379)
 
 @click.command()
 @click.option('--env', default='dev', help='working environment')
