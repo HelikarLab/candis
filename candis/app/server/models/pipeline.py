@@ -57,8 +57,8 @@ class PipelineRun(db.Model):
 
     id_ = db.Column(db.Integer, primary_key=True)
     gist = db.Column(db.JSON)
-    # last_ran_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    # time_taken = db.Column(db.DateTime, nullable=False)
+    last_ran_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    time_taken = db.Column(db.Numeric, nullable=False)
     pipeline_id = db.Column(db.Integer, db.ForeignKey('pipeline.id_'))
     
     def add_pipeline_run(self):

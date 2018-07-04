@@ -38,11 +38,11 @@ def run(delay = 5):
     user = User.get_user(username=username)
 
     stages = []
+    current_pipe = None
     for p in user.pipelines:
         if p.name == parameters.name:
-            print("Found a match!!")
+            current_pipe = p
             stages = json.loads(p.stages)
-
 
     if parameters.path and parameters.name and parameters.format:
         relpath      = os.path.join(parameters.path, parameters.name)
@@ -50,8 +50,8 @@ def run(delay = 5):
         # TODO: Check if file exists, else respond error.
         if parameters.format == 'pipeline':
             try:
+                start = time.time()
                 cdat, pipe  = Pipeline.load(stages)
-                print("Loaded correctly!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 pipe.run(cdat, verbose = CONFIG.DEBUG)
 
                 while pipe.status == Pipeline.RUNNING:
@@ -62,13 +62,12 @@ def run(delay = 5):
                     socketio.emit('status', status)
 
                     time.sleep(delay)
-                
-                print("Type of gist is {}".format(type(pipe.gist)))
-                for p in user.pipelines:
-                    if p.name == parameters.name:
-                        print("Found a match!!")
-                        new_pipe_run = PipelineRun(gist=json.dumps(pipe.gist), pipeline=p)
-                        new_pipe_run.add_pipeline_run()
+
+                end = time.time()
+                time_taken = end - start
+                if current_pipe:
+                    new_pipe_run = PipelineRun(gist=json.dumps(pipe.gist), pipeline=current_pipe, time_taken=time_taken)
+                    new_pipe_run.add_pipeline_run()
 
                 JSON.write(relpath, pipe.stages)
 

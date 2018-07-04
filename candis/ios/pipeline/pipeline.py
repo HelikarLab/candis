@@ -395,6 +395,7 @@ class Pipeline(object):
                 models.append(summary)
 
         self.gist.models = models
+        self.gist.name = '{}.cgist'.format(name)
 
         JVM.stop()
 
