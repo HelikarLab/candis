@@ -17,6 +17,7 @@ class PipelineEditor extends React.Component
 
 	onClick (e) {
 		const action = stage.delete(e.target.value)
+
 		this.props.dispatch(action)
 	}
 	
@@ -49,7 +50,7 @@ class PipelineEditor extends React.Component
 											</a>
 										</div>
 										<div className="col-xs-3" >
-											<button className="close" value={node.code} onClick={this.onClick}>&times;</button>
+											<button className="close" value={node.ID} onClick={this.onClick}>&times;</button>
 										</div>
 									</div>
 								</div>
