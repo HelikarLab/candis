@@ -218,7 +218,7 @@ test('should set stage for an active document', () => {
 })
 
 test('should remove node from state.documents and stata.active', () => {
-    const code = dokuments.active.data[0].code
+    const ID = dokuments.active.data[0].ID
     const data = dokuments.active.data
     const state = documentProcessor(
         dokuments,    
@@ -226,12 +226,12 @@ test('should remove node from state.documents and stata.active', () => {
             type: ActionType.Pipeline.REMOVE_STAGE,
             payload: {
                 data,
-                code
+                ID
             }
     })
     const reducedData = [ ]
     data.forEach((node) => {
-        if(node.code !== code){
+        if(node.ID !== ID){
             reducedData.push(node)
         }
     })

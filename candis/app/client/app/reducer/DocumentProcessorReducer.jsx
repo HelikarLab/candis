@@ -198,7 +198,7 @@ const documentProcessor   = (state = initial, action) => {
       
       const updatedNodes = [ ]
       payload.data.forEach((node) => {
-        if(node.code !== payload.code){
+        if(node.ID !== payload.ID){
           updatedNodes.push(node)
         }
       })

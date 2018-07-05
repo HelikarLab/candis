@@ -110,13 +110,13 @@ const stage =
 
     return dispatch
   },
-  delete: (code) => {
+  delete: (ID) => {
     const dispatch = (dispatch) => {
       const dokument = store.getState().documentProcessor.active
       
       var action = {
         payload: {
-          code: code,
+          ID: ID,
           data: dokument.data
         },
         type: ActionType.Pipeline.REMOVE_STAGE
@@ -125,7 +125,7 @@ const stage =
 
       if( dokument !== null ){
         var buffer = dokument.data.filter((node) => {
-          if( node.code == code ){
+          if( node.ID == ID ){
             return false
           }
           return true
