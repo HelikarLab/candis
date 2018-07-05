@@ -23,7 +23,7 @@ from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
 from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
-from candis.app.server.models.pipeline import Pipeline
+from candis.app.server.models.pipeline import Pipeline, Cdata
 from candis.app.server.models.user import User
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
@@ -100,7 +100,7 @@ def discover_resource(path, level = None, filter_ = None):
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 @login_required
-def resource(filter_ = ['cdata', 'csv', 'cel', 'gist'], level = None):
+def resource(filter_ = ['csv', 'cel', 'gist'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
@@ -120,6 +120,9 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'gist'], level = None):
     files = tree.files
     for pipe in user.pipelines:
         temp = addict.Dict(name=pipe.name, format='pipeline')
+        files.append(temp)
+    for cdata in user.cdata:
+        temp = addict.Dict(name=cdata.name, format='cdata')
         files.append(temp)
     tree.files = files
 
@@ -209,7 +212,9 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     output.path  = ABSPATH_STARTDIR # TODO: make it work with os.path.join(ABSPATH_DIR, output.path)
     output.name  = output.name.strip() # remove padding spaces
 
-    buffer_      = assign_if_none(parameters.buffer, []) 
+    buffer_      = assign_if_none(parameters.buffer, [])
+
+    opath        = os.path.join(output.path, output.name)
         
     if output.format:
         if   output.format == 'cdata':
@@ -221,6 +226,24 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
                 name = output.name
 
             output.name = name
+
+            cdata_obj = Cdata.get_cdata(name=output.name)
+
+            if not cdata_obj:
+                new_cdata = Cdata(name=name, user=user, value=json.dumps(buffer_))
+                new_cdata.add_cdata()
+                cdata_obj = new_cdata
+            else:
+                cdata_obj.update_cdata(value=json.dumps(buffer_))
+
+            
+            cdat = handler.CData()
+            cdat.to_json(buffer_)
+            cdat = handler.CData.load_from_json(buffer_, opath)
+            
+            data = addict.Dict(output=output, data=(cdat.to_dict()))
+            response.set_data(data)
+
         elif output.format == 'pipeline':
             handler = pipeline
 
@@ -235,31 +258,14 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
 
             if not pipe:
                 # list is empty i.e. pipeline is just created.
-                new_pipe = Pipeline(name=output.name, user=user, stages=json.dumps({}))
+                new_pipe = Pipeline(name=output.name, user=user, stages=json.dumps(buffer_))
                 new_pipe.add_pipeline()
                 pipe = new_pipe
             else:
                 pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
 
             data = addict.Dict(output=output, data=(buffer_))
-            response.set_data(data) 
-
-    opath        = os.path.join(output.path, output.name)
-
-    try:
-        if  output.format and output.format == 'cdata':
-            handler.write(opath, buffer_)
-
-            data          = addict.Dict()
-            data.output   = output
-
-            # These anomalies are confusing moi. Kindly check the difference between readers, writers and loaders and make it uniform.
-            cdat      = handler.read(opath)
-            data.data = cdat.to_dict()
-
             response.set_data(data)
-    except TypeError as e:
-        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
 
     dict_      = response.to_dict()
     save_response_to_db(dict_)

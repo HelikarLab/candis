@@ -109,6 +109,7 @@ def logout():
 
     return json_, code
 
+# for debugging only - to check if JWT token auth is working as expected.
 @app.route('/private', methods=['GET'])
 @login_required
 def private():

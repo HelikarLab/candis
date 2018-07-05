@@ -70,39 +70,32 @@ class PipelineRun(db.Model):
             db.session.flush()
             print(e)  # use logging
 
-# class Stage(db.Model):
-#     __tablename__ = 'stage'
+class Cdata(db.Model):
+    __tablename__ = 'cdata'
 
-#     id_ = db.Column(db.Integer, primary_key=True)
-#     ID = db.Column(db.String(100), nullable=False)
-#     code = db.Column(db.String(50))
-#     name = db.Column(db.String(50))
-#     label = db.Column(db.String(50))
-#     status = db.Column(db.String(50))
-#     value = db.Column(db.JSON)
-#     stage_number = db.Column(db.Integer)
-#     # pipeline_id = db.Column(db.Integer, db.ForeignKey('pipeline.id_'))
+    id_ = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    value = db.Column(db.JSON)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id_'))
 
-#     def add_stage(self):
-#         try:
-#             db.session.add(self)
-#             db.session.commit()
-#         except Exception as e:
-#             db.session.rollback()
-#             db.session.flush()
-#             print(e)  # use logging
+    def add_cdata(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            db.session.flush()
+            print(e)  # TODO: use logging
 
-#     def update_stage(self, **kwargs):
-#         for key, value in kwargs.items():
-#             setattr(self, key, value)
-#         db.session.add(self)
-#         db.session.commit()
+    @classmethod
+    def get_cdata(cls, id_=None, name=None):
+        if id_:
+            return cls.query.filter_by(id_=id_).first()
+        elif name:
+            return cls.query.filter_by(name=name).first()
 
-#     @classmethod
-#     def get_stage(cls, ID=None, code=None, pipeline_id=None):
-#         if ID:
-#             return cls.query.filter_by(ID=ID).first()
-#         elif code:
-#             return cls.query.filter_by(code=code).first()
-#         elif pipeline_id:
-#             return cls.query.filter_by(pipeline_id=pipeline_id).first()
+    def update_cdata(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()    

@@ -10,9 +10,6 @@ import jwt
 from candis.app.server.app import app, redis
 from candis.app.server.response import Response
 
-def generate_token(payload, secret_key):
-    pass
-
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -33,7 +30,7 @@ def login_required(f):
 
             return f(*args, **kwargs)
         except Exception as e:
-            print(e)
+            print(e)  # TODO: use logger
             response = Response()
             response.set_error(
                 Response.Error.ACCESS_DENIED,

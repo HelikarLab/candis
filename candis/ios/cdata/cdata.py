@@ -29,6 +29,16 @@ from candis.ios      import json as JSON
 
 ATTRIBUTE_TYPES = JSON.read(os.path.join(R.Path.DATA, 'attribute-types.json'))
 
+def get_attribute_tag(attr):
+    tag          = None
+
+    if 'type' in attr:
+        for attp in ATTRIBUTE_TYPES:
+            if attr['type'] == attp['name']:
+                tag  = attp['tag']
+
+    return tag
+
 def get_attribute_pattern():
     wrapper     = '({regex})?'
     regex       = '|'.join([attt['tag'] for attt in ATTRIBUTE_TYPES])
@@ -110,6 +120,45 @@ class CData(object):
 
         return cdat
 
+    def load_from_json(buffer_, path):
+        # path is required for CEL file!
+        
+        df = pd.read_json(json.dumps(buffer_['data']), orient='records')
+        cols = addict.Dict(zip(list(df.columns), buffer_['cnames']))
+        df.rename(columns=cols, inplace=True)
+
+        columns = list(df.columns)
+        cclass       = [col for col in columns if '!class' in col]
+
+        if len(cclass) == 0:
+            raise ValueError('No class attribute found.')
+        if len(cclass) != 1:
+            raise ValueError('More than one class attribute found.')
+
+        cclass       = cclass[0]        
+
+        abspath      = os.path.abspath(path)
+        head, tail   = os.path.split(abspath)        
+
+        if buffer_:
+            for column in list(df.columns):
+                if any(tag in column for tag in ('!file', '!cel')):
+                    for i, p in enumerate(df[column]):
+                        if not os.path.isabs(p):
+                            path = os.path.normpath(os.path.join(head, p))
+                        if not os.path.exists(path) and not os.path.isfile(path):
+                            raise ValueError('{path} is not a valid file.'.format(path = path))
+
+                        df[column].loc[i] = path
+
+        cdat = CData()
+        cdat.data = df
+        cdat.clss    = cdat.data[cclass]
+        cdat.iclss   = columns.index(cclass)
+
+        return cdat
+
+
     def toARFF(self, path, express_config = { }, verbose = False):
         # NOTE - This is assuming a single !cel input vector only.
         for column in self.data.columns:
@@ -181,6 +230,19 @@ class CData(object):
 
             os.remove(name)
 
+    def to_json(self, buffer_):
+        try:
+            cnames = []
+
+            for attr in buffer_['attributes']:
+                tag = get_attribute_tag(attr)
+                name = attr['name']
+                cname = (tag + ' ' + name) if tag else name
+                cnames.append(cname)
+            buffer_.update({"cnames": cnames})
+        except Exception as e:
+            print(str(e))
+    
     def to_dict(self):
         data       = self.data.copy()
 

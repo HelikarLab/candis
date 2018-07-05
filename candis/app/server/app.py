@@ -26,7 +26,7 @@ app      = Flask(__name__,
 )
 
 env.read_envfile()
-# will read first from Environment variables, then .env file if any, then will fallback to default values.
+# will first find from Environment variables, then from .env file if any, then will fallback to default values.
 try:
     database_config = addict.Dict(
         drivername = env.str('CANDIS_DATABASE_DRIVERNAME', default='postgresql'),
