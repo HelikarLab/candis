@@ -135,7 +135,7 @@ class CData(object):
         if len(cclass) != 1:
             raise ValueError('More than one class attribute found.')
 
-        cclass       = cclass[0]        
+        cclass       = cclass[0]
 
         abspath      = os.path.abspath(path)
         head, tail   = os.path.split(abspath)        

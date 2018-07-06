@@ -14,14 +14,14 @@ from candis.util                import (
     assign_if_none, get_rand_uuid_str, get_timestamp_str, merge_dicts
 )
 from candis.resource            import R
-from candis.ios                 import Pipeline
+from candis.ios                 import Pipeline, CData
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.app      import socketio
 from candis.app.server.utils.tokens import login_required
 from candis.app.server.response import Response
 from candis.app.server.utils.response import save_response_to_db
-from candis.app.server.models.pipeline import PipelineRun, Pipeline as PipelineModel
+from candis.app.server.models.pipeline import PipelineRun, Pipeline as PipelineModel, Cdata
 from candis.app.server.models.user import User
 
 # TODO: Create a default handler that accepts JSON serializable data.
@@ -51,7 +51,16 @@ def run(delay = 5):
         if parameters.format == 'pipeline':
             try:
                 start = time.time()
-                cdat, pipe  = Pipeline.load(stages)
+                _, pipe, fpath = Pipeline.load(stages)
+                
+                for cdat in user.cdata:
+                    if fpath.value.name == cdat.name:
+                        cdat_dict = cdat.value
+                        break
+                
+                opath =  os.path.join(fpath.value.path, fpath.value.name)
+                cdat = CData.load_from_json(json.loads(cdat_dict), opath)
+
                 pipe.run(cdat, verbose = CONFIG.DEBUG)
 
                 while pipe.status == Pipeline.RUNNING:

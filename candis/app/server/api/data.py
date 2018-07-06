@@ -143,12 +143,11 @@ def read():
     parameters      = addict.Dict(request.get_json())
     parameters.path = os.path.abspath(parameters.path) if parameters.path else ABSPATH_STARTDIR
     
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)        
+
     if parameters.format == 'pipeline':
-
-        decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-        username = decoded_token['username']
-        user = User.get_user(username=username)
-
         flag = False
         for pipeline in user.pipelines:
             if parameters.name == pipeline.name:
@@ -161,28 +160,39 @@ def read():
             response.set_error(Response.Error.NOT_FOUND, 
             'Pipeline does not exist in the database')
 
+    if parameters.format == 'cdata':
+        flag = False
+        for cdat in user.cdata:
+            if parameters.name == cdat.name:
+                cdat_dict = json.loads(cdat.value)
+                path        = os.path.join(parameters.path, parameters.name)
+                cdat = cdata.CData.load_from_json(cdat_dict, path)
+                data = cdat.to_dict()
+                response.set_data(data)
+                flag = True
+                break
+        if not flag:
+            response.set_error(Response.Error.NOT_FOUND, 
+            'CData file does not exist in the database')
+
+
     if parameters.name and parameters.format:
         path        = os.path.join(parameters.path, parameters.name)
 
         if os.path.exists(path):
-            if parameters.format == 'cdata':
-                cdat = cdata.read(path)
-                data = cdat.to_dict()
-
-                response.set_data(data)
-            elif parameters.format == 'gist':
+            if parameters.format == 'gist':
                 try:
                     data = JSON.read(path)
                 except json.decoder.JSONDecodeError as e:
                     data = [ ]
                     
                 response.set_data(data)
-            elif parameters.format == 'pipeline':
+            elif parameters.format in ['pipeline', 'cdata']:
                 pass
             else:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Here')
         else:
-            if parameters.format != 'pipeline':
+            if parameters.format not in ['pipeline', 'cdata']:
                 response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     else:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'There')
@@ -227,8 +237,10 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
 
             output.name = name
 
+            cdat = handler.CData()
+            cdat.to_json(buffer_)
             cdata_obj = Cdata.get_cdata(name=output.name)
-
+            
             if not cdata_obj:
                 new_cdata = Cdata(name=name, user=user, value=json.dumps(buffer_))
                 new_cdata.add_cdata()
@@ -236,9 +248,6 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
             else:
                 cdata_obj.update_cdata(value=json.dumps(buffer_))
 
-            
-            cdat = handler.CData()
-            cdat.to_json(buffer_)
             cdat = handler.CData.load_from_json(buffer_, opath)
             
             data = addict.Dict(output=output, data=(cdat.to_dict()))

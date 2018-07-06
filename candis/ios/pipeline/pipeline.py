@@ -66,7 +66,6 @@ class Pipeline(object):
 
     # raise IOError, ValueError.
     def load(stages):
-        print("Stages are {}".format(stages))
         # if not os.path.isabs(path):
         #     path     = os.path.abspath(path)
 
@@ -209,7 +208,7 @@ class Pipeline(object):
 
         objekt.set_config(config)
 
-        return data, objekt
+        return data, objekt, fpath
 
     def runner(self, cdat, heap_size = 16384, seed = None, verbose = True):
         self.set_status(Pipeline.RUNNING)
