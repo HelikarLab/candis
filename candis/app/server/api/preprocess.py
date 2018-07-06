@@ -10,6 +10,7 @@ from candis.resource            import R
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.response import Response
+from candis.app.server.utils.response import save_response_to_db
 
 @app.route(CONFIG.App.Routes.API.Preprocess.METHODS, methods = ['GET'])
 def pmethods():
@@ -21,6 +22,7 @@ def pmethods():
     response.set_data(methods)
 
     dict_     = response.to_dict()
+    save_response_to_db(dict_)
     json_     = jsonify(dict_)
     code      = response.code
 

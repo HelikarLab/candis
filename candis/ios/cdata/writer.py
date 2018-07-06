@@ -39,3 +39,5 @@ def write(path, dataset, delimiter = ','):
                 row.append(value)
 
             writer.writerow(row)
+
+
