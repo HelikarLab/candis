@@ -41,8 +41,9 @@ const documentProcessor   = (state = initial, action) => {
               if(stage.code){
               nodes[stage.code] =
               {
-                onClick: nodesMeta[stage.code].onClick,
-                icon: nodesMeta[stage.code].icon
+                // onClick: nodesMeta[stage.code].onClick,
+                // icon: nodesMeta[stage.code].icon,
+                icon: stage.icon
               }}
 
               const node =
@@ -50,9 +51,11 @@ const documentProcessor   = (state = initial, action) => {
                      ID: stage.ID,
                    code: stage.code,
                    name: stage.name,
-                   icon: nodesMeta[stage.code].icon,
+                  //  icon: nodesMeta[stage.code].icon,
+                  icon: stage.icon,
                   label: stage.label,
-                onClick: nodesMeta[stage.code].onClick,
+                // onClick: nodesMeta[stage.code].onClick,
+                onClick: stage.onClick,
                   value: stage.value,
                  status: stage.status
               }
@@ -77,8 +80,9 @@ const documentProcessor   = (state = initial, action) => {
             if (stage.code){
             nodes[stage.code] =
             {
-              onClick: nodesMeta[stage.code].onClick,
-                 icon: nodesMeta[stage.code].icon
+              // onClick: nodesMeta[stage.code].onClick,
+              //    icon: nodesMeta[stage.code].icon,
+              icon: stage.icon
             }}
 
             const node =
@@ -86,9 +90,11 @@ const documentProcessor   = (state = initial, action) => {
                    ID: stage.ID,
                  code: stage.code,
                  name: stage.name,
-                 icon: nodesMeta[stage.code].icon,
+                //  icon: nodesMeta[stage.code].icon,
+                icon: stage.icon,
                 label: stage.label,
-                onClick: nodesMeta[stage.code].onClick,
+                // onClick: nodesMeta[stage.code].onClick,
+                onClick: stage.onClick,
                 value: stage.value,
                status: stage.status
             }
@@ -124,7 +130,7 @@ const documentProcessor   = (state = initial, action) => {
       {
         const documents   = state.documents.slice().map((dokument) =>
         {
-          const exists    = isEqual(dokument.output, meta.output)
+          const exists    = isEqual(dokument.output.name, meta.output.name)
           if ( exists )
           {
             const pipe    = [ ]
@@ -193,7 +199,7 @@ const documentProcessor   = (state = initial, action) => {
       const active       = action.payload
       const documents    = state.documents.slice().map((dokument) =>
       {
-        return {...dokument, active: isEqual(dokument.output, active.output) }
+        return {...dokument, active: isEqual(dokument.output.name, active.output.name) }
       })
 
       return {...state, documents: documents, active: active, errors: [ ]}
