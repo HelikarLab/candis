@@ -4,6 +4,7 @@ import cloneDeep  from 'lodash.clonedeep'
 
 import ActionType from '../constant/ActionType'
 import FileFormat from '../constant/FileFormat'
+import nodesMeta from '../meta/nodes'
 
 const initial             =
 {
@@ -21,24 +22,35 @@ const documentProcessor   = (state = initial, action) => {
       const meta          = action.payload
       var   active        = null
 
+      nodes            = cloneDeep(state.nodes)
+
       if ( meta.output.format == FileFormat.PIPELINE )
       {
         const documents   = state.documents.slice().map((dokument) =>
         {
+
           const exists    = isEqual(dokument.output, meta.output)
           if ( exists )
           {
             const pipe    = [ ]
             meta.data.forEach((stage) =>
             {
+              
+              if(stage.code){
+              nodes[stage.code] =
+              {
+                icon: stage.icon,
+                onClick: stage.onClick
+              }}
+
               const node =
               {
                      ID: stage.ID,
                    code: stage.code,
                    name: stage.name,
-                  //  icon: state.nodes[stage.code].icon,
+                  icon: stage.icon,
                   label: stage.label,
-                // onClick: state.nodes[stage.code].onClick,
+                onClick: stage.onClick,
                   value: stage.value,
                  status: stage.status
               }
@@ -57,14 +69,23 @@ const documentProcessor   = (state = initial, action) => {
           const pipe   = [ ]
           meta.data.forEach((stage) =>
           {
+
+            
+            if (stage.code){
+            nodes[stage.code] =
+            {
+              icon: stage.icon,
+              onClick: stage.onClick
+            }}
+
             const node =
             {
                    ID: stage.ID,
                  code: stage.code,
                  name: stage.name,
-                //  icon: state.nodes[stage.code].icon,
+                icon: stage.icon,
                 label: stage.label,
-              // onClick: state.nodes[stage.code].onClick,
+                onClick: stage.onClick,
                 value: stage.value,
                status: stage.status
             }
@@ -83,7 +104,7 @@ const documentProcessor   = (state = initial, action) => {
           documents.push(active)
         }
 
-        return {...state, documents: documents, active: active, errors: [ ] }
+        return {...state, documents: documents, active: active, errors: [ ], nodes: nodes}
       }
 
       break
@@ -98,7 +119,7 @@ const documentProcessor   = (state = initial, action) => {
       {
         const documents   = state.documents.slice().map((dokument) =>
         {
-          const exists    = isEqual(dokument.output, meta.output)
+          const exists    = isEqual(dokument.output.name, meta.output.name)
           if ( exists )
           {
             const pipe    = [ ]
@@ -167,7 +188,7 @@ const documentProcessor   = (state = initial, action) => {
       const active       = action.payload
       const documents    = state.documents.slice().map((dokument) =>
       {
-        return {...dokument, active: isEqual(dokument.output, active.output) }
+        return {...dokument, active: isEqual(dokument.output.name, active.output.name) }
       })
 
       return {...state, documents: documents, active: active, errors: [ ]}

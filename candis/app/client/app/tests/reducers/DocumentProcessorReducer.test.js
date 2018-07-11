@@ -67,11 +67,12 @@ test('should return state with one object being active given ONE document matche
         active: {
             ...dokuments.active,
             data: expect.any(Array)
-        }
+        },
+        nodes: expect.any(Object)
     })
     state.active.data.forEach(node => {
         expect(Object.keys(node).sort()).toEqual(
-            ['ID', 'code', 'name', 'label', 'value', 'status'].sort()
+            ['ID', 'code', 'name', 'label', 'value', 'status', 'onClick', 'icon'].sort()
         )
     })
 
@@ -97,7 +98,7 @@ test('should return state with provided doc being active given NO state.document
     })
     state.active.data.forEach(node => {
         expect(Object.keys(node).sort()).toEqual(
-            ['ID', 'code', 'name', 'label', 'value', 'status'].sort()
+            ['ID', 'code', 'name', 'label', 'value', 'status', 'onClick', 'icon'].sort()
         )
     })
 })
@@ -316,5 +317,3 @@ test('should delete the pipeline and change state.active to some other pipeline 
         active: true
     })
 })
-
-

@@ -1,7 +1,12 @@
 import axios      from 'axios'
 
 import config     from '../config'
+import modal        from './ModalAction'
 import ActionType from '../constant/ActionType'
+import Component    from '../constant/Component'
+import Pipeline     from '../constant/Pipeline'
+import { stage }    from './DocumentProcessorAction'
+import nodes from '../meta/nodes'
 
 const write              = (output, buffer = null) => {
   const dispatch         = (dispatch) => {
@@ -123,12 +128,18 @@ const read               = (output) => {
 
     return axios.post(config.routes.API.data.read, output).then(({ data }) => {
       data               = data.data
-      const action       = successRead(output, data)
+      
+      updateNodeProperties(data).then((data) => {
 
-      dispatch(action)
+        const action       = successRead(output, data)
+  
+        dispatch(action)
+  
+        data = data
+      })
 
-      return data
-    }).catch(({ response }) => {
+      return data      
+    }).catch(({response}) => {
       const error        = response.data.error
       const action       = errorRead(output, error)
 
@@ -137,6 +148,109 @@ const read               = (output) => {
   }
 
   return dispatch
+}
+
+const updateNodeProperties = (output) => {
+  
+  return axios.get(config.routes.API.preprocess.methods).then(({ data }) => {
+    const response = data
+    
+    if(response.status == "success"){
+      const data = response.data
+      
+      output = output.map(node => {
+        let nodeUpdate = undefined
+
+        if(nodes[node.code]){
+          nodeUpdate = {
+            ...nodes[node.code](node.ID)
+          }
+        } else {
+          data.forEach((method) => {
+            if (method.code == node.code) {
+
+              const ID = node.ID
+
+              const options = method.methods.map((option) =>
+              {
+                return { label: option.name, value: JSON.stringify(option) }
+              })
+
+              const onClick = (dispatch) => {
+    
+                var   option = null
+                const dialog =
+                {
+                  component: Component.SelectViewer,
+                      title: method.name,
+                    buttons:
+                    [
+                      {
+                            label: "Select",
+                        className: "btn-primary",
+                          onClick: ( ) =>
+                          {
+                                method = JSON.parse(option.value)
+                            var update =
+                            {
+                              label: method.name,
+                              value: method.value,
+                              status: Pipeline.Status.READY
+                            }
+    
+                            var action = stage.update(ID, update)
+    
+                            dispatch(action)
+    
+                            action     = modal.hide()
+    
+                            dispatch(action)
+                          }
+                      },
+                      {
+                            label: "Cancel",
+                          onClick: ( ) =>
+                          {
+                            var action = modal.hide()
+    
+                            dispatch(action)
+                          }
+                      }
+                    ],
+                      props:
+                      {
+                        classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                          options: options,
+                          onChange: (changed) => { option = changed }
+                      }
+                }
+                const action = modal.show(dialog)
+    
+                dispatch(action)              
+              }
+
+            const icon = method.icon
+              
+            nodeUpdate = {
+                onClick: node.onClick || onClick,
+                icon: node.icon || icon
+              }
+            }
+          })
+        }
+
+        if (nodeUpdate) {
+          return {
+            ...node,
+            ...nodeUpdate
+          }
+        } else {
+          return node
+        }
+      })
+      return output
+    }
+  })
 }
 
 const requestRead        = (output) => {
