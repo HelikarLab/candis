@@ -22,7 +22,6 @@ const documentProcessor   = (state = initial, action) => {
       const meta          = action.payload
       var   active        = null
 
-      // update state.node
       nodes            = cloneDeep(state.nodes)
 
       if ( meta.output.format == FileFormat.PIPELINE )
@@ -36,14 +35,12 @@ const documentProcessor   = (state = initial, action) => {
             const pipe    = [ ]
             meta.data.forEach((stage) =>
             {
-              console.log("stage existsssssss is", stage)
               
               if(stage.code){
               nodes[stage.code] =
               {
-                // onClick: nodesMeta[stage.code].onClick,
-                // icon: nodesMeta[stage.code].icon,
-                icon: stage.icon
+                icon: stage.icon,
+                onClick: stage.onClick
               }}
 
               const node =
@@ -51,10 +48,8 @@ const documentProcessor   = (state = initial, action) => {
                      ID: stage.ID,
                    code: stage.code,
                    name: stage.name,
-                  //  icon: nodesMeta[stage.code].icon,
                   icon: stage.icon,
                   label: stage.label,
-                // onClick: nodesMeta[stage.code].onClick,
                 onClick: stage.onClick,
                   value: stage.value,
                  status: stage.status
@@ -75,14 +70,12 @@ const documentProcessor   = (state = initial, action) => {
           meta.data.forEach((stage) =>
           {
 
-            console.log("stage not exisstssssss is", stage)
             
             if (stage.code){
             nodes[stage.code] =
             {
-              // onClick: nodesMeta[stage.code].onClick,
-              //    icon: nodesMeta[stage.code].icon,
-              icon: stage.icon
+              icon: stage.icon,
+              onClick: stage.onClick
             }}
 
             const node =
@@ -90,15 +83,12 @@ const documentProcessor   = (state = initial, action) => {
                    ID: stage.ID,
                  code: stage.code,
                  name: stage.name,
-                //  icon: nodesMeta[stage.code].icon,
                 icon: stage.icon,
                 label: stage.label,
-                // onClick: nodesMeta[stage.code].onClick,
                 onClick: stage.onClick,
                 value: stage.value,
                status: stage.status
             }
-            console.log("node before is ", node)
 
             pipe.push(node)
           })
@@ -113,7 +103,6 @@ const documentProcessor   = (state = initial, action) => {
 
           documents.push(active)
         }
-        console.log("nodes are", nodes)
 
         return {...state, documents: documents, active: active, errors: [ ], nodes: nodes}
       }

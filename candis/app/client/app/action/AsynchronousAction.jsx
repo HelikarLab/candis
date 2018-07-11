@@ -7,25 +7,21 @@ import Component    from '../constant/Component'
 import Pipeline     from '../constant/Pipeline'
 import FileFormat   from '../constant/FileFormat'
 import { stage }    from './DocumentProcessorAction'
+import nodes from '../meta/nodes'
 
 const write              = (output, buffer = null) => {
   const dispatch         = (dispatch) => {
-    console.log("output is ", output)
-    console.log("buffer is ", buffer)
     const action         = requestWrite(output, buffer)
     const parameters     = { output: output, buffer: buffer }
 
     dispatch(action)
 
     axios.post(config.routes.API.data.write, parameters).then(({ data }) => {
-      console.log("data received from write endpoint ",data)
       data               = data.data
       const action       = successWrite(output, buffer, data)
 
-      console.log("Just need to be dispatched!!!")
       dispatch(action)
     }).catch((error) => {
-      console.log("error is ",error)
       // const error        = response.data.error
       const action       = errorWrite(output, buffer, error)
 
@@ -131,13 +127,10 @@ const read               = (output) => {
 
     dispatch(action)
 
-    // call a fetcher too!!!
-
     return axios.post(config.routes.API.data.read, output).then(({ data }) => {
       data               = data.data
-      console.log("read data is", data)
+      
       updateNodeProperties(data).then((data) => {
-        console.log("Update data is ", data)
 
         const action       = successRead(output, data)
   
@@ -146,9 +139,8 @@ const read               = (output) => {
         return data
       })
       
-    }).catch((error) => {
-      // const error        = response.data.error
-      console.log("read error is", error)
+    }).catch(({response}) => {
+      const error        = response.data.error
       const action       = errorRead(output, error)
 
       dispatch(action)
@@ -165,95 +157,97 @@ const updateNodeProperties = (output) => {
     
     if(response.status == "success"){
       const data = response.data
-      console.log("response data is ", data)
       
       output = output.map(node => {
         let nodeUpdate = undefined
-        data.forEach((method) => {
-          if (method.code == node.code) {
 
-            const ID = node.ID
-
-            const options = method.methods.map((option) =>
-            {
-              return { label: option.name, value: JSON.stringify(option) }
-            })
-
-            const onClick = (dispatch) => {
-  
-              var   option = null
-              const dialog =
-              {
-                component: Component.SelectViewer,
-                    title: method.name,
-                  buttons:
-                  [
-                    {
-                          label: "Select",
-                      className: "btn-primary",
-                        onClick: ( ) =>
-                        {
-                              method = JSON.parse(option.value)
-                          var update =
-                          {
-                             label: method.name,
-                             value: method.value,
-                            status: Pipeline.Status.READY
-                          }
-  
-                          var action = stage.update(ID, update)
-  
-                          dispatch(action)
-  
-                          action     = modal.hide()
-  
-                          dispatch(action)
-                        }
-                    },
-                    {
-                          label: "Cancel",
-                        onClick: ( ) =>
-                        {
-                          var action = modal.hide()
-  
-                          dispatch(action)
-                        }
-                    }
-                  ],
-                    props:
-                    {
-                      classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
-                         options: options,
-                        onChange: (changed) => { option = changed }
-                    }
-              }
-              const action = modal.show(dialog)
-  
-              dispatch(action)              
-            }
-
-          const icon = method.icon
-            
+        if(nodes[node.code]){
           nodeUpdate = {
-              onClick: node.onClick || onClick,
-              icon: node.icon || icon
+            ...nodes[node.code](node.ID)
+          }
+        } else {
+          data.forEach((method) => {
+            if (method.code == node.code) {
+
+              const ID = node.ID
+
+              const options = method.methods.map((option) =>
+              {
+                return { label: option.name, value: JSON.stringify(option) }
+              })
+
+              const onClick = (dispatch) => {
+    
+                var   option = null
+                const dialog =
+                {
+                  component: Component.SelectViewer,
+                      title: method.name,
+                    buttons:
+                    [
+                      {
+                            label: "Select",
+                        className: "btn-primary",
+                          onClick: ( ) =>
+                          {
+                                method = JSON.parse(option.value)
+                            var update =
+                            {
+                              label: method.name,
+                              value: method.value,
+                              status: Pipeline.Status.READY
+                            }
+    
+                            var action = stage.update(ID, update)
+    
+                            dispatch(action)
+    
+                            action     = modal.hide()
+    
+                            dispatch(action)
+                          }
+                      },
+                      {
+                            label: "Cancel",
+                          onClick: ( ) =>
+                          {
+                            var action = modal.hide()
+    
+                            dispatch(action)
+                          }
+                      }
+                    ],
+                      props:
+                      {
+                        classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                          options: options,
+                          onChange: (changed) => { option = changed }
+                      }
+                }
+                const action = modal.show(dialog)
+    
+                dispatch(action)              
+              }
+
+            const icon = method.icon
+              
+            nodeUpdate = {
+                onClick: node.onClick || onClick,
+                icon: node.icon || icon
+              }
             }
-          }
-        })
+          })
+        }
+
         if (nodeUpdate) {
-          console.log("node update is ", nodeUpdate)
-          const result = {
-            ...node,
-            ...nodeUpdate
-          }
-          console.log("result is!!!!!!!", result)
           return {
             ...node,
             ...nodeUpdate
           }
+        } else {
+          return node
         }
       })
-      console.log("update output is ", output)
       return output
     }
   })
