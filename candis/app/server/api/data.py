@@ -109,7 +109,7 @@ def resource(filter_ = ['csv', 'cel', 'gist'], level = None):
     username = decoded_token['username']
     user = User.get_user(username=username)
 
-    path       = CONFIG.App.STARTDIR if not parameters.path else os.path.join(CONFIG.App.STARTDIR, parameters.path)
+    path       = CONFIG.App.DATADIR if not parameters.path else os.path.join(CONFIG.App.DATADIR, parameters.path)
 
     tree       = discover_resource(
       path     = path,
@@ -306,14 +306,6 @@ def delete():
 
     if not flag:
         response.set_error(Response.Error.NOT_FOUND, 'Pipeline does not exist in the database')
-
-    # if os.path.isfile(opath):
-    #     try:
-    #         os.remove(opath)
-    #     except:
-    #         response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Write access denied!')
-    # else:
-    #     response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     
     dict_ = response.to_dict()
     save_response_to_db(dict_)
