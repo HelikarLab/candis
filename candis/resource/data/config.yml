@@ -187,3 +187,4 @@ app:
 
   container: "app"
   startdir: "CRES"
+  datadir: "candisDATA"

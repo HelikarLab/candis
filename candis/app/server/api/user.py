@@ -35,12 +35,12 @@ def sign_up():
     if User.get_user(username=username):
         response.set_error(
             Response.Error.UNPROCESSABLE_ENTITY,
-            'User with username {} is already registered'.format(username)
+            'User with username "{}" is already registered'.format(username)
         )
     elif User.get_user(email=email):
         response.set_error(
             Response.Error.UNPROCESSABLE_ENTITY,
-            'User with email {} is already registered'.format(email)
+            'User with email "{}" is already registered'.format(email)
         )
     else:
         new_user = User(username, email, password)
@@ -52,6 +52,17 @@ def sign_up():
             'message': 'Registered successfully.'
         })
         new_user.close()
+        # os
+        try:
+            path = CONFIG.App.DATADIR
+            if not os.path.exists(path):
+                os.mkdir(path)
+            os.mkdir(os.path.join(path, '{}_data'.format(username)))
+        except OSError as e:
+            response.set_error(
+                Response.Error.UNPROCESSABLE_ENTITY,
+                'could not setup data directory: {}'.format(e)
+            )
     
     gc.collect()
 
