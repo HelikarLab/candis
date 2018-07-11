@@ -87,9 +87,7 @@ const Menus = [
                     animate: false,
                     callback: (result) => {
                       if ( result  !== null ) {
-                        console.log("Result is {}", result)
                         const output = JSON.parse(result)
-                        console.log("Output is {}", output)
                         const action = read(output)
 
                         dispatch(action)

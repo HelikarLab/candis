@@ -5,7 +5,6 @@ import modal        from './ModalAction'
 import ActionType from '../constant/ActionType'
 import Component    from '../constant/Component'
 import Pipeline     from '../constant/Pipeline'
-import FileFormat   from '../constant/FileFormat'
 import { stage }    from './DocumentProcessorAction'
 import nodes from '../meta/nodes'
 
@@ -136,9 +135,10 @@ const read               = (output) => {
   
         dispatch(action)
   
-        return data
+        data = data
       })
-      
+
+      return data      
     }).catch(({response}) => {
       const error        = response.data.error
       const action       = errorRead(output, error)
