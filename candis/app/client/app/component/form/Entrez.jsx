@@ -110,64 +110,100 @@ const EntrezEnhanced = withFormik({
 
     const action = entrez.search(payload)
     props.dispatch(action)
-    setSubmitting(false)  // this happens synchronously, use promise callback. 
   },
   displayName: "Entrez Form"
 })(EntrezBasic)
 
-const EntrezDataGrid = props => {
-  // cols 'key' are dependent on api/data/search API endpoint
-  const cols = [
-    {
-      key: 'accession',
-      name: 'accession number',
-      resizable: true,
-      width: 200
-    },
-    {
-      key: 'title',
-      name: 'title',
-      resizable: true,
-      width: 1000
+class EntrezDataGrid extends React.Component {
+  constructor(props){
+    super(props)
 
-    },
-    {
-      key: 'taxon',
-      name: 'taxon',
-      resizable: true,
-      width: 200
-    }
-  ]
-
-  const rowGetter = i => {
-    return props.search_results[i]
+    this.state = { payload: undefined, downloading: false }
+    
+    this.rowGetter = this.rowGetter.bind(this)
+    this.onSelect = this.onSelect.bind(this)
+    this.onClick = this.onClick.bind(this)
   }
 
-  const onSelect = (row) => {
+  onClick () {
+    const payload = this.state.payload
+    const action = entrez.download(payload)
+    this.props.dispatch(action)
+    this.setState({
+      ...this.state,
+      downloading: true
+    })
+  }
+
+  rowGetter(i) {
+    return this.props.search_results[i]
+  }  
+
+  onSelect(row) {
     const payload = {
       accession: row[0].accession,
-      toolName: props.toolName,
-      database: props.database,
-      email: props.email
+      toolName: this.props.toolName,
+      database: this.props.database,
+      email: this.props.email
     }
-    const action = entrez.download(payload)
-    props.dispatch(action)
+    this.setState({
+      ...this.state,
+      payload 
+    })
   }
 
-  return (
-    <div>
-      <ReactDataGrid
-        rowKey="accession"
-        columns={cols}
-        rowGetter={rowGetter}
-        rowsCount={props.search_results.length}
-        enableCellSelect={true}
-        enableRowSelect="single"
-        onRowSelect={onSelect}
-        minHeight={500}
-      />
-    </div>
-  )
+  render() {
+  // cols 'key' parameter is dependent on api/data/search API endpoint
+    const cols = [
+      {
+        key: 'accession',
+        name: 'accession number',
+        resizable: true,
+        width: 200
+      },
+      {
+        key: 'title',
+        name: 'title',
+        resizable: true,
+        width: 1000
+
+      },
+      {
+        key: 'taxon',
+        name: 'taxon',
+        resizable: true,
+        width: 200
+      }
+    ]
+
+    const props = this.props
+    return (
+      <div>
+        <ReactDataGrid
+          rowKey="accession"
+          columns={cols}
+          rowGetter={this.rowGetter}
+          rowsCount={props.search_results.length}
+          enableCellSelect={true}
+          enableRowSelect="single"
+          onRowSelect={this.onSelect}
+          minHeight={500}
+        />
+        <div className="row" style={marginTop=0.5}>
+          <div className="col-xs-8">
+          </div>
+          <div className="col-xs-4">        
+            <button onClick={this.onClick} disabled={!this.state.payload || this.state.downloading} className="btn btn-block btn-primary">
+              <div className="text-uppercase font-bold">
+              {this.state.downloading ? <i className="fa fa-spinner fa-pulse"></i> : <i className="fa fa-download"></i>}
+                {" "}Download
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state, props) => {
