@@ -93,7 +93,7 @@ class Pipeline(object):
             raise ValueError('Resource pending.')
 
         dpath        = os.path.join(fpath.value.path, fpath.value.name)
-        data         = cdata.read(dpath)
+        data         = None # cdata.read(dpath)
         fpath.status = Pipeline.READY
         objekt.add_stages(fpath)
 

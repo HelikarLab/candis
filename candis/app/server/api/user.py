@@ -17,6 +17,7 @@ from candis.app.server.response import Response
 from candis.app.server.helpers.verify import verify_password
 from candis.app.server.utils.tokens import login_required, logout_required
 from candis.app.server.utils.response import save_response_to_db
+from candis.app.server.helpers.fileData import modify_data_path
 
 def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPIRY_TIME')):
     payload = addict.Dict(username=user_.username)
@@ -57,7 +58,7 @@ def sign_up():
             path = CONFIG.App.DATADIR
             if not os.path.exists(path):
                 os.mkdir(path)
-            os.mkdir(os.path.join(path, '{}_data'.format(username)))
+            os.mkdir(os.path.join(path, modify_data_path(username)))
         except OSError as e:
             response.set_error(
                 Response.Error.UNPROCESSABLE_ENTITY,

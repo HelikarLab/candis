@@ -25,6 +25,7 @@ from candis.app.server.utils.tokens import login_required
 from candis.app.server.utils.response import save_response_to_db
 from candis.app.server.models.pipeline import Pipeline, Cdata
 from candis.app.server.models.user import User
+from candis.app.server.helpers.fileData import modify_data_path
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -100,7 +101,7 @@ def discover_resource(path, level = None, filter_ = None):
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 @login_required
-def resource(filter_ = ['csv', 'cel', 'gist'], level = None):
+def resource(filter_ = ['csv', 'cel'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
@@ -109,7 +110,8 @@ def resource(filter_ = ['csv', 'cel', 'gist'], level = None):
     username = decoded_token['username']
     user = User.get_user(username=username)
 
-    path       = CONFIG.App.DATADIR if not parameters.path else os.path.join(CONFIG.App.DATADIR, parameters.path)
+    data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
+    path       = data_path if not parameters.path else os.path.join(data_path, parameters.path)
 
     tree       = discover_resource(
       path     = path,
@@ -121,6 +123,9 @@ def resource(filter_ = ['csv', 'cel', 'gist'], level = None):
     for pipe in user.pipelines:
         temp = addict.Dict(name=pipe.name, format='pipeline')
         files.append(temp)
+        for pipe_run in pipe.pipeline_run:
+            temp = addict.Dict(name=json.loads(pipe_run.gist)['name'], format='gist', pipeline_name=pipe.name)
+            files.append(temp)
     for cdata in user.cdata:
         temp = addict.Dict(name=cdata.name, format='cdata')
         files.append(temp)
@@ -139,13 +144,14 @@ def resource(filter_ = ['csv', 'cel', 'gist'], level = None):
 @login_required
 def read():
     response        = Response()
-
-    parameters      = addict.Dict(request.get_json())
-    parameters.path = os.path.abspath(parameters.path) if parameters.path else ABSPATH_STARTDIR
     
     decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
     username = decoded_token['username']
-    user = User.get_user(username=username)        
+    user = User.get_user(username=username)
+
+    parameters      = addict.Dict(request.get_json())
+    data_path = os.path.abspath(os.path.join(CONFIG.App.DATADIR, modify_data_path(username)))
+    parameters.path = os.path.abspath(parameters.path) if parameters.path else data_path    
 
     if parameters.format == 'pipeline':
         flag = False
@@ -164,8 +170,10 @@ def read():
         flag = False
         for cdat in user.cdata:
             if parameters.name == cdat.name:
+                print("Found the cdat file!!!")
                 cdat_dict = json.loads(cdat.value)
-                path        = os.path.join(parameters.path, parameters.name)
+                path = os.path.join(parameters.path, parameters.name)
+                print("loading path for cdata is!!! {}".format(path))
                 cdat = cdata.CData.load_from_json(cdat_dict, path)
                 data = cdat.to_dict()
                 response.set_data(data)
@@ -176,18 +184,26 @@ def read():
             'CData file does not exist in the database')
 
 
+    if parameters.format == 'gist':
+        print("parameters is {}".format(parameters))
+        flag = False
+        for pipe in user.pipelines:
+            for pipe_run in pipe.pipeline_run:
+                if json.loads(pipe_run.gist)['name'] == parameters.name:
+                    print("Found the gist!!")
+                    data = json.loads(pipe_run.gist)
+                    response.set_data(data)
+                    flag = True
+                    break
+        if not flag:
+            response.set_error(Response.Error.NOT_FOUND, 
+            'Gist file does not exist in the database')
+        
     if parameters.name and parameters.format:
         path        = os.path.join(parameters.path, parameters.name)
 
         if os.path.exists(path):
-            if parameters.format == 'gist':
-                try:
-                    data = JSON.read(path)
-                except json.decoder.JSONDecodeError as e:
-                    data = [ ]
-                    
-                response.set_data(data)
-            elif parameters.format in ['pipeline', 'cdata']:
+            if parameters.format in ['pipeline', 'cdata', 'gist']:
                 pass
             else:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Here')
@@ -227,7 +243,7 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     opath        = os.path.join(output.path, output.name)
         
     if output.format:
-        if   output.format == 'cdata':
+        if  output.format == 'cdata':
             handler = cdata
 
             if output.name in ['', '.cdata', '.CDATA']:
