@@ -156,7 +156,7 @@ const Compartments =
           onClick: (dispatch) => {
             const dialog = {
               component: Component.Entrez,
-              title: 'Search NCBI',
+              title: 'Download CEL files from NCBI',
               size: 'lg',
               buttons:
               [                
