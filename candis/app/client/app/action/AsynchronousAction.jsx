@@ -7,6 +7,7 @@ import Component    from '../constant/Component'
 import Pipeline     from '../constant/Pipeline'
 import { stage }    from './DocumentProcessorAction'
 import nodes from '../meta/nodes'
+import FileFormat from '../constant/FileFormat'
 
 const write              = (output, buffer = null) => {
   const dispatch         = (dispatch) => {
@@ -20,8 +21,8 @@ const write              = (output, buffer = null) => {
       const action       = successWrite(output, buffer, data)
 
       dispatch(action)
-    }).catch((error) => {
-      // const error        = response.data.error
+    }).catch(({response}) => {
+      const error        = response.data.error
       const action       = errorWrite(output, buffer, error)
 
       dispatch(action)
@@ -129,16 +130,18 @@ const read               = (output) => {
     return axios.post(config.routes.API.data.read, output).then(({ data }) => {
       data               = data.data
       
-      updateNodeProperties(data).then((data) => {
+      if ( output.format === FileFormat.PIPELINE ) {
+        updateNodeProperties(data).then((data) => {
 
-        const action       = successRead(output, data)
-  
-        dispatch(action)
-  
-        data = data
-      })
+          const action       = successRead(output, data)
+    
+          dispatch(action)
+    
+          data = data
+        })
+      }
 
-      return data      
+      return data
     }).catch(({response}) => {
       const error        = response.data.error
       const action       = errorRead(output, error)
@@ -157,7 +160,6 @@ const updateNodeProperties = (output) => {
     
     if(response.status == "success"){
       const data = response.data
-      
       output = output.map(node => {
         let nodeUpdate = undefined
 
