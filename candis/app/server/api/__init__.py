@@ -14,3 +14,6 @@ from candis.app.server.api.model      import (
 from candis.app.server.api.pipeline   import (
 	run
 )
+from candis.app.server.api.user import (
+	sign_up
+)

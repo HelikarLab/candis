@@ -5,6 +5,7 @@ import config       from './config'
 import PrivateRoute from './component/PrivateRoute'
 import App          from './component/App'
 import SignIn       from './page/SignIn'
+import SignUp       from './page/SignUp'
 
 const Routes = (
   <div>
@@ -13,7 +14,11 @@ const Routes = (
     	component={App}/>
     <Route
     		   path={config.routes.signin}
-    	component={SignIn}/>
+      component={SignIn}/>
+    <Route
+      path={config.routes.signup}
+      component={SignUp}
+    />
   </div>
 )
 

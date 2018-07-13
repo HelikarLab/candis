@@ -1,27 +1,24 @@
-import React        from 'react'
-import PropTypes    from 'prop-types'
-import { Redirect, Link } from 'react-router-dom'
-import { connect }  from 'react-redux'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
 
-import jsonwebtoken from 'jsonwebtoken'
-
-import config       from '../config'
-
-import SignInForm   from '../component/form/SignInForm'
+import config from '../config'
+import SignUpForm from '../component/form/SignUpForm'
+import { signin } from '../action/AppAction'
 import ActionType   from '../constant/ActionType'
-import { signin }   from '../action/AppAction'
 
-class SignIn extends React.Component {
-  constructor (props) {
-    super (props)
+class SignUp extends React.Component {
+  constructor(props){
+    super(props)
 
-    this.onSubmit  = this.onSubmit.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   onSubmit (data) {
     const props    = this.props
     const dispatch = props.dispatch
-
+    
     dispatch({
       type: ActionType.App.SIGNIN_REQUEST
     })
@@ -34,13 +31,14 @@ class SignIn extends React.Component {
     })
   }
 
-  render ( ) {
-    const props    = this.props
-    const { from } = props.location.state || { from: { pathname: config.routes.base } }
-
-    return props.user !== null ? 
-      (<Redirect to={from}/>)
-      : 
+  render(){
+    const props = this.props
+    const { from } = { from: { pathname: config.routes.base } }
+    return props.user !== null ?
+      (<Redirect
+         to={from} 
+        />)
+      :
       (
         <div className="jumbotron no-margin vertical-center">
           <div className="container-fluid">
@@ -53,8 +51,7 @@ class SignIn extends React.Component {
             </div>
             <div className="panel panel-default no-margin no-background no-border no-shadow">
               <div className="panel-body">
-                <SignInForm onSubmit={this.onSubmit}/>
-                <Link to={config.routes.signup}>New User?</Link>
+                <SignUpForm onSubmit={this.onSubmit} />
               </div>
             </div>
           </div>
@@ -63,11 +60,11 @@ class SignIn extends React.Component {
   }
 }
 
-SignIn.propTypes      = 
+SignUp.propTypes      = 
 {
   user: PropTypes.object
 }
-SignIn.defaultProps   = 
+SignUp.defaultProps   = 
 {
   user: null
 }
@@ -78,6 +75,6 @@ const mapStateToProps = (state, props) => {
   return {
     user: app.user
   }
-}
+}  
 
-export default connect(mapStateToProps)(SignIn)
+export default connect(mapStateToProps)(SignUp)
