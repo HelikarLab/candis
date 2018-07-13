@@ -29,7 +29,7 @@ const documentProcessor   = (state = initial, action) => {
         const documents   = state.documents.slice().map((dokument) =>
         {
 
-          const exists    = isEqual(dokument.output, meta.output)
+          const exists    = isEqual(dokument.output.name, meta.output.name)
           if ( exists )
           {
             const pipe    = [ ]
