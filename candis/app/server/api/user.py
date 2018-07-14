@@ -53,12 +53,14 @@ def sign_up():
             'message': 'Registered successfully.'
         })
         new_user.close()
-        # os
+
         try:
             path = CONFIG.App.DATADIR
             if not os.path.exists(path):
                 os.mkdir(path)
-            os.mkdir(os.path.join(path, modify_data_path(username)))
+            path = os.path.join(path, modify_data_path(username))
+            if not os.path.exists(path):
+                os.mkdir(path)
         except OSError as e:
             response.set_error(
                 Response.Error.UNPROCESSABLE_ENTITY,
