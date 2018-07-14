@@ -1,5 +1,10 @@
 const ActionType =
 {
+  Root:
+  {
+    RESET_STATE: 'ACTION_TYPE_ROOT_RESET_STATE'
+  },
+  
   App:
   {
      SIGNIN_REQUEST: 'ACTION_TYPE_APP_SIGNIN_REQUEST',

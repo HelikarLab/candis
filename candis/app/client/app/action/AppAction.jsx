@@ -38,13 +38,14 @@ const signout      = ( ) =>
 	{	
 		axios.post(config.routes.API.user.sign_out).then(({data}) => {
 			toastr.success("Logged out Successfully")
-		
+			
 			storage.remove('JWT_TOKEN')
 			storage.remove('ACTIVE_USER')
 
-			const action   = setUser(null)
-
-		dispatch(action)
+			const action = {
+				type: ActionType.Root.RESET_STATE
+			}
+			dispatch(action)
 		}).catch(({response}) => {
 			toastr.error(response.data.error.errors[0].message)
 		})
