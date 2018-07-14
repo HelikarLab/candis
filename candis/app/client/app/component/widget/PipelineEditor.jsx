@@ -38,7 +38,6 @@ class PipelineEditor extends React.Component
 									<div className="row">
 										<div className="col-xs-9">
 											<a style={{ color: '#FFF' }} href="javascript:void(0);" onClick={() => {
-												// console.log({...node})
 												if ( node.onClick ) {
 													props.dispatch(node.onClick)
 												}

@@ -174,10 +174,8 @@ def read():
         flag = False
         for cdat in user.cdata:
             if parameters.name == cdat.name:
-                print("Found the cdat file!!!")
                 cdat_dict = json.loads(cdat.value)
                 path = os.path.join(parameters.path, parameters.name)
-                print("loading path for cdata is!!! {}".format(path))
                 cdat = cdata.CData.load_from_json(cdat_dict, path)
                 data = cdat.to_dict()
                 response.set_data(data)
@@ -189,12 +187,10 @@ def read():
 
 
     if parameters.format == 'gist':
-        print("parameters is {}".format(parameters))
         flag = False
         for pipe in user.pipelines:
             for pipe_run in pipe.pipeline_run:
                 if json.loads(pipe_run.gist)['name'] == parameters.name:
-                    print("Found the gist!!")
                     data = json.loads(pipe_run.gist)
                     response.set_data(data)
                     flag = True
