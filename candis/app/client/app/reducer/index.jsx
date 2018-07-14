@@ -7,8 +7,18 @@ import modal             from './ModalReducer'
 import dataEditor        from './DataEditorReducer'
 import data              from './DataReducer'
 import entrez			 from './EntrezReducer'
+import ActionType 		 from '../constant/ActionType'
 
 const Reducer = combineReducers({ app, modal, documentProcessor,
 	toolBox, dataEditor, data, entrez })
 
-export default Reducer
+const rootReducer = (state, action) => {
+	if (action.type === ActionType.Root.RESET_STATE) {
+
+		state = undefined
+	}
+
+	return Reducer(state, action)
+	}
+
+export default rootReducer
