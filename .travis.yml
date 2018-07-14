@@ -10,6 +10,13 @@ python:
   - "3.6"
   # - "3.6-dev"
   # - "3.7-dev"
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'create database travis_ci_test;' -U postgres
+
 install:
         #- curl -sL git.io/install-candis | sudo python
   - sudo python get-candis
