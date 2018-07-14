@@ -165,6 +165,10 @@ app:
     signin: !relurljoin [*base, "SignIn"]
 
     API:
+      user:
+        sign_up: !relurljoin [*base, "api", "user", "sign_up"]
+        login: !relurljoin [*base, "api", "user", "login"]
+        sign_out: !relurljoin [*base, "api", "user", "sign_out"]
       data:
         resource: !relurljoin [*base, "api", "data", "resource"]
         read: !relurljoin [*base, "api", "data", "read"]
@@ -183,3 +187,4 @@ app:
 
   container: "app"
   startdir: "CRES"
+  datadir: "candisDATA"

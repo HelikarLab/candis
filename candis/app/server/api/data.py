@@ -2,11 +2,13 @@
 import os
 import json
 import time
+from datetime import datetime
 
 # imports - third-party imports
 from flask import request, jsonify
 import addict
 from requests import Timeout
+import jwt
 
 # imports - module imports
 from candis.config              import CONFIG
@@ -16,10 +18,15 @@ from candis.util                import (
 from candis.resource            import R
 from candis.ios                 import cdata, pipeline
 from candis.ios                 import json as JSON
-from candis.app.server.app      import app
+from candis.app.server.app      import app, db
 from candis.app.server.response import Response
 from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
+from candis.app.server.utils.tokens import login_required
+from candis.app.server.utils.response import save_response_to_db
+from candis.app.server.models.pipeline import Pipeline, Cdata
+from candis.app.server.models.user import User
+from candis.app.server.helpers.fileData import modify_data_path
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -97,12 +104,18 @@ def log_times(i):
     print("No. of times tried to connect to NCBI: {}".format(i))
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
-def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None):
+@login_required
+def resource(filter_ = ['csv', 'cel'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
 
-    path       = CONFIG.App.STARTDIR if not parameters.path else os.path.join(CONFIG.App.STARTDIR, parameters.path)
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+
+    data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
+    path       = data_path if not parameters.path else os.path.join(data_path, parameters.path)
 
     tree       = discover_resource(
       path     = path,
@@ -110,45 +123,102 @@ def resource(filter_ = ['cdata', 'csv', 'cel', 'pipeline', 'gist'], level = None
       filter_  = filter_
     )
 
+    files = tree.files
+    for pipe in user.pipelines:
+        temp = addict.Dict(name=pipe.name, format='pipeline')
+        files.append(temp)
+        for pipe_run in pipe.pipeline_run:
+            temp = addict.Dict(name=json.loads(pipe_run.gist)['name'], format='gist', pipeline_name=pipe.name)
+            files.append(temp)
+    for cdata in user.cdata:
+        temp = addict.Dict(name=cdata.name, format='cdata')
+        files.append(temp)
+    tree.files = files
+
     response.set_data(tree)
 
     dict_      = response.to_dict()
+    save_response_to_db(dict_)
     json_      = jsonify(dict_)
     code       = response.code
 
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.READ, methods = ['GET', 'POST'])
+@login_required
 def read():
     response        = Response()
+    
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
 
     parameters      = addict.Dict(request.get_json())
-    parameters.path = os.path.abspath(parameters.path) if parameters.path else ABSPATH_STARTDIR
+    data_path = os.path.abspath(os.path.join(CONFIG.App.DATADIR, modify_data_path(username)))
+    parameters.path = os.path.abspath(parameters.path) if parameters.path else data_path    
 
+    if parameters.format == 'pipeline':
+        flag = False
+        for pipeline in user.pipelines:
+            if parameters.name == pipeline.name:
+                stages = json.loads(pipeline.stages)
+                response.set_data(stages)
+                flag = True
+                break
+
+        if not flag:
+            response.set_error(Response.Error.NOT_FOUND, 
+            'Pipeline does not exist in the database')
+
+    if parameters.format == 'cdata':
+        flag = False
+        for cdat in user.cdata:
+            if parameters.name == cdat.name:
+                print("Found the cdat file!!!")
+                cdat_dict = json.loads(cdat.value)
+                path = os.path.join(parameters.path, parameters.name)
+                print("loading path for cdata is!!! {}".format(path))
+                cdat = cdata.CData.load_from_json(cdat_dict, path)
+                data = cdat.to_dict()
+                response.set_data(data)
+                flag = True
+                break
+        if not flag:
+            response.set_error(Response.Error.NOT_FOUND, 
+            'CData file does not exist in the database')
+
+
+    if parameters.format == 'gist':
+        print("parameters is {}".format(parameters))
+        flag = False
+        for pipe in user.pipelines:
+            for pipe_run in pipe.pipeline_run:
+                if json.loads(pipe_run.gist)['name'] == parameters.name:
+                    print("Found the gist!!")
+                    data = json.loads(pipe_run.gist)
+                    response.set_data(data)
+                    flag = True
+                    break
+        if not flag:
+            response.set_error(Response.Error.NOT_FOUND, 
+            'Gist file does not exist in the database')
+        
     if parameters.name and parameters.format:
         path        = os.path.join(parameters.path, parameters.name)
 
         if os.path.exists(path):
-            if parameters.format == 'cdata':
-                cdat = cdata.read(path)
-                data = cdat.to_dict()
-
-                response.set_data(data)
-            elif parameters.format in ['pipeline', 'gist']:
-                try:
-                    data = JSON.read(path)
-                except json.decoder.JSONDecodeError as e:
-                    data = [ ]
-                    
-                response.set_data(data)
+            if parameters.format in ['pipeline', 'cdata', 'gist']:
+                pass
             else:
                 response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Here')
         else:
-            response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
+            if parameters.format not in ['pipeline', 'cdata']:
+                response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
     else:
         response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'There')
 
     dict_       = response.to_dict()
+    save_response_to_db(dict_)
     json_       = jsonify(dict_)
     code        = response.code
 
@@ -157,88 +227,115 @@ def read():
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
+@login_required
 def write(output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
     parameters   = addict.Dict(request.get_json())
-
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+    
     if parameters.output:
         output   = addict.Dict(merge_dicts(output, parameters.output))
 
     output.path  = ABSPATH_STARTDIR # TODO: make it work with os.path.join(ABSPATH_DIR, output.path)
     output.name  = output.name.strip() # remove padding spaces
 
-    buffer_      = parameters.buffer
-
-    if output.format:
-        if   output.format == 'cdata':
-             handler = cdata
-
-             if output.name in ['', '.cdata', '.CDATA']:
-                name = get_timestamp_str('CDAT%Y%m%d%H%M%S.cdata')
-             else:
-                name = output.name
-
-             output.name = name
-        elif output.format == 'pipeline':
-             handler = pipeline
-
-             if output.name in ['', '.cpipe', '.CPIPE']:
-                name = get_timestamp_str('PIPE%Y%m%d%H%M%S.cpipe')
-             else:
-                name = output.name
-
-             output.name = name
-
-             if not buffer_:
-                buffer_  = [ ]
+    buffer_      = assign_if_none(parameters.buffer, [])
 
     opath        = os.path.join(output.path, output.name)
-
-    try:
-        handler.write(opath, buffer_)
-
-        data          = addict.Dict()
-        data.output   = output
         
-        # These anomalies are confusing moi. Kindly check the difference between readers, writers and loaders and make it uniform.
-        if output.format == 'cdata':
-            cdat      = handler.read(opath)
-            data.data = cdat.to_dict()
-        else:
-            data.data = handler.read(opath)
+    if output.format:
+        if  output.format == 'cdata':
+            handler = cdata
 
-        response.set_data(data)
-    except TypeError as e:
-        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+            if output.name in ['', '.cdata', '.CDATA']:
+                name = get_timestamp_str('CDAT%Y%m%d%H%M%S.cdata')
+            else:
+                name = output.name
+
+            output.name = name
+
+            cdat = handler.CData()
+            cdat.to_json(buffer_)
+            cdata_obj = Cdata.get_cdata(name=output.name)
+            
+            if not cdata_obj:
+                new_cdata = Cdata(name=name, user=user, value=json.dumps(buffer_))
+                new_cdata.add_cdata()
+                cdata_obj = new_cdata
+            else:
+                cdata_obj.update_cdata(value=json.dumps(buffer_))
+
+            cdat = handler.CData.load_from_json(buffer_, opath)
+            
+            data = addict.Dict(output=output, data=(cdat.to_dict()))
+            response.set_data(data)
+
+        elif output.format == 'pipeline':
+            handler = pipeline
+
+            if output.name in ['', '.cpipe', '.CPIPE']:
+                name = get_timestamp_str('PIPE%Y%m%d%H%M%S.cpipe')
+            else:
+                name = output.name
+
+            output.name = name
+
+            pipe = Pipeline.get_pipeline(name=output.name)
+
+            if not pipe:
+                # list is empty i.e. pipeline is just created.
+                new_pipe = Pipeline(name=output.name, user=user, stages=json.dumps(buffer_))
+                new_pipe.add_pipeline()
+                pipe = new_pipe
+            else:
+                pipe.update_pipeline(last_modified=datetime.utcnow(), stages=json.dumps(buffer_))
+
+            data = addict.Dict(output=output, data=(buffer_))
+            response.set_data(data)
 
     dict_      = response.to_dict()
+    save_response_to_db(dict_)
     json_      = jsonify(dict_)
     code       = response.code
 
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.DELETE, methods = ['POST'])
+@login_required
 def delete():
     # delete handle to delete a pipeline
     response = Response()
     parameters   = addict.Dict(request.get_json())
-    opath        = os.path.join(ABSPATH_STARTDIR, parameters.name)  # parameter.name is expected to be name of the pipeline.
-    if os.path.isfile(opath):
-        try:
-            os.remove(opath)
-        except:
-            response.set_error(Response.Error.UNPROCESSABLE_ENTITY, 'Write access denied!')
-    else:
-        response.set_error(Response.Error.NOT_FOUND, 'File does not exist.')
+    opath        = os.path.join(ABSPATH_STARTDIR, parameters.name)
+
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+    
+    flag = False
+    for pipeline in user.pipelines:
+        if parameters.name == pipeline.name:
+            pipeline.delete_pipeline()
+            data = addict.Dict(message="successfully deleted pipeline {}".format(parameters.name))
+            response.set_data(data)
+            flag = True
+            break
+
+    if not flag:
+        response.set_error(Response.Error.NOT_FOUND, 'Pipeline does not exist in the database')
     
     dict_ = response.to_dict()
+    save_response_to_db(dict_)
     json_ = jsonify(dict_)
     code = response.code
 
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.SEARCH, methods = ['GET', 'POST'])
+@login_required
 def search():
     response = Response()
     parameters = addict.Dict(request.get_json())
@@ -287,6 +384,7 @@ def search():
 
     response.set_data(summary_results)
     dict_ = response.to_dict()
+    save_response_to_db(dict_)
     json_ = jsonify(dict_)
     code = response.code
 
@@ -346,10 +444,10 @@ def download():
     download_path = geo.raw_data(links[0], series_accession_list[0])
     
     response.set_data(download_path)
+    
     dict_ = response.to_dict()
+    save_response_to_db(dict_)
     json_ = jsonify(dict_)
     code = response.code
     
     return  json_, code
-
-

@@ -59,24 +59,24 @@ class Pipeline(object):
     def add_stages(self, *args):
         self.stages += args
 
-        if any(stage == Pipeline.PENDING for stage in self.stages):
+        if any(stage.status == Pipeline.PENDING for stage in self.stages):
             self.set_status(Pipeline.PENDING)
-        if all(stage == Pipeline.READY   for stage in self.stages):
+        if all(stage.status == Pipeline.READY   for stage in self.stages):
             self.set_status(Pipeline.READY)
 
     # raise IOError, ValueError.
-    def load(path):
-        if not os.path.isabs(path):
-            path     = os.path.abspath(path)
+    def load(stages):
+        # if not os.path.isabs(path):
+        #     path     = os.path.abspath(path)
 
-        if not os.path.exists(path):
-            raise IOError('{path} does not exist.'.format(path = path))
-        if not os.path.isfile(path):
-            raise IOError('{path} is not a valid file.'.format(path = path))
+        # if not os.path.exists(path):
+        #     raise IOError('{path} does not exist.'.format(path = path))
+        # if not os.path.isfile(path):
+        #     raise IOError('{path} is not a valid file.'.format(path = path))
 
         objekt       = Pipeline()
-        stages       = [addict.Dict(stage) for stage in read(path)]
-
+        # stages       = [addict.Dict(stage) for stage in read(path)]
+        stages = [addict.Dict(stage) for stage in stages]
         if len(stages) == 0:
             raise ValueError('Pipeline is empty.')
 
@@ -93,7 +93,7 @@ class Pipeline(object):
             raise ValueError('Resource pending.')
 
         dpath        = os.path.join(fpath.value.path, fpath.value.name)
-        data         = cdata.read(dpath)
+        data         = None # cdata.read(dpath)
         fpath.status = Pipeline.READY
         objekt.add_stages(fpath)
 
@@ -208,7 +208,7 @@ class Pipeline(object):
 
         objekt.set_config(config)
 
-        return data, objekt
+        return data, objekt, fpath
 
     def runner(self, cdat, heap_size = 16384, seed = None, verbose = True):
         self.set_status(Pipeline.RUNNING)
@@ -335,11 +335,11 @@ class Pipeline(object):
 
                 for i, instance in enumerate(data):
                     iclass = list(range(instance.num_classes))
-                
+
                 options    = assign_if_none(model.OPTIONS, [ ])
                 classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(classname = model.NAME), options = options)
                 classifier.build_classifier(tran)
-        
+
                 serializer.write(os.path.join(head, '{name}.{classname}.model'.format(
                         name = name,
                     classname = model.NAME
@@ -355,7 +355,7 @@ class Pipeline(object):
                 frame  = pd.DataFrame(data = evaluation.confusion_matrix)
                 axes   = sns.heatmap(frame, cbar = False, annot = True)
                 b64str = get_b64_plot(axes)
-                
+
                 summary.confusion_matrix = addict.Dict({
                     'value': evaluation.confusion_matrix.tolist(),
                      'plot': b64str
@@ -394,6 +394,7 @@ class Pipeline(object):
                 models.append(summary)
 
         self.gist.models = models
+        self.gist.name = '{}.cgist'.format(name)
 
         JVM.stop()
 
