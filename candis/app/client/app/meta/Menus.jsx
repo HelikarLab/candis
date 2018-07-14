@@ -1,4 +1,5 @@
 import axios        from 'axios'
+import storage      from 'store'
 
 import config       from '../config'
 
@@ -99,36 +100,6 @@ const Menus = [
             }
           })
         }
-      },
-      {
-           text: 'Quit',
-           icon: `${config.routes.icons}/quit.png`,
-        tooltip: 'Quit the application',
-        onClick: (dispatch) => {
-          bootbox.confirm({
-             message: "Are you sure you want to quit?",
-             buttons:
-             {
-                cancel: { label: "Cancel", className: "btn-sm btn-primary" },
-               confirm: { label: "Quit",   className: "btn-sm btn-success" }
-             },
-                size: "small",
-             animate: false,
-            callback: (confirm) => {
-              if ( confirm ) {
-                dispatch({
-                  type: ActionType.App.SIGNOUT_REQUEST,
-                })
-
-                dispatch(signout())
-
-                dispatch({
-                  type: ActionType.App.SIGNOUT_SUCCESS
-                })
-              }
-            }
-          })
-        }
       }
     ]
   },
@@ -185,6 +156,41 @@ const Menus = [
         onClick: () => {
           window.open(config.urls.docs)
         }
+      }
+    ]
+  },
+  {
+    title: 'My Profile',
+    actions: [
+      {
+          text: 'Quit',
+            icon: `${config.routes.icons}/quit.png`,
+        tooltip: 'Quit the application',
+        onClick: (dispatch) => {
+          bootbox.confirm({
+              message: "Are you sure you want to quit?",
+              buttons:
+              {
+                cancel: { label: "Cancel", className: "btn-sm btn-primary" },
+                confirm: { label: "Quit",   className: "btn-sm btn-success" }
+              },
+                size: "small",
+              animate: false,
+            callback: (confirm) => {
+              if ( confirm ) {
+                dispatch({
+                  type: ActionType.App.SIGNOUT_REQUEST,
+                })
+
+                dispatch(signout())
+
+                dispatch({
+                  type: ActionType.App.SIGNOUT_SUCCESS
+                })
+              }
+            }
+            })
+          }
       }
     ]
   }

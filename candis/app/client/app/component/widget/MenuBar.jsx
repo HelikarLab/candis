@@ -1,5 +1,6 @@
 import React       from 'react'
 import PropTypes   from 'prop-types'
+import storage      from 'store'
 
 import shortid     from 'shortid'
 import classNames  from 'classnames'
@@ -10,7 +11,15 @@ import { getBSTTProps } from '../../util'
 class MenuBar extends React.Component {
   render ( ) {
     const props = this.props
-
+    
+    const titles = ['My Profile']
+    const leftMenus = props.menus.filter((menu) => {
+      return !titles.some((title) => {return title == menu.title})
+    })
+    const rightMenus = props.menus.filter((menu) => {
+      return titles.some((title) => {return title == menu.title})
+    })
+    
     return (
       <div
                id={`menubar-${props.ID}`}
@@ -32,7 +41,7 @@ class MenuBar extends React.Component {
                 <div id={`menubar-${props.ID}-collapse`} className="collapse navbar-collapse">
                   <ul className="nav navbar-nav">
                     {
-                      props.menus.map((menu, index) => {
+                      leftMenus.map((menu, index) => {
                         return (
                           <MenuBar.Menu
                                 key={index} {...menu}
@@ -41,6 +50,20 @@ class MenuBar extends React.Component {
                             }}/>
                         )
                       })
+                    }
+                  </ul>
+                  <ul className="nav navbar-nav navbar-right">
+                    {
+                      rightMenus.map((menu, index) => {
+                        return (
+                          <MenuBar.Menu
+                                key={index} {...menu}
+                                user={props.user}
+                            onClick={(action) => {
+                              props.onClick(action, menu)
+                            }}/>
+                        )
+                      })                      
                     }
                   </ul>
                 </div>
@@ -60,7 +83,7 @@ MenuBar.Menu    = class extends React.Component {
       <li className="dropdown">
         <a href="javascript:void(0);" className="dropdown-toggle"
           data-toggle="dropdown">
-          {props.title}
+          {props.user && props.title === 'My Profile' ? props.user.username : props.title}
         </a>
         <ul className="dropdown-menu">
           {
