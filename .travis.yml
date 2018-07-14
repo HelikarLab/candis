@@ -10,9 +10,5 @@ python:
   - "3.6"
   # - "3.6-dev"
   # - "3.7-dev"
-install:
-        #- curl -sL git.io/install-candis | sudo python
-  - sudo python get-candis
-script:
-  - redis-cli ping
-  - make test
+before_install:
+    echo $CANDIS_DATABASE_NAME
