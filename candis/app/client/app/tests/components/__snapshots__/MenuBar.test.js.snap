@@ -80,6 +80,9 @@ ShallowWrapper {
                 onClick={[Function]}
               />
             </ul>
+            <ul
+              className="nav navbar-nav navbar-right"
+            />
           </div>
         </span>
       </div>,
@@ -137,6 +140,9 @@ ShallowWrapper {
                 onClick={[Function]}
               />
             </ul>
+            <ul
+              className="nav navbar-nav navbar-right"
+            />
           </div>
         </span>,
         "className": "container",
@@ -192,6 +198,9 @@ ShallowWrapper {
                   onClick={[Function]}
                 />
               </ul>
+              <ul
+                className="nav navbar-nav navbar-right"
+              />
             </div>,
           ],
         },
@@ -285,37 +294,10 @@ ShallowWrapper {
             "key": undefined,
             "nodeType": "host",
             "props": Object {
-              "children": <ul
-                className="nav navbar-nav"
-              >
-                <_class
-                  0="w"
-                  1="v"
-                  2="h"
-                  3="w"
-                  4="h"
-                  5="e"
-                  onClick={[Function]}
-                />
-                <_class
-                  0="d"
-                  1="f"
-                  2="v"
-                  3="s"
-                  4="v"
-                  onClick={[Function]}
-                />
-              </ul>,
-              "className": "collapse navbar-collapse",
-              "id": "menubar-axyu-collapse",
-            },
-            "ref": null,
-            "rendered": Object {
-              "instance": null,
-              "key": undefined,
-              "nodeType": "host",
-              "props": Object {
-                "children": Array [
+              "children": Array [
+                <ul
+                  className="nav navbar-nav"
+                >
                   <_class
                     0="w"
                     1="v"
@@ -324,7 +306,7 @@ ShallowWrapper {
                     4="h"
                     5="e"
                     onClick={[Function]}
-                  />,
+                  />
                   <_class
                     0="d"
                     1="f"
@@ -332,48 +314,94 @@ ShallowWrapper {
                     3="s"
                     4="v"
                     onClick={[Function]}
-                  />,
-                ],
-                "className": "nav navbar-nav",
-              },
-              "ref": null,
-              "rendered": Array [
-                Object {
-                  "instance": null,
-                  "key": "0",
-                  "nodeType": "class",
-                  "props": Object {
-                    "0": "w",
-                    "1": "v",
-                    "2": "h",
-                    "3": "w",
-                    "4": "h",
-                    "5": "e",
-                    "onClick": [Function],
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
-                Object {
-                  "instance": null,
-                  "key": "1",
-                  "nodeType": "class",
-                  "props": Object {
-                    "0": "d",
-                    "1": "f",
-                    "2": "v",
-                    "3": "s",
-                    "4": "v",
-                    "onClick": [Function],
-                  },
-                  "ref": null,
-                  "rendered": null,
-                  "type": [Function],
-                },
+                  />
+                </ul>,
+                <ul
+                  className="nav navbar-nav navbar-right"
+                />,
               ],
-              "type": "ul",
+              "className": "collapse navbar-collapse",
+              "id": "menubar-axyu-collapse",
             },
+            "ref": null,
+            "rendered": Array [
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [
+                    <_class
+                      0="w"
+                      1="v"
+                      2="h"
+                      3="w"
+                      4="h"
+                      5="e"
+                      onClick={[Function]}
+                    />,
+                    <_class
+                      0="d"
+                      1="f"
+                      2="v"
+                      3="s"
+                      4="v"
+                      onClick={[Function]}
+                    />,
+                  ],
+                  "className": "nav navbar-nav",
+                },
+                "ref": null,
+                "rendered": Array [
+                  Object {
+                    "instance": null,
+                    "key": "0",
+                    "nodeType": "class",
+                    "props": Object {
+                      "0": "w",
+                      "1": "v",
+                      "2": "h",
+                      "3": "w",
+                      "4": "h",
+                      "5": "e",
+                      "onClick": [Function],
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                  Object {
+                    "instance": null,
+                    "key": "1",
+                    "nodeType": "class",
+                    "props": Object {
+                      "0": "d",
+                      "1": "f",
+                      "2": "v",
+                      "3": "s",
+                      "4": "v",
+                      "onClick": [Function],
+                    },
+                    "ref": null,
+                    "rendered": null,
+                    "type": [Function],
+                  },
+                ],
+                "type": "ul",
+              },
+              Object {
+                "instance": null,
+                "key": undefined,
+                "nodeType": "host",
+                "props": Object {
+                  "children": Array [],
+                  "className": "nav navbar-nav navbar-right",
+                },
+                "ref": null,
+                "rendered": Array [],
+                "type": "ul",
+              },
+            ],
             "type": "div",
           },
         ],
@@ -437,6 +465,9 @@ ShallowWrapper {
                   onClick={[Function]}
                 />
               </ul>
+              <ul
+                className="nav navbar-nav navbar-right"
+              />
             </div>
           </span>
         </div>,
@@ -494,6 +525,9 @@ ShallowWrapper {
                   onClick={[Function]}
                 />
               </ul>
+              <ul
+                className="nav navbar-nav navbar-right"
+              />
             </div>
           </span>,
           "className": "container",
@@ -549,6 +583,9 @@ ShallowWrapper {
                     onClick={[Function]}
                   />
                 </ul>
+                <ul
+                  className="nav navbar-nav navbar-right"
+                />
               </div>,
             ],
           },
@@ -642,37 +679,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": <ul
-                  className="nav navbar-nav"
-                >
-                  <_class
-                    0="w"
-                    1="v"
-                    2="h"
-                    3="w"
-                    4="h"
-                    5="e"
-                    onClick={[Function]}
-                  />
-                  <_class
-                    0="d"
-                    1="f"
-                    2="v"
-                    3="s"
-                    4="v"
-                    onClick={[Function]}
-                  />
-                </ul>,
-                "className": "collapse navbar-collapse",
-                "id": "menubar-axyu-collapse",
-              },
-              "ref": null,
-              "rendered": Object {
-                "instance": null,
-                "key": undefined,
-                "nodeType": "host",
-                "props": Object {
-                  "children": Array [
+                "children": Array [
+                  <ul
+                    className="nav navbar-nav"
+                  >
                     <_class
                       0="w"
                       1="v"
@@ -681,7 +691,7 @@ ShallowWrapper {
                       4="h"
                       5="e"
                       onClick={[Function]}
-                    />,
+                    />
                     <_class
                       0="d"
                       1="f"
@@ -689,48 +699,94 @@ ShallowWrapper {
                       3="s"
                       4="v"
                       onClick={[Function]}
-                    />,
-                  ],
-                  "className": "nav navbar-nav",
-                },
-                "ref": null,
-                "rendered": Array [
-                  Object {
-                    "instance": null,
-                    "key": "0",
-                    "nodeType": "class",
-                    "props": Object {
-                      "0": "w",
-                      "1": "v",
-                      "2": "h",
-                      "3": "w",
-                      "4": "h",
-                      "5": "e",
-                      "onClick": [Function],
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
-                  Object {
-                    "instance": null,
-                    "key": "1",
-                    "nodeType": "class",
-                    "props": Object {
-                      "0": "d",
-                      "1": "f",
-                      "2": "v",
-                      "3": "s",
-                      "4": "v",
-                      "onClick": [Function],
-                    },
-                    "ref": null,
-                    "rendered": null,
-                    "type": [Function],
-                  },
+                    />
+                  </ul>,
+                  <ul
+                    className="nav navbar-nav navbar-right"
+                  />,
                 ],
-                "type": "ul",
+                "className": "collapse navbar-collapse",
+                "id": "menubar-axyu-collapse",
               },
+              "ref": null,
+              "rendered": Array [
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [
+                      <_class
+                        0="w"
+                        1="v"
+                        2="h"
+                        3="w"
+                        4="h"
+                        5="e"
+                        onClick={[Function]}
+                      />,
+                      <_class
+                        0="d"
+                        1="f"
+                        2="v"
+                        3="s"
+                        4="v"
+                        onClick={[Function]}
+                      />,
+                    ],
+                    "className": "nav navbar-nav",
+                  },
+                  "ref": null,
+                  "rendered": Array [
+                    Object {
+                      "instance": null,
+                      "key": "0",
+                      "nodeType": "class",
+                      "props": Object {
+                        "0": "w",
+                        "1": "v",
+                        "2": "h",
+                        "3": "w",
+                        "4": "h",
+                        "5": "e",
+                        "onClick": [Function],
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                    Object {
+                      "instance": null,
+                      "key": "1",
+                      "nodeType": "class",
+                      "props": Object {
+                        "0": "d",
+                        "1": "f",
+                        "2": "v",
+                        "3": "s",
+                        "4": "v",
+                        "onClick": [Function],
+                      },
+                      "ref": null,
+                      "rendered": null,
+                      "type": [Function],
+                    },
+                  ],
+                  "type": "ul",
+                },
+                Object {
+                  "instance": null,
+                  "key": undefined,
+                  "nodeType": "host",
+                  "props": Object {
+                    "children": Array [],
+                    "className": "nav navbar-nav navbar-right",
+                  },
+                  "ref": null,
+                  "rendered": Array [],
+                  "type": "ul",
+                },
+              ],
               "type": "div",
             },
           ],
