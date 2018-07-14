@@ -20,8 +20,6 @@ const middlewares = [
 	config.debug && logger
 ].filter(Boolean)
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
-
 const middleware  = applyMiddleware(...middlewares)
 const store       = createStore(reducer, composeEnhancers(middleware))
 
