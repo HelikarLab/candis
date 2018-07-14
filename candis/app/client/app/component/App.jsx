@@ -33,6 +33,7 @@ class App extends React.Component {
           classNames={{ root: ["no-border-bottom", "no-margin"] }}/>
         <MenuBar
             menus={menus}
+            user={props.user}
           onClick={(action) => {
             props.dispatch(action.onClick)
           }}/>
