@@ -189,7 +189,7 @@ class EntrezDataGrid extends React.Component {
           onRowSelect={this.onSelect}
           minHeight={500}
         />
-        <div className="row" style={marginTop=0.5}>
+        <div className="row">
           <div className="col-xs-8">
           </div>
           <div className="col-xs-4">        
