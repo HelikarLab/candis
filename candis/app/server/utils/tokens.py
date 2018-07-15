@@ -24,7 +24,7 @@ def login_required(f):
                 
                 dict_      = response.to_dict()
                 json_      = jsonify(dict_)
-                code       = response.code    
+                code       = response.code
                 
                 return json_, code
 
