@@ -22,12 +22,12 @@ const signin = (payload) => {
   const dispatcher = (dispatch) => {
 	
 	storage.set('JWT_TOKEN', payload.token)	
-    storage.set('ACTIVE_USER', payload.user)
+	storage.set('ACTIVE_USER', payload.user)
+	
+	setAuthorizationToken(payload.token)
 	
 	const action = setUser(jwt.decode(payload.token))
 	dispatch(action)
-	
-	setAuthorizationToken(payload.token)
   }
   return dispatcher
 }
