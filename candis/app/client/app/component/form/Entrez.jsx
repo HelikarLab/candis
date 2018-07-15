@@ -15,10 +15,10 @@ const EntrezBasic = props => {
   return (
     <div className="container-fluid">
       <Form>
-          
+
         <div className="form-group">
           <label>Email</label>
-          <Field type="email" name="email" className="form-control" />
+          <Field type="email" name="email" className="form-control" placeholder={props.email}/>
           <small className="help-block">
             {props.touched.email && props.errors.email}
           </small>
@@ -26,7 +26,7 @@ const EntrezBasic = props => {
         
         <div className="form-group">
           <label>Tool Name</label>
-          <Field type="text" name="toolName" className="form-control"/>
+          <Field type="text" name="toolName" className="form-control" placeholder={props.toolName}/>
           <small className="help-block">
             {props.touched.toolName && props.errors.toolName}
           </small>          
@@ -85,13 +85,11 @@ const EntrezBasic = props => {
 }
 
 const EntrezEnhanced = withFormik({
-  mapPropsToValues({ email, toolName, database, term, useHistory, api_key }) {
-    return {
-      email: email || "",
-      toolName: toolName || "",
-      api_key: api_key || ""
-    }
-  },
+  mapPropsToValues: (props) => ({
+    email: props.user.email || "",
+    toolName: props.user.username || "",
+    api_key: props.api_key || ""
+  }),
   validationSchema: Yup.object().shape({
     email: Yup.string()
       .email("Email is not valid")
@@ -208,12 +206,14 @@ class EntrezDataGrid extends React.Component {
 
 const mapStateToProps = (state, props) => {
   const entrez = state.entrez
+  const user = state.app.user
   return {
     search_results: entrez.search_results,
     toolName: entrez.toolName,
     database: entrez.database,
     api_key: entrez.api_key,
-    email: entrez.email
+    email: entrez.email,
+    user: user
   }
 }
 
