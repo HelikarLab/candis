@@ -29,6 +29,7 @@ const SignUpBasic = ({
         onChange={handleChange}
         onBlur={handleBlur}
         value={values.username}
+        autoFocus
       />
       <small className="help-block">{touched.username && errors.username}</small>
     </div>

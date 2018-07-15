@@ -34,7 +34,7 @@ const EntrezBasic = props => {
           
         <div className="form-group">
           <label>API KEY</label>
-          <Field type="text" name="api_key" className="form-control" />
+          <Field type="text" name="api_key" className="form-control" autoFocus />
         </div>
 
         <div className="form-group">
