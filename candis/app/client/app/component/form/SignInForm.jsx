@@ -79,12 +79,12 @@ const SignInEnhanced = withFormik({
           username: values.username
         }
       }
+      setSubmitting(false)
       props.onSubmit(payload)
-      resetForm()
     }, ({response}) => {
+      setSubmitting(false)
       toastr.error(response.data.error.errors[0].message)
     })
-    setSubmitting(false)
   },
 })(SignInBasic)
 
