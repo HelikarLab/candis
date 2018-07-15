@@ -20,7 +20,7 @@ from candis.app.server.utils.response import save_response_to_db
 from candis.app.server.helpers.fileData import modify_data_path
 
 def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPIRY_TIME')):
-    payload = addict.Dict(username=user_.username)
+    payload = addict.Dict(username=user_.username, email=user_.email)
     if exp:
         payload.update({'exp': exp})
     encoded_token = jwt.encode(payload=payload, key=key).decode('utf-8')
