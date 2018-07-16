@@ -163,7 +163,16 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 			<a href="mailto:achillesrasquinha@gmail.com">achillesrasquinha@gmail.com</a>
 			<br>
 			<p>Author and Maintainer</p>
-    	</td>
+		</td>
+		<td align="center" valign="top">
+			<img width="150" height="150" src="https://github.com/rupav.png?s=150">
+			<br>
+			<a href="https://github.com/rupav">Rupav Jain</a>
+			<br>
+			<a href="mailto:rupavwinchester@gmail.com">rupavwinchester@gmail.com</a>
+			<br>
+			<p>Author and Maintainer</p>
+		</td>		
      </tr>
   </tbody>
 </table>
