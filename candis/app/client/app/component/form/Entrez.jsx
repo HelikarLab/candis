@@ -68,7 +68,10 @@ const EntrezBasic = props => {
         
         <div className="row">
           <div className="col-xs-8">
-          <a href="javascript:void(0)" onClick={() => props.onSwitch('search')}>next</a>
+          <ul className="pager">
+            <li className="disabled"><a>Previous</a></li>
+            <li><a href="javascript:void(0)" onClick={() => props.onSwitch('search')}>Next</a></li>
+          </ul>
           </div>
           <div className="col-xs-4">
             <button type="submit" disabled={props.isSubmitting} className="btn btn-block btn-primary">
@@ -190,7 +193,10 @@ class EntrezDataGrid extends React.Component {
         />
         <div className="row">
           <div className="col-xs-8">
-            <a href="javascript:void(0)" onClick={() => props.onSwitch('download')}>back</a>
+            <ul className="pager">
+              <li><a href="javascript:void(0)" onClick={() => props.onSwitch('download')}>Previous</a></li>
+              <li className="disabled"><a>Next</a></li>
+            </ul>
           </div>
           <div className="col-xs-4">        
             <button onClick={this.onClick} disabled={!this.state.payload || this.state.downloading} className="btn btn-block btn-primary">
