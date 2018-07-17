@@ -12,7 +12,7 @@ except ImportError:
 import addict
 import numpy   as np
 import matplotlib.pyplot as pplt
-import pandas  as pd
+import pandas  as pd, arff
 import seaborn as sns
 
 from weka.core                import jvm as JVM
@@ -210,7 +210,7 @@ class Pipeline(object):
 
         return data, objekt, fpath
 
-    def runner(self, cdat, heap_size = 16384, seed = None, verbose = True):
+    def runner(self, cdat, heap_size = 16384, seed = None, verbose = True, split_params = {'split_type': 'unsupervised', 'split_percent': 20, 'split_folds': 20}):
         self.set_status(Pipeline.RUNNING)
 
         self.logs.append('Initializing Pipeline')
@@ -242,7 +242,6 @@ class Pipeline(object):
                 self.stages[i].status = Pipeline.COMPLETE
 
         self.logs.append('Saved ARFF at {path}'.format(path = path))
-        self.logs.append('Splitting to Training and Testing Sets')
 
         JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
 
@@ -252,23 +251,59 @@ class Pipeline(object):
         data = load.load_file(os.path.join(head, 'iris.arff')) # For Debugging Purposes Only
         data.class_is_last() # For Debugging Purposes Only
         # data.class_index = cdat.iclss
+        
+        split_type = split_params['split_type']
+        
+        seed = assign_if_none(seed, random.randint(0, 1000))
+        if(split_type == 'supervised'):
+            folds = split_params['split_folds']
+            self.logs.append('Splitting to Training and Testing datasets with Stratified data - Test data will have 1 of {} folds'.format(folds))
+            opts = ['-S', str(seed), '-N', str(folds)]
+            wobj = Filter(classname = 'weka.filters.supervised.instance.StratifiedRemoveFolds', options = opts + ['-V'])
+            wobj.inputformat(data)
+            
+            tran = wobj.filter(data)
+            wobj.options = opts
+            test = wobj.filter(data)
+        else:
+            split_percent = split_params['split_percent']
+            self.logs.append('Splitting to Training and Testing datasets with randomized data - Ratio of train:test split is {}:{}'.format(split_percent, 100 - split_percent))
+            wobj = Filter(classname = 'weka.filters.unsupervised.instance.Randomize')
+            wobj.inputformat(data)
+            data = wobj.filter(data)
+
+            opts = ['-P', str(split_percent)]
+            wobj = Filter(classname = 'weka.filters.unsupervised.instance.RemovePercentage', options = opts + ['-V'])
+            wobj.inputformat(data)
+            
+            tran = wobj.filter(data)
+            wobj.options = opts
+            test = wobj.filter(data)
+
+        saver =  Saver(classname = 'weka.core.converters.ArffSaver')
+        
+        train_path = os.path.join(head, 'iris_train.arff')
+        test_path = os.path.join(head, 'iris_test.arff')
+        
+        saver.save_file(tran, train_path)
+        saver.save_file(test, test_path)
+        
+        data = tran
 
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
                 self.stages[i].status = Pipeline.RUNNING
 
-        self.logs.append('Splitting Training Set')
-
+        self.logs.append('Splitting to Training and Testing Sets')
         # TODO - Check if this seed is worth it.
         seed = assign_if_none(seed, random.randint(0, 1000))
-        opts = ['-S', str(seed), '-N', str(para.Preprocess.FOLDS)]
+        opts = ['-S', str(seed), '-N', str(2)]
         wobj = Filter(classname = 'weka.filters.supervised.instance.StratifiedRemoveFolds', options = opts + ['-V'])
         wobj.inputformat(data)
-
+        
         tran = wobj.filter(data)
 
         self.logs.append('Splitting Testing Set')
-
         wobj.options = opts
         test = wobj.filter(data)
 
@@ -404,9 +439,9 @@ class Pipeline(object):
 
         self.set_status(Pipeline.COMPLETE)
 
-    def run(self, cdat, heap_size = 16384, seed = None, verbose = False):
+    def run(self, cdat, heap_size = 16384, seed = None, verbose = False, **kwargs):
         if not self.thread:
-            self.thread = threading.Thread(target = self.runner, args = (cdat, heap_size, seed, verbose))
+            self.thread = threading.Thread(target = self.runner, args = (cdat, heap_size, seed, verbose, kwargs))
             self.thread.start()
         else:
             warnings.warn('Pipeline currently active.')

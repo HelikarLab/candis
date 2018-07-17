@@ -59,7 +59,7 @@ def run(delay = 5):
                 opath =  os.path.join(fpath.value.path, fpath.value.name)
                 cdat = CData.load_from_json(json.loads(cdat_dict), opath)
 
-                pipe.run(cdat, verbose = CONFIG.DEBUG)
+                pipe.run(cdat, verbose = CONFIG.DEBUG, split_type='unsupervised', split_percent=2)
 
                 while pipe.status == Pipeline.RUNNING:
                     status        = addict.Dict()
