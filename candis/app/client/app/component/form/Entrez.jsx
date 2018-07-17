@@ -68,6 +68,7 @@ const EntrezBasic = props => {
         
         <div className="row">
           <div className="col-xs-8">
+          <a href="javascript:void(0)" onClick={() => props.onSwitch('search')}>next</a>
           </div>
           <div className="col-xs-4">
             <button type="submit" disabled={props.isSubmitting} className="btn btn-block btn-primary">
@@ -189,6 +190,7 @@ class EntrezDataGrid extends React.Component {
         />
         <div className="row">
           <div className="col-xs-8">
+            <a href="javascript:void(0)" onClick={() => props.onSwitch('download')}>back</a>
           </div>
           <div className="col-xs-4">        
             <button onClick={this.onClick} disabled={!this.state.payload || this.state.downloading} className="btn btn-block btn-primary">
@@ -220,17 +222,38 @@ const mapStateToProps = (state, props) => {
 const ConnectedEntrezEnhanced = connect(mapStateToProps)(EntrezEnhanced)
 const ConnectedEntrezDataGrid = connect(mapStateToProps)(EntrezDataGrid)
 
-const Entrez = (props) => {
-  return (
-    <div>
-      { !props.search_results.length
-        ?
-        <ConnectedEntrezEnhanced />
-        :
-        <ConnectedEntrezDataGrid />
-      }
-    </div>
-  )
+class Entrez extends React.Component {
+  constructor(props){
+    super(props)
+
+    this.state = { activeForm: 'search' }
+    
+    this.onSwitch = this.onSwitch.bind(this)
+  }
+
+  onSwitch (val) {
+
+    let form = 'search'
+    if(val == 'search'){
+      form = 'download'
+    }
+    this.setState({ activeForm: form })
+  }
+
+  render () {
+    const props = this.props
+    return (
+      <div>
+        { (this.state.activeForm === 'search')
+          ?
+          <ConnectedEntrezEnhanced onSwitch={this.onSwitch}/>
+          :
+          <ConnectedEntrezDataGrid onSwitch={this.onSwitch}/>
+        }
+      </div>
+    )    
+  }
+
 }
 
 export default connect(mapStateToProps)(Entrez)
