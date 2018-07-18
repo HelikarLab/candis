@@ -26,6 +26,9 @@ from candis.config   import CONFIG
 from candis.resource import R
 from candis.util     import assign_if_none
 from candis.ios      import json as JSON
+from logger import get_logger
+
+log = get_logger()
 
 ATTRIBUTE_TYPES = JSON.read(os.path.join(R.Path.DATA, 'attribute-types.json'))
 
@@ -262,7 +265,7 @@ class CData(object):
                 cnames.append(cname)
             buffer_.update({"cnames": cnames})
         except Exception as e:
-            print(str(e))
+            log.error(str(e))
     
     def to_dict(self):
         data       = self.data.copy()

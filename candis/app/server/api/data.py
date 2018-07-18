@@ -25,6 +25,9 @@ from candis.data.GEO import API as geo_API
 from candis.app.server.utils import login_required, save_response_to_db
 from candis.app.server.models import Pipeline, Cdata, User
 from candis.app.server.helpers.fileData import modify_data_path
+from logger import get_logger
+
+log = get_logger()
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))
 ABSPATH_STARTDIR = os.path.abspath(CONFIG.App.STARTDIR)
@@ -99,7 +102,7 @@ def discover_resource(path, level = None, filter_ = None):
     return tree
 
 def log_times(i):
-    print("No. of times tried to connect to NCBI: {}".format(i))
+    log.info("No. of times tried to connect to NCBI: {}".format(i))
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 @login_required

@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash
 
 # imports - module imports
 from candis.app.server.app import db
+from logger import get_logger
+
+log = get_logger()
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -26,7 +29,7 @@ class User(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # use logging
+            log.error(e)
 
     @classmethod
     def get_user(cls, id_=None, username=None, email=None):
@@ -46,7 +49,7 @@ class User(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # use logging
+            log.error(e)
 
     def _encrypt(self, pswd):
         return generate_password_hash(pswd)

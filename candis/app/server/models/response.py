@@ -7,6 +7,9 @@ import addict
 
 # imports - module imports
 from candis.app.server.app import db
+from logger import get_logger
+
+log = get_logger()
 
 class Response(db.Model):
     __tablename__ = 'response'
@@ -25,7 +28,7 @@ class Response(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # use logging
+            log.error(e)
 
     @classmethod
     def get_response(cls, id=None, version=None, status=None):

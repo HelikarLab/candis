@@ -13,6 +13,9 @@ from candis.data.entrez.const import URL
 from candis.util import validate_email
 from candis.config import CONFIG
 from candis.manager import Redis
+from logger import get_logger
+
+log = get_logger()
 
 def sanitize_response(response, type_ = 'json'):
     if type_ == 'json':
@@ -71,7 +74,7 @@ class API(object):
             except ResponseError:
                 # exception caught is custom ResponseError of redis.
                 # TODO: instead of raising exception, give a warning or use logging.captureWarning or log INFO
-                print('redis key "databases" must be a list, refreshing cache.')
+                log.info('redis key "databases" must be a list, refreshing cache.')
             else:
                 return None
         
@@ -168,7 +171,7 @@ class API(object):
         if(optional.get('query_key') and optional.get('WebEnv')):
             if db not in self.databases:
                 raise ValueError('database should be from : {}'.format(self.databases))            
-            # print("Using WebEnv and query_key") - TODO: Use logging instead
+            log.info("Using WebEnv and query_key")
             optional.update({'db': db})
             data = self.request('get', URL.SUMMARY, optional)
             return data
