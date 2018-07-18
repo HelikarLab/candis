@@ -22,10 +22,8 @@ from candis.app.server.app      import app, db
 from candis.app.server.response import Response
 from candis.data.entrez import API
 from candis.data.GEO import API as geo_API
-from candis.app.server.utils.tokens import login_required
-from candis.app.server.utils.response import save_response_to_db
-from candis.app.server.models.pipeline import Pipeline, Cdata
-from candis.app.server.models.user import User
+from candis.app.server.utils import login_required, save_response_to_db
+from candis.app.server.models import Pipeline, Cdata, User
 from candis.app.server.helpers.fileData import modify_data_path
 
 FFORMATS         = JSON.read(os.path.join(R.Path.DATA, 'file-formats.json'))

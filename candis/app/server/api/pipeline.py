@@ -18,11 +18,9 @@ from candis.ios                 import Pipeline, CData
 from candis.ios                 import json as JSON
 from candis.app.server.app      import app
 from candis.app.server.app      import socketio
-from candis.app.server.utils.tokens import login_required
+from candis.app.server.utils import login_required, save_response_to_db
 from candis.app.server.response import Response
-from candis.app.server.utils.response import save_response_to_db
-from candis.app.server.models.pipeline import PipelineRun, Pipeline as PipelineModel, Cdata
-from candis.app.server.models.user import User
+from candis.app.server.models import PipelineRun, Pipeline as PipelineModel, Cdata, User
 
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?

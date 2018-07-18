@@ -1,5 +1,6 @@
 # imports - standard imports
 from datetime import datetime
+import json
 
 # imports - module imports
 from candis.app.server.app import db
@@ -49,8 +50,14 @@ class Pipeline(db.Model):
         elif name:
             return cls.query.filter_by(name=name).first()
         elif last_modified:
-            return cls.query.filter_by(last_modified=last_modified).first()     
+            return cls.query.filter_by(last_modified=last_modified).first()
 
+    @classmethod
+    def of_user(cls, user=None, pipe_name=None):
+        for pipeline in user.pipelines:
+            if pipeline.name == pipe_name:
+                return pipeline
+        return None
 
 class PipelineRun(db.Model):
     __tablename__ = 'pipeline_run'
@@ -69,6 +76,13 @@ class PipelineRun(db.Model):
             db.session.rollback()
             db.session.flush()
             print(e)  # use logging
+
+    @classmethod
+    def of_pipeline(pipeline=None, gist_name=None):
+        for pipe_run in pipeline.pipeline_run:
+            if json.loads(pipe_run.gist)['name'] == gist_name:
+                return pipe_run
+        return None
 
 class Cdata(db.Model):
     __tablename__ = 'cdata'
@@ -99,3 +113,10 @@ class Cdata(db.Model):
             setattr(self, key, value)
         db.session.add(self)
         db.session.commit()    
+
+    @classmethod
+    def of_user(user=None, cdata_name=None):
+        for cdat in user.cdata:
+            if cdat.name == cdata_name:
+                return cdat
+        return None
