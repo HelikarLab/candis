@@ -14,10 +14,8 @@ from candis.app.server.app import app, redis
 from candis.app.server.models.user import User
 from candis.config import CONFIG
 from candis.app.server.response import Response
-from candis.app.server.helpers.verify import verify_password
-from candis.app.server.utils.tokens import login_required, logout_required
-from candis.app.server.utils.response import save_response_to_db
-from candis.app.server.helpers.fileData import modify_data_path
+from candis.app.server.helpers import verify_password, modify_data_path
+from candis.app.server.utils import login_required, logout_required, save_response_to_db
 
 def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPIRY_TIME')):
     payload = addict.Dict(username=user_.username, email=user_.email)
