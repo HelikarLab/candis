@@ -4,7 +4,9 @@ import json
 
 # imports - module imports
 from candis.app.server.app import db
+from logger import get_logger
 
+log = get_logger()
 
 class Pipeline(db.Model):
     __tablename__ = 'pipeline'
@@ -25,7 +27,7 @@ class Pipeline(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # use logging
+            log.error(e)
 
     def delete_pipeline(self):
         try:
@@ -34,7 +36,7 @@ class Pipeline(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # use logging
+            log.error(e)
         
 
     def update_pipeline(self, **kwargs):
@@ -75,7 +77,7 @@ class PipelineRun(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # use logging
+            log.error(e)
 
     @classmethod
     def of_pipeline(pipeline=None, gist_name=None):
@@ -99,7 +101,7 @@ class Cdata(db.Model):
         except Exception as e:
             db.session.rollback()
             db.session.flush()
-            print(e)  # TODO: use logging
+            log.error(e)
 
     @classmethod
     def get_cdata(cls, id_=None, name=None):

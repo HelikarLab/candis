@@ -7,6 +7,9 @@ from urllib.parse import urlparse
 
 # imports - module imports
 from candis.util import assign_if_none
+from logger import get_logger
+
+log = get_logger()
 
 class API():
     def __init__(self, path='', ftype='suppl'):
@@ -24,7 +27,7 @@ class API():
     def _ftp_close(self):
         if isinstance(self.ftp, FTP):
             self.ftp.quit()
-            print("Closed successfully!")
+            log.info("Closed successfully!")
         self.ftp = None
 
     def raw_data(self, ftp_link, series_accession, path=None):
@@ -50,12 +53,12 @@ class API():
         file_path = os.path.join(self.path, tar_file)
         
         with open(file_path, 'wb') as f:
-            print("\n Downloading {} at {} \n".format(tar_file, os.path.abspath(self.path)))
+            log.info("\n Downloading {} at {} \n".format(tar_file, os.path.abspath(self.path)))
             try:
                 self.ftp.retrbinary('RETR '+ file_name, f.write)
-                print("Downloaded!")
+                log.info("Downloaded!")
             except EOFError:
-                print("Connection closed, couldn't download")
+                log.error("Connection closed, couldn't download")
             except Exception as e:
-                print("Error {}".format(e))
+                log.error("Error {}".format(e))
             self._ftp_close()

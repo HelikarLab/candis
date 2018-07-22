@@ -1,7 +1,7 @@
 # imports - standard imports
 import os
 import sys
-import logging
+# import logging
 
 # imports - third-party imports
 from flask          import Flask
@@ -17,8 +17,9 @@ import addict
 from candis.config   import CONFIG
 from candis.resource import R
 from candis.manager.redis.redis import Redis
+from logger import get_logger
 
-log = logging.getLogger(__name__)
+log = get_logger()
 
 app      = Flask(__name__,
     template_folder = R.Path.TEMPLATES,
