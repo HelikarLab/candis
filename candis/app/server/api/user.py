@@ -5,12 +5,13 @@ import json
 
 # imports - third-party imports
 from flask import request, jsonify
+from flask_mail import Message
 import jwt
 import addict
 from jwt.exceptions import ExpiredSignatureError, InvalidSignatureError
 
 # imports - module imports
-from candis.app.server.app import app, redis
+from candis.app.server.app import app, redis, mail
 from candis.app.server.models.user import User
 from candis.config import CONFIG
 from candis.app.server.response import Response
@@ -34,12 +35,12 @@ def sign_up():
     if User.get_user(username=username):
         response.set_error(
             Response.Error.UNPROCESSABLE_ENTITY,
-            'User with username "{}" is already registered'.format(username)
+            "User with username '{}'is already registered".format(username)
         )
     elif User.get_user(email=email):
         response.set_error(
             Response.Error.UNPROCESSABLE_ENTITY,
-            'User with email "{}" is already registered'.format(email)
+            "User with email '{}' is already registered".format(email)
         )
     else:
         new_user = User(username, email, password)
@@ -114,6 +115,34 @@ def logout():
     redis.redis.hset('blacklist', payload['username'], 'True')
     response.set_data({'message': 'Logged out successfully!'})
     
+    dict_      = response.to_dict()
+    save_response_to_db(dict_)
+    json_      = jsonify(dict_)
+    code       = response.code
+
+    return json_, code
+
+@app.route('/reset_password', methods=['POST'])
+def reset():
+    response = Response()
+    form = addict.Dict(request.get_json())
+    email = form['email']
+    user = User.get_user(email=email)
+    if user:
+        msg = Message(
+            "Reset password!",
+            recipients=[email]
+        )
+        msg.body = "testing reset link!"
+        mail.send(msg)
+        
+        response.set_data({'message': 'Check your inbox for password reset link!'})
+    else:
+        response.set_error(
+            Response.Error.UNPROCESSABLE_ENTITY,
+            "user with email '{}' is not registered with us".format(email)
+        )
+
     dict_      = response.to_dict()
     save_response_to_db(dict_)
     json_      = jsonify(dict_)
