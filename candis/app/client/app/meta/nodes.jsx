@@ -9,15 +9,12 @@ import modal        from '../action/ModalAction'
 import { read, write, getResource }  from '../action/AsynchronousAction'
 import { stage }    from '../action/DocumentProcessorAction'
 import { getFiles } from '../util'
-import store from '../Store'
-
 
 const nodes = {
     'dat.fle': (ID) => {return {
         icon: `${config.routes.icons}/document.png`,
         onClick: (dispatch) =>
         {
-            console.log("dispatch is", dispatch)
           var   output  = null
           const dialog  =
           {
@@ -31,9 +28,6 @@ const nodes = {
                   className: "btn-primary",
                     onClick: ( ) =>
                     {
-                      // const ID = store.getState().documentProcessor.active.data[0].ID
-                      // console.log(store.getState().documentProcessor)
-                      console.log("ID is", ID)
                       var action;
                       var update =
                       {
@@ -41,8 +35,6 @@ const nodes = {
                          label: `${output.path}/${output.name}`,
                         status: Pipeline.Status.READY
                       }
-
-                      console.log("update")
 
                       action     = stage.update(ID, update)
 
@@ -93,7 +85,6 @@ const nodes = {
              callback: (folds) => {
                if ( folds !== null ) {
                   const update = { value: folds, label: `${folds} folds`, status: Pipeline.Status.READY }
-                  // const ID = store.getState().documentProcessor.active.data[1].ID
                   const action = stage.update(ID, update)
 
                   dispatch(action)
