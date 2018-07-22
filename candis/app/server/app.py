@@ -11,6 +11,7 @@ from flask_socketio import SocketIO
 from htmlmin.minify import html_minify
 from envparse import env, ConfigurationError
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 import addict
 
 # imports - module imports
@@ -36,6 +37,14 @@ try:
         password = env.str('CANDIS_DATABASE_PASSWORD'),
         database = env.str('CANDIS_DATABASE_NAME')
     )
+    mail_config = addict.Dict(
+        MAIL_SERVER = env.str('CANDIS_MAIL_SERVER', default='smtp.gmail.com'),
+        MAIL_PORT = env.str('CANDIS_MAIL_PORT', default='465'),
+        MAIL_USERNAME = env.str('CANDIS_MAIL_USERNAME'),
+        MAIL_PASSWORD = env.str('CANDIS_MAIL_PASSWORD'),
+        MAIL_DEFAULT_SENDER = env.str('CANDIS_MAIL_DEFAULT_SENDER'),
+        MAIL_USE_SSL = env.bool('CANDIS_MAIL_USE_SSL')
+    )
     app_config = addict.Dict(
         SECRET_KEY = env.str('CANDIS_SECRET_KEY'),
         SQLALCHEMY_DATABASE_URI = str(url.URL(**database_config)),
@@ -47,8 +56,10 @@ except ConfigurationError as e:
     sys.exit(1)
 
 app.config.update(app_config)
+app.config.update(mail_config)
 
 socketio = SocketIO(app)
+mail = Mail(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
