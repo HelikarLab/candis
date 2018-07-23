@@ -26,7 +26,7 @@ from candis.app.server.models import PipelineRun, Pipeline as PipelineModel, Cda
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Pipeline.RUN, methods = ['POST'])
 @login_required
-def run(delay = 5):
+def run(delay = 5, split_percent = 30):
     response         = Response()
 
     parameters       = addict.Dict(request.get_json())
@@ -59,7 +59,7 @@ def run(delay = 5):
                 opath =  os.path.join(fpath.value.path, fpath.value.name)
                 cdat = CData.load_from_json(json.loads(cdat_dict), opath)
 
-                pipe.run(cdat, verbose = CONFIG.DEBUG)
+                pipe.run(cdat, verbose = CONFIG.DEBUG, split_percent = split_percent)
 
                 while pipe.status == Pipeline.RUNNING:
                     status        = addict.Dict()
