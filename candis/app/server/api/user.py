@@ -2,6 +2,7 @@
 import os
 import gc
 import json
+import datetime
 
 # imports - third-party imports
 from flask import request, jsonify
@@ -16,11 +17,12 @@ from candis.app.server.models.user import User
 from candis.config import CONFIG
 from candis.app.server.response import Response
 from candis.app.server.helpers import verify_password, modify_data_path
-from candis.app.server.utils import login_required, logout_required, save_response_to_db
+from candis.app.server.utils import login_required, logout_required, save_response_to_db, MailMessage
 
-def generate_token(user_, key=app.config['SECRET_KEY'], exp=os.environ.get('EXPIRY_TIME')):
+def generate_token(user_, key=app.config['SECRET_KEY'], delay=os.environ.get('EXPIRY_TIME_DELAY')):
     payload = addict.Dict(username=user_.username, email=user_.email)
-    if exp:
+    if delay:
+        exp = datetime.datetime.utcnow() + datetime.timedelta(seconds=delay)
         payload.update({'exp': exp})
     encoded_token = jwt.encode(payload=payload, key=key).decode('utf-8')
     return encoded_token
@@ -122,25 +124,59 @@ def logout():
 
     return json_, code
 
-@app.route('/reset_password', methods=['POST'])
-def reset():
+@app.route('/forgot_password', methods=['POST'])
+def forgot():
     response = Response()
     form = addict.Dict(request.get_json())
     email = form['email']
     user = User.get_user(email=email)
     if user:
+        delay = 900
+        reset_token = generate_token(user, delay=delay)
         msg = Message(
             "Reset password!",
             recipients=[email]
         )
-        msg.body = "testing reset link!"
+        msg.html = MailMessage.forgot_password_body(url='test.com', reset_token=reset_token, time='{} minutes'.format(delay/60))
         mail.send(msg)
-        
         response.set_data({'message': 'Check your inbox for password reset link!'})
     else:
         response.set_error(
             Response.Error.UNPROCESSABLE_ENTITY,
             "user with email '{}' is not registered with us".format(email)
+        )
+
+    dict_      = response.to_dict()
+    save_response_to_db(dict_)
+    json_      = jsonify(dict_)
+    code       = response.code
+
+    return json_, code
+
+@app.route('/reset_password', methods=['POST'])
+def reset():
+    response = Response()
+    form = addict.Dict(request.get_json())
+    if 'reset_token' in form:
+        # validate jwt token
+        try:
+            payload = jwt.decode(form.reset_token, app.config['SECRET_KEY'])
+            username = payload['username']
+            if 'new_password' in form:
+                user = User.get_user(username=username)
+                user.update_user(password=form.new_password)
+                response.set_data({'message': 'Password updated successfully!'})
+            else:
+                response.set_data({'message': 'Enter your new password.'})
+        except Exception as e:
+            response.set_error(
+                Response.Error.ACCESS_DENIED,
+                "Invalid token."
+            )
+    else:
+        response.set_error(
+            Response.Error.ACCESS_DENIED,
+            "Create a reset token first"
         )
 
     dict_      = response.to_dict()

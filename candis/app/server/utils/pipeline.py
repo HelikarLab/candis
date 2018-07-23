@@ -20,4 +20,3 @@ def convert_to_stage_schema(dict_):
 
 def convert_to_pipeline_schema(**kwargs):
     pass
-
