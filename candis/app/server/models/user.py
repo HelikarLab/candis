@@ -27,6 +27,14 @@ class User(db.Model):
             db.session.rollback()
             db.session.flush()
             print(e)  # use logging
+        
+    def update_user(self, **kwargs):
+        for key, value in kwargs.items():
+            if key == 'password':
+                value = self._encrypt(value)
+            setattr(self, key, value)
+        db.session.add(self)
+        db.session.commit()
 
     @classmethod
     def get_user(cls, id_=None, username=None, email=None):
