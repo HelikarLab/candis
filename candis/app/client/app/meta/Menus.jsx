@@ -8,6 +8,8 @@ import FileFormat   from '../constant/FileFormat'
 import { signout }  from '../action/AppAction'
 import { read, write, getResource } from '../action/AsynchronousAction'
 import { getFiles } from '../util'
+import modal        from '../action/ModalAction'
+import Component    from '../constant/Component'
 
 const Menus = [
   {
@@ -112,6 +114,34 @@ const Menus = [
          tooltip: 'Open Settings View',
          onClick: (dispatch) => {
            toastr.warning('To be implemented.')
+           const dialog = {
+             component: Component.DefaultsForm,
+             title: 'Default Settings',
+             size: 'lg',
+             buttons: [
+               {
+                 label: "Reset To Defaults",
+                 className: "btn-primary",
+                 onClick: () => {
+                   toastr.warning('To be implemented')
+                 }
+               },
+               {
+                 label: "Ok",
+                 className: "btn-primary",
+                 onClick: () => {
+                   const action = modal.hide()
+                   dispatch(action)
+                 }
+               }
+             ],
+             props:
+             {
+               classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] }
+             }
+           }
+           const action = modal.show(dialog)
+           dispatch(action)
          }
       }
     ]
