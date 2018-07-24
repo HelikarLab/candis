@@ -4,6 +4,12 @@ const ActionType =
   {
     RESET_STATE: 'ACTION_TYPE_ROOT_RESET_STATE'
   },
+
+  Defaults:
+  {
+    UPDATE: 'ACTION_TYPE_DEFAULTS_UPDATE',
+    RESTORE: 'ACTIONS_TYPE_DEFAULTS_RESTORE'
+  },
   
   App:
   {

@@ -1,8 +1,8 @@
 import axios      from 'axios'
 
 import config     from '../config'
-
 import ActionType from '../constant/ActionType'
+import store      from '../Store'
 
 const pipeline     =
 {
@@ -10,6 +10,7 @@ const pipeline     =
 	{
 		const dispatch = (dispatch) =>
 		{
+			output = {...output, 'split_percent': store.getState().defaults.trainPercent}
 			const action = pipeline.runRequest(output)
 			dispatch(action)
 

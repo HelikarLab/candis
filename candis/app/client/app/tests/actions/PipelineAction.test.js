@@ -57,9 +57,10 @@ const mock = new MockAdapter(axios)
 
  test('should setup pipeline.run action object', (done) => {
     const data = { data: true }  // dummy data which is returned by successful axios call.
+    dokuments.active = {...dokuments.active, 'split_percent': 70}
     mock.onPost(config.routes.API.pipeline.run, dokuments.active).reply(200, data)
     const store = createMockStore({})
-
+    
     store.dispatch(pipeline.run(dokuments.active)).then(() => {
 
         const actions = store.getActions()

@@ -2813,7 +2813,7 @@ form-data@~2.3.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
-formik@0.11.11:
+formik@^0.11.11:
   version "0.11.11"
   resolved "https://registry.yarnpkg.com/formik/-/formik-0.11.11.tgz#4b02838133c0196b1ef443aa973766cd097ec4a5"
   dependencies:
@@ -4804,6 +4804,10 @@ mixin-object@^2.0.1:
   dependencies:
     minimist "0.0.8"
 
+moment@^2.22.1:
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -5830,10 +5834,6 @@ property-expr@^1.2.0:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/property-expr/-/property-expr-1.3.2.tgz#2df60082c243e79118924ecb8f7ae7183b4fc43e"
 
-proptypes@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/proptypes/-/proptypes-1.1.0.tgz#78b3828a5aa6bb1308939e0de3c6044dfd4bd239"
-
 proto-list@~1.2.1:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/proto-list/-/proto-list-1.2.4.tgz#212d5bfe1318306a420f6402b8e26ff39647a849"
@@ -6099,6 +6099,10 @@ react-select@^1.2.1:
     classnames "^2.2.4"
     prop-types "^15.5.8"
     react-input-autosize "^2.1.2"
+
+react-slider@^0.11.2:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/react-slider/-/react-slider-0.11.2.tgz#ae014e1454c3cdd5f28b5c2495b2a08abd9971e6"
 
 react-sortable-hoc@^0.6.8:
   version "0.6.8"

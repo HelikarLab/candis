@@ -8,6 +8,9 @@ import FileFormat   from '../constant/FileFormat'
 import { signout }  from '../action/AppAction'
 import { read, write, getResource } from '../action/AsynchronousAction'
 import { getFiles } from '../util'
+import modal        from '../action/ModalAction'
+import defaults     from '../action/DefaultsAction'
+import Component    from '../constant/Component'
 
 const Menus = [
   {
@@ -111,7 +114,38 @@ const Menus = [
             icon: `${config.routes.icons}/settings.png`,
          tooltip: 'Open Settings View',
          onClick: (dispatch) => {
-           toastr.warning('To be implemented.')
+           const dialog = {
+             component: Component.DefaultsForm,
+             title: 'Default Settings',
+             size: 'lg',
+             buttons: [
+               {
+                 label: "Restore Defaults",
+                 className: "btn-primary",
+                 onClick: () => {
+                   let action = defaults.restore()
+                   dispatch(action)
+                   toastr.success("Defaults restored successfully!")
+                   action = modal.hide()
+                   dispatch(action)
+                 }
+               },
+               {
+                 label: "Ok",
+                 className: "btn-primary",
+                 onClick: () => {
+                   const action = modal.hide()
+                   dispatch(action)
+                 }
+               }
+             ],
+             props:
+             {
+               classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] }
+             }
+           }
+           const action = modal.show(dialog)
+           dispatch(action)
          }
       }
     ]
