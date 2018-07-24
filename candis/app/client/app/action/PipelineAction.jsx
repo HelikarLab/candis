@@ -11,7 +11,6 @@ const pipeline     =
 		const dispatch = (dispatch) =>
 		{
 			output = {...output, 'split_percent': store.getState().defaults.trainPercent}
-			console.log("output is ", output)
 			const action = pipeline.runRequest(output)
 			dispatch(action)
 
