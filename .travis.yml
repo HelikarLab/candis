@@ -1,5 +1,5 @@
 language: python
-dist: xenial
+# dist: xenial
 sudo: true
 python:
   # - "2.6" # no longer supported.
