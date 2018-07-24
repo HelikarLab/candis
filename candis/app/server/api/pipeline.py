@@ -26,10 +26,11 @@ from candis.app.server.models import PipelineRun, Pipeline as PipelineModel, Cda
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Pipeline.RUN, methods = ['POST'])
 @login_required
-def run(delay = 5, split_percent = 30):
+def run(delay = 5):
     response         = Response()
 
     parameters       = addict.Dict(request.get_json())
+    split_percent = parameters.split_percent or 70
 
     decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
     username = decoded_token['username']

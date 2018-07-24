@@ -9,7 +9,7 @@ import SelectViewer from '../component/widget/SelectViewer'
 const Component =
 {
   Entrez: Entrez,
-  DefaultsForm: Defaults,
+  DefaultsForm: DefaultsForm,
     FileEditor: FileEditor,
     FileViewer: FileViewer,
     GistViewer: GistViewer,

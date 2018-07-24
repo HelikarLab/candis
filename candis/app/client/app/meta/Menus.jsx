@@ -9,6 +9,7 @@ import { signout }  from '../action/AppAction'
 import { read, write, getResource } from '../action/AsynchronousAction'
 import { getFiles } from '../util'
 import modal        from '../action/ModalAction'
+import defaults     from '../action/DefaultsAction'
 import Component    from '../constant/Component'
 
 const Menus = [
@@ -113,17 +114,20 @@ const Menus = [
             icon: `${config.routes.icons}/settings.png`,
          tooltip: 'Open Settings View',
          onClick: (dispatch) => {
-           toastr.warning('To be implemented.')
            const dialog = {
              component: Component.DefaultsForm,
              title: 'Default Settings',
              size: 'lg',
              buttons: [
                {
-                 label: "Reset To Defaults",
+                 label: "Restore Defaults",
                  className: "btn-primary",
                  onClick: () => {
-                   toastr.warning('To be implemented')
+                   let action = defaults.restore()
+                   dispatch(action)
+                   toastr.success("Defaults restored successfully!")
+                   action = modal.hide()
+                   dispatch(action)
                  }
                },
                {
