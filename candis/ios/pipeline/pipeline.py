@@ -248,7 +248,7 @@ class Pipeline(object):
         load = Loader(classname = 'weka.core.converters.ArffLoader')
         # data = load.load_file(path)
         # save =  Saver(classname = 'weka.core.converters.ArffSaver')
-        data = load.load_file(os.path.join(head, 'iris.arff')) # For Debugging Purposes Only
+        data = load.load_file(os.path.join(head, 'diabetes.arff')) # For Debugging Purposes Only
         data.class_is_last() # For Debugging Purposes Only
         # data.class_index = cdat.iclss
                 
@@ -261,9 +261,9 @@ class Pipeline(object):
         wobj = Filter(classname = 'weka.filters.unsupervised.instance.RemovePercentage', options = opts + ['-V'])
         wobj.inputformat(data)
         
-        tran = wobj.filter(data)
-        wobj.options = opts
         test = wobj.filter(data)
+        wobj.options = opts
+        tran = wobj.filter(data)
 
         saver =  Saver(classname = 'weka.core.converters.ArffSaver')
         
@@ -360,10 +360,40 @@ class Pipeline(object):
                 classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(classname = model.NAME), options = options)
                 classifier.build_classifier(tran)
 
+                print("classifier before writing is {}".format(classifier))
+
                 serializer.write(os.path.join(head, '{name}.{classname}.model'.format(
                         name = name,
                     classname = model.NAME
                 )), classifier)
+
+                fileClassifier = Classifier(jobject = serializer.read(os.path.join(head, '{name}.{classname}.model'.format(
+                        name = name,
+                    classname = model.NAME
+                ))))
+
+                print("CLassifier read from file is {}".format(fileClassifier))
+
+
+                load = Loader(classname = 'weka.core.converters.ArffLoader')
+                # data = load.load_file(path)
+                # save =  Saver(classname = 'weka.core.converters.ArffSaver')
+                IrisTest = load.load_file(os.path.join(head, 'iris_test.arff')) # For Debugging Purposes Only
+                IrisTest.class_is_last() # For Debugging Purposes Only
+                # data.class_index = cdat.iclss
+
+                # output predictions
+                print("# - actual - predicted - error - distribution")
+                for index, inst in enumerate(IrisTest):
+                    pred = fileClassifier.classify_instance(inst)
+                    dist = fileClassifier.distribution_for_instance(inst)
+                    print(
+                        "%d - %s - %s - %s  - %s" %
+                        (index+1,
+                        inst.get_string_value(inst.class_index),
+                        inst.class_attribute.value(int(pred)),
+                        "yes" if pred != inst.get_value(inst.class_index) else "no",
+                        str(dist.tolist())))        
 
                 self.logs.append('Testing model {model}'.format(model = model.LABEL))
 
