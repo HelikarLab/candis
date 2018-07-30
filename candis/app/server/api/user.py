@@ -124,7 +124,8 @@ def logout():
 
     return json_, code
 
-@app.route('/forgot_password', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.FORGOT_PASSWORD, methods=['POST'])
+@logout_required
 def forgot():
     response = Response()
     form = addict.Dict(request.get_json())
@@ -137,6 +138,7 @@ def forgot():
             "Reset password!",
             recipients=[email]
         )
+        # url = CONFIG.App.Routes.BASE
         msg.html = MailMessage.forgot_password_body(url='test.com', reset_token=reset_token, time='{} minutes'.format(delay/60))
         mail.send(msg)
         response.set_data({'message': 'Check your inbox for password reset link!'})
@@ -153,7 +155,8 @@ def forgot():
 
     return json_, code
 
-@app.route('/reset_password', methods=['POST'])
+@app.route(CONFIG.App.Routes.API.User.RESET_PASSWORD, methods=['POST'])
+@logout_required
 def reset():
     response = Response()
     form = addict.Dict(request.get_json())

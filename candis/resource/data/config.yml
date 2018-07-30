@@ -169,6 +169,8 @@ app:
         sign_up: !relurljoin [*base, "api", "user", "sign_up"]
         login: !relurljoin [*base, "api", "user", "login"]
         sign_out: !relurljoin [*base, "api", "user", "sign_out"]
+        forgot_password: !relurljoin [*base, "api", "user", "forgot_password"]
+        reset_password: !relurljoin [*base, "api", "user", "reset_password"]
       data:
         resource: !relurljoin [*base, "api", "data", "resource"]
         read: !relurljoin [*base, "api", "data", "read"]
