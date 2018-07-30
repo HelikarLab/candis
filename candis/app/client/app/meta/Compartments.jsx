@@ -486,6 +486,68 @@ const Compartments =
           tooltip: 'Perform a prediction',
           onClick: (dispatch) => {
             toastr.warning('To be implemented.')
+            const action = getResource()
+
+            dispatch(action).then((resource) => {
+              const files = getFiles(resource, [FileFormat.MODEL, FileFormat.ARFF])
+              const options = files.map((file) => {
+                return { text: file.name, value: file.name }
+              })
+              const arff_options = options.filter((option) => {
+                return option.text.endsWith(FileFormat.ARFF)
+              })
+              const model_options = options.filter((option) => {
+                return option.text.endsWith(FileFormat.MODEL)
+              })
+              
+              if( arff_options.length ){
+                bootbox.prompt({
+                  title: '<span class="font-bold">Select testing dataset</span>',
+                  inputType: 'select',
+                  inputOptions: arff_options,
+                  buttons: {
+                    cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
+                    confirm: { label: "Select",   className: "btn-sm btn-success" }
+                  },
+                  size: "small",
+                  animate: false,
+                  callback: (arff_output) => {
+                    if( arff_output != null ){
+                      console.log("arff_output is", arff_output)
+                      if ( model_options.length ) {
+                        bootbox.prompt({
+                          title: '<span class="font-bold">Select trained model</span>',
+                          inputType: 'select',
+                          inputOptions: model_options,
+                          buttons: {
+                            cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
+                            confirm: { label: "Select",   className: "btn-sm btn-success" }
+                          },
+                          size: "small",
+                          animant: false,
+                          callback: (model_output) => {
+                            if( model_output != null ){
+                              const output = {'test_path': arff_output, 'model_path': model_output}
+                              console.log("output is ", output)
+                              axios.post(config.routes.API.pipeline.predict, output).then(({data}) => {
+                                console.log("data is ", data)
+                              }).catch((error) => {
+                                console.log("errros is ", error)
+                              })
+                            }
+                          }
+                        })
+                      } else {
+                        toastr.warning('No model/classifier found.')
+                      }
+                    }
+                  }
+                })
+              }else{
+                toastr.warning('No ARFF file found.')
+              }
+
+            })
           }
         },
         {

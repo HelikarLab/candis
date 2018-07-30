@@ -103,7 +103,7 @@ def log_times(i):
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 @login_required
-def resource(filter_ = ['csv', 'cel'], level = None):
+def resource(filter_ = ['csv', 'cel', 'model', 'arff'], level = None):
     response   = Response()
 
     parameters = addict.Dict(request.get_json())
