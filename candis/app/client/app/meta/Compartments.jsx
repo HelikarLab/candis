@@ -513,7 +513,6 @@ const Compartments =
                   animate: false,
                   callback: (arff_output) => {
                     if( arff_output != null ){
-                      console.log("arff_output is", arff_output)
                       if ( model_options.length ) {
                         bootbox.prompt({
                           title: '<span class="font-bold">Select trained model</span>',
@@ -528,11 +527,11 @@ const Compartments =
                           callback: (model_output) => {
                             if( model_output != null ){
                               const output = {'test_path': arff_output, 'model_path': model_output}
-                              console.log("output is ", output)
                               axios.post(config.routes.API.pipeline.predict, output).then(({data}) => {
-                                console.log("data is ", data)
-                              }).catch((error) => {
-                                console.log("errros is ", error)
+                                toastr.success("Predicting...")
+                              }).catch(({response}) => {
+                                const error = response.data.error
+                                toastr.error(error)
                               })
                             }
                           }
