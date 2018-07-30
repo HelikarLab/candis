@@ -42,7 +42,8 @@
                 "methods": "/api/model/methods"
             },
             "pipeline": {
-                "run": "/api/run"
+                "run": "/api/run",
+                "predict": "/api/predict"
             }
         }
     },

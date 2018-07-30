@@ -8,7 +8,9 @@ from candis.util.util import (
 	get_timestamp_str,
 	merge_dicts,
 	get_b64_plot,
-	buffer_to_b64
+	buffer_to_b64,
+	modify_test_path,
+	modify_train_path
 )
 
 from candis.util.validate import validate_email
