@@ -21,7 +21,44 @@ from candis.app.server.app      import socketio
 from candis.app.server.utils import login_required, save_response_to_db
 from candis.app.server.response import Response
 from candis.app.server.models import PipelineRun, Pipeline as PipelineModel, Cdata, User
+from candis.app.server.helpers.fileData import modify_data_path
 
+@app.route(CONFIG.App.Routes.API.Pipeline.PREDICT, methods = ['POST'])
+@login_required
+def predict():
+    response = Response()
+
+    parameters = addict.Dict(request.get_json())
+
+    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+    username = decoded_token['username']
+    user = User.get_user(username=username)
+
+    data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
+    
+    test_path, model_path = parameters.test_path, parameters.model_path
+    if test_path and model_path:
+        if(not os.path.isabs(test_path) or not os.path.isabs(model_path)):
+            _, test_fname = os.path.split(test_path)
+            _, model_name = os.path.split(model_path)
+
+            test_path = os.path.abspath(os.path.join(data_path, test_fname))
+            model_path = os.path.abspath(os.path.join(data_path, model_name))
+        if(os.path.isfile(test_path) and os.path.isfile(model_path)):
+            objkt = Pipeline()
+            objkt.predict(test_path, model_path)
+        else:
+            response.set_error(Response.Error.NOT_FOUND)
+    else:
+        response.set_error(Response.Error.UNPROCESSABLE_ENTITY)
+
+    dict_       = response.to_dict()
+    save_response_to_db(dict_)
+    json_       = jsonify(dict_)
+    code        = response.code
+
+    return json_, code
+    
 # TODO: Create a default handler that accepts JSON serializable data.
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Pipeline.RUN, methods = ['POST'])

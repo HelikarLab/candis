@@ -372,7 +372,7 @@ class Pipeline(object):
                     classname = model.NAME
                 ))))
 
-                print("CLassifier read from file is {}".format(fileClassifier))
+                print("Classifier read from file is {}".format(fileClassifier))
 
 
                 load = Loader(classname = 'weka.core.converters.ArffLoader')
@@ -393,7 +393,7 @@ class Pipeline(object):
                         inst.get_string_value(inst.class_index),
                         inst.class_attribute.value(int(pred)),
                         "yes" if pred != inst.get_value(inst.class_index) else "no",
-                        str(dist.tolist())))        
+                        str(dist.tolist())))  
 
                 self.logs.append('Testing model {model}'.format(model = model.LABEL))
 
@@ -460,3 +460,38 @@ class Pipeline(object):
             self.thread.start()
         else:
             warnings.warn('Pipeline currently active.')
+
+    def generate_predictions(self, test_path, model_path, heap_size = 16384, seed = None, verbose = True):
+        
+        JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
+        print(model_path)
+        fileClassifier = Classifier(jobject = serializer.read(model_path))
+        print("file classifier is {}".format(fileClassifier))
+        load = Loader(classname = 'weka.core.converters.ArffLoader')
+        # test_data = load.load_file(test_path)
+        # save =  Saver(classname = 'weka.core.converters.ArffSaver')
+        test_data = load.load_file(os.path.join('/home/rupav/opensource/candis/candisDATA/bb99da373cbc139df312b9b860466d0a217fa66683a420418a5a03d4051d3c05_data/iris_test.arff')) # For Debugging Purposes Only
+        test_data.class_is_last() # For Debugging Purposes Only
+        # data.class_index = cdat.iclss
+
+        # output predictions
+        print("# - actual - predicted - error - distribution")
+        for index, inst in enumerate(test_data):
+            pred = fileClassifier.classify_instance(inst)
+            dist = fileClassifier.distribution_for_instance(inst)
+            print(
+                "%d - %s - %s - %s  - %s" %
+                (index+1,
+                inst.get_string_value(inst.class_index),
+                inst.class_attribute.value(int(pred)),
+                "yes" if pred != inst.get_value(inst.class_index) else "no",
+                str(dist.tolist())))
+        print("Done!!")
+        JVM.stop()
+
+    def predict(self, test_path, model_path, heap_size = 16384, seed = None, verbose = False):
+        if not self.thread:
+            self.thread = threading.Thread(target = self.generate_predictions, args = (test_path, model_path, heap_size, seed, verbose))
+            self.thread.start()
+        else:
+            warning.warn('Pipeline currently active')

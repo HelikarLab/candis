@@ -184,6 +184,7 @@ app:
         methods: !relurljoin [*base, "api", "model", "methods"]
       pipeline:
         run: !relurljoin [*base, "api", "run"]
+        predict: !relurljoin [*base, "api", "predict"]
 
   container: "app"
   startdir: "CRES"

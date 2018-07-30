@@ -233,12 +233,12 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
     if parameters.output:
         output   = addict.Dict(merge_dicts(output, parameters.output))
 
-    output.path  = ABSPATH_STARTDIR # TODO: make it work with os.path.join(ABSPATH_DIR, output.path)
+    output.path = os.path.abspath(os.path.join(CONFIG.App.DATADIR, modify_data_path(username)))
     output.name  = output.name.strip() # remove padding spaces
 
     buffer_      = assign_if_none(parameters.buffer, [])
 
-    opath        = os.path.join(output.path, output.name)
+    opath = os.path.join(output.path, output.name)
         
     if output.format:
         if  output.format == 'cdata':
