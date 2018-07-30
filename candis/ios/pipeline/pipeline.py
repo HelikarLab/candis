@@ -28,7 +28,8 @@ from candis.config import CONFIG
 from candis.ios    import cdata
 from candis.ios    import json as JSON
 from candis.ios.pipeline.reader    import read
-from candis.util   import assign_if_none, get_rand_uuid_str, get_b64_plot, buffer_to_b64
+from candis.util   import assign_if_none, get_rand_uuid_str, get_b64_plot, buffer_to_b64, modify_test_path, modify_train_path
+
 
 pplt.style.use('seaborn')
 
@@ -248,7 +249,8 @@ class Pipeline(object):
         load = Loader(classname = 'weka.core.converters.ArffLoader')
         # data = load.load_file(path)
         # save =  Saver(classname = 'weka.core.converters.ArffSaver')
-        data = load.load_file(os.path.join(head, 'diabetes.arff')) # For Debugging Purposes Only
+        path = 'diabetes.arff' # For debugging Purposes Only
+        data = load.load_file(os.path.join(head, path)) # For Debugging Purposes Only
         data.class_is_last() # For Debugging Purposes Only
         # data.class_index = cdat.iclss
                 
@@ -265,11 +267,11 @@ class Pipeline(object):
         wobj.options = opts
         tran = wobj.filter(data)
 
+
         saver =  Saver(classname = 'weka.core.converters.ArffSaver')
         
-        train_path = os.path.join(head, 'iris_train.arff')
-        test_path = os.path.join(head, 'iris_test.arff')
-        
+        train_path = os.path.join(head, modify_train_path(path))
+        test_path = os.path.join(head, modify_test_path(path))
         saver.save_file(tran, train_path)
         saver.save_file(test, test_path)
         
@@ -360,40 +362,10 @@ class Pipeline(object):
                 classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(classname = model.NAME), options = options)
                 classifier.build_classifier(tran)
 
-                print("classifier before writing is {}".format(classifier))
-
                 serializer.write(os.path.join(head, '{name}.{classname}.model'.format(
                         name = name,
                     classname = model.NAME
                 )), classifier)
-
-                fileClassifier = Classifier(jobject = serializer.read(os.path.join(head, '{name}.{classname}.model'.format(
-                        name = name,
-                    classname = model.NAME
-                ))))
-
-                print("Classifier read from file is {}".format(fileClassifier))
-
-
-                load = Loader(classname = 'weka.core.converters.ArffLoader')
-                # data = load.load_file(path)
-                # save =  Saver(classname = 'weka.core.converters.ArffSaver')
-                IrisTest = load.load_file(os.path.join(head, 'iris_test.arff')) # For Debugging Purposes Only
-                IrisTest.class_is_last() # For Debugging Purposes Only
-                # data.class_index = cdat.iclss
-
-                # output predictions
-                print("# - actual - predicted - error - distribution")
-                for index, inst in enumerate(IrisTest):
-                    pred = fileClassifier.classify_instance(inst)
-                    dist = fileClassifier.distribution_for_instance(inst)
-                    print(
-                        "%d - %s - %s - %s  - %s" %
-                        (index+1,
-                        inst.get_string_value(inst.class_index),
-                        inst.class_attribute.value(int(pred)),
-                        "yes" if pred != inst.get_value(inst.class_index) else "no",
-                        str(dist.tolist())))  
 
                 self.logs.append('Testing model {model}'.format(model = model.LABEL))
 
@@ -462,17 +434,15 @@ class Pipeline(object):
             warnings.warn('Pipeline currently active.')
 
     def generate_predictions(self, test_path, model_path, heap_size = 16384, seed = None, verbose = True):
-        
+        # assumes the class index is last for the given testing dataset.
+
         JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
-        print(model_path)
-        fileClassifier = Classifier(jobject = serializer.read(model_path))
-        print("file classifier is {}".format(fileClassifier))
+
         load = Loader(classname = 'weka.core.converters.ArffLoader')
-        # test_data = load.load_file(test_path)
-        # save =  Saver(classname = 'weka.core.converters.ArffSaver')
-        test_data = load.load_file(os.path.join('/home/rupav/opensource/candis/candisDATA/bb99da373cbc139df312b9b860466d0a217fa66683a420418a5a03d4051d3c05_data/iris_test.arff')) # For Debugging Purposes Only
-        test_data.class_is_last() # For Debugging Purposes Only
-        # data.class_index = cdat.iclss
+        test_data = load.load_file(test_path)
+        test_data.class_is_last()
+
+        fileClassifier = Classifier(jobject = serializer.read(model_path))
 
         # output predictions
         print("# - actual - predicted - error - distribution")
@@ -486,7 +456,7 @@ class Pipeline(object):
                 inst.class_attribute.value(int(pred)),
                 "yes" if pred != inst.get_value(inst.class_index) else "no",
                 str(dist.tolist())))
-        print("Done!!")
+
         JVM.stop()
 
     def predict(self, test_path, model_path, heap_size = 16384, seed = None, verbose = False):

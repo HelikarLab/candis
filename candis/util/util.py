@@ -91,4 +91,12 @@ def buffer_to_b64(buffer):
 
 	return b64str
 
+def modify_test_path(fname, ftype = 'arff'):
+    test_path = '{}.test.{}'.format(fname, ftype)
+    return test_path
+
+def modify_train_path(fname, ftype = 'arff'):
+    train_path = '{}.train.{}'.format(fname, ftype)
+    return train_path
+
 
