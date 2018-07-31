@@ -18,5 +18,13 @@
   {
     "name": "gist",
     "extensions": [".cgist", ".CGIST"]
+  },
+  {
+    "name": "model",
+    "extensions": [".model", ".MODEL"]
+  },
+  {
+    "name": "arff",
+    "extensions": [".arff", ".ARFF"]
   }
 ]
