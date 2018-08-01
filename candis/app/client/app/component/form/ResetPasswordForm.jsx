@@ -43,12 +43,12 @@ const ResetPasswordEnhanced = withFormik({
   }),
 
   validationSchema: Yup.object().shape({
-    password: Yup.string().required("This field is required to login"),
-    confirmPassword: Yup.string().equalTo(Yup.ref('password'), 'passwords must match').required('Confirm password required')
+    password: Yup.string().required("Enter new password!"),
+    confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords don't match!").required("This field is required.")
   }),
 
-  handleSubmit: (values) => {
-      console.log("values are ", values)
+  handleSubmit: (values, {props}) => {
+    props.onSubmit(values.password)
   }
 })(ResetPasswordBasic)
 

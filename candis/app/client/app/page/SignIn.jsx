@@ -55,6 +55,7 @@ class SignIn extends React.Component {
               <div className="panel-body">
                 <SignInForm onSubmit={this.onSubmit}/>
                 <Link to={config.routes.signup}>New User?</Link>
+                <Link to={config.routes.forgotPassword}>Forgot Password?</Link>
               </div>
             </div>
           </div>

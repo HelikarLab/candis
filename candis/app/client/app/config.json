@@ -18,11 +18,15 @@
         "icons": "/assets/img/icons",
         "signin": "/SignIn",
         "signup": "/SignUp",
+        "resetPassword": "/ResetPassword",
+        "forgotPassword": "/ForgotPassword",
         "API": {
             "user": {
                 "sign_up": "/api/user/sign_up",
                 "login": "/api/user/login",
-                "sign_out": "/api/user/sign_out"
+                "sign_out": "/api/user/sign_out",
+                "resetPassword": "/api/user/reset_password",
+                "forgotPassword": "/api/user/forgot_password"
             },
             "data": {
                 "resource": "/api/data/resource",
