@@ -138,8 +138,9 @@ def forgot():
             "Reset password!",
             recipients=[email]
         )
-        # url = CONFIG.App.Routes.BASE
-        msg.html = MailMessage.forgot_password_body(url='test.com', reset_token=reset_token, time='{} minutes'.format(delay/60))
+        # need to update url with prefix host name during runtime.
+        url = request.host_url.rsplit('/', 1)[0] + CONFIG.App.Routes.RESET_PASSWORD
+        msg.html = MailMessage.forgot_password_body(url=url, reset_token=reset_token, time='{} minutes'.format(delay/60))
         mail.send(msg)
         response.set_data({'message': 'Check your inbox for password reset link!'})
     else:

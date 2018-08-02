@@ -163,6 +163,7 @@ app:
     icons: &icons !relurljoin [*images, "icons"]
 
     signin: !relurljoin [*base, "SignIn"]
+    reset_password: !relurljoin [*base, "ResetPassword"]
 
     API:
       user:

@@ -16,17 +16,17 @@ const DefaultsBasic = props => {
       <Form>
 
         <div className="form-group">
-        <label className="control-label col-sm-4">Training data Percentage: </label>
-        <div className="col-sm-8">
-          <Field
-            type="number"
-            name={"trainPercent"}
-            className="form-control"
-            min="1"
-            max="100" 
-            value={props.values.trainPercent}
-          />
-        </div>
+          <label className="control-label col-sm-4">Training data Percentage: </label>
+          <div className="col-sm-8">
+            <Field
+              type="number"
+              name={"trainPercent"}
+              className="form-control"
+              min="1"
+              max="100" 
+              value={props.values.trainPercent}
+            />
+          </div>
         </div>
         
         <div className="form-group">

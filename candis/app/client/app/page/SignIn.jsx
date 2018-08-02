@@ -54,7 +54,8 @@ class SignIn extends React.Component {
             <div className="panel panel-default no-margin no-background no-border no-shadow">
               <div className="panel-body">
                 <SignInForm onSubmit={this.onSubmit}/>
-                <Link to={config.routes.signup}>New User?</Link>
+                <Link to={config.routes.signup} className="link">New User?</Link>
+                <Link to={config.routes.forgotPassword} style={{ float:'right' }} className="link">Forgot Password?</Link>
               </div>
             </div>
           </div>

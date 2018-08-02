@@ -10,13 +10,23 @@ import config from '../../config'
 
 const ForgotPasswordBasic = props => (
   <Form className="form-inline">
+    
     <div className="form-group">
-      <label>Email</label>
-      <Field type="email" name="email" className="form-control" placeholder={props.email}/>
+      <Field type="email" name="email" className="form-control" placeholder="email"/>
       <small className="help-block">
         {props.touched.email && props.errors.email}
       </small>
     </div>
+    
+    <button className="btn btn-block btn-brand-primary" disabled={props.isSubmitting}>
+      <div className="text-center">
+        <div className="text-uppercase font-bold">
+        {props.isSubmitting ? <i className="fa fa-spinner fa-pulse"></i> : <i className="fa fa-send-o"></i>}
+        {" "}Send Email!
+        </div>
+      </div>
+    </button>
+
   </Form>
 )
 
@@ -25,10 +35,13 @@ const ForgotPasswordEnhanced = withFormik({
   validationSchema: Yup.object().shape({
     email: Yup.string().email("Email is not valid").required("This field is required")
   }),
-  onSubmit: (values) => {
-    console.log("Values are", values)
+  handleSubmit: (values, { props, setSubmitting, resetForm }) => {
+    props.onSubmit(values.email).then(() => {
+      setSubmitting(false)
+    }).catch(() => {
+      resetForm()
+    })
   }
 })(ForgotPasswordBasic)
 
 export default ForgotPasswordEnhanced
-
