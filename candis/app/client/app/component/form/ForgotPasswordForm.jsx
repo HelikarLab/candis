@@ -12,8 +12,7 @@ const ForgotPasswordBasic = props => (
   <Form className="form-inline">
     
     <div className="form-group">
-      <label>Email</label>
-      <Field type="email" name="email" className="form-control" placeholder={props.email}/>
+      <Field type="email" name="email" className="form-control" placeholder="email"/>
       <small className="help-block">
         {props.touched.email && props.errors.email}
       </small>

@@ -32,9 +32,22 @@ class ResetPassword extends React.Component {
 
   render () {
     return (
-      <div>
-        <ForgotPasswordForm onSubmit={this.onSubmit}/>
+    <div className="jumbotron no-margin vertical-center">
+      <div className="container-fluid">
+        <div className="panel panel-default no-margin no-background no-border no-shadow">
+          <div className="panel-body">
+            <img className="img-responsive center-block" src={`${config.routes.images}/logo-w-title.png`} style={{
+                maxHeight: '256px'
+              }}/>
+          </div>
+        </div>
+        <div className="panel panel-default no-margin no-background no-border no-shadow">
+          <div className="panel-body">
+            <ForgotPasswordForm onSubmit={this.onSubmit}/>
+          </div>
+        </div>
       </div>
+    </div>
     )
   }
 }

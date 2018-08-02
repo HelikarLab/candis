@@ -13,6 +13,7 @@ const Routes = (
   <div>
     <PrivateRoute
            path={config.routes.base}
+           exact
     	component={App}/>
     <Route
     		   path={config.routes.signin}

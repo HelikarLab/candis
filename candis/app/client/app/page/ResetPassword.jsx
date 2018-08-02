@@ -27,15 +27,14 @@ class ResetPassword extends React.Component {
     const reset_token = props.location.search.match(/reset_token=(.*)/)[1]
     const output = { reset_token }
     axios.post(config.routes.API.user.resetPassword, output).then(({ data }) => {
-      console.log("data is", data)
       this.setState({
         resetToken: reset_token
       })
     }).catch(({response}) => {
+      toastr.error("Invalid Reset Token!")
       this.setState({
         resetToken: null
       })
-      toastr.error("Invalid Reset Token!")
     })
   }
 
@@ -43,7 +42,6 @@ class ResetPassword extends React.Component {
     const reset_token = this.state.resetToken
     const output = { reset_token, new_password: data }
     axios.post(config.routes.API.user.resetPassword, output).then(({ data }) => {
-      console.log("data is", data)
       toastr.success("Password updated successfully! Login with your new password.")
     }).catch(({response}) => {
       this.setState({
@@ -56,16 +54,29 @@ class ResetPassword extends React.Component {
   render () {
     const props = this.props
     
-    return this.state.reset_token !== null ?
+    return this.state.resetToken !== null ?
     (
-      <div>
-        <ResetPasswordForm onSubmit={this.onSubmit}/>
+    <div className="jumbotron no-margin vertical-center">
+      <div className="container-fluid">
+        <div className="panel panel-default no-margin no-background no-border no-shadow">
+          <div className="panel-body">
+            <img className="img-responsive center-block" src={`${config.routes.images}/logo-w-title.png`} style={{
+                maxHeight: '256px'
+              }}/>
+          </div>
+        </div>
+        <div className="panel panel-default no-margin no-background no-border no-shadow">
+          <div className="panel-body">
+            <ResetPasswordForm onSubmit={this.onSubmit}/>
+          </div>
+        </div>
       </div>
+    </div>
     )
     :
     (
-      <div>
-        <Link to={config.routes.base}>Return Home</Link>
+      <div className="jumbotron no-margin vertical-center">
+        <Link to={config.routes.base} className="link">Home</Link>
       </div>
     )
   }

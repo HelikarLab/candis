@@ -30,7 +30,7 @@ const DefaultsBasic = props => {
         </div>
         
         <div className="form-group">
-          <div className="col-sm-offset-4 col-sm-8">
+          <div className="col-sm-offset-8 col-sm-4">
             <button type="submit" className="btn btn-block btn-primary">
               <div className="text-uppercase font-bold">Update</div>
             </button>
