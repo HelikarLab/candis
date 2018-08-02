@@ -41,7 +41,7 @@ class ResetPassword extends React.Component {
   onSubmit (data) {
     const reset_token = this.state.resetToken
     const output = { reset_token, new_password: data }
-    axios.post(config.routes.API.user.resetPassword, output).then(({ data }) => {
+    return axios.post(config.routes.API.user.resetPassword, output).then(({ data }) => {
       toastr.success("Password updated successfully! Login with your new password.")
     }).catch(({response}) => {
       this.setState({
@@ -68,6 +68,7 @@ class ResetPassword extends React.Component {
         <div className="panel panel-default no-margin no-background no-border no-shadow">
           <div className="panel-body">
             <ResetPasswordForm onSubmit={this.onSubmit}/>
+            <Link to={config.routes.signin} className="link">Go to SignIn Page</Link>
           </div>
         </div>
       </div>
@@ -75,9 +76,7 @@ class ResetPassword extends React.Component {
     )
     :
     (
-      <div className="jumbotron no-margin vertical-center">
-        <Link to={config.routes.base} className="link">Home</Link>
-      </div>
+      <Link to={config.routes.base} className="link">Home</Link>
     )
   }
 }

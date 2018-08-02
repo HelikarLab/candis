@@ -11,25 +11,24 @@ import config from '../../config'
 const ResetPasswordBasic = props => (
   <Form>
     <div className="form-group">
-      <label>Password</label>
-      <Field type="password" name="password" className="form-control"/>
+      <Field type="password" name="password" className="form-control" placeholder="New Password"/>
       <small className="help-block">
         {props.touched.password && props.errors.password}
       </small>
     </div>  
 
     <div className="form-group">
-      <label>Confirm Password</label>
-      <Field type="password" name="confirmPassword" className="form-control"/>
+      <Field type="password" name="confirmPassword" className="form-control" placeholder="Confirm Password"/>
       <small className="help-block">
         {props.touched.confirmPassword && props.errors.confirmPassword}
       </small>
     </div>
     
-    <button className="btn btn-block btn-brand-primary">
+    <button className="btn btn-block btn-brand-primary" disabled={props.isSubmitting}>
     <div className="text-center">
       <div className="text-uppercase font-bold">
-        Reset Password
+      {props.isSubmitting ? <i className="fa fa-spinner fa-pulse"></i> : <i className="fa fa-edit"></i>}
+      {" "}Reset Password
       </div>
     </div>
     </button>
@@ -43,12 +42,17 @@ const ResetPasswordEnhanced = withFormik({
   }),
 
   validationSchema: Yup.object().shape({
-    password: Yup.string().required("Enter new password!"),
+    password: Yup.string().min(8).required("Enter new password!"),
     confirmPassword: Yup.string().oneOf([Yup.ref("password"), null], "Passwords don't match!").required("This field is required.")
   }),
 
-  handleSubmit: (values, {props}) => {
-    props.onSubmit(values.password)
+  handleSubmit: (values, {props, setSubmitting, resetForm}) => {
+    props.onSubmit(values.password).then(() => {
+      setSubmitting(false)
+      resetForm()
+    }).catch(() => {
+      resetForm()
+    })
   }
 })(ResetPasswordBasic)
 

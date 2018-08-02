@@ -20,10 +20,11 @@ class ResetPassword extends React.Component {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
-  onSubmit (data) {
+  onSubmit (data, setSubmitting) {
     const output = { 'email': data }
-    axios.post(config.routes.API.user.forgotPassword, output).then(({data}) => {
+    return axios.post(config.routes.API.user.forgotPassword, output).then(({data}) => {
       toastr.success("Check your inbox!")
+      // setSubmitting(false)
     }).catch(({response}) => {
       const error = response.data.error
       toastr.error(error)
