@@ -548,92 +548,94 @@ const Compartments =
 
             })
           }
-        },
-        {
-             name: 'Output',
-          tooltip: 'Generate a Classification Report',
-          onClick: (dispatch) => {
-            const action    = getResource()
-            
-            dispatch(action).then((resource) => {
-              const files   = getFiles(resource, [FileFormat.GIST])
-              const options = files.map((file) => {
-                const name  = file.name
-                const value = JSON.stringify(file)
-  
-                return { text: name, value: value }
-              })
-  
-              if ( options.length ) {
-                bootbox.prompt({
-                        title: '<span class="font-bold">Open Gist</span>',
-                    inputType: 'select',
-                  inputOptions: options,
-                      buttons:
-                        {
-                          cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
-                          confirm: { label: "Open",   className: "btn-sm btn-success" }
-                        },
-                          size: "small",
-                      animate: false,
-                      callback: (result) => {
-                        if ( result  !== null ) {
-                          const output = JSON.parse(result)
-                          const action = read(output)
-  
-                          dispatch(action).then((gist) => {
-                            const dialog  =
-                            {
-                              component: Component.GistViewer,
-                                  title: 'Gist',
-                                   size: 'lg',
-                                buttons:
-                                [
-                                  {
-                                        label: "Ok",
-                                    className: "btn-primary",
-                                      onClick: ( ) =>
-                                      {
-                                        var action = modal.hide()
-                
-                                        dispatch(action)
-                                      }
-                                  },
-                                  {
-                                        label: "Cancel",
-                                      onClick: ( ) =>
-                                      {
-                                        var action = modal.hide()
-                
-                                        dispatch(action)
-                                      }
-                                  }
-                                ],
-                                  props:
-                                  {
-                                    classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
-                                          data: gist
-                                  }
-                            }
-                            const action  = modal.show(dialog)
-                
-                            dispatch(action)
-                          })
-                        }
-                      }
-                })
-              } else {
-                toastr.warning('No gist found. Create a new pipeline by clicking on the <span class="font-bold">New</div> option.', 'Sorry!')
-              }
-            })
-          }
         }
       ]
   },
   {
     name: 'Visualize',
     icon: `${config.routes.icons}/pie-chart.png`,
- tooltip: 'Tools for Data Visualization'
+ tooltip: 'Tools for Data Visualization',
+   tools: [
+        {
+          name: 'Output',
+      tooltip: 'Generate a Classification Report',
+      onClick: (dispatch) => {
+        const action    = getResource()
+        
+        dispatch(action).then((resource) => {
+          const files   = getFiles(resource, [FileFormat.GIST])
+          const options = files.map((file) => {
+            const name  = file.name
+            const value = JSON.stringify(file)
+
+            return { text: name, value: value }
+          })
+
+          if ( options.length ) {
+            bootbox.prompt({
+                    title: '<span class="font-bold">Open Gist</span>',
+                inputType: 'select',
+              inputOptions: options,
+                  buttons:
+                    {
+                      cancel:  { label: "Cancel", className: "btn-sm btn-primary" },
+                      confirm: { label: "Open",   className: "btn-sm btn-success" }
+                    },
+                      size: "small",
+                  animate: false,
+                  callback: (result) => {
+                    if ( result  !== null ) {
+                      const output = JSON.parse(result)
+                      const action = read(output)
+
+                      dispatch(action).then((gist) => {
+                        const dialog  =
+                        {
+                          component: Component.GistViewer,
+                              title: 'Gist',
+                                size: 'lg',
+                            buttons:
+                            [
+                              {
+                                    label: "Ok",
+                                className: "btn-primary",
+                                  onClick: ( ) =>
+                                  {
+                                    var action = modal.hide()
+            
+                                    dispatch(action)
+                                  }
+                              },
+                              {
+                                    label: "Cancel",
+                                  onClick: ( ) =>
+                                  {
+                                    var action = modal.hide()
+            
+                                    dispatch(action)
+                                  }
+                              }
+                            ],
+                              props:
+                              {
+                                classNames: { root: ['no-background', 'no-border', 'no-shadow', 'no-margin'] },
+                                      data: gist
+                              }
+                        }
+                        const action  = modal.show(dialog)
+            
+                        dispatch(action)
+                      })
+                    }
+                  }
+            })
+          } else {
+            toastr.warning('No gist found. Create a new pipeline by clicking on the <span class="font-bold">New</div> option.', 'Sorry!')
+          }
+        })
+      }
+    }
+   ]
   },
 ]
 
