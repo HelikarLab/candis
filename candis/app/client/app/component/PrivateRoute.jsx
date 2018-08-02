@@ -1,6 +1,6 @@
 import React       from 'react'
 import PropTypes   from 'prop-types'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import config      from '../config'
@@ -36,4 +36,4 @@ const mapStateToProps     = (state, props) => {
 	}
 }
 
-export default connect(mapStateToProps)(PrivateRoute)
+export default withRouter(connect(mapStateToProps)(PrivateRoute))
