@@ -7,7 +7,7 @@ const entrez = {
 
     search: (values) => {
         const dispatch = (dispatch) => {
-            axios.post(config.routes.API.data.search, values).then(({data}) => {
+            return axios.post(config.routes.API.data.search, values).then(({data}) => {
                 data = data.data
                 
                 let action = {
@@ -32,7 +32,7 @@ const entrez = {
 
     download: (payload) => {
         const dispatch = (dispatch) => {
-            axios.post(config.routes.API.data.download, payload).then((data) => {
+            return axios.post(config.routes.API.data.download, payload).then((data) => {
                 data = data.data
                 let action = {
                     type: ActionType.Entrez.DOWNLOAD,

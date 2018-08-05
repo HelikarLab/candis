@@ -12,6 +12,7 @@ import SelectTags from "../widget/SelectTags"
 import entrez from '../../action/EntrezAction'
 
 const EntrezBasic = props => {
+  const flag = props.search_results.length == 0
   return (
     <div className="container-fluid">
       <Form>
@@ -67,8 +68,18 @@ const EntrezBasic = props => {
         </div>
         
         <div className="row">
-          <div className="col-xs-8">
+          <div className="col-xs-4">
+            <button
+              onClick={() => props.onSwitch('search')}
+              className={`btn btn-block btn-${flag ? 'primary': 'success'}`}
+              disabled={flag}>
+              <div className="text-uppercase font-bold">
+                Next{" "}
+                <i className="fa fa-chevron-right"></i>
+              </div>
+            </button>            
           </div>
+          <div className="col-xs-4"></div>
           <div className="col-xs-4">
             <button type="submit" disabled={props.isSubmitting} className="btn btn-block btn-primary">
               <div className="text-uppercase font-bold">
@@ -107,7 +118,10 @@ const EntrezEnhanced = withFormik({
     }
 
     const action = entrez.search(payload)
-    props.dispatch(action)
+    props.dispatch(action).then(() => {
+      setSubmitting(false)
+    })
+
   },
   displayName: "Entrez Form"
 })(EntrezBasic)
@@ -124,12 +138,20 @@ class EntrezDataGrid extends React.Component {
   }
 
   onClick () {
-    const payload = this.state.payload
-    const action = entrez.download(payload)
-    this.props.dispatch(action)
+    let payload = this.state.payload
+    payload = {...payload, path: this.props.downloadPath}
     this.setState({
       ...this.state,
       downloading: true
+    })
+    const action = entrez.download(payload)
+    this.props.dispatch(action).then(() => {
+      this.setState({
+        ...this.state,
+        downloading: false
+      })
+    }).catch(() => {
+      toastr.error("Could not download the selected file.")
     })
   }
 
@@ -188,9 +210,16 @@ class EntrezDataGrid extends React.Component {
           minHeight={500}
         />
         <div className="row">
-          <div className="col-xs-8">
+          <div className="col-xs-4">
+            <button onClick={() => props.onSwitch('download')} className="btn btn-block btn-primary" >
+              <div className="text-uppercase font-bold">
+                <i className="fa fa-chevron-left"></i>  
+                {" "}Previous
+              </div>
+            </button>
           </div>
-          <div className="col-xs-4">        
+          <div className="col-xs-4"></div>
+          <div className="col-xs-4">
             <button onClick={this.onClick} disabled={!this.state.payload || this.state.downloading} className="btn btn-block btn-primary">
               <div className="text-uppercase font-bold">
               {this.state.downloading ? <i className="fa fa-spinner fa-pulse"></i> : <i className="fa fa-download"></i>}
@@ -207,30 +236,53 @@ class EntrezDataGrid extends React.Component {
 const mapStateToProps = (state, props) => {
   const entrez = state.entrez
   const user = state.app.user
+  const defaults = state.defaults
   return {
     search_results: entrez.search_results,
     toolName: entrez.toolName,
     database: entrez.database,
     api_key: entrez.api_key,
     email: entrez.email,
-    user: user
+    user: user,
+    downloadPath: defaults.downloadPath
   }
 }
 
 const ConnectedEntrezEnhanced = connect(mapStateToProps)(EntrezEnhanced)
 const ConnectedEntrezDataGrid = connect(mapStateToProps)(EntrezDataGrid)
 
-const Entrez = (props) => {
-  return (
-    <div>
-      { !props.search_results.length
-        ?
-        <ConnectedEntrezEnhanced />
-        :
-        <ConnectedEntrezDataGrid />
-      }
-    </div>
-  )
+class Entrez extends React.Component {
+  constructor(props){
+    super(props)
+
+    this.state = { activeForm: 'search' }
+    
+    this.onSwitch = this.onSwitch.bind(this)
+  }
+
+  onSwitch (val) {
+
+    let form = 'search'
+    if(val == 'search'){
+      form = 'download'
+    }
+    this.setState({ activeForm: form })
+  }
+
+  render () {
+    const props = this.props
+    return (
+      <div>
+        { (this.state.activeForm === 'search')
+          ?
+          <ConnectedEntrezEnhanced onSwitch={this.onSwitch}/>
+          :
+          <ConnectedEntrezDataGrid onSwitch={this.onSwitch}/>
+        }
+      </div>
+    )    
+  }
+
 }
 
 export default connect(mapStateToProps)(Entrez)

@@ -5,9 +5,11 @@ import cloneDeep  from 'lodash.clonedeep'
 import ActionType from '../constant/ActionType'
 import FileFormat from '../constant/FileFormat'
 import nodesMeta from '../meta/nodes'
+import config from '../config'
 
 const initial = {
-  trainPercent : 70
+  trainPercent : 70,
+  downloadPath : config.datadir
 }
 
 const Defaults = (state = initial, action) => {

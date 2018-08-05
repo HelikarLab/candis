@@ -52,5 +52,6 @@
         }
     },
     "container": "app",
-    "startdir": "CRES"
+    "startdir": "CRES",
+    "datadir": "candisDATA"
 }
