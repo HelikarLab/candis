@@ -103,10 +103,8 @@ console:
 
 start:
 ifeq ($(ENV), development)
-	# $(HONCHO) start --procfile $(BASEDIR)/Procfile.dev
 	$(PYTHON) $(BASEDIR)/$(HONCHO_MANAGER) --env 'dev'
 else
-	# $(HONCHO) start
 	$(PYTHON) $(BASEDIR)/$(HONCHO_MANAGER) --env 'prod'
 endif
 
