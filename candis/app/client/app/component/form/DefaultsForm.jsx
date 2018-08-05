@@ -28,6 +28,18 @@ const DefaultsBasic = props => {
             />
           </div>
         </div>
+
+        <div className="form-group">
+          <label className="control-label col-sm-4">Download Path: </label>
+          <div className="col-sm-8">
+            <Field
+              type="text"
+              name={"downloadPath"}
+              className="form-control"
+              value={props.values.downloadPath}
+            />
+          </div>          
+        </div>
         
         <div className="form-group">
           <div className="col-sm-offset-4 col-sm-8">
@@ -44,7 +56,8 @@ const DefaultsBasic = props => {
 
 const DefaultsEnhanced = withFormik({
   mapPropsToValues: (props) => ({
-    trainPercent: props.trainPercent || props.defaults.trainPercent
+    trainPercent: props.trainPercent || props.defaults.trainPercent,
+    downloadPath: props.downloadPath || props.defaults.downloadPath
   }),
   handleSubmit(values, { props }){
     const action = defaults.update(values)
