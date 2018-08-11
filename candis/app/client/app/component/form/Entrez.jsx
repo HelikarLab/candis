@@ -151,6 +151,10 @@ class EntrezDataGrid extends React.Component {
         downloading: false
       })
     }).catch(() => {
+      this.setState({
+        ...this.state,
+        downloading: false
+      })
       toastr.error("Could not download the selected file.")
     })
   }

@@ -126,8 +126,10 @@ def resource(filter_ = ['csv', 'cel', 'model', 'arff'], level = None):
         temp = addict.Dict(name=pipe.name, format='pipeline')
         files.append(temp)
         for pipe_run in pipe.pipeline_run:
-            temp = addict.Dict(name=json.loads(pipe_run.gist)['name'], format='gist', pipeline_name=pipe.name)
-            files.append(temp)
+            if 'name' in json.loads(pipe_run.gist):
+                name = json.loads(pipe_run.gist)['name']
+                temp = addict.Dict(name=name, format='gist', pipeline_name=pipe.name)
+                files.append(temp)
     for cdata in user.cdata:
         temp = addict.Dict(name=cdata.name, format='cdata')
         files.append(temp)
@@ -434,10 +436,18 @@ def download():
             links.append(value.get('ftplink'))
             series_accession_list.append(value.get('accession'))
 
+    if os.path.split(CONFIG.App.DATADIR)[1] in os.path.split(parameters.path):
+        
+        decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+        username = decoded_token['username']
+        data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
+
+        parameters.path = data_path
+
     geo = geo_API(path = parameters.path)
     download_path = geo.raw_data(links[0], series_accession_list[0])
     
-    response.set_data(download_path)
+    response.set_data(addict.Dict(download_path = download_path))
     
     dict_ = response.to_dict()
     save_response_to_db(dict_)
