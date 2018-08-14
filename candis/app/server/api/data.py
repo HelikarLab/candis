@@ -103,14 +103,11 @@ def log_times(i):
 
 @app.route(CONFIG.App.Routes.API.Data.RESOURCE, methods = ['GET', 'POST'])
 @login_required
-def resource(filter_ = ['csv', 'cel', 'model', 'arff'], level = None):
+def resource(user, filter_ = ['csv', 'cel', 'model', 'arff'], level = None):
     response   = Response()
 
+    username = user.username
     parameters = addict.Dict(request.get_json())
-
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
 
     data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
     path       = data_path if not parameters.path else os.path.join(data_path, parameters.path)
@@ -146,13 +143,10 @@ def resource(filter_ = ['csv', 'cel', 'model', 'arff'], level = None):
 
 @app.route(CONFIG.App.Routes.API.Data.READ, methods = ['GET', 'POST'])
 @login_required
-def read():
+def read(user):
     response        = Response()
-    
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
 
+    username = user.username
     parameters      = addict.Dict(request.get_json())
     data_path = os.path.abspath(os.path.join(CONFIG.App.DATADIR, modify_data_path(username)))
     parameters.path = os.path.abspath(parameters.path) if parameters.path else data_path    
@@ -224,13 +218,11 @@ def read():
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Data.WRITE, methods = ['POST'])
 @login_required
-def write(output = { 'name': '', 'path': '', 'format': None }):
+def write(user, output = { 'name': '', 'path': '', 'format': None }):
     response     = Response()
 
+    username = user.username
     parameters   = addict.Dict(request.get_json())
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
     
     if parameters.output:
         output   = addict.Dict(merge_dicts(output, parameters.output))
@@ -301,15 +293,13 @@ def write(output = { 'name': '', 'path': '', 'format': None }):
 
 @app.route(CONFIG.App.Routes.API.Data.DELETE, methods = ['POST'])
 @login_required
-def delete():
+def delete(user):
     # delete handle to delete a pipeline
     response = Response()
+
+    username = user.username
     parameters   = addict.Dict(request.get_json())
     opath        = os.path.join(ABSPATH_STARTDIR, parameters.name)
-
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
     
     flag = False
     for pipeline in user.pipelines:
@@ -332,8 +322,9 @@ def delete():
 
 @app.route(CONFIG.App.Routes.API.Data.SEARCH, methods = ['GET', 'POST'])
 @login_required
-def search():
+def search(user):
     response = Response()
+
     parameters = addict.Dict(request.get_json())
     # TODO: type check of parameters, currently, parameters must have 'database', 'email', 'toolName'
     i = 0
@@ -387,8 +378,11 @@ def search():
     return json_, code
 
 @app.route(CONFIG.App.Routes.API.Data.DOWNLOAD, methods = ['POST'])
-def download():
+@login_required
+def download(user):
     response = Response()
+
+    username = user.username
     parameters = addict.Dict(request.get_json())
     # TODO: type check of parameters, currently, parameters must have 'database', 'email', 'toolName', 'accession', 'path'
     
@@ -437,9 +431,6 @@ def download():
             series_accession_list.append(value.get('accession'))
 
     if os.path.split(CONFIG.App.DATADIR)[1] in os.path.split(parameters.path):
-        
-        decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-        username = decoded_token['username']
         data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
 
         parameters.path = data_path

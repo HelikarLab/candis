@@ -25,14 +25,11 @@ from candis.app.server.helpers.fileData import modify_data_path
 
 @app.route(CONFIG.App.Routes.API.Pipeline.PREDICT, methods = ['POST'])
 @login_required
-def predict():
+def predict(user):
     response = Response()
 
+    username = user.username
     parameters = addict.Dict(request.get_json())
-
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
 
     data_path = os.path.join(CONFIG.App.DATADIR, modify_data_path(username))
     
@@ -63,15 +60,11 @@ def predict():
 # HINT: Can be written better?
 @app.route(CONFIG.App.Routes.API.Pipeline.RUN, methods = ['POST'])
 @login_required
-def run(delay = 5):
+def run(user, delay = 5):
     response         = Response()
 
     parameters       = addict.Dict(request.get_json())
     split_percent = parameters.split_percent or 70
-
-    decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    username = decoded_token['username']
-    user = User.get_user(username=username)
 
     stages = []
     current_pipe = None

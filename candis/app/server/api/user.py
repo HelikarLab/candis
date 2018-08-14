@@ -111,7 +111,7 @@ def login():
 
 @app.route(CONFIG.App.Routes.API.User.SIGN_OUT, methods=['POST'])
 @login_required
-def logout():
+def logout(user):
     response = Response()
     payload = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
     redis.redis.hset('blacklist', payload['username'], 'True')
