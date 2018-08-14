@@ -113,8 +113,10 @@ def login():
 @login_required
 def logout(user):
     response = Response()
-    payload = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
-    redis.redis.hset('blacklist', payload['username'], 'True')
+    
+    username = user.username
+
+    redis.redis.hset('blacklist', username, 'True')
     response.set_data({'message': 'Logged out successfully!'})
     
     dict_      = response.to_dict()
@@ -189,9 +191,3 @@ def reset():
     code       = response.code
 
     return json_, code
-
-# for debugging only - to check if JWT token auth is working as expected.
-@app.route('/private', methods=['GET'])
-@login_required
-def private():
-    return jsonify({'Secret': 'Messi is better than CR7'})
