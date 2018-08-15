@@ -9,6 +9,7 @@ import jwt
 # imports - module imports
 from candis.app.server.app import app, redis
 from candis.app.server.response import Response
+from candis.app.server.models import User
 
 def login_required(f):
     @wraps(f)
@@ -28,7 +29,11 @@ def login_required(f):
                 
                 return json_, code
 
-            return f(*args, **kwargs)
+            decoded_token = jwt.decode(request.headers.get('token'), app.config['SECRET_KEY'])
+            username = decoded_token['username']
+            user = User.get_user(username=username)
+
+            return f(user=user, *args, **kwargs)
         except Exception as e:
             print(e)  # TODO: use logger
             response = Response()
