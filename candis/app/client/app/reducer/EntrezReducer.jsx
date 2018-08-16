@@ -20,6 +20,11 @@ const entrezReducer = (state = initial, action) => {
             return {...state, search_results: []}
         }
 
+        case ActionType.Entrez.SEARCH_REQUEST:
+        case ActionType.Entrez.DOWNLOAD_REQUEST:
+            nprogress.set(0.0)
+            break
+
         case ActionType.Entrez.DOWNLOAD_ERROR:
         case ActionType.Entrez.DOWNLOAD_SUCCESS:
         case ActionType.Entrez.SEARCH_ERROR:

@@ -63,8 +63,8 @@ class API():
         file_path = os.path.join(self.path, tar_file)
         self.fpath = file_path
         
+        self.logs.append("Downloading {} at {}".format(tar_file, os.path.abspath(self.path)))
         with open(file_path, 'wb') as f:
-            self.logs.append("Downloading {} at {}".format(tar_file, os.path.abspath(self.path)))
             try:
                 self.ftp.retrbinary('RETR '+ file_name, f.write)
                 self.logs.append("Downloaded")
