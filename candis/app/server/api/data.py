@@ -15,6 +15,7 @@ from candis.config              import CONFIG
 from candis.util                import (
     assign_if_none, get_rand_uuid_str, get_timestamp_str, merge_dicts
 )
+from candis.app.server.app      import socketio
 from candis.resource            import R
 from candis.ios                 import cdata, pipeline
 from candis.ios                 import json as JSON
@@ -379,7 +380,7 @@ def search(user):
 
 @app.route(CONFIG.App.Routes.API.Data.DOWNLOAD, methods = ['POST'])
 @login_required
-def download(user):
+def download(user, delay=5):
     response = Response()
 
     username = user.username
@@ -436,8 +437,17 @@ def download(user):
         parameters.path = data_path
 
     geo = geo_API(path = parameters.path)
-    download_path = geo.raw_data(links[0], series_accession_list[0])
+    geo.download(links[0], series_accession_list[0])
     
+    while geo.status == geo.DOWNLOADING:
+        status        = addict.Dict()
+        status.logs   = geo.logs
+
+        socketio.emit('status', status)
+
+        time.sleep(delay)
+
+    download_path = geo.fpath
     response.set_data(addict.Dict(download_path = download_path))
     
     dict_ = response.to_dict()
