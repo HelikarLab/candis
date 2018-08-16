@@ -7,6 +7,8 @@ import classNames from "classnames"
 import { withFormik, Form, Field } from "formik"
 import * as Yup from "yup"
 
+import io from 'socket.io-client'
+
 import config from '../../config'
 import SelectTags from "../widget/SelectTags"
 import entrez from '../../action/EntrezAction'
@@ -130,31 +132,38 @@ class EntrezDataGrid extends React.Component {
   constructor(props){
     super(props)
 
-    this.state = { payload: undefined, downloading: false }
+    this.socket = io.connect(`http://${config.host}:${config.port}`)
+    this.state = EntrezDataGrid.defaultStates
     
     this.rowGetter = this.rowGetter.bind(this)
     this.onSelect = this.onSelect.bind(this)
     this.onClick = this.onClick.bind(this)
   }
 
+  componentDidUpdate ( )
+  {
+    if ( this.state.downloading )
+    {
+      this.socket.on('status', (status) => {
+        this.setState({
+          status: status
+        })
+      })
+    }
+  }  
+
   onClick () {
     let payload = this.state.payload
     payload = {...payload, path: this.props.downloadPath}
-    this.setState({
-      ...this.state,
-      downloading: true
-    })
+    
+    this.setState({ downloading: true })
+    
     const action = entrez.download(payload)
     this.props.dispatch(action).then(() => {
-      this.setState({
-        ...this.state,
-        downloading: false
-      })
+      this.setState({ downloading: false })
+      toastr.success("Downloaded successfully!")
     }).catch(() => {
-      this.setState({
-        ...this.state,
-        downloading: false
-      })
+      this.setState({ downloading: false })
       toastr.error("Could not download the selected file.")
     })
   }
@@ -172,7 +181,7 @@ class EntrezDataGrid extends React.Component {
     }
     this.setState({
       ...this.state,
-      payload 
+      payload
     })
   }
 
@@ -199,6 +208,16 @@ class EntrezDataGrid extends React.Component {
         width: 200
       }
     ]
+
+    const status = this.state.status
+    const len = status.logs.length
+    if ( len ) {
+      let log = status.logs[len - 1]
+      toastr.clear()
+      
+      toastr.options = { extendedTimeOut: 0 }
+      toastr.info(log, 'Status')
+    }
 
     const props = this.props
     return (
@@ -259,7 +278,7 @@ class Entrez extends React.Component {
   constructor(props){
     super(props)
 
-    this.state = { activeForm: 'search' }
+    this.state = Entrez.defaultStates
     
     this.onSwitch = this.onSwitch.bind(this)
   }
@@ -288,6 +307,9 @@ class Entrez extends React.Component {
   }
 
 }
+
+EntrezDataGrid.defaultStates = { payload: undefined, downloading: false , status: { logs: [ ] } }
+Entrez.defaultStates = { activeForm: 'search' }
 
 export default connect(mapStateToProps)(Entrez)
 
