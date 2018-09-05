@@ -5,7 +5,7 @@
 ---
 
 <h4 align="center">
-	A data mining suite for DNA microarrays
+	A data mining suite for gene expression data
 </h4>
 
 <p align="center">
@@ -27,7 +27,7 @@
 	<img src=".github/sample.gif" height>
 </div>
 
-**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for DNA microarrays that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](http://helikarlab.org).
+**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for gene expression data that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](http://helikarlab.org).
 
 ***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/HelikarLab/candis/issues).
 
