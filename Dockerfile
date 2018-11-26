@@ -1,12 +1,12 @@
-FROM ubuntu
+FROM ubuntu:xenial
+
+COPY ./get-candis ./get-candis
 
 RUN apt-get update \
         && apt-get install -y \
-                sudo \
-                bash \
-                curl \
-                python3 \
-        && curl -sL git.io/install-candis | sudo python3
+                python3-minimal
+
+RUN python3 ./get-candis
 
 EXPOSE 5000
 
