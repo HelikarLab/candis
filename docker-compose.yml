@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+        postgres:
+                restart: always
+                image: postgres:10
+                env_file: .postgres_env
+                ports:
+                        - "5432:5432"
+
+        api:
+                restart: always
+                build: .
+                env_file: .env
+                volumes:
+                        - .:/usr/src/app
+                depends_on:
+                        - postgres
+                ports:
+                        - 5000:5000
+
+
