@@ -26,7 +26,7 @@ RUN     pip3 install setuptools \
         && pip3 install numpy \
         && pip3 install pyyaml
 
-RUN     git clone https://github.com/HelikarLab/candis.git \
+RUN     git clone https://github.com/rupav/candis.git \
         && pip3 install -r ./candis/requirements.txt
 
 RUN     pip3 install ./candis
