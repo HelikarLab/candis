@@ -31,22 +31,22 @@ env.read_envfile()
 try:
     database_config = addict.Dict(
         drivername = env.str('CANDIS_DATABASE_DRIVERNAME', default='postgresql'),
-        host = env.str('CANDIS_DATABASE_HOST'),
-        port = env.str('CANDIS_DATABASE_PORT'),
-        username = env.str('CANDIS_DATABASE_USERNAME'),
-        password = env.str('CANDIS_DATABASE_PASSWORD'),
-        database = env.str('CANDIS_DATABASE_NAME')
+        host = env.str('CANDIS_DATABASE_HOST', default='localhost'),
+        port = env.str('CANDIS_DATABASE_PORT', default='5432'),
+        username = env.str('CANDIS_DATABASE_USERNAME', default='postgres'),
+        password = env.str('CANDIS_DATABASE_PASSWORD', default='postgres'),
+        database = env.str('CANDIS_DATABASE_NAME', default='postgres')
     )
     mail_config = addict.Dict(
         MAIL_SERVER = env.str('CANDIS_MAIL_SERVER', default='smtp.gmail.com'),
         MAIL_PORT = env.str('CANDIS_MAIL_PORT', default='465'),
-        MAIL_USERNAME = env.str('CANDIS_MAIL_USERNAME'),
-        MAIL_PASSWORD = env.str('CANDIS_MAIL_PASSWORD'),
-        MAIL_DEFAULT_SENDER = env.str('CANDIS_MAIL_DEFAULT_SENDER'),
-        MAIL_USE_SSL = env.bool('CANDIS_MAIL_USE_SSL')
+        MAIL_USERNAME = env.str('CANDIS_MAIL_USERNAME', default='rupavjain1@gmail.com'),
+        MAIL_PASSWORD = env.str('CANDIS_MAIL_PASSWORD', default='codingninja'),
+        MAIL_DEFAULT_SENDER = env.str('CANDIS_MAIL_DEFAULT_SENDER', default='rupavjain1@gmail.com'),
+        MAIL_USE_SSL = env.bool('CANDIS_MAIL_USE_SSL', default=True)
     )
     app_config = addict.Dict(
-        SECRET_KEY = env.str('CANDIS_SECRET_KEY'),
+        SECRET_KEY = env.str('CANDIS_SECRET_KEY', default='super_secret_key'),
         SQLALCHEMY_DATABASE_URI = str(url.URL(**database_config)),
         SQLALCHEMY_TRACK_MODIFICATIONS = env.str('CANDIS_SQLALCHEMY_TRACK_MODIFICATIONS', default='False'),
         INTEGRATE_SOCKETIO = env.str('CANDIS_INTEGRATE_SOCKETIO', default='True')
