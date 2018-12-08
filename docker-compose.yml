@@ -7,7 +7,12 @@ services:
                 env_file: .postgres_env
                 ports:
                         - "5432:5432"
-
+          
+        redis:
+                image: redis:3.2-alpine
+                volumes:
+                        - redis_data:/data
+            
         api:
                 restart: always
                 build: .
@@ -16,7 +21,9 @@ services:
                         - .:/usr/src/app
                 depends_on:
                         - postgres
+                        - redis
                 ports:
-                        - 5000:5000
-
+                        - "5000:5000"
+volumes:
+        redis_data:
 
