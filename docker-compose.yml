@@ -1,29 +1,44 @@
-version: '3'
+version: "3.4"
+
+x-defaults: &defaults
+  restart: unless-stopped
 
 services:
-        postgres:
-                restart: always
-                image: postgres:10
-                env_file: .postgres_env
-                ports:
-                        - "5432:5432"
-          
-        redis:
-                image: redis:3.2-alpine
-                volumes:
-                        - redis_data:/data
-            
-        api:
-                restart: always
-                build: .
-                env_file: .env
-                volumes:
-                        - .:/usr/src/app
-                depends_on:
-                        - postgres
-                        - redis
-                ports:
-                        - "5000:5000"
-volumes:
-        redis_data:
+  app:
+    <<: *defaults
+    build: .
+    # environment:
+    #   - 
+    networks:
+      - db
+      - cache
+      - proxy
+  db:
+    <<: *defaults
+    image: postgres
+    networks:
+      - db
+  cache:
+    <<: *defaults
+    image: redis
+    networks:
+      - cache
+  proxy:
+    <<: *defaults
+    image: nginx
+    depends_on:
+      - app
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "4000:80"
+    networks:
+      - proxy
 
+networks:
+  db:
+    driver: bridge
+  cache:
+    driver: bridge
+  proxy:
+    driver: bridge 
