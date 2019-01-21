@@ -77,6 +77,21 @@ $ docker pull helikarlab/candis
 $ docker run -p 8888:5000 helikarlab/candis
 ```
 
+OR
+
+After cloning the repository, build from the updated Dockerfile and docker-compose.yml:
+
+```
+$ docker-compose build
+```
+
+```
+$ docker-compose up
+```
+
+Then go to localhost:4000 in your browser to open the app.
+
+
 ### Usage
 **Launching the RIA (Rich Internet Application)**
 
