@@ -4,19 +4,24 @@ x-defaults: &defaults
   restart: unless-stopped
 
 services:
-  app:
-    <<: *defaults
-    build: .
-    # environment:
-    #   - 
-    networks:
-      - db
-      - cache
-      - proxy
   db:
     <<: *defaults
     image: postgres
     networks:
+      - db
+    expose:
+      - "5432"
+  app:
+    <<: *defaults
+    build: .
+    environment:
+      CANDIS_DATABASE_HOST: db
+    networks:
+      - db
+      - cache
+      - proxy
+
+    depends_on:
       - db
   cache:
     <<: *defaults
