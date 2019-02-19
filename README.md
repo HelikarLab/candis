@@ -27,7 +27,14 @@
 	<img src=".github/sample.gif" height>
 </div>
 
-**candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for gene expression data that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](http://helikarlab.org).
+**Candis** is an open source data mining suite (released under the [GNU General Public License v3](LICENSE)) for gene expression data that consists of a wide collection of tools you require, right from Data Extraction to Model Deployment. **candis** is built on top of the toolkit - [CancerDiscover](http://github.com/HelikarLab/CancerDiscover) written by the bioinformaticians at [HelikarLab](http://helikarlab.org).
+
+**Citation**: If you use candis please cite our work  
+Mohammed, A., Biegert, G., Adamec, J., & Helikar, T. (2017). **Identification of potential tissue-specific cancer biomarkers and development of cancer versus normal genomic classifiers**. Oncotarget, 8(49), 85692-85715. https://doi.org/10.18632/oncotarget.21127
+
+**Or**
+
+Mohammed, A., Biegert, G., Adamec, J., & Helikar, T. (2018). **CancerDiscover: An integrative pipeline for cancer biomarker and cancer class prediction from high-throughput sequencing data**. Oncotarget, 9(2), 2565-2573. https://doi.org/10.18632/oncotarget.23511
 
 ***WARNING***: candis currently is still in `dev` mode and not production-ready yet. In case if you run across bugs or errors, raise an issue over [here](https://github.com/HelikarLab/candis/issues).
 
@@ -155,7 +162,7 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 		<td align="center" valign="top">
 			<img height="150" src="http://newsroom.unl.edu/announce/files/file37859.jpg">
 			<br>
-			<a href="http://helikarlab.org/members.html">Dr. Tomas Helikar, Ph.D</a>
+			<a href="http://helikarlab.org/members.html">Dr. Tomas Helikar</a>
 			<br>
 			<a href="mailto:thelikar2@unl.edu">thelikar2@unl.edu</a>
 			<br>
@@ -164,9 +171,9 @@ $ candis --cdata path/to/data.cdata --config path/to/config.json
 		<td align="center" valign="top">
 			<img height="150" src="https://github.com/akram-mohammed.png?s=150">
 			<br>
-			<a href="https://github.com/akram-mohammed">Dr. Akram Mohammed, Ph.D</a>
+			<a href="https://github.com/akram-mohammed">Dr. Akram Mohammed</a>
 			<br>
-			<a href="mailto:amohammed3@unl.edu">amohammed3@unl.edu</a>
+			<a href="mailto:akrammohd@gmail.com">akrammohd@gmail.com</a>
 			<br>
 			<p>Author and Maintainer</p>
 		</td>
