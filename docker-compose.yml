@@ -16,6 +16,7 @@ services:
     build: .
     environment:
       CANDIS_DATABASE_HOST: db
+      CANDIS_CACHE_HOST: cache
     networks:
       - db
       - cache

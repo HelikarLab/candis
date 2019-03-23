@@ -13,7 +13,7 @@ class Redis(object):
         # TODO: to parse .env files, use python-dotenv or envparse? and for defaults use config file?
         # initialize redis client instance.
         self.redis = redis.StrictRedis(
-            host = assign_if_none(host, os.getenv('REDIS_HOST', 'localhost')), 
+            host = assign_if_none(host, os.getenv('CANDIS_CACHE_HOST', 'localhost')), 
             port = assign_if_none(port, os.getenv('REDIS_PORT', 6379)), 
             db = assign_if_none(db, os.getenv('REDIS_DB_INDEX', 0)), 
             decode_responses=decode_response)
