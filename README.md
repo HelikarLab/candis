@@ -60,7 +60,7 @@ $ pip install candis
 $ curl -sL git.io/install-candis | python # with dependencies
 ```
 
-... and lauch `candis`'s development server:
+... and launch `candis`'s development server:
 
 ```
 $ candis
