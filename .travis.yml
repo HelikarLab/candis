@@ -1,7 +1,5 @@
 language: python
 python:
-  # - "2.6" # no longer supported.
-  # - "2.7" # not supported.
   # - "3.2" # coverage seems to fail.
   # - "3.3" # seaborn is incompatible.
   # - "3.4" # hangs on pipenv install
@@ -11,15 +9,25 @@ python:
   # - "3.6-dev"
   # - "3.7-dev"
 
-services:
-  - postgresql
+sudo: required
 
-before_script:
-  - psql -c 'create database travis_ci_test;' -U postgres
+dist: xenial        
+        
+services:
+    - docker
 
 install:
-        #- curl -sL git.io/install-candis | sudo python
-  - sudo python get-candis
+    - docker-compose build
+    - docker-compose up -d
+    - docker-compose exec app sh -c "apt-get update && apt-get install -y netcat"
+    - docker-compose exec proxy sh -c "apt-get update && apt-get install -y curl"
+
 script:
-  - redis-cli ping
-  - make test
+    - docker-compose exec app sh -c "nc -vz cache 6379"
+    - docker-compose exec app sh -c "nc -vz db 5432"
+    - docker-compose exec app sh -c "nc -vz proxy 80"
+    - docker-compose exec proxy sh -c "curl localhost/api/ping"  
+
+after_script:
+    - docker-compose stop
+    - docker-compose rm -f         

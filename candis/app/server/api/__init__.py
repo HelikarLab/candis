@@ -17,3 +17,6 @@ from candis.app.server.api.pipeline   import (
 from candis.app.server.api.user import (
 	sign_up
 )
+from candis.app.server.api.ping import(
+        ping
+)
