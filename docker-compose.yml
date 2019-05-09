@@ -24,6 +24,8 @@ services:
 
     depends_on:
       - db
+    volumes:
+      - .:/app      
   cache:
     <<: *defaults
     image: redis
