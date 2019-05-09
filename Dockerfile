@@ -11,10 +11,13 @@ RUN apt-get install -y --no-install-recommends \
                 python3-tk \
                 software-properties-common \ 
                 graphviz-dev \
-        && echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections 
-RUN add-apt-repository -y ppa:webupd8team/java 
-RUN apt-get update 
-RUN apt-get install -y --no-install-recommends oracle-java8-installer 
+				wget
+
+# Install Java.
+RUN wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
+    apt-get update &&  apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
+    dpkg --install java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb
+
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 
 RUN add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' 
 RUN apt-get update 
