@@ -1,24 +1,16 @@
-FROM  ubuntu:xenial
+FROM python:3.7-alpine
 
 # Add labels for metadata
 LABEL maintainer achillesrasquinha@gmail.com
 
 # Install dependencies
-RUN apt-get update --fix-missing
-RUN apt-get install -y --no-install-recommends \
-                apt-transport-https \
-                gcc \
-                git \
-                python3-dev \ 
-                python3-pip \
-                python3-tk \
-                software-properties-common \ 
-                graphviz-dev \
-				wget
+RUN apk update \
+	&& apk add --no-cache --virtual build-deps gcc musl-dev\
+    && apk add --no-cache git python3-dev python3-tkinter graphviz-dev wget
 
 # Install Java
 RUN wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
-    apt-get update &&  apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
+    apt-get update && apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
     dpkg --install java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb
 
 # Install R
@@ -45,6 +37,7 @@ VOLUME /app
 # Work in the app directory of the container
 WORKDIR /app
 
+# Export python path
 ENV PYTHONPATH="/app/candis"
 
 # Expose port 5000
