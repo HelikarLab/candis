@@ -9,9 +9,8 @@ RUN apk update \
     && apk add --no-cache git python3-dev python3-tkinter graphviz-dev wget
 
 # Install Java
-RUN wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
-    apt-get update && apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
-    dpkg --install java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb
+RUN apk add openjdk8-jre-base --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted \
+    && rm -rf /var/cache/apk/*
 
 # Install R
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
