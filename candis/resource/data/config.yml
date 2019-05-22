@@ -135,6 +135,9 @@ pipeline:
     - use: false
       name: trees.RandomForest
       label: Random Forest
+    - use: false
+      name: learn.Scikit
+      label: Scikit-learn Model    
 CLI:
   arguments:
     - name: ["-d", "--cdata"]
