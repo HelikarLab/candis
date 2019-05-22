@@ -135,6 +135,21 @@ pipeline:
     - use: false
       name: trees.RandomForest
       label: Random Forest
+    - use: false
+      name: functions.KRR
+      label: Kernel Ridge Regression
+    - use: false
+      name: functions.SGD
+      label: Stochastic Gradient Descent
+    - use: false
+      name: functions.GPC
+      label: Gaussian Process Classification
+    - use: false
+      name: functions.CrossDecompostion
+      label: Cross Decomposition
+    - use: false
+      name: deep.NNM
+      label: Neural Networks Model         
 CLI:
   arguments:
     - name: ["-d", "--cdata"]
