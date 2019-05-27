@@ -51,7 +51,7 @@ class API(object):
         if validate_email(email):
             self.email = email
 
-        if not isinstance(name, str):
+        if name and not isinstance(name, str):
             raise TypeError('name should be a string')
         
         if api_key and not isinstance(api_key, str):
