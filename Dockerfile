@@ -48,7 +48,7 @@ WORKDIR /app
 ENV PYTHONPATH="/app/candis"
 
 # Expose port 5000
-EXPOSE 5000
+EXPOSE 5000 8888
 
 # Launch Candis
 CMD ["python3", "-m", "candis"]

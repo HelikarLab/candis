@@ -25,7 +25,9 @@ services:
     depends_on:
       - db
     volumes:
-      - .:/app      
+      - .:/app
+    ports:
+      - "8888:8888"      
   cache:
     <<: *defaults
     image: redis
