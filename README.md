@@ -123,6 +123,19 @@ via Python
 $ candis --cdata path/to/data.cdata --config path/to/config.json
 ```
 
+**Using the Jupyter Notebook from inside the docker container**
+* Entering the candis_app container
+
+```
+$ docker exec -it candis_app_1 bash
+```
+
+* Starting the jupyter notebook server inside the docker container
+
+```
+$ jupyter notebook --ip 0.0.0.0 --no-browser --allow-root
+```
+
 ### Features
 * Converting a CDATA to an **ARFF** file
 
