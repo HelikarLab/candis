@@ -36,6 +36,16 @@ RUN pip3 install setuptools wheel \
     && pip3 install numpy pyyaml \
     && pip3 install --no-binary javabridge -r /requirements.txt
 
+RUN groupadd -r app && useradd -r -m -g app app
+
+# Copy the R directory into the container
+COPY ./R /R
+
+# Run the setup.R script to install all the required R packages
+RUN cd /R \
+    && Rscript setup.R \
+    && cd ..
+
 # Create the app directory in the container
 RUN mkdir app
 
@@ -47,7 +57,7 @@ WORKDIR /app
 
 ENV PYTHONPATH="/app/candis"
 
-# Expose port 5000
+# Expose port 5000 and 8888
 EXPOSE 5000 8888
 
 # Launch Candis
