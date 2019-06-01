@@ -42,11 +42,11 @@ COPY ./requirements.txt  /requirements.txt
 # Install pip packages
 RUN pip3 install --upgrade pip \
 	&& echo "http://dl-8.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-	&& ln -s /usr/include/locale.h /usr/include/xlocale.h
-RUN pip3 install numpy pyyaml \
+	&& ln -s /usr/include/locale.h /usr/include/xlocale.h \ 
+    && pip3 install numpy pyyaml \
 	&& pip3 install setuptools wheel \
-	&& pip3 install javabridge 
-RUN pip3 install -r /requirements.txt \
+	&& pip3 install javabridge \
+    && pip3 install -r /requirements.txt \
 	&& rm /requirements.txt
 
 # Create the app directory in the container
