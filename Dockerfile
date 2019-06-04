@@ -1,14 +1,23 @@
+# Use node base image
 FROM node:latest
 ENV NODE_ENV=development
 
+# Create a working app directory
 RUN mkdir -p /app
 WORKDIR /app
 
-COPY . /app
+# Copy the package.json file into app directory to install the npm packages
+COPY ./package.json /app
 
+# Install all the npm packages
 RUN npm install
 
+# Copy all the files of the project into the app directory
+COPY . /app
+
+# Run the yarn run build script
 RUN yarn build 
+
 # Base image that is derived from alpine and has R installed as a shared library
 FROM achillesrasquinha/rpy2
 
@@ -52,7 +61,7 @@ COPY ./requirements.txt  /requirements.txt
 
 # Install pip packages
 RUN pip3 install --upgrade pip \
-	&& echo "http://dl-8.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+    && echo "http://dl-8.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
 	&& ln -s /usr/include/locale.h /usr/include/xlocale.h \ 
     && pip3 install numpy pyyaml \
 	&& pip3 install setuptools wheel \
@@ -69,8 +78,10 @@ VOLUME /app
 # Work in the app directory of the container
 WORKDIR /app
 
+# Use docker build args to copy the static asset files built previously into this container
 RUN rm -rf /app/candis/app/assets
 COPY --from=0  /app/candis/app/assets  /app/candis/app/assets
+
 # Export python path
 ENV PYTHONPATH="/app/candis"
 
