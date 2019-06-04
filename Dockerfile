@@ -1,3 +1,14 @@
+FROM node:latest
+ENV NODE_ENV=development
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY . /app
+
+RUN npm install
+
+RUN yarn build 
 # Base image that is derived from alpine and has R installed as a shared library
 FROM achillesrasquinha/rpy2
 
@@ -58,6 +69,8 @@ VOLUME /app
 # Work in the app directory of the container
 WORKDIR /app
 
+RUN rm -rf /app/candis/app/assets
+COPY --from=0  /app/candis/app/assets  /app/candis/app/assets
 # Export python path
 ENV PYTHONPATH="/app/candis"
 
