@@ -1,16 +1,15 @@
 # Use node base image
-FROM node:latest
+FROM node:latest AS build
 ENV NODE_ENV=development
 
 # Create a working app directory
-RUN mkdir -p /app
 WORKDIR /app
 
 # Copy the package.json file into app directory to install the npm packages
 COPY ./package.json /app
 
 # Install all the npm packages
-RUN npm install
+RUN yarn install --pure-lockfile
 
 # Copy all the files of the project into the app directory
 COPY . /app
@@ -45,11 +44,11 @@ RUN { \
 	echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
 	} > /usr/local/bin/docker-java-home \
 	&& chmod +x /usr/local/bin/docker-java-home
-ENV JAVA_HOME /usr/lib/jvm/java-1.8-openjdk
-ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin
 
-ENV JAVA_VERSION 8u212
-ENV JAVA_ALPINE_VERSION 8.212.04-r0
+ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
+    PATH=$PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin \
+    JAVA_VERSION=8u212 \
+    JAVA_ALPINE_VERSION=8.212.04-r0
 
 RUN set -x \
 	&& apk add --no-cache \
@@ -62,25 +61,22 @@ COPY ./requirements.txt  /requirements.txt
 # Install pip packages
 RUN pip3 install --upgrade pip \
     && echo "http://dl-8.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-	&& ln -s /usr/include/locale.h /usr/include/xlocale.h \ 
+    && ln -s /usr/include/locale.h /usr/include/xlocale.h \ 
     && pip3 install numpy pyyaml \
-	&& pip3 install setuptools wheel \
-	&& pip3 install javabridge \
+    && pip3 install setuptools wheel \
+    && pip3 install javabridge \
     && pip3 install -r /requirements.txt \
-	&& rm /requirements.txt
-
-# Create the app directory in the container
-RUN mkdir app
-
-# Change the app directory into volumes
-VOLUME /app
+    && rm /requirements.txt
 
 # Work in the app directory of the container
 WORKDIR /app
 
+# Change the app directory into volumes
+VOLUME /app
+
 # Use docker build args to copy the static asset files built previously into this container
 RUN rm -rf /app/candis/app/assets
-COPY --from=0  /app/candis/app/assets  /app/candis/app/assets
+COPY --from=build  /app/candis/app/assets  /app/candis/app/assets
 
 # Export python path
 ENV PYTHONPATH="/app/candis"
