@@ -9,13 +9,13 @@ WORKDIR /app
 COPY ./package.json /app
 
 # Install all the npm packages
-RUN yarn install && yarn upgrade
+RUN yarn install --pure-lockfile
 
 # Copy all the files of the project into the app directory
 COPY . /app
 
 # Run the yarn run build script
-RUN yarn build --pure-lockfile
+RUN yarn build
 
 # Base image that is derived from alpine and has R installed as a shared library
 FROM achillesrasquinha/rpy2
