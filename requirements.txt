@@ -54,7 +54,7 @@ mistune==0.8.3
 nbconvert==5.3.1
 nbformat==4.4.0
 notebook==5.4.0
-numpy==1.14.0
+numpy
 packaging==16.8
 # pandas==0.22.0
 pandas; python_version >= '3.5'
@@ -89,7 +89,7 @@ redis==2.10.6
 requests==2.18.4
 rpy2==2.9.2
 rq==0.10.0
-scipy==1.0.0
+scipy
 seaborn==0.8.1
 Send2Trash==1.5.0
 simplegeneric==0.8.1
