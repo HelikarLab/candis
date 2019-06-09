@@ -17,55 +17,51 @@ COPY . /app
 # Run the yarn run build script
 RUN yarn build
 
-# Base image that is derived from alpine and has R installed as a shared library
-FROM achillesrasquinha/rpy2
+# Use ubuntu as base image
+FROM  ubuntu:xenial
 
-# Add label for metadata
+# Add labels for metadata
 LABEL maintainer achillesrasquinha@gmail.com
 
 # Install dependencies
-RUN apk update \
-	&& apk --no-cache add \
-	build-base \
-	git \
-	python3-dev \
-	python3-tkinter \
-	graphviz-dev \
-	curl \
-	postgresql-dev \
-	freetype-dev \
-	openblas-dev 
+RUN apt-get update --fix-missing
+RUN apt-get install -y --no-install-recommends \
+                apt-transport-https \
+                gcc \
+                git \
+                python3-dev \ 
+                python3-pip \
+                python3-tk \
+                software-properties-common \ 
+                graphviz-dev \
+                wget
 
 # Install Java
-RUN { \
-	echo '#!/bin/sh'; \
-	echo 'set -e'; \
-	echo; \
-	echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
-	} > /usr/local/bin/docker-java-home \
-	&& chmod +x /usr/local/bin/docker-java-home
+RUN wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
+    apt-get update &&  apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
+    dpkg --install java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb
 
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk \
-    PATH=$PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin \
-    JAVA_VERSION=8u212 \
-    JAVA_ALPINE_VERSION=8.212.04-r0
+# Install R
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
+    && add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' \
+    && apt-get update \
+    && apt-get install -y r-base 
 
-RUN set -x \
-	&& apk add --no-cache \
-	openjdk8="$JAVA_ALPINE_VERSION" \
-	&& [ "$JAVA_HOME" = "$(docker-java-home)" ]
+# Copy the R directory into the container
+COPY ./R /R
+
+# Run setup.R script to install required R packages
+RUN cd /R \
+    && Rscript setup.R
 
 # Copy the pip requirements file into the container
 COPY ./requirements.txt  /requirements.txt
 
 # Install pip packages
 RUN pip3 install --upgrade pip \
-    && echo "http://dl-8.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
-    && ln -s /usr/include/locale.h /usr/include/xlocale.h \ 
-    && pip3 install numpy pyyaml \
-    && pip3 install setuptools wheel \
-    && pip3 install javabridge \
-    && pip3 install -r /requirements.txt \
+    && pip install setuptools wheel \
+    && pip install numpy pyyaml \
+    && pip install --no-binary javabridge -r /requirements.txt \
     && rm /requirements.txt
 
 # Work in the app directory of the container
