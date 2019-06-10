@@ -136,20 +136,60 @@ pipeline:
       name: trees.RandomForest
       label: Random Forest
     - use: false
-      name: functions.KRR
+      name: linear_model.LinearRegression
+      label: Linear Regression
+    - use: false
+      name: linear_model.Ridge
+      label: Ridge Regression
+    - use: false
+      name: linear_model.Lasso
+      label: Lasso
+    - use: false
+      name: linear_model.MultiTaskLasso
+      label: Multi-task Lasso
+    - use: false
+      name: linear_model.ElasticNet
+      label: Elastic-net
+    - use: false
+      name: linear_model.MultiTaskELasticNet
+      label: Multi-task Elastic-net
+    - use: false
+      name: linear_model.Lars
+      label: Least Angle Regression
+    - use: false
+      name: linear_model.LassoLars
+      label: LARS Lasso
+    - use: false
+      name: linear_model.OrthogonalMatchingPersuit
+      label: Orthogonal Matching Persuit
+    - use: false
+      name: linear_model.BayesianRidge
+      label: Bayesian Ridge Regression
+    - use: false
+      name: linear_model.LogisticRegression
+      label: Logistic Regression
+    - use: false
+      name: linear_model.Perceptron
+      label: Perceptron
+    - use: false
+      name: linear_model.HuberRegressor
+      label: Huber Regression
+    - use: false
+      name: linear_model.TheilSenRegressor
+      label: Theil-Sen Regression
+    - use: false
+      name: kernel_ridge.KernelRidge
       label: Kernel Ridge Regression
     - use: false
-      name: functions.SGD
-      label: Stochastic Gradient Descent
+      name: linear_model.SGDClassifier
+      label: Stochastic Gradient Descent Classification
     - use: false
-      name: functions.GPC
-      label: Gaussian Process Classification
-    - use: false
-      name: functions.CrossDecompostion
-      label: Cross Decomposition
-    - use: false
-      name: deep.NNM
-      label: Neural Networks Model         
+      name: linear_model.SGDRegression
+      label: Stochastic Gradient Descent Regression
+    
+       
+       
+
 CLI:
   arguments:
     - name: ["-d", "--cdata"]

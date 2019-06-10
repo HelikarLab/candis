@@ -42,33 +42,99 @@
     "desc": {}
   },
   {
+    "name": "Linear Regression",
+    "code": "lrn.sup.cls.lre",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Ridge Regression",
+    "code": "lrn.sup.cls.rre",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Lasso",
+    "code": "lrn.sup.cls.las",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Multi-Task Lasso",
+    "code": "lrn.sup.cls.mtl",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Elastic-Net",
+    "code": "lrn.sup.cls.eln",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Multi-Task Elastic-Net",
+    "code": "lrn.sup.cls.mte",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Least Angle Regression",
+    "code": "lrn.sup.cls.lar",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "LARS Lasso",
+    "code": "lrn.sup.cls.lal",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Orthogonal Matching Persuit",
+    "code": "lrn.sup.cls.omp",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Bayesian Ridge Regression",
+    "code": "lrn.sup.cls.brr",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Logistic Regression",
+    "code": "lrn.sup.cls.lor",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Huber Regression",
+    "code": "lrn.sup.cls.hre",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Theil-Sen Regression",
+    "code": "lrn.sup.cls.tsr",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
     "name": "Kernel Ridge Regression",
     "code": "lrn.sup.cls.krr",
+    "type": "Regression",
+    "desc": {}
+  },
+  {
+    "name": "Stochastic Gradient Descent Classification",
+    "code": "lrn.sup.cls.sgc",
     "type": "Classifier",
     "desc": {}
   },
   {
-    "name": "Stochastic Gradient Descent",
-    "code": "lrn.sup.cls.sgd",
-    "type": "Classifier",
-    "desc": {}
-  },
-  {
-    "name": "Gaussian Process Classification",
-    "code": "lrn.sup.cls.gpc",
-    "type": "Classifier",
-    "desc": {}
-  },
-  {
-    "name": "Cross Decomposition",
-    "code": "lrn.sup.cls.cde",
-    "type": "Classifier",
-    "desc": {}
-  },
-  {
-    "name": "Neural Networks Model",
-    "code": "lrn.sup.cls.nnm",
-    "type": "Classifier",
+    "name": "Stochastic Gradient Descent Regression",
+    "code": "lrn.sup.cls.sgr",
+    "type": "Regression",
     "desc": {}
   }
 ]
