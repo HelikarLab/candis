@@ -44,85 +44,85 @@
   {
     "name": "Linear Regression",
     "code": "lrn.sup.cls.lre",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Ridge Regression",
     "code": "lrn.sup.cls.rre",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Lasso",
     "code": "lrn.sup.cls.las",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Multi-Task Lasso",
     "code": "lrn.sup.cls.mtl",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Elastic-Net",
     "code": "lrn.sup.cls.eln",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Multi-Task Elastic-Net",
     "code": "lrn.sup.cls.mte",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Least Angle Regression",
     "code": "lrn.sup.cls.lar",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "LARS Lasso",
     "code": "lrn.sup.cls.lal",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Orthogonal Matching Persuit",
     "code": "lrn.sup.cls.omp",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Bayesian Ridge Regression",
     "code": "lrn.sup.cls.brr",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Logistic Regression",
     "code": "lrn.sup.cls.lor",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Huber Regression",
     "code": "lrn.sup.cls.hre",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Theil-Sen Regression",
     "code": "lrn.sup.cls.tsr",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
     "name": "Kernel Ridge Regression",
     "code": "lrn.sup.cls.krr",
-    "type": "Regression",
+    "type": "Regressor",
     "desc": {}
   },
   {
@@ -134,7 +134,97 @@
   {
     "name": "Stochastic Gradient Descent Regression",
     "code": "lrn.sup.cls.sgr",
-    "type": "Regression",
+    "type": "Regressor",
+    "desc": {}
+  },
+  {
+    "name": "Unsupervised Nearest Neighbors",
+    "code": "lrn.sup.cls.unn",
+    "type": "Algorithm",
+    "desc": {}
+  },
+  {
+    "name": "K-Neighbors Classification",
+    "code": "lrn.sup.cls.knc",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "Radius-based Neighbors Classification",
+    "code": "lrn.sup.cls.rnc",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "K-Neighbors Regression",
+    "code": "lrn.sup.cls.knr",
+    "type": "Regressor",
+    "desc": {}
+  },
+  {
+    "name": "Radius-based Neighbors Regression",
+    "code": "lrn.sup.cls.rnr",
+    "type": "Regressor",
+    "desc": {}
+  },
+  {
+    "name": "Gaussian Process Classification",
+    "code": "lrn.sup.cls.gpc",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "Gaussian Process Regression",
+    "code": "lrn.sup.cls.gpr",
+    "type": "Regressor",
+    "desc": {}
+  },
+  {
+    "name": "Cross Decomposition PLSRegression",
+    "code": "lrn.sup.cls.cdr",
+    "type": "Regressor",
+    "desc": {}
+  },
+  {
+    "name": "Cross Decomposition PLSCanonical",
+    "code": "lrn.sup.cls.cdc",
+    "type": "Canonical",
+    "desc": {}
+  },
+  {
+    "name": "Decision Tree Classification",
+    "code": "lrn.sup.cls.dtc",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "Decision Tree Regression",
+    "code": "lrn.sup.cls.dte",
+    "type": "Regressor",
+    "desc": {}
+  },
+  {
+    "name": "Label Propagation",
+    "code": "lrn.sup.cls.lpr",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "Label Spreading",
+    "code": "lrn.sup.cls.lsp",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "Multi-Layer Perceptron Classification",
+    "code": "lrn.sup.cls.mpc",
+    "type": "Classifier",
+    "desc": {}
+  },
+  {
+    "name": "Multi-Layer Perceptron Regression",
+    "code": "lrn.sup.cls.mpr",
+    "type": "Regressor",
     "desc": {}
   }
 ]

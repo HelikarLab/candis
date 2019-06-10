@@ -186,7 +186,52 @@ pipeline:
     - use: false
       name: linear_model.SGDRegression
       label: Stochastic Gradient Descent Regression
-    
+    - use: false
+      name: neighbors.NearestNeighbors
+      label: Unsupervised Nearest Neighbors
+    - use: false
+      name: neighbors.KNeighborsClassifier
+      label: K-Neighbors Classification
+    - use: false
+      name: neighbors.RadiusNeighborsClassifier
+      label: Radius-based Neighbors Classification
+    - use: false
+      name: neighbors.KNeighborsRegressor
+      label: K-Neighbors Regression
+    - use: false
+      name: neighbors.RadiusNeighborsRegressor
+      label: Radius-based Neighbors Regression      
+    - use: false
+      name: gaussian_process.GaussianProcessClassifier
+      label: Gaussian Process Classification
+    - use: false
+      name: gaussian_process.GaussianProcessRegressor
+      label: Gaussian Process Regression  
+    - use: false
+      name: cross_decompostion.PLSRegression
+      label: Cross Decomposition PLSRegression
+    - use: false
+      name: cross_decompostion.PLSCanonical
+      label: Cross Decomposition PLSCanonical   
+    - use: false
+      name: tree.DecisionTreeClassifier
+      label: Decision Tree Classification
+    - use: false
+      name: tree.DecisionTreeRegressor
+      label: Decision Tree Regression
+    - use: false
+      name: semi_supervised.LabelPropagation
+      label: Label Propagation
+    - use: false
+      name: semi_supervised.LabelSpreading
+      label: Label Spreading
+    - use: false
+      name: neural_network.MLPClassifier
+      label: Multi-Layer Perceptron Classification
+    - use: false
+      name: neural_network.MLPRegressor
+      label: Multi-Layer Perceptron Regression     
+      
        
        
 
