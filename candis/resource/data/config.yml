@@ -136,105 +136,166 @@ pipeline:
       name: trees.RandomForest
       label: Random Forest
     - use: false
-      name: linear_model.LinearRegression
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: LinearRegression
       label: Linear Regression
     - use: false
-      name: linear_model.Ridge
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: Ridge
       label: Ridge Regression
     - use: false
-      name: linear_model.Lasso
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: Lasso
       label: Lasso
     - use: false
-      name: linear_model.MultiTaskLasso
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: MultiTaskLasso
       label: Multi-task Lasso
     - use: false
-      name: linear_model.ElasticNet
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: ElasticNet
       label: Elastic-net
     - use: false
-      name: linear_model.MultiTaskELasticNet
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: MultiTaskELasticNet
       label: Multi-task Elastic-net
     - use: false
-      name: linear_model.Lars
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: Lars
       label: Least Angle Regression
     - use: false
-      name: linear_model.LassoLars
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: LassoLars
       label: LARS Lasso
     - use: false
-      name: linear_model.OrthogonalMatchingPersuit
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: OrthogonalMatchingPersuit
       label: Orthogonal Matching Persuit
     - use: false
-      name: linear_model.BayesianRidge
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: BayesianRidge
       label: Bayesian Ridge Regression
     - use: false
-      name: linear_model.LogisticRegression
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: LogisticRegression
       label: Logistic Regression
     - use: false
-      name: linear_model.Perceptron
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: Perceptron
       label: Perceptron
     - use: false
-      name: linear_model.HuberRegressor
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: HuberRegressor
       label: Huber Regression
     - use: false
-      name: linear_model.TheilSenRegressor
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: TheilSenRegressor
       label: Theil-Sen Regression
     - use: false
-      name: kernel_ridge.KernelRidge
+      engine: scikit-learn
+      importPath: sklearn.kernel_ridge
+      name: KernelRidge
       label: Kernel Ridge Regression
     - use: false
-      name: linear_model.SGDClassifier
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: SGDClassifier
       label: Stochastic Gradient Descent Classification
     - use: false
-      name: linear_model.SGDRegression
+      engine: scikit-learn
+      importPath: sklearn.linear_model
+      name: SGDRegression
       label: Stochastic Gradient Descent Regression
     - use: false
-      name: neighbors.NearestNeighbors
+      engine: scikit-learn
+      importPath: sklearn.neighbors
+      name: NearestNeighbors
       label: Unsupervised Nearest Neighbors
     - use: false
-      name: neighbors.KNeighborsClassifier
+      engine: scikit-learn
+      importPath: sklearn.neighbors
+      name: KNeighborsClassifier
       label: K-Neighbors Classification
     - use: false
-      name: neighbors.RadiusNeighborsClassifier
+      engine: scikit-learn
+      importPath: sklearn.neighbors
+      name: RadiusNeighborsClassifier
       label: Radius-based Neighbors Classification
     - use: false
-      name: neighbors.KNeighborsRegressor
+      engine: scikit-learn
+      importPath: sklearn.neighbors
+      name: KNeighborsRegressor
       label: K-Neighbors Regression
     - use: false
-      name: neighbors.RadiusNeighborsRegressor
+      engine: scikit-learn
+      importPath: sklearn.neighbors
+      name: RadiusNeighborsRegressor
       label: Radius-based Neighbors Regression      
     - use: false
-      name: gaussian_process.GaussianProcessClassifier
+      engine: scikit-learn
+      importPath: sklearn.gaussian_process
+      name: GaussianProcessClassifier
       label: Gaussian Process Classification
     - use: false
-      name: gaussian_process.GaussianProcessRegressor
+      engine: scikit-learn
+      importPath: sklearn.gaussian_process
+      name: GaussianProcessRegressor
       label: Gaussian Process Regression  
     - use: false
-      name: cross_decompostion.PLSRegression
+      engine: scikit-learn
+      importPath: sklearn.cross_decompostion
+      name: PLSRegression
       label: Cross Decomposition PLSRegression
     - use: false
-      name: cross_decompostion.PLSCanonical
+      engine: scikit-learn
+      importPath: sklearn.cross_decompostion
+      name: PLSCanonical
       label: Cross Decomposition PLSCanonical   
     - use: false
-      name: tree.DecisionTreeClassifier
+      engine: scikit-learn
+      importPath: sklearn.tree
+      name: DecisionTreeClassifier
       label: Decision Tree Classification
     - use: false
-      name: tree.DecisionTreeRegressor
+      engine: scikit-learn
+      importPath: sklearn.tree
+      name: DecisionTreeRegressor
       label: Decision Tree Regression
     - use: false
-      name: semi_supervised.LabelPropagation
+      engine: scikit-learn
+      importPath: sklearn.semi_supervised
+      name: LabelPropagation
       label: Label Propagation
     - use: false
-      name: semi_supervised.LabelSpreading
+      engine: scikit-learn
+      importPath: sklearn.semi_supervised
+      name: LabelSpreading
       label: Label Spreading
     - use: false
-      name: neural_network.MLPClassifier
+      engine: scikit-learn
+      importPath: sklearn.neural_network
+      name: MLPClassifier
       label: Multi-Layer Perceptron Classification
     - use: false
-      name: neural_network.MLPRegressor
-      label: Multi-Layer Perceptron Regression     
+      engine: scikit-learn
+      importPath: sklearn.neural_network
+      name: MLPRegressor
+      label: Multi-Layer Perceptron Regression
       
-       
-       
-
 CLI:
   arguments:
     - name: ["-d", "--cdata"]
