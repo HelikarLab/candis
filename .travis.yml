@@ -21,7 +21,7 @@ install:
     - docker-compose up -d
     - docker-compose exec app sh -c "apt-get update && apt-get install -y netcat curl"
     - docker-compose exec app sh -c "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -"
-    - docker-compose exec app bash -c "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | tee /etc/apt/sources.list.d/yarn.list"
+    - docker-compose exec app sh -c "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | tee /etc/apt/sources.list.d/yarn.list"
     - docker-compose exec app sh -c "apt-get update -qq && apt-get install -y yarn"
     - docker-compose exec proxy sh -c "apt-get update && apt-get install -y curl"
 

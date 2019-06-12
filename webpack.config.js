@@ -1,17 +1,17 @@
-var path           = require('path')
-,   webpack        = require('webpack')
-,   UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-,   Jarvis         = require('webpack-jarvis');
+var path = require('path')
+  , webpack = require('webpack')
+  , UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+  , Jarvis = require('webpack-jarvis');
 
 require('dotenv').config()
 
-var paths          = { };
-paths.BASE         = path.join(__dirname, 'candis', 'app');
-paths.APP          = path.join(paths.BASE, 'client', 'app');
+var paths = {};
+paths.BASE = path.join(__dirname, 'candis', 'app');
+paths.APP = path.join(paths.BASE, 'client', 'app');
 
-var config         = require(path.join(paths.APP, 'config'));
+var config = require(path.join(paths.APP, 'config'));
 
-module.exports     = {
+module.exports = {
   entry: [
     path.join(paths.APP, 'Client.jsx'),
     path.join(paths.APP, 'plugins.js')
@@ -21,16 +21,18 @@ module.exports     = {
     filename: 'bundle.min.js',
     publicPath: 'http://' + config.host + ':' + config.port
   },
+  devServer: {
+    port: 9000,
+    proxy: {
+      '/api': '0.0.0.0:5000',
+    }
+  },
   module: {
     rules: [
       {
-           test: /\.(js|jsx)$/,
-         loader: 'babel-loader',
+        test: /\.(js|jsx)$/,
+        loader: 'babel-loader',
         exclude: /(node_modules)/
-      },
-      {
-          test: /\.json$/,
-        loader: 'json-loader'
       }
     ]
   },
@@ -39,9 +41,9 @@ module.exports     = {
       // debug plugins go here.
       new Jarvis(),
       new webpack.DefinePlugin({
-      	'process.env': {
-		'NODE_ENV': JSON.stringify('development')
-      	}
+        'process.env': {
+          'NODE_ENV': JSON.stringify('development')
+        }
       })
     ]
     :

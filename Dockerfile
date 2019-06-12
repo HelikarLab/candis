@@ -15,7 +15,7 @@ RUN yarn install --pure-lockfile
 COPY . /app
 
 # Run the yarn run build script
-RUN yarn build
+CMD ["yarn", "build"]
 
 # Use ubuntu as base image
 FROM  ubuntu:xenial
@@ -24,17 +24,17 @@ FROM  ubuntu:xenial
 LABEL maintainer achillesrasquinha@gmail.com
 
 # Install dependencies
-RUN apt-get update --fix-missing
-RUN apt-get install -y --no-install-recommends \
-                apt-transport-https \
-                gcc \
-                git \
-                python3-dev \ 
-                python3-pip \
-                python3-tk \
-                software-properties-common \ 
-                graphviz-dev \
-                wget
+RUN apt-get update --fix-missing \
+    && apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    gcc \
+    git \
+    python3-dev \ 
+    python3-pip \
+    python3-tk \
+    software-properties-common \ 
+    graphviz-dev \
+    wget
 
 # Install Java
 RUN wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
