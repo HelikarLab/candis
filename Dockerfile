@@ -35,7 +35,6 @@ COPY ./requirements.txt  /requirements.txt
 # Run setup.R script to install required R packages
 RUN cd /R \
     && Rscript setup.R \
-    && rm -rf /R \
 # Install pip packages
     && python3 -m pip install --upgrade pip \
     && pip3 install setuptools wheel \
