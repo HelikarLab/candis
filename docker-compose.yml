@@ -13,7 +13,9 @@ services:
       - "5432"
   app:
     <<: *defaults
-    build: .
+    build:
+      context: .
+      dockerfile: ./compose/development/flask/Dockerfile     
     environment:
       CANDIS_DATABASE_HOST: db
       CANDIS_CACHE_HOST: cache
