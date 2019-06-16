@@ -23,6 +23,7 @@ services:
       - db
       - cache
       - proxy
+      - node
 
     depends_on:
       - db
@@ -49,6 +50,23 @@ services:
     networks:
       - proxy
 
+  node:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./compose/development/node/Dockerfile 
+    
+    depends_on:
+      - app
+    ports:
+      - "9000:9000"
+      - "1337:1337"
+    networks:
+      - node
+    environment:
+      NODE_ENV: "development"
+      NODE_PORT: 9000
+
 networks:
   db:
     driver: bridge
@@ -56,3 +74,5 @@ networks:
     driver: bridge
   proxy:
     driver: bridge 
+  node:
+    driver: bridge   
