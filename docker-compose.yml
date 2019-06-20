@@ -19,11 +19,13 @@ services:
     environment:
       CANDIS_DATABASE_HOST: db
       CANDIS_CACHE_HOST: cache
+      NODE_ENV: "development"
+      NODE_PORT: 9000
+
     networks:
       - db
       - cache
       - proxy
-      - node
 
     depends_on:
       - db
@@ -32,6 +34,8 @@ services:
     ports:
       - "5000:5000"
       - "8888:8888"
+      - "1337:1337"
+      - "9000:9000"
         
   cache:
     <<: *defaults
@@ -50,29 +54,10 @@ services:
     networks:
       - proxy
 
-  node:
-    <<: *defaults
-    build:
-      context: .
-      dockerfile: ./compose/development/node/Dockerfile 
-    
-    depends_on:
-      - app
-    ports:
-      - "9000:9000"
-      - "1337:1337"
-    networks:
-      - node
-    environment:
-      NODE_ENV: "development"
-      NODE_PORT: 9000
-
 networks:
   db:
     driver: bridge
   cache:
     driver: bridge
   proxy:
-    driver: bridge 
-  node:
     driver: bridge   
