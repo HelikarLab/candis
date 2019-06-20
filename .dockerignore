@@ -2,6 +2,5 @@
 .github
 .gitignore
 .travis.yml
-.dockerignore
 LICENSE
-
+node_modules
