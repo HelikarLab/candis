@@ -13,7 +13,9 @@ services:
       - "5432"
   app:
     <<: *defaults
-    build: .
+    build:
+      context: .
+      dockerfile: ./compose/development/app/Dockerfile
     environment:
       CANDIS_DATABASE_HOST: db
       CANDIS_CACHE_HOST: cache
@@ -21,13 +23,17 @@ services:
       - db
       - cache
       - proxy
-
+    
     depends_on:
       - db
     volumes:
-      - .:/app
+      - ./CRES:/app/CRES
+      - ./candis:/app/candis
+      - /app/node_modules
     ports:
-      - "8888:8888"      
+      - "5000:5000"
+      - "8888:8888"
+        
   cache:
     <<: *defaults
     image: redis

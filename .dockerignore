@@ -1,0 +1,6 @@
+.git/
+.github/
+.gitignore
+LICENSE
+node_modules/
+.travis.yml

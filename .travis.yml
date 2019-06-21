@@ -19,7 +19,7 @@ services:
 install:
     - docker-compose build
     - docker-compose up -d
-    - docker-compose exec app sh -c "apk update && apk add netcat-openbsd"
+    - docker-compose exec app sh -c "apt-get update && apt-get install -y netcat"
     - docker-compose exec proxy sh -c "apt-get update && apt-get install -y curl"
 
 script:
