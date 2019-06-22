@@ -65,6 +65,9 @@ RUN yarn install
 # Copy the files from the working directory into the container
 COPY . /app
 
+# Build the static assets inside the container  
+RUN yarn build 
+
 # Export python path
 ENV PYTHONPATH="/app/candis"
 
