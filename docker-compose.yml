@@ -26,9 +26,10 @@ services:
     
     depends_on:
       - db
+      - cache
+      
     volumes:
-      - ./CRES:/app/CRES
-      - ./candis:/app/candis
+      - .:/app
       - /app/node_modules
     ports:
       - "5000:5000"

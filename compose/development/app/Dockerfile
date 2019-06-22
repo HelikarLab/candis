@@ -4,18 +4,6 @@ FROM  ubuntu:xenial
 # Add labels for metadata
 LABEL maintainer="achillesrasquinha@gmail.com"
 
-# Work in the app directory of the container
-WORKDIR /app
-
-# Copy the R directory into the container
-COPY ./R /app/R
-
-# Copy the pip requirements file into the container
-COPY ./requirements.txt  /app/requirements.txt
-
-# Copy the package.json
-COPY ./package.json /app/package.json
-
 # Install dependencies
 RUN apt-get update --fix-missing \
     && apt-get install -y --no-install-recommends \
@@ -40,24 +28,39 @@ RUN apt-get update --fix-missing \
     && add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' \
     && apt-get update \
     && apt-get install -y r-base \
-# Run setup.R script to install required R packages
-    && cd /app/R \
-    && Rscript setup.R \
-    && cd .. \
-# Install pip packages
-    && python3 -m pip install --upgrade pip \
-    && pip3 install setuptools wheel \
-    && pip3 install numpy pyyaml \
-    && pip3 install --no-binary javabridge -r ./requirements.txt \
 # Install yarn and nodejs inside the container
     && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y nodejs \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update -qq \ 
-    && apt-get install -y yarn \
-# Install the npm packages    
-    && yarn install
+    && apt-get install -y yarn
+
+# Work in the app directory of the container
+WORKDIR /app
+
+# Copy the R directory into the container
+COPY ./R /app/R
+
+# Run setup.R script to install required R packages
+RUN cd /app/R \
+    && Rscript setup.R \
+    && cd ..
+
+# Copy the pip requirements file into the container
+COPY ./requirements.txt  /app/requirements.txt
+
+# Install pip packages
+RUN python3 -m pip install --upgrade pip \
+    && pip3 install setuptools wheel \
+    && pip3 install numpy pyyaml \
+    && pip3 install --no-binary javabridge -r ./requirements.txt
+
+# Copy the package.json
+COPY ./package.json /app/package.json
+
+# Install the npm packages
+RUN yarn install
 
 # Copy the files from the working directory into the container
 COPY . /app
