@@ -54,7 +54,8 @@ COPY ./requirements.txt  /app/requirements.txt
 RUN python3 -m pip install --upgrade pip \
     && pip3 install setuptools wheel \
     && pip3 install numpy pyyaml \
-    && pip3 install --no-binary javabridge -r ./requirements.txt
+    && pip3 install --no-binary javabridge -r ./requirements.txt \
+    && pip3 install --upgrade supervisor
 
 # Copy the package.json
 COPY ./package.json /app/package.json
@@ -65,14 +66,11 @@ RUN yarn install
 # Copy the files from the working directory into the container
 COPY . /app
 
-# Build the static assets inside the container  
-RUN yarn build 
-
 # Export python path
 ENV PYTHONPATH="/app/candis"
 
 # Expose port 5000 and 8888
 EXPOSE 5000 8888
 
-# Launch Candis server
-CMD ["python3", "-m", "candis"]
+# Launch Candis server and Node webpack server
+CMD ["supervisord", "-c", "./compose/development/app/supervisord.conf"]

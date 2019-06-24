@@ -7,6 +7,7 @@ node_modules
 # Logs
 npm-debug.log
 yarn-error.log
+supervisord.log
 
 # Cache
 .sass-cache
@@ -15,6 +16,7 @@ yarn-error.log
 CRES
 snippet
 .DS_Store
+supervisord.pid
 
 # Python
 __pycache__
