@@ -1,0 +1,21 @@
+{
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/__pycache__": true,
+        "**/*.egg-info": true,
+        ".pytest_cache": true,
+        "*.coverage": true,
+        "*.coverage.*": true,
+        "requirements*.txt": true,
+        "**/.tox": true,
+        ".venv": true,
+        "**/build": true,
+        "dist": true,
+        "htmlcov": true,
+    },
+    "editor.rulers": [78],
+    "editor.fontFamily": "Consolas, Menlo",
+    "editor.tabSize": 4,
+    "python.pythonPath": ".venv/bin/python",
+    "python.linting.pylintPath": "${workspaceFolder}/.venv/bin/pylint"
+}

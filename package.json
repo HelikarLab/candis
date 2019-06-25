@@ -7,13 +7,13 @@
     "doc": "docs"
   },
   "scripts": {
-    "sass": "node-sass candis/app/client/styles/App.scss candis/app/assets/css/styles.min.css --sourcemap=none --output-style compressed",
-    "sass.watch": "node-sass --watch candis/app/client/styles/App.scss candis/app/assets/css/styles.min.css --sourcemap=none --output-style compressed",
-    "webpack": "webpack",
-    "webpack.watch": "webpack --watch",
+    "sass": "$(yarn bin)/node-sass src/candis/app/client/styles/App.scss src/candis/app/assets/css/styles.min.css --sourcemap=none --output-style compressed",
+    "sass-watch": "$(yarn bin)/node-sass --watch src/candis/app/client/styles/App.scss src/candis/app/assets/css/styles.min.css --sourcemap=none --output-style compressed",
+    "webpack": "$(yarn bin)/webpack",
+    "webpack-watch": "$(yarn bin)/webpack --watch",
     "build": "yarn run webpack && yarn run sass",
-    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
-    "test": "jest"
+    "start:development": "$(yarn bin)/concurrently --kill-others \"yarn run sass-watch\" \"yarn run webpack-watch\"",
+    "test": "$(yarn bin)/jest"
   },
   "repository": {
     "type": "git",
@@ -43,8 +43,7 @@
     "nprogress": "^0.2.0",
     "react-hot-loader": "^3.1.3",
     "uglifyjs-webpack-plugin": "^1.3.0",
-    "webpack": "^3.12.0",
-    "webpack-jarvis": "^0.1.1"
+    "webpack": "^3.12.0"
   },
   "dependencies": {
     "axios": "^0.17.1",

@@ -1,12 +1,11 @@
 var path           = require('path')
 ,   webpack        = require('webpack')
-,   UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-,   Jarvis         = require('webpack-jarvis');
+,   UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 require('dotenv').config()
 
 var paths          = { };
-paths.BASE         = path.join(__dirname, 'candis', 'app');
+paths.BASE         = path.join(__dirname, 'src', 'candis', 'app');
 paths.APP          = path.join(paths.BASE, 'client', 'app');
 
 var config         = require(path.join(paths.APP, 'config'));
@@ -34,10 +33,9 @@ module.exports     = {
       }
     ]
   },
-  plugins: process.env.ENV === 'development' ?
+  plugins: process.env.NODE_ENV === 'development' ?
     [
       // debug plugins go here.
-      new Jarvis(),
       new webpack.DefinePlugin({
       	'process.env': {
 		'NODE_ENV': JSON.stringify('development')
