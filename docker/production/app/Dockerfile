@@ -12,8 +12,7 @@ RUN yarn install --pure-lockfile
 
 COPY . /app
 
-RUN python3 -B -m /app/builder \
-    && yarn build
+RUN yarn build
 
 FROM  debian:stretch-slim
 

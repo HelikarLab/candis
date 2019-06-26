@@ -152,6 +152,30 @@ $ docker-compose exec app jupyter notebook --ip 0.0.0.0 --no-browser --allow-roo
 	...     # do something while pipeline is running
 	```
 
+### Docker
+
+For Development
+
+```
+$ ./manage up -d --build
+```
+
+For Production
+
+```
+$ CANDIS_ENVIRONMENT=production ./manage up -d --build
+```
+
+# Other Commands
+
+```
+$ ./manage [service] [command]
+
+$ ./manage db backup			 		# Backup the database
+$ ./manage db restore /path/to/backup	# Restore a snapshot
+$ ./manage db backups 				 	# List all backups
+```
+
 ### Dependencies
 * Production Dependencies
 	* R

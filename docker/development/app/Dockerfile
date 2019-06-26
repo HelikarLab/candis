@@ -61,7 +61,6 @@ RUN pip3 install --no-binary javabridge -r /app/requirements-dev.txt
 COPY . /app
 
 RUN pip3 install -e /app \
-    && python3 -B -m /app/builder \
     && yarn build
 
 COPY ./docker/development/app/_processes /_processes
