@@ -1,4 +1,7 @@
-FROM  node:stretch-slim AS build
+FROM  node:alpine AS build
+
+RUN apk add --update --no-cache \
+        python3
 
 WORKDIR /app
 
@@ -9,7 +12,8 @@ RUN yarn install --pure-lockfile
 
 COPY . /app
 
-RUN yarn build
+RUN python3 -B -m /app/builder \
+    && yarn build
 
 FROM  debian:stretch-slim
 
