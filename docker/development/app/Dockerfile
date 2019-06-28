@@ -18,17 +18,17 @@ RUN apt-get update --fix-missing \
     software-properties-common \ 
     graphviz-dev \
     wget \
-# Install Java
+    # Install Java
     && wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
     apt-get update &&  apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
     dpkg --install java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb \
     && rm -rf java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb \
-# Install R
+    # Install R
     && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
     && add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' \
     && apt-get update \
     && apt-get install -y r-base \
-# Install yarn and nodejs inside the container
+    # Install yarn and nodejs inside the container
     && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
     && apt-get install -y nodejs \
     && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
@@ -72,5 +72,5 @@ ENV PYTHONPATH="/app/candis"
 # Expose port 5000 and 8888
 EXPOSE 5000 8888
 
-# Launch Candis server and Node webpack server
-CMD ["supervisord", "-c", "./compose/development/app/supervisord.conf"]
+# Launch Candis server
+CMD ["python3", "-m", "candis"]

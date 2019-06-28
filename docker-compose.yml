@@ -15,7 +15,7 @@ services:
     <<: *defaults
     build:
       context: .
-      dockerfile: ./compose/development/app/Dockerfile
+      dockerfile: ./docker/development/app/Dockerfile
     environment:
       CANDIS_DATABASE_HOST: db
       CANDIS_CACHE_HOST: cache
