@@ -21,9 +21,9 @@ RUN apt-get update \
     python3-dev \
     python3-pip \
     python3-tk \
-    graphviz-dev 
-
-RUN echo "Installing R..." \
+    graphviz-dev \
+    \
+    && echo "Installing R..." \
     && mkdir -p ~/.gnupg \
     && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
     && apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
@@ -37,7 +37,6 @@ RUN echo "Installing R..." \
     && echo "Removing intermediate dependencies..." \
     && apt-get remove -y --purge \
     dirmngr \
-    #apt-transport-https \
     software-properties-common \
     \
     && echo "Removing cache..." \

@@ -4,6 +4,7 @@ x-defaults: &defaults
   restart: unless-stopped
 
 services:
+  
   db:
     <<: *defaults
     image: postgres
@@ -11,6 +12,7 @@ services:
       - db
     expose:
       - "5432"
+
   app:
     <<: *defaults
     build:
@@ -21,14 +23,13 @@ services:
     networks:
       - db
       - cache
-      - proxy
     depends_on:
       - db
       - cache
     env_file:
       - ./.envs/.development/.app   
     volumes:
-      #- .:/app
+      - .:/app
       - development_node_modules:/app/node_modules
       - development_candis_resources:/app/CRES
       - development_candis_data:/app/candisDATA
@@ -41,17 +42,6 @@ services:
     image: redis
     networks:
       - cache
-  proxy:
-    <<: *defaults
-    image: nginx
-    depends_on:
-      - app
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - "4000:80"
-    networks:
-      - proxy
 
 volumes:  
   development_node_modules: { }
@@ -63,5 +53,3 @@ networks:
     driver: bridge
   cache:
     driver: bridge
-  proxy:
-    driver: bridge 
