@@ -19,14 +19,12 @@ services:
 install:
     - docker-compose build
     - docker-compose up -d
-    - docker-compose exec app sh -c "apt-get update && apt-get install -y netcat"
-    - docker-compose exec proxy sh -c "apt-get update && apt-get install -y curl"
+    - docker-compose exec app sh -c "apt-get update && apt-get install -y netcat curl"
 
 script:
     - docker-compose exec app sh -c "nc -vz cache 6379"
     - docker-compose exec app sh -c "nc -vz db 5432"
-    - docker-compose exec app sh -c "nc -vz proxy 80"
-    - docker-compose exec proxy sh -c "curl localhost/api/ping"  
+    - docker-compose exec app sh -c "curl localhost:5000/api/ping"  
 
 after_script:
     - docker-compose stop
