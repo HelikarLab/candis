@@ -12,7 +12,7 @@
     "webpack": "webpack",
     "webpack.watch": "webpack --watch",
     "build": "yarn run webpack && yarn run sass",
-    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
+    "start:development": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
     "test": "jest"
   },
   "repository": {

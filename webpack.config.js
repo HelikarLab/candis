@@ -33,7 +33,7 @@ module.exports = {
       }
     ]
   },
-  plugins: process.env.ENV === 'development' ?
+  plugins: process.env.NODE_ENV === 'development' ?
     [
       // debug plugins go here.
       new webpack.DefinePlugin({

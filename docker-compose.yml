@@ -16,21 +16,22 @@ services:
     build:
       context: .
       dockerfile: ./docker/development/app/Dockerfile
-    environment:
-      CANDIS_DATABASE_HOST: db
-      CANDIS_CACHE_HOST: cache
+    image: candis-app:development
+    container_name: development_candis_app  
     networks:
       - db
       - cache
       - proxy
-    
     depends_on:
       - db
       - cache
-      
+    env_file:
+      - ./.envs/.development/.app   
     volumes:
-      - .:/app
-      - /app/node_modules
+      #- .:/app
+      - development_node_modules:/app/node_modules
+      - development_candis_resources:/app/CRES
+      - development_candis_data:/app/candisDATA
     ports:
       - "5000:5000"
       - "8888:8888"
@@ -52,6 +53,11 @@ services:
     networks:
       - proxy
 
+volumes:  
+  development_node_modules: { }
+  development_candis_resources: { }
+  development_candis_data: { }
+  
 networks:
   db:
     driver: bridge

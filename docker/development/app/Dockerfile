@@ -1,43 +1,47 @@
 # Use ubuntu as base image
-FROM  ubuntu:xenial
+FROM node:stretch-slim
 
 # Add labels for metadata
 LABEL maintainer="achillesrasquinha@gmail.com"
 
-# Install dependencies
-RUN apt-get update --fix-missing \
-    && apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    gcc \
-    git \
-    python3-dev \
-    curl \
-    bash \
-    python3-pip \
-    python3-tk \
-    software-properties-common \ 
-    graphviz-dev \
-    wget \
-    # Install Java
-    && wget https://d3pxv6yz143wms.cloudfront.net/8.212.04.2/java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb && \
-    apt-get update &&  apt-get install java-common && apt-get install -y --no-install-recommends apt-utils && \
-    dpkg --install java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb \
-    && rm -rf java-1.8.0-amazon-corretto-jdk_8.212.04-2_amd64.deb \
-    # Install R
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 \
-    && add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/' \
-    && apt-get update \
-    && apt-get install -y r-base \
-    # Install yarn and nodejs inside the container
-    && curl -sL https://deb.nodesource.com/setup_10.x | bash - \
-    && apt-get install -y nodejs \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update -qq \ 
-    && apt-get install -y yarn
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=true
 
 # Work in the app directory of the container
 WORKDIR /app
+
+RUN apt-get update \
+    \
+    && echo "Installing dependencies..." \
+    && apt-get install -y --no-install-recommends \
+    bash \
+    procps \
+    dirmngr \
+    apt-transport-https \
+    software-properties-common \
+    python3-dev \
+    python3-pip \
+    python3-tk \
+    graphviz-dev 
+
+RUN echo "Installing R..." \
+    && mkdir -p ~/.gnupg \
+    && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
+    && apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
+    && add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' \
+    && apt-get update \
+    && apt-get install -y r-base \
+    \
+    && echo "Installing Java..." \
+    && mkdir -p /usr/share/man/man1 \
+    && apt-get install -y --no-install-recommends openjdk-8-jdk \
+    && echo "Removing intermediate dependencies..." \
+    && apt-get remove -y --purge \
+    dirmngr \
+    #apt-transport-https \
+    software-properties-common \
+    \
+    && echo "Removing cache..." \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy the R directory into the container
 COPY ./R /app/R
@@ -48,29 +52,38 @@ RUN cd /app/R \
     && cd ..
 
 # Copy the pip requirements file into the container
-COPY ./requirements.txt  /app/requirements.txt
+COPY ./requirements.txt  /app/requirements.txt  
 
 # Install pip packages
 RUN python3 -m pip install --upgrade pip \
     && pip3 install setuptools wheel \
-    && pip3 install numpy pyyaml \
-    && pip3 install --no-binary javabridge -r ./requirements.txt \
-    && pip3 install --upgrade supervisor
+    && pip3 install numpy pyyaml   \
+    && pip3 install --no-binary javabridge -r ./requirements.txt
 
-# Copy the package.json
 COPY ./package.json /app/package.json
+COPY ./yarn.lock    /app/yarn.lock
 
-# Install the npm packages
-RUN yarn install
+RUN yarn install --pure-lockfile
 
 # Copy the files from the working directory into the container
 COPY . /app
 
-# Export python path
-ENV PYTHONPATH="/app/candis"
+RUN pip3 install -e /app \
+    && yarn build
+
+COPY ./docker/development/app/_processes /_processes
+
+RUN chmod +x /_processes/* \
+    && mv /_processes/* /usr/local/bin \
+    && rmdir /_processes
+
+COPY ./docker/development/app/start /start
+
+RUN sed -i -e 's/\r$//' /start \
+    && chmod +x /start
 
 # Expose port 5000 and 8888
 EXPOSE 5000 8888
 
 # Launch Candis server
-CMD ["python3", "-m", "candis"]
+CMD ["/start"]
