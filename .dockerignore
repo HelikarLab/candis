@@ -41,7 +41,6 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -252,9 +251,3 @@ Temporary Items
 .apdisk
 
 # End of https://www.gitignore.io/api/macos
-
-src/candis/app/assets/css/styles.min.css
-src/candis/app/assets/js/bundle.min.js
-candisDATA
-CRES
-node_modules

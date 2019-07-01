@@ -12,7 +12,7 @@
     "webpack": "webpack",
     "webpack.watch": "webpack --watch",
     "build": "yarn run webpack && yarn run sass",
-    "start": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
+    "start:development": "concurrently --kill-others \"yarn run sass.watch\" \"yarn run webpack.watch\"",
     "test": "jest"
   },
   "repository": {
@@ -43,8 +43,7 @@
     "nprogress": "^0.2.0",
     "react-hot-loader": "^3.1.3",
     "uglifyjs-webpack-plugin": "^1.3.0",
-    "webpack": "^3.12.0",
-    "webpack-jarvis": "^0.1.1"
+    "webpack": "^3.12.0"
   },
   "dependencies": {
     "axios": "^0.17.1",

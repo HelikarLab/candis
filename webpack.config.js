@@ -1,17 +1,16 @@
-var path           = require('path')
-,   webpack        = require('webpack')
-,   UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-,   Jarvis         = require('webpack-jarvis');
+var path = require('path')
+  , webpack = require('webpack')
+  , UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 require('dotenv').config()
 
-var paths          = { };
-paths.BASE         = path.join(__dirname, 'candis', 'app');
-paths.APP          = path.join(paths.BASE, 'client', 'app');
+var paths = {};
+paths.BASE = path.join(__dirname, 'candis', 'app');
+paths.APP = path.join(paths.BASE, 'client', 'app');
 
-var config         = require(path.join(paths.APP, 'config'));
+var config = require(path.join(paths.APP, 'config'));
 
-module.exports     = {
+module.exports = {
   entry: [
     path.join(paths.APP, 'Client.jsx'),
     path.join(paths.APP, 'plugins.js')
@@ -24,24 +23,23 @@ module.exports     = {
   module: {
     rules: [
       {
-           test: /\.(js|jsx)$/,
-         loader: 'babel-loader',
+        test: /\.(js|jsx)$/,
+        loader: 'babel-loader',
         exclude: /(node_modules)/
       },
       {
-          test: /\.json$/,
+        test: /\.json$/,
         loader: 'json-loader'
       }
     ]
   },
-  plugins: process.env.ENV === 'development' ?
+  plugins: process.env.NODE_ENV === 'development' ?
     [
       // debug plugins go here.
-      new Jarvis(),
       new webpack.DefinePlugin({
-      	'process.env': {
-		'NODE_ENV': JSON.stringify('development')
-      	}
+        'process.env': {
+          'NODE_ENV': JSON.stringify('development')
+        }
       })
     ]
     :
