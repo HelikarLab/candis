@@ -17,8 +17,7 @@ services:
     - docker
 
 install:
-    - docker-compose build
-    - docker-compose up -d
+    - docker-compose -f docker-compose.production.yml up --build
     - docker-compose exec app sh -c "apt-get update && apt-get install -y netcat curl"
 
 script:
