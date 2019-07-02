@@ -5,14 +5,6 @@ x-defaults: &defaults
 
 services:
   
-  db:
-    <<: *defaults
-    image: postgres
-    networks:
-      - db
-    expose:
-      - "5432"
-
   app:
     <<: *defaults
     build:
@@ -36,14 +28,36 @@ services:
     ports:
       - "5000:5000"
       - "8888:8888"
-        
+  
+  db:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./docker/base/db/Dockerfile
+    image: candis-db
+    container_name: development_candis_db 
+    networks:
+      - db
+    volumes:
+      - development_db_data:/var/lib/postgresql/data
+      - development_db_backups:/backups
+    env_file:
+      - ./.envs/.development/.db
+
   cache:
     <<: *defaults
-    image: redis
+     build:
+      context: .
+      dockerfile: ./docker/base/cache/Dockerfile
+    image: candis-cache
+    container_name: development_candis_cache
     networks:
       - cache
 
-volumes:  
+volumes: 
+  development_db_data: {  }
+  development_db_backups: { }
+
   development_node_modules: { }
   development_candis_resources: { }
   development_candis_data: { }
