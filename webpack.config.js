@@ -5,7 +5,7 @@ var path = require('path')
 require('dotenv').config()
 
 var paths = {};
-paths.BASE = path.join(__dirname, 'candis', 'app');
+paths.BASE = path.join(__dirname, 'src', 'candis', 'app');
 paths.APP = path.join(paths.BASE, 'client', 'app');
 
 var config = require(path.join(paths.APP, 'config'));
