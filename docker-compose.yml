@@ -46,7 +46,7 @@ services:
 
   cache:
     <<: *defaults
-     build:
+    build:
       context: .
       dockerfile: ./docker/base/cache/Dockerfile
     image: candis-cache
