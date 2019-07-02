@@ -37,6 +37,7 @@ RUN apt-get update --fix-missing \
     python3-tk \
     gnupg2 \
     graphviz-dev \
+    build-essential \
     # Install Java
     && mkdir -p /usr/share/man/man1 \
     && apt-get install -y --no-install-recommends openjdk-8-jdk \
