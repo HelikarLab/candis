@@ -51,13 +51,13 @@ RUN cd /app/R \
     && cd ..
 
 # Copy the pip requirements file into the container
-COPY ./requirements.txt  /app/requirements.txt  
+COPY ./requirements-dev.txt  /app/requirements-dev.txt  
 
 # Install pip packages
 RUN python3 -m pip install --upgrade pip \
     && pip3 install setuptools wheel \
     && pip3 install numpy pyyaml   \
-    && pip3 install --no-binary javabridge -r ./requirements.txt
+    && pip3 install --no-binary javabridge -r ./requirements-dev.txt
 
 COPY ./package.json /app/package.json
 COPY ./yarn.lock    /app/yarn.lock

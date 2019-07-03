@@ -17,7 +17,7 @@ else
 fi
 
 # Build requirements...
-find ${basedir}/requirements -maxdepth 1 -type f | xargs awk '{print}' > ${basedir}/requirements.txt
+find ${basedir}/requirements -maxdepth 1 -type f | xargs awk '{print}' > ${basedir}/requirements-dev.txt
 cat ${basedir}/requirements/production.txt > ${basedir}/requirements.txt
 
 if [[ "$1" == "install" ]]; then
