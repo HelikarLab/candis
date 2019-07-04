@@ -21,14 +21,13 @@ RUN apt-get update \
     python3-dev \
     python3-pip \
     python3-tk \
-    graphviz-dev \
-    \
-    && echo "Installing R..." \
+    graphviz-dev 
+RUN echo "Installing R..." \
     && mkdir -p ~/.gnupg \
     && echo "disable-ipv6" >> ~/.gnupg/dirmngr.conf \
     && apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
     && add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' \
-    && apt-get update \
+    && apt-get update --fix-missing \
     && apt-get install -y r-base \
     \
     && echo "Installing Java..." \
@@ -51,13 +50,13 @@ RUN cd /app/R \
     && cd ..
 
 # Copy the pip requirements file into the container
-COPY ./requirements.txt  /app/requirements.txt  
+COPY ./requirements-dev.txt  /app/requirements-dev.txt  
 
 # Install pip packages
 RUN python3 -m pip install --upgrade pip \
     && pip3 install setuptools wheel \
     && pip3 install numpy pyyaml   \
-    && pip3 install --no-binary javabridge -r ./requirements.txt
+    && pip3 install --no-binary javabridge -r ./requirements-dev.txt
 
 COPY ./package.json /app/package.json
 COPY ./yarn.lock    /app/yarn.lock

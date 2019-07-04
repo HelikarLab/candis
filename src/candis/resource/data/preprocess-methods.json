@@ -1,0 +1,182 @@
+[
+  {
+       "name": "Background Correction",
+       "code": "prp.bgc",
+    "methods": 
+    [
+      {
+        "name": "Robust Multi-Array Average",
+        "code": "prp.bgc.rma",
+       "value": "rma",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "MAS",
+        "code": "prp.bgc.mas",
+       "value": "mas",
+        "info": 
+        {
+          "desc": ""
+        }
+      }
+    ]
+  },
+  {
+       "name": "Normalization",
+       "code": "prp.nrm",
+    "methods": 
+    [
+      {
+        "name": "Constant",
+        "code": "prp.nrm.cst",
+       "value": "constant",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Contrast",
+        "code": "prp.nrm.crt",
+       "value": "contrast",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Quantiles",
+        "code": "prp.nrm.qnt",
+       "value": "quantiles",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Quantiles Robust",
+        "code": "prp.nrm.qrb",
+       "value": "quantiles.robust",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Loess",
+        "code": "prp.nrm.los",
+       "value": "loess",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Invariant Set",
+        "code": "prp.nrm.ivs",
+       "value": "invariantset",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "QSPline",
+        "code": "prp.nrm.qsp",
+       "value": "qspline",
+        "info": 
+        {
+          "desc": ""
+        }
+      }
+    ]
+  },
+  {
+       "name": "Phenotype Microarray Correction",
+       "code": "prp.pmc",
+    "methods": 
+    [
+      {
+        "name": "MAS",
+        "code": "prp.pmc.mas",
+       "value": "mas",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "PM Only",
+        "code": "prp.pmc.pmo",
+       "value": "pmonly",
+        "info": 
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Subtract MM",
+        "code": "prp.pmc.smm",
+       "value": "pmonly",
+        "info": 
+        {
+          "desc": ""
+        }
+      }
+    ]
+  },
+  {
+       "name": "Summarization",
+       "code": "prp.sum",
+    "methods": [
+      {
+        "name": "Average Difference",
+        "code": "prp.sum.avd",
+       "value": "avgdiff",
+        "info":
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Li and Wong",
+        "code": "prp.sum.lwo",
+       "value": "liwong",
+        "info":
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "MAS",
+        "code": "prp.sum.mas",
+       "value": "mas",
+        "info":
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Median Polish",
+        "code": "prp.sum.mdp",
+       "value": "medianpolish",
+        "info":
+        {
+          "desc": ""
+        }
+      },
+      {
+        "name": "Player Out",
+        "code": "prp.sum.ply",
+       "value": "playerout",
+        "info":
+        {
+          "desc": ""
+        }
+      }
+    ]
+  }
+]

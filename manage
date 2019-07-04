@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -e
+
+CANDIS_ENVIRONMENT="${CANDIS_ENVIRONMENT:-"development"}"
+DOCKER_EXEC_ARGS="${DOCKER_EXEC_ARGS:-""}"
+
+export CANDIS_GIT_BRANCH=$(git branch | grep \* | cut -d ' ' -f2)
+export CANDIS_GIT_COMMIT=$(git rev-parse --verify HEAD)
+
+basedir="$(dirname "${0}")"
+
+if 	 [[ "${CANDIS_ENVIRONMENT}" == "production" ]]; then
+	filepath="${basedir}/docker-compose.production.yml"
+else
+	filepath="${basedir}/docker-compose.yml"
+fi
+
+# Build requirements...
+find ${basedir}/requirements -maxdepth 1 -type f | xargs awk '{print}' > ${basedir}/requirements-dev.txt
+cat ${basedir}/requirements/production.txt > ${basedir}/requirements.txt
+
+if [[ "$1" == "install" ]]; then
+	if [[ -z "$2" ]]; then
+		eval $(echo "docker-compose -f "${filepath}" exec "${DOCKER_EXEC_ARGS}" web yarn")
+		exit
+	else
+		eval $(echo "docker-compose -f "${filepath}" exec "${DOCKER_EXEC_ARGS}" web yarn add "${@:2}"")
+		exit
+	fi
+fi
+
+case "$1" in
+	app|db|cache|proxy)
+		eval $(echo "docker-compose -f "${filepath}" exec "${DOCKER_EXEC_ARGS}" "$@"")
+		exit
+	;;
+esac
+
+docker-compose -f "${filepath}" "$@"

@@ -1,0 +1,55 @@
+[
+  {
+    "name": "Correlation-based Feature Subset Selection",
+    "code": "fsl.cfs",
+    "desc":
+    {
+      "short": "Evaluates the worth of a subset of attributes by considering the individual predictive ability of each feature along with the degree of redundancy between them. Subsets of features that are highly correlated with the class while having low intercorrelation are preferred.",
+        "bib": 
+        [
+          {
+               "type": "phdthesis",
+             "author": [{ "name": "M. A. Hall" }],
+              "title": "Correlation-based Feature Subset Selection for Machine Learning",
+             "school": "University of Waikato",
+               "year": "1993",
+            "address": "Hamilton, New Zealand"
+          }
+        ]
+    }
+  },
+  {
+    "name": "Genetic Algorithm",
+    "code": "fsl.gea",
+    "desc":
+    {
+      "short": "Performs a search using the simple genetic algorithm.",
+        "bib": 
+        [
+          {
+                 "type": "book",
+               "author": [{ "name": "David E. Goldberg" }],
+                "title": "Genetic algorithms in search, optimization and machine learning",
+                 "year": "1989",
+            "publisher": "Addison-Wesley"
+          }
+        ]
+    }
+  },
+  {
+    "name": "Greedy Stepwise",
+    "code": "fsl.gsw",
+    "desc":
+    {
+      "short": "Performs a greedy forward or backward search through the space of attribute subsets. May start with no/all attributes or from an arbitrary point in the space. Stops when the addition/deletion of any remaining attributes results in a decrease in evaluation. Can also produce a ranked list of attributes by traversing the space from one side to the other and recording the order that attributes are selected."
+    }
+  },
+  {
+    "name": "Linear Forward Selection",
+    "code": "fsl.lfs",
+    "desc":
+    {
+      "short": "Extension of BestFirst. Takes a restricted number of k attributes into account. Fixed-set selects a fixed number k of attributes, whereas k is increased in each step when fixed-width is selected. The search uses either the initial ordering to select the top k attributes, or performs a ranking (with the same evalutator the search uses later on). The search direction can be forward, or floating forward selection (with opitional backward search steps)."
+    }
+  }
+]

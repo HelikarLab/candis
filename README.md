@@ -88,16 +88,27 @@ OR
 
 After cloning the repository, build from the updated Dockerfile and docker-compose.yml:
 
+For development:
 ```
-$ docker-compose build
-```
-
-```
-$ docker-compose up
+$ ./manage up -d --build
 ```
 
-Then go to localhost:4000 in your browser to open the app.
+For production:
+```
+$ CANDIS_ENVIRONMENT=production ./manage up -d --build
+```
 
+Then go to localhost:5000 in your browser to open the app.
+
+### Other Commands:
+
+```
+$ ./manage [service] [command]
+
+$ ./manage db backup			 		# Backup the database
+$ ./manage db restore /path/to/backup	# Restore a snapshot
+$ ./manage db backups 				 	# List all backups
+```
 
 ### Usage
 **Launching the RIA (Rich Internet Application)**

@@ -1,0 +1,8 @@
+<head>
+  <meta charset="{% if config.ENCODING %}{{ config.ENCODING }}{% else %}{{ utf-8 }}{% endif %}">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ config.TITLE }}</title>
+  <meta name="theme-color" content="{{ config.Color.PRIMARY }}">
+  {% include "includes/styles.html" %}
+</head>

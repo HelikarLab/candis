@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Recommended - http://docs.gunicorn.org/en/stable/design.html#how-many-workers
+nworkers=$((2*$(nproc)+1))
+
+gunicorn -w ${nworkers} -b "${CANDIS_APP_HOST}:${CANDIS_APP_PORT}" candis.app:app

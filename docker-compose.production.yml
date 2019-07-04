@@ -1,0 +1,89 @@
+version: "3.4"
+
+x-defaults: &defaults
+  restart: always
+
+services:
+  
+  app:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./docker/production/app/Dockerfile
+    image: candis-app:production
+    container_name: production_candis_app  
+    networks:
+      - db
+      - cache
+      - proxy
+    depends_on:
+      - db
+      - cache
+    env_file:
+      - ./.envs/.production/.app   
+    volumes:
+      - production_candis_resources:/app/CRES
+      - production_candis_data:/app/candisDATA
+    ports:
+      - "80"
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}  
+  
+  db:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./docker/base/db/Dockerfile
+    image: candis-db
+    container_name: production_candis_db 
+    networks:
+      - db
+    volumes:
+      - production_db_data:/var/lib/postgresql/data
+      - production_db_backups:/backups
+    env_file:
+      - ./.envs/.production/.db
+
+  cache:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./docker/base/cache/Dockerfile
+    image: candis-cache
+    container_name: production_candis_cache
+    networks:
+      - cache
+
+  proxy:
+    <<: *defaults
+    build:
+      context: .
+      dockerfile: ./docker/production/proxy/Dockerfile
+    image: candis-proxy
+    container_name: production_candis_proxy 
+    networks:
+      - proxy
+    env_file:
+      - ./.envs/.production/.proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro  
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"         
+
+volumes: 
+  production_db_data: {  }
+  production_db_backups: { }
+
+  production_candis_resources: { }
+  production_candis_data: { }
+  
+networks:
+  db:
+    driver: bridge
+  cache:
+    driver: bridge
+  proxy:
+    driver: bridge  

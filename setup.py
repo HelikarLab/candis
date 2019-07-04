@@ -1,99 +1,109 @@
-#!/usr/bin/env python
+# pylint: disable=E0602
 
 import sys
-import os
-import shutil
-import codecs
+import os.path as osp
+import glob
+import io
 
-from distutils.core import Command
-from distutils.command.clean import clean as Clean
+from setuptools import setup, find_packages
 
-from package import package
+import pip
 
-ABSPATH_ROOTDIR              = os.path.dirname(os.path.abspath(__file__))
-RELPATH_FILES_CLEAN          = ['build', 'dist', '{name}.egg-info'.format(name = package['name']), '.cache']
-RELPATH_WALK_FILES_EXT_CLEAN = ['.pyc', '.DS_Store']
-RELPATH_WALK_DIRS_CLEAN      = ['__pycache__']
+try:
+    from pip._internal.req import parse_requirements  # pip 10
+except ImportError:
+    from pip.req import parse_requirements  # pip 9
 
-class CleanCommand(Clean):
-    def run(self):
-        Clean.run(self)
+# globals
+PACKAGE = "candis"
+SRCDIR = "src"
 
-        for filename in RELPATH_FILES_CLEAN:
-            if os.path.exists(filename):
-                shutil.rmtree(filename)
 
-        for dirpath, dirnames, filenames in os.walk(ABSPATH_ROOTDIR):
-            for filename in filenames:
-                for extension in RELPATH_WALK_FILES_EXT_CLEAN:
-                    if filename.endswith(extension):
-                        path = os.path.join(dirpath, filename)
-                        os.unlink(path)
+def isdef(var):
+    return var in globals()
 
-            for dirname in dirnames:
-                if dirname in RELPATH_WALK_DIRS_CLEAN:
-                    path = os.path.join(dirpath, dirname)
-                    shutil.rmtree(path, ignore_errors = True)
 
-class TestCommand(Command):
-    user_options = [('pytest=', 'a', 'arguments to be passed to pytest')]
+def read(path, encoding=None):
+    content = None
 
-    def initialize_options(self):
-        self.args_pytest = [ ]
+    with io.open(path, encoding=encoding) as f:
+        content = f.read()
 
-    def finalize_options(self):
-        pass
+    return content
 
-    def run(self):
-        import pytest
 
-        errno = pytest.main(self.args_pytest)
+def get_package_info():
+    attr = osp.abspath(osp.join(SRCDIR, PACKAGE, "__attr__.py"))
+    info = dict(__file__=attr)  # HACK
 
-        sys.exit(errno)
+    with open(attr) as f:
+        content = f.read()
+        exec(content, info)
 
-def main(argv = None):
-    code = os.EX_OK
-    
-    try:
-        from setuptools import setup
-        args_setuptools = dict(
-            keywords    = ', '.join([keyword for keyword in package['keywords']])
-        )
-    except ImportError:
-        from distutils.core import setup
-        args_setuptools = dict()
+    return info
 
-    metadata = dict(
-        name             = package['name'],
-        version          = package['version'],
-        description      = package['description'],
-        long_description = package['long_description'],
-        author           = ','.join([author['name'] for author in package['authors']]),
-        author_email     = ','.join([author['email'] for author in package['authors']]),
-        maintainer       = ','.join([maintainer['name'] for maintainer in package['maintainers']]),
-        maintainer_email = ','.join([maintainer['email'] for maintainer in package['maintainers']]),
-        license          = package['license'],
-        packages         = package['modules'],
-        url              = package['homepage'],
-        # install_requires = package['dependencies']['production'],
-        cmdclass         = dict(
-            clean = CleanCommand, test = TestCommand
-        ),
-        include_package_data = True,
-        entry_points     = dict(
-            console_scripts = [
-                'candis = candis:main'
-            ]
-        ),
-        **args_setuptools
-    )
 
-    setup(**metadata)
+def get_dependencies(type_=None):
+    path = osp.realpath("requirements.txt")
+    requirements = [str(ir.req)
+                    for ir in parse_requirements(path, session="hack")]
 
-    return code
+    if type_ == "development":
+        path = osp.realpath("requirements-dev.txt")
+        requirements = [
+            str(ir.req) for ir in parse_requirements(path, session="hack")
+            if str(ir.req) not in requirements
+        ]
 
-if __name__ == '__main__':
-    args = sys.argv[1:]
-    code = main(args)
+    return requirements
 
-    sys.exit(code)
+
+PKGINFO = get_package_info()
+
+setup(
+    name=PKGINFO["__name__"],
+    version=PKGINFO["__version__"],
+    url=PKGINFO["__url__"],
+    author=PKGINFO["__author__"],
+    author_email=PKGINFO["__email__"],
+    description=PKGINFO["__description__"],
+    long_description=read("README.md", encoding="utf8"),
+    long_description_content_type="text/markdown",
+    license=PKGINFO["__license__"],
+    keywords=" ".join(PKGINFO["__keywords__"]),
+    packages=find_packages(where=SRCDIR),
+    package_dir={"": SRCDIR},
+    zip_safe=False,
+    entry_points={
+        "console_scripts": [
+            "%s = %s.__main__:main" % (
+                PKGINFO["__command__"] if hasattr(
+                    PKGINFO, "__command__") else PKGINFO["__name__"],
+                PACKAGE
+            )
+        ]
+    },
+
+    install_requires=get_dependencies(type_="production"),
+    extras_require=dict(
+        dev=get_dependencies(type_="development")
+    ),
+    include_package_data=True,
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Programming Language :: Python :: Implementation :: PyPy"
+    ]
+)
