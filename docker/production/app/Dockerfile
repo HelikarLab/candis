@@ -72,7 +72,7 @@ RUN apt-get update \
 
 COPY . /app
 
-RUN pip3 install -e /app
+RUN pip3 install /app
 
 COPY --from=build /app/src/candis/app/assets/css/styles.min.css /app/src/candis/app/assets/css/styles.min.css
 COPY --from=build /app/src/candis/app/assets/js/bundle.min.js   /app/src/candis/app/assets/js/bundle.min.js 
