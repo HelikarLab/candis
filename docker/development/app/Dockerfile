@@ -52,6 +52,7 @@ RUN cd /app/R \
 # Copy the pip requirements file into the container
 COPY ./requirements-dev.txt  /app/requirements-dev.txt  
 
+ENV PIP_DEFAULT_TIMEOUT=100
 # Install pip packages
 RUN python3 -m pip install --upgrade pip \
     && pip3 install setuptools wheel \
