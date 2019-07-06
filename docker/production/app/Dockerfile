@@ -44,7 +44,7 @@ RUN apt-get update \
     && apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' \
     && add-apt-repository 'deb https://cloud.r-project.org/bin/linux/debian stretch-cran35/' \
     && apt-get update \
-    && apt-get install -y r-base \
+    && apt-get install --no-install-recommends -y r-base \
     \
     # Installing Java...
     && mkdir -p /usr/share/man/man1 \
@@ -74,10 +74,12 @@ COPY . /app
 
 RUN pip3 install /app
 
+# Using build-args copy the bundled assets into the app container
 COPY --from=build /app/src/candis/app/assets/css/styles.min.css /app/src/candis/app/assets/css/styles.min.css
 COPY --from=build /app/src/candis/app/assets/js/bundle.min.js   /app/src/candis/app/assets/js/bundle.min.js 
 
 COPY ./docker/production/app/start /start
+
 RUN sed -i -e 's/\r//' /start \
     && chmod +x /start
 
