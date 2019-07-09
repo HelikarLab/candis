@@ -3,9 +3,9 @@ python:
   # - "3.2" # coverage seems to fail.
   # - "3.3" # seaborn is incompatible.
   # - "3.4" # hangs on pipenv install
-  - "3.5" 
+  #- "3.5" 
   # - "3.5-dev"
-  #- "3.6"
+  - "3.6"
   # - "3.6-dev"
   # - "3.7-dev"
 
@@ -24,6 +24,8 @@ script:
     - docker-compose exec app sh -c "nc -vz cache 6379"
     - docker-compose exec app sh -c "nc -vz db 5432"
     - docker-compose exec app sh -c "curl localhost:5000/api/ping"  
+    - docker-compose exec app sh -c "yarn test"
+    - docker-compose exec app sh -c "pytest --cov=candis.app.server.api src/candis/app/server/api/tests"  
 
 after_script:
     - docker-compose stop
