@@ -1,2 +1,9 @@
 # Cache
 .ipynb_checkpoints
+
+# Misc
+diabetes.arff
+diabetes.arff.test.arff
+diabetes.arff.train.arff
+*.cgist
+*.model
