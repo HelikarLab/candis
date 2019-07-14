@@ -2,7 +2,7 @@ NODE_ENV=production
 
 CANDIS_ENVIRONMENT=production
 
-CANDIS_DEBUG=true
+CANDIS_DEBUG=false
 
 CANDIS_DATABASE_HOST=db
 
