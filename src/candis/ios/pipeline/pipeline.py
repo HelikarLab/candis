@@ -13,10 +13,9 @@ import addict
 import numpy   as np
 import matplotlib.pyplot as pplt
 import pandas  as pd
-import arff
 import seaborn as sns
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 
 
 from weka.core                import jvm as JVM
@@ -289,8 +288,8 @@ class Pipeline(object):
         self.logs.append('Saved ARFF at {path}'.format(path = path))
 
         path = 'diabetes.arff' # For debugging Purposes Only
-        dataset = arff.load(open(os.path.join(head, path), 'r')) # For Debugging Purposes Only
-        data = np.array(dataset['data'])
+        df = cdat.toPandas(open(os.path.join(head, path))
+        data = np.array(df.values)
         print(data)
                 
         self.logs.append('Splitting to Training and Testing datasets with randomized data - Ratio of train:test split is {}:{}'.format(split_percent, 100 - split_percent))
@@ -298,39 +297,23 @@ class Pipeline(object):
         y_data = data[:,data.shape[1]-1: ]
         X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, train_size=(split_percent/100))
         
-        train_path = os.path.join(head, modify_train_path(path))
-        test_path = os.path.join(head, modify_test_path(path))
+        #train_path = os.path.join(head, modify_train_path(path))
+        #test_path = os.path.join(head, modify_test_path(path))
 
         train_data =  np.concatenate((X_train, y_train), axis=1)
         test_data =  np.concatenate((X_test, y_test), axis=1)
 
-        # saver.save_file(tran, train_path)
-        # saver.save_file(test, test_path)
-        
-        # data = tran
-
         for i, stage in enumerate(self.stages):
             if stage.code == 'prp.kcv':
                 self.stages[i].status = Pipeline.RUNNING
+                self.logs.append('Splitting to Training and Testing Sets')
+                skf = StratifiedKFold(n_splits=para.Preprocess.FOLDS)
+                # NOT E: To be Done 
+                for train, test in skf.split(X_data, y_data):
+                    print("%s %s" % (train, test))
+                self.stages[i].status = Pipeline.COMPLETE                
 
-        self.logs.append('Splitting to Training and Testing Sets')
-        # # TODO - Check if this seed is worth it.
-        # seed = assign_if_none(seed, random.randint(0, 1000))
-        # opts = ['-S', str(seed), '-N', str(para.Preprocess.FOLDS)]
-        # wobj = Filter(classname = 'weka.filters.supervised.instance.StratifiedRemoveFolds', options = opts + ['-V'])
-        # wobj.inputformat(data)
-        
-        # tran = wobj.filter(data)
-
-        # self.logs.append('Splitting Testing Set')
-        # wobj.options = opts
-        # test = wobj.filter(data)
-
-        for i, stage in enumerate(self.stages):
-            if stage.code == 'prp.kcv':
-                self.stages[i].status = Pipeline.COMPLETE
-
-        # self.logs.append('Performing Feature Selection')
+        self.logs.append('Performing Feature Selection')
 
         # feat = [ ]
         # for comb in para.FEATURE_SELECTION:
