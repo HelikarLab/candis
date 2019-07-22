@@ -157,7 +157,7 @@ pipeline:
       label: Elastic-net
     - use: false
       engine: scikit-learn
-      importPath: sklearn.linear_mode.MultiTaskELasticNet
+      importPath: sklearn.linear_model.MultiTaskELasticNet
       label: Multi-task Elastic-net
     - use: false
       engine: scikit-learn
