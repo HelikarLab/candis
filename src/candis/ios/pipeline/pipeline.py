@@ -16,6 +16,7 @@ import pandas  as pd
 import seaborn as sns
 
 from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn import linear_model
 
 
 from weka.core                import jvm as JVM
@@ -288,9 +289,9 @@ class Pipeline(object):
         self.logs.append('Saved ARFF at {path}'.format(path = path))
 
         path = 'diabetes.arff' # For debugging Purposes Only
-        df = cdat.toPandas(open(os.path.join(head, path))
+        df = cdat.toPandas(os.path.join(head, path))
         data = np.array(df.values)
-        print(data)
+        # print(data)
                 
         self.logs.append('Splitting to Training and Testing datasets with randomized data - Ratio of train:test split is {}:{}'.format(split_percent, 100 - split_percent))
         X_data = data[:,:data.shape[1]-1 ]
@@ -308,12 +309,19 @@ class Pipeline(object):
                 self.stages[i].status = Pipeline.RUNNING
                 self.logs.append('Splitting to Training and Testing Sets')
                 skf = StratifiedKFold(n_splits=para.Preprocess.FOLDS)
-                # NOT E: To be Done 
+                # NOTE: To be Done 
                 for train, test in skf.split(X_data, y_data):
                     print("%s %s" % (train, test))
                 self.stages[i].status = Pipeline.COMPLETE                
 
         self.logs.append('Performing Feature Selection')
+
+        # feat = [ ]
+
+        # for comb in para.FEATURE_SELECTION:
+        #     if comb.USE:
+        #         for i, stage in enumerate(self.stages):
+
 
         # feat = [ ]
         # for comb in para.FEATURE_SELECTION:
@@ -354,6 +362,22 @@ class Pipeline(object):
 
         #                 if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
         #                     self.stages[i].status = Pipeline.COMPLETE
+        models = [ ]
+        for model in para.MODEL:
+            if model.USE:
+                summary = addict.Dict()
+                summary.label = model.LABEL
+                summary.name = model.LABEL
+                summary.importPath = model.IMPORTPATH
+                summary.options = assign_if_none(model.OPTIONS, [ ])
+
+                self.logs.append('Modelling {model}'.format(model = model.LABEL))
+
+                for i, stage in enumerate(self.stages):
+                    if stage.code == 'lrn' and stage.value.name == model.LABEL:
+                        self.stages[i].status = Pipeline.RUNNING
+                # NOTE: Transform        
+                X_trained = self.fit_model(X_train, y_train, model.IMPORTPATH)
 
         # models = [ ]
         # for model in para.MODEL:
@@ -440,3 +464,8 @@ class Pipeline(object):
         self.logs.append('Pipeline Complete')
 
         self.set_status(Pipeline.COMPLETE)
+
+    def fit_model(self, X_train, y_train, model):
+        model_object = model()
+        X_trained = model_object.fit(X_train, y_train)
+        return X_trained
