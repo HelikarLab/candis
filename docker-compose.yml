@@ -25,6 +25,9 @@ services:
       - development_node_modules:/app/node_modules
       - development_candis_resources:/app/CRES
       - development_candis_data:/app/candisDATA
+      - development_candis_assets_bundlejs:/app/src/candis/app/assets/js
+      - development_candis_assets_stylescss:/app/src/candis/app/assets/css
+
     ports:
       - "5000:5000"
       - "8888:8888"
@@ -61,7 +64,9 @@ volumes:
   development_node_modules: { }
   development_candis_resources: { }
   development_candis_data: { }
-  
+ 
+  development_candis_assets_bundlejs: { }
+  development_candis_assets_stylescss: { }
 networks:
   db:
     driver: bridge
