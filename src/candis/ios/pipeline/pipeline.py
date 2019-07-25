@@ -14,9 +14,9 @@ import numpy   as np
 import matplotlib.pyplot as pplt
 import pandas  as pd
 import seaborn as sns
+from scipy.io import arff
 
 from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn import linear_model
 
 
 from weka.core                import jvm as JVM
@@ -254,7 +254,10 @@ class Pipeline(object):
             self.thread.start()
         else:
             warnings.warn('Pipeline currently active')
-    
+    # def runner(self, cdat, heap_size = 16384, seed = None, verbose = True, split_percent = 70):
+    #     pass
+
+
     def runner2(self, cdat, heap_size = 16384, seed = None, verbose = True, split_percent = 70):
         self.set_status(Pipeline.RUNNING)
 
@@ -289,9 +292,9 @@ class Pipeline(object):
         self.logs.append('Saved ARFF at {path}'.format(path = path))
 
         path = 'diabetes.arff' # For debugging Purposes Only
-        df = cdat.toPandas(os.path.join(head, path))
-        data = np.array(df.values)
-        # print(data)
+        raw_data, meta = arff.loadarff(os.path.join(head, path))
+        df = pd.DataFrame(raw_data)
+        data = df.values
                 
         self.logs.append('Splitting to Training and Testing datasets with randomized data - Ratio of train:test split is {}:{}'.format(split_percent, 100 - split_percent))
         X_data = data[:,:data.shape[1]-1 ]
@@ -367,10 +370,11 @@ class Pipeline(object):
             if model.USE:
                 summary = addict.Dict()
                 summary.label = model.LABEL
+                summary.engine = model.ENGINE
                 summary.name = model.LABEL
                 summary.importPath = model.IMPORTPATH
                 summary.options = assign_if_none(model.OPTIONS, [ ])
-
+                print(summary)
                 self.logs.append('Modelling {model}'.format(model = model.LABEL))
 
                 for i, stage in enumerate(self.stages):
@@ -378,6 +382,7 @@ class Pipeline(object):
                         self.stages[i].status = Pipeline.RUNNING
                 # NOTE: Transform        
                 X_trained = self.fit_model(X_train, y_train, model.IMPORTPATH)
+                print(X_trained)
 
         # models = [ ]
         # for model in para.MODEL:
@@ -465,7 +470,25 @@ class Pipeline(object):
 
         self.set_status(Pipeline.COMPLETE)
 
-    def fit_model(self, X_train, y_train, model):
-        model_object = model()
+    def fit_model(self, X_train, y_train, model_name):
+        print(model_name)
+        _HANDLER_REGISTRY = HandlerRegistry()
+        model_object = _HANDLER_REGISTRY[model_name]()
         X_trained = model_object.fit(X_train, y_train)
+        print('done handling')
         return X_trained
+
+
+class HandlerRegistry(dict):
+    def __missing__(self, name):
+        if '.' not in name:
+            handler = __import__(name)
+        else:
+            module_name, handler_name = name.rsplit('.', 1)
+
+            module = __import__(module_name, {}, {}, [handler_name])
+            handler = getattr(module, handler_name)
+
+            self[name] = handler
+
+        return handler
