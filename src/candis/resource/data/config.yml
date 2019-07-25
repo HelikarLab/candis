@@ -121,21 +121,6 @@ pipeline:
         options: ['-B', 'weka.classifiers.rules.ZeroR', '-F', '5', '-T', '0.01', '-R', '1']
   model:
     - use: true
-      name: bayes.NaiveBayes
-      label: Naive Bayes
-    - use: false
-      name: trees.J48
-      label: Decision Tree
-    - use: false
-      name: functions.SMO
-      label: Support Vector Machine
-    - use: false
-      name: lazy.IBk
-      label: k-Nearest Neighbor
-    - use: false
-      name: trees.RandomForest
-      label: Random Forest
-    - use: false
       engine: scikit-learn
       importPath: sklearn.linear_model.LinearRegression
       label: Linear Regression
@@ -157,7 +142,7 @@ pipeline:
       label: Elastic-net
     - use: false
       engine: scikit-learn
-      importPath: sklearn.linear_mode.MultiTaskELasticNet
+      importPath: sklearn.linear_model.MultiTaskELasticNet
       label: Multi-task Elastic-net
     - use: false
       engine: scikit-learn

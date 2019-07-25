@@ -12,8 +12,12 @@ except ImportError:
 import addict
 import numpy   as np
 import matplotlib.pyplot as pplt
-import pandas  as pd, arff
+import pandas  as pd
 import seaborn as sns
+from scipy.io import arff
+
+from sklearn.model_selection import train_test_split, StratifiedKFold
+
 
 from weka.core                import jvm as JVM
 from weka.core.converters     import Loader, Saver
@@ -66,7 +70,7 @@ class Pipeline(object):
             self.set_status(Pipeline.READY)
 
     # raise IOError, ValueError.
-    def load(stages):
+    def load(self, stages):
         # if not os.path.isabs(path):
         #     path     = os.path.abspath(path)
 
@@ -211,224 +215,9 @@ class Pipeline(object):
 
         return data, objekt, fpath
 
-    def runner(self, cdat, heap_size = 16384, seed = None, verbose = True, split_percent = 30):
-        self.set_status(Pipeline.RUNNING)
-
-        self.logs.append('Initializing Pipeline')
-
-        para = self.config
-
-        self.logs.append('Reading Pipeline Configuration')
-
-        head = ''
-        name = get_rand_uuid_str()
-
-        self.logs.append('Reading Input File')
-
-        for i, stage in enumerate(self.stages):
-            if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
-                self.stages[i].status = Pipeline.RUNNING
-            if stage.code ==  'dat.fle':
-                head    = os.path.abspath(stage.value.path)
-                name, _ = os.path.splitext(stage.value.name)
-
-        self.logs.append('Parsing to ARFF')
-
-        path = os.path.join(head, '{name}.arff'.format(name = name))
-        # This bug, I don't know why, using Config.schema instead.
-        # cdat.toARFF(path, express_config = para.Preprocess.schema, verbose = verbose)
-
-        for i, stage in enumerate(self.stages):
-            if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
-                self.stages[i].status = Pipeline.COMPLETE
-
-        self.logs.append('Saved ARFF at {path}'.format(path = path))
-
-        JVM.start(max_heap_size = '{size}m'.format(size = heap_size))
-
-        load = Loader(classname = 'weka.core.converters.ArffLoader')
-        # data = load.load_file(path)
-        # save =  Saver(classname = 'weka.core.converters.ArffSaver')
-        path = 'diabetes.arff' # For debugging Purposes Only
-        data = load.load_file(os.path.join(head, path)) # For Debugging Purposes Only
-        data.class_is_last() # For Debugging Purposes Only
-        # data.class_index = cdat.iclss
-                
-        self.logs.append('Splitting to Training and Testing datasets with randomized data - Ratio of train:test split is {}:{}'.format(split_percent, 100 - split_percent))
-        wobj = Filter(classname = 'weka.filters.unsupervised.instance.Randomize')
-        wobj.inputformat(data)
-        data = wobj.filter(data)
-
-        opts = ['-P', str(split_percent)]
-        wobj = Filter(classname = 'weka.filters.unsupervised.instance.RemovePercentage', options = opts + ['-V'])
-        wobj.inputformat(data)
-        
-        test = wobj.filter(data)
-        wobj.options = opts
-        tran = wobj.filter(data)
-
-
-        saver =  Saver(classname = 'weka.core.converters.ArffSaver')
-        
-        train_path = os.path.join(head, modify_train_path(path))
-        test_path = os.path.join(head, modify_test_path(path))
-        saver.save_file(tran, train_path)
-        saver.save_file(test, test_path)
-        
-        data = tran
-
-        for i, stage in enumerate(self.stages):
-            if stage.code == 'prp.kcv':
-                self.stages[i].status = Pipeline.RUNNING
-
-        self.logs.append('Splitting to Training and Testing Sets')
-        # TODO - Check if this seed is worth it.
-        seed = assign_if_none(seed, random.randint(0, 1000))
-        opts = ['-S', str(seed), '-N', str(para.Preprocess.FOLDS)]
-        wobj = Filter(classname = 'weka.filters.supervised.instance.StratifiedRemoveFolds', options = opts + ['-V'])
-        wobj.inputformat(data)
-        
-        tran = wobj.filter(data)
-
-        self.logs.append('Splitting Testing Set')
-        wobj.options = opts
-        test = wobj.filter(data)
-
-        for i, stage in enumerate(self.stages):
-            if stage.code == 'prp.kcv':
-                self.stages[i].status = Pipeline.COMPLETE
-
-        self.logs.append('Performing Feature Selection')
-
-        feat = [ ]
-        for comb in para.FEATURE_SELECTION:
-            if comb.USE:
-                for i, stage in enumerate(self.stages):
-                    if stage.code == 'ats':
-                        search    = stage.value.search.name
-                        evaluator = stage.value.evaluator.name
-
-                        if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
-                            self.stages[i].status = Pipeline.RUNNING
-
-                srch = ASSearch(classname = 'weka.attributeSelection.{classname}'.format(
-                    classname = comb.Search.NAME,
-                    options   = assign_if_none(comb.Search.OPTIONS, [ ])
-                ))
-                ewal = ASEvaluation(classname = 'weka.attributeSelection.{classname}'.format(
-                    classname = comb.Evaluator.NAME,
-                    options   = assign_if_none(comb.Evaluator.OPTIONS, [ ])
-                ))
-
-                attr = AttributeSelection()
-                attr.search(srch)
-                attr.evaluator(ewal)
-                attr.select_attributes(tran)
-
-                meta = addict.Dict()
-                meta.search    = comb.Search.NAME
-                meta.evaluator = comb.Evaluator.NAME
-                meta.features  = [tran.attribute(index).name for index in attr.selected_attributes]
-
-                feat.append(meta)
-
-                for i, stage in enumerate(self.stages):
-                    if stage.code == 'ats':
-                        search    = stage.value.search.name
-                        evaluator = stage.value.evaluator.name
-
-                        if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
-                            self.stages[i].status = Pipeline.COMPLETE
-
-        models = [ ]
-        for model in para.MODEL:
-            if model.USE:
-                summary         = addict.Dict()
-
-                self.logs.append('Modelling {model}'.format(model = model.LABEL))
-
-                summary.label   = model.LABEL
-                summary.name    = model.NAME
-                summary.options = assign_if_none(model.OPTIONS, [ ])
-
-                for i, stage in enumerate(self.stages):
-                    if stage.code == 'lrn' and stage.value.name == model.NAME:
-                        self.stages[i].status = Pipeline.RUNNING
-
-                for i, instance in enumerate(data):
-                    iclass = list(range(instance.num_classes))
-
-                options    = assign_if_none(model.OPTIONS, [ ])
-                classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(classname = model.NAME), options = options)
-                classifier.build_classifier(tran)
-
-                serializer.write(os.path.join(head, '{name}.{classname}.model'.format(
-                        name = name,
-                    classname = model.NAME
-                )), classifier)
-
-                self.logs.append('Testing model {model}'.format(model = model.LABEL))
-
-                evaluation       = Evaluation(tran)
-                evaluation.test_model(classifier, test)
-
-                summary.summary  = evaluation.summary()
-
-                frame  = pd.DataFrame(data = evaluation.confusion_matrix)
-                axes   = sns.heatmap(frame, cbar = False, annot = True)
-                b64str = get_b64_plot(axes)
-
-                summary.confusion_matrix = addict.Dict({
-                    'value': evaluation.confusion_matrix.tolist(),
-                     'plot': b64str
-                })
-
-                self.logs.append('Plotting Learning Curve for {model}'.format(model = model.LABEL))
-
-                buffer = io.BytesIO()
-                plot_classifier_errors(evaluation.predictions, tran, test, outfile = buffer, wait = False)
-                b64str = buffer_to_b64(buffer)
-
-                summary.learning_curve   = b64str
-
-                buffer = io.BytesIO()
-                plot_roc(evaluation, class_index = iclass, outfile = buffer, wait = False)
-                b64str = buffer_to_b64(buffer)
-
-                summary.roc_curve        = b64str
-
-                buffer = io.BytesIO()
-                plot_prc(evaluation, class_index = iclass, outfile = buffer, wait = False)
-                b64str = buffer_to_b64(buffer)
-
-                summary.prc_curve        = b64str
-
-                if classifier.graph:
-                    summary.graph = classifier.graph
-
-                for i, instance in enumerate(test):
-                    prediction = classifier.classify_instance(instance)
-
-                for i, stage in enumerate(self.stages):
-                    if stage.code == 'lrn' and stage.value.name == model.NAME:
-                        self.stages[i].status = Pipeline.COMPLETE
-
-                models.append(summary)
-
-        self.gist.models = models
-        self.gist.name = '{}.cgist'.format(name)
-
-        JVM.stop()
-
-        JSON.write(os.path.join(head, '{name}.cgist'.format(name = name)), self.gist)
-
-        self.logs.append('Pipeline Complete')
-
-        self.set_status(Pipeline.COMPLETE)
-
     def run(self, cdat, heap_size = 16384, seed = None, verbose = False, split_percent = 30):
         if not self.thread:
-            self.thread = threading.Thread(target = self.runner, args = (cdat, heap_size, seed, verbose, split_percent))
+            self.thread = threading.Thread(target = self.runner2, args = (cdat, heap_size, seed, verbose, split_percent))
             self.thread.start()
         else:
             warnings.warn('Pipeline currently active.')
@@ -464,4 +253,242 @@ class Pipeline(object):
             self.thread = threading.Thread(target = self.generate_predictions, args = (test_path, model_path, heap_size, seed, verbose))
             self.thread.start()
         else:
-            warning.warn('Pipeline currently active')
+            warnings.warn('Pipeline currently active')
+    # def runner(self, cdat, heap_size = 16384, seed = None, verbose = True, split_percent = 70):
+    #     pass
+
+
+    def runner2(self, cdat, heap_size = 16384, seed = None, verbose = True, split_percent = 70):
+        self.set_status(Pipeline.RUNNING)
+
+        self.logs.append('Initializing Pipeline')
+
+        para = self.config
+
+        self.logs.append('Reading Pipeline Configuration')
+
+        head = ''
+        name = get_rand_uuid_str()
+
+        self.logs.append('Reading Input File')
+
+        for i, stage in enumerate(self.stages):
+            if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
+                self.stages[i].status = Pipeline.RUNNING
+            if stage.code ==  'dat.fle':
+                head    = os.path.abspath(stage.value.path)
+                name, _ = os.path.splitext(stage.value.name)
+
+        self.logs.append('Parsing to ARFF')
+
+        path = os.path.join(head, '{name}.arff'.format(name = name))
+        # This bug, I don't know why, using Config.schema instead.
+        # cdat.toARFF(path, express_config = para.Preprocess.schema, verbose = verbose)
+
+        for i, stage in enumerate(self.stages):
+            if stage.code in ('dat.fle', 'prp.bgc', 'prp.nrm', 'prp.pmc', 'prp.sum'):
+                self.stages[i].status = Pipeline.COMPLETE
+
+        self.logs.append('Saved ARFF at {path}'.format(path = path))
+
+        path = 'diabetes.arff' # For debugging Purposes Only
+        raw_data, meta = arff.loadarff(os.path.join(head, path))
+        df = pd.DataFrame(raw_data)
+        data = df.values
+                
+        self.logs.append('Splitting to Training and Testing datasets with randomized data - Ratio of train:test split is {}:{}'.format(split_percent, 100 - split_percent))
+        X_data = data[:,:data.shape[1]-1 ]
+        y_data = data[:,data.shape[1]-1: ]
+        X_train, X_test, y_train, y_test = train_test_split(X_data, y_data, train_size=(split_percent/100))
+        
+        #train_path = os.path.join(head, modify_train_path(path))
+        #test_path = os.path.join(head, modify_test_path(path))
+
+        train_data =  np.concatenate((X_train, y_train), axis=1)
+        test_data =  np.concatenate((X_test, y_test), axis=1)
+
+        for i, stage in enumerate(self.stages):
+            if stage.code == 'prp.kcv':
+                self.stages[i].status = Pipeline.RUNNING
+                self.logs.append('Splitting to Training and Testing Sets')
+                skf = StratifiedKFold(n_splits=para.Preprocess.FOLDS)
+                # NOTE: To be Done 
+                for train, test in skf.split(X_data, y_data):
+                    print("%s %s" % (train, test))
+                self.stages[i].status = Pipeline.COMPLETE                
+
+        self.logs.append('Performing Feature Selection')
+
+        # feat = [ ]
+
+        # for comb in para.FEATURE_SELECTION:
+        #     if comb.USE:
+        #         for i, stage in enumerate(self.stages):
+
+
+        # feat = [ ]
+        # for comb in para.FEATURE_SELECTION:
+        #     if comb.USE:
+        #         for i, stage in enumerate(self.stages):
+        #             if stage.code == 'ats':
+        #                 search    = stage.value.search.name
+        #                 evaluator = stage.value.evaluator.name
+
+        #                 if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
+        #                     self.stages[i].status = Pipeline.RUNNING
+
+        #         srch = ASSearch(classname = 'weka.attributeSelection.{classname}'.format(
+        #             classname = comb.Search.NAME,
+        #             options   = assign_if_none(comb.Search.OPTIONS, [ ])
+        #         ))
+        #         ewal = ASEvaluation(classname = 'weka.attributeSelection.{classname}'.format(
+        #             classname = comb.Evaluator.NAME,
+        #             options   = assign_if_none(comb.Evaluator.OPTIONS, [ ])
+        #         ))
+
+        #         attr = AttributeSelection()
+        #         attr.search(srch)
+        #         attr.evaluator(ewal)
+        #         attr.select_attributes(tran)
+
+        #         meta = addict.Dict()
+        #         meta.search    = comb.Search.NAME
+        #         meta.evaluator = comb.Evaluator.NAME
+        #         meta.features  = [tran.attribute(index).name for index in attr.selected_attributes]
+
+        #         feat.append(meta)
+
+        #         for i, stage in enumerate(self.stages):
+        #             if stage.code == 'ats':
+        #                 search    = stage.value.search.name
+        #                 evaluator = stage.value.evaluator.name
+
+        #                 if search == comb.Search.NAME and evaluator == comb.Evaluator.NAME:
+        #                     self.stages[i].status = Pipeline.COMPLETE
+        models = [ ]
+        for model in para.MODEL:
+            if model.USE:
+                summary = addict.Dict()
+                summary.label = model.LABEL
+                summary.engine = model.ENGINE
+                summary.name = model.LABEL
+                summary.importPath = model.IMPORTPATH
+                summary.options = assign_if_none(model.OPTIONS, [ ])
+                print(summary)
+                self.logs.append('Modelling {model}'.format(model = model.LABEL))
+
+                for i, stage in enumerate(self.stages):
+                    if stage.code == 'lrn' and stage.value.name == model.LABEL:
+                        self.stages[i].status = Pipeline.RUNNING
+                # NOTE: Transform        
+                X_trained = self.fit_model(X_train, y_train, model.IMPORTPATH)
+                print(X_trained)
+
+        # models = [ ]
+        # for model in para.MODEL:
+        #     if model.USE:
+        #         summary         = addict.Dict()
+
+        #         self.logs.append('Modelling {model}'.format(model = model.LABEL))
+
+        #         summary.label   = model.LABEL
+        #         summary.name    = model.NAME
+        #         summary.options = assign_if_none(model.OPTIONS, [ ])
+
+        #         for i, stage in enumerate(self.stages):
+        #             if stage.code == 'lrn' and stage.value.name == model.NAME:
+        #                 self.stages[i].status = Pipeline.RUNNING
+
+        #         for i, instance in enumerate(data):
+        #             iclass = list(range(instance.num_classes))
+
+        #         options    = assign_if_none(model.OPTIONS, [ ])
+        #         classifier = Classifier(classname = 'weka.classifiers.{classname}'.format(classname = model.NAME), options = options)
+        #         classifier.build_classifier(tran)
+
+        #         serializer.write(os.path.join(head, '{name}.{classname}.model'.format(
+        #                 name = name,
+        #             classname = model.NAME
+        #         )), classifier)
+
+        #         self.logs.append('Testing model {model}'.format(model = model.LABEL))
+
+        #         evaluation       = Evaluation(tran)
+        #         evaluation.test_model(classifier, test)
+
+        #         summary.summary  = evaluation.summary()
+
+        #         frame  = pd.DataFrame(data = evaluation.confusion_matrix)
+        #         axes   = sns.heatmap(frame, cbar = False, annot = True)
+        #         b64str = get_b64_plot(axes)
+
+        #         summary.confusion_matrix = addict.Dict({
+        #             'value': evaluation.confusion_matrix.tolist(),
+        #              'plot': b64str
+        #         })
+
+        #         self.logs.append('Plotting Learning Curve for {model}'.format(model = model.LABEL))
+
+        #         buffer = io.BytesIO()
+        #         plot_classifier_errors(evaluation.predictions, tran, test, outfile = buffer, wait = False)
+        #         b64str = buffer_to_b64(buffer)
+
+        #         summary.learning_curve   = b64str
+
+        #         buffer = io.BytesIO()
+        #         plot_roc(evaluation, class_index = iclass, outfile = buffer, wait = False)
+        #         b64str = buffer_to_b64(buffer)
+
+        #         summary.roc_curve        = b64str
+
+        #         buffer = io.BytesIO()
+        #         plot_prc(evaluation, class_index = iclass, outfile = buffer, wait = False)
+        #         b64str = buffer_to_b64(buffer)
+
+        #         summary.prc_curve        = b64str
+
+        #         if classifier.graph:
+        #             summary.graph = classifier.graph
+
+        #         for i, instance in enumerate(test):
+        #             prediction = classifier.classify_instance(instance)
+
+        #         for i, stage in enumerate(self.stages):
+        #             if stage.code == 'lrn' and stage.value.name == model.NAME:
+        #                 self.stages[i].status = Pipeline.COMPLETE
+
+        #         models.append(summary)
+
+        # self.gist.models = models
+        # self.gist.name = '{}.cgist'.format(name)
+
+        # JVM.stop()
+
+        # JSON.write(os.path.join(head, '{name}.cgist'.format(name = name)), self.gist)
+
+        self.logs.append('Pipeline Complete')
+
+        self.set_status(Pipeline.COMPLETE)
+
+    def fit_model(self, X_train, y_train, model_name):
+        print(model_name)
+        _HANDLER_REGISTRY = HandlerRegistry()
+        model_object = _HANDLER_REGISTRY[model_name]()
+        X_trained = model_object.fit(X_train, y_train)
+        print('done handling')
+        return X_trained
+
+
+class HandlerRegistry(dict):
+    def __missing__(self, name):
+        if '.' not in name:
+            handler = __import__(name)
+        else:
+            module_name, handler_name = name.rsplit('.', 1)
+
+            module = __import__(module_name, {}, {}, [handler_name])
+            handler = getattr(module, handler_name)
+
+            self[name] = handler
+
+        return handler
