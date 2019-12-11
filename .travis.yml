@@ -1,4 +1,6 @@
 language: python
+# dist: xenial
+sudo: true
 python:
   # - "3.2" # coverage seems to fail.
   # - "3.3" # seaborn is incompatible.
@@ -6,6 +8,7 @@ python:
   #- "3.5" 
   # - "3.5-dev"
   - "3.6"
+  - "3.7"
   # - "3.6-dev"
   # - "3.7-dev"
 
