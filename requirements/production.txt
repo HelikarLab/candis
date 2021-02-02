@@ -6,7 +6,7 @@ astroid==1.6.1
 attrs==17.4.0
 Babel==2.5.3
 beautifulsoup4==4.6.0
-bleach==2.1.2
+bleach==3.3.0
 blinker==1.4
 candis==0.0.5
 certifi==2018.1.18
