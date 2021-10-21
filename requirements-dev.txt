@@ -4,7 +4,7 @@ alembic==0.9.9
 appnope==0.1.0
 astroid==1.6.1
 attrs==17.4.0
-Babel==2.5.3
+Babel==2.9.1
 beautifulsoup4==4.6.0
 bleach==2.1.2
 blinker==1.4
